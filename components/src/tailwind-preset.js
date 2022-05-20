@@ -3,7 +3,7 @@ module.exports = {
     extend: {
       colors: {
         gertie: {
-          DEFAULT: `#00f`,
+          DEFAULT: `#0f0`,
         },
       },
     },

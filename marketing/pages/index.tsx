@@ -1,10 +1,12 @@
 import type { NextPage } from 'next';
 import Button from '@shared/Button';
+import Foo from '../components/Foo';
 
 const Home: NextPage = () => {
   return (
     <div>
-      Home <Button />
+      <Foo />
+      Home foo bara <Button />
     </div>
   );
 };
