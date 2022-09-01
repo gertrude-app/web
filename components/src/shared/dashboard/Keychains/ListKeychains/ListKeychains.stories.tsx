@@ -14,6 +14,20 @@ const Template: ComponentStory<typeof ListKeychains> = (args) => (
   <ListKeychains {...args} />
 );
 
+export function keychainProps(
+  override: Partial<React.ComponentProps<typeof KeychainCard>> = {},
+): React.ComponentProps<typeof KeychainCard> & { id: UUID } {
+  return {
+    id: `id-${Math.random()}`,
+    isPublic: false,
+    name: `HTC`,
+    description: `Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore laudantium velit assumenda nemo exercitationem.`,
+    keys: 232,
+    onRemove: () => {},
+    ...override,
+  };
+}
+
 export const Default = Template.bind({});
 Default.args = {
   keychains: [
@@ -32,17 +46,3 @@ Default.args = {
     }),
   ],
 };
-
-export function keychainProps(
-  override: Partial<React.ComponentProps<typeof KeychainCard>> = {},
-): React.ComponentProps<typeof KeychainCard> & { id: UUID } {
-  return {
-    id: `id-${Math.random()}`,
-    isPublic: false,
-    name: `HTC`,
-    description: `Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore laudantium velit assumenda nemo exercitationem.`,
-    keys: 232,
-    onRemove: () => {},
-    ...override,
-  };
-}

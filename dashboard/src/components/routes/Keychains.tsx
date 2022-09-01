@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from '../../redux/hooks';
 import ApiErrorMessage from '../ApiErrorMessage';
 import { fetchAdminKeychains } from '../../redux/slice-admin';
 import ListKeychains from '@shared/dashboard/Keychains/ListKeychains';
+import Modal from '../shared/dashboard/Modal';
 
 const Keychains: React.FC = () => {
   const dispatch = useDispatch();
@@ -22,14 +23,17 @@ const Keychains: React.FC = () => {
   }
 
   return (
-    <ListKeychains
-      keychains={request.payload.map((keychain) => ({
-        ...keychain,
-        description: keychain.description || undefined,
-        keys: keychain.keys.length,
-      }))}
-      removeKeychain={() => {}}
-    />
+    <div>
+      <Modal isOpen={true} setIsOpen={() => {}} />
+      <ListKeychains
+        keychains={request.payload.map((keychain) => ({
+          ...keychain,
+          description: keychain.description || undefined,
+          keys: keychain.keys.length,
+        }))}
+        removeKeychain={() => {}}
+      />
+    </div>
   );
 };
 
