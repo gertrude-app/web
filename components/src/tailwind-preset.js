@@ -1,4 +1,5 @@
-module.exports = {
+module.exportoutlines = {
+  plugins: [require(`@tailwindcss/forms`)],
   theme: {
     screens: {
       xs: `500px`,
