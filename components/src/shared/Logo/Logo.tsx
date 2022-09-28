@@ -11,7 +11,6 @@ interface Props {
 const Logo: React.FC<Props> = ({ size = 40, className, iconOnly, type = `default` }) => {
   let outerColor = ``;
   let innerColor = ``;
-
   switch (type) {
     case `inverted`:
       outerColor = `white`;

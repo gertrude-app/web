@@ -1,4 +1,5 @@
 module.exports = {
   presets: [require(`../components/src/tailwind-preset`)],
-  content: [`./pages/**/*.{ts,tsx}`, `./components/**/*.{ts,tsx}`],
+  plugins: [require(`@tailwindcss/typography`)],
+  content: [`./pages/**/*.{ts,tsx,mdx}`, `./components/**/*.{ts,tsx}`],
 };
