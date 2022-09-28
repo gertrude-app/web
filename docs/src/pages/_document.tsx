@@ -38,7 +38,7 @@ const themeScript = `
   isDarkMode.addEventListener('change', () => updateThemeWithoutTransitions())
 `
 
-export default function Document() {
+export default function Document(props) {
   return (
     <Html className="antialiased [font-feature-settings:'ss01']" lang="en">
       <Head>
@@ -51,3 +51,8 @@ export default function Document() {
     </Html>
   )
 }
+
+// export async function getStaticProps(lol) {
+//   console.log({ lol })
+//   return {}
+// }

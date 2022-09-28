@@ -1,9 +1,27 @@
-const withMDX = require('@next/mdx')({
+// @ts-check
+
+// const withMDX = require('@next/mdx')({
+//   extension: /\.mdx?$/,
+//   options: {
+//     remarkPlugins: [dothing, require('remark-frontmatter')],
+//     // If you use `MDXProvider`, uncomment the following line.
+//     // providerImportSource: "@mdx-js/react",
+//   },
+// })
+
+const mdxPlugin = require('./lib/mdx')
+
+const withFrontMatterMDX = mdxPlugin({
   extension: /\.mdx?$/,
   options: {
-    remarkPlugins: [require('remark-frontmatter')],
+    remarkPlugins: [],
     // If you use `MDXProvider`, uncomment the following line.
     // providerImportSource: "@mdx-js/react",
+  },
+  layout: {
+    module: '@/components/MatterPage',
+    component: 'MatterPage',
+    frontMatterProp: 'metadata',
   },
 })
 
@@ -17,7 +35,6 @@ const nextConfig = {
     scrollRestoration: true,
     esmExternals: true,
   },
-  options: {},
 }
 
-module.exports = withMDX(nextConfig)
+module.exports = withFrontMatterMDX(nextConfig)
