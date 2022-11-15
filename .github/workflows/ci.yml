@@ -45,10 +45,17 @@ jobs:
         run: pnpm install
       - name: build storybook
         run: make build-storybook
+      - name: serve storybook
+        run: make storybook &
       - name: make screenshots
-        run: make visual-tests
+        run: pnpm dlx wait-on tcp:4777 && make visual-test
       - name: upload screenshots
         run: pnpm dlx @argos-ci/cli upload storybook/visual-tests/screenshots/argos
+      - name: create screenshots pr
+        uses: peter-evans/create-pull-request@v4
+        with:
+          delete-branch: true
+          base: ${{ github.head_ref }}
 
   dashboard:
     name: dashboard
