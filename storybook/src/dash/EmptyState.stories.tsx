@@ -14,7 +14,7 @@ Default.args = {
   heading: `No burgers`,
   secondaryText: `Let's make some!`,
   buttonText: `Make a burger`,
-  icon: `burger`,
+  icon: `users`,
 };
 
 // @screenshot: xs/350
