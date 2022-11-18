@@ -36,6 +36,7 @@ Default.args = {
 export const Empty = Template.bind({});
 Empty.args = { ...Default.args, items: [] };
 
+// @screenshot: xs,md
 export const Chunked = Template.bind({});
 Chunked.args = {
   ...Default.args,
