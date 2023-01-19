@@ -17,22 +17,22 @@ const WebsiteCounter: React.FC = () => {
   }, 333);
 
   return (
-    <div className="flex justify-center flex-col pt-12 mt-20 relative z-10">
-      <div className="flex flex-col items-start space-y-6">
-        <h2 className="font-inter text-8xl text-white w-[716px]">
+    <div className="flex justify-center flex-col pt-12 mt-8 md:mt-20 relative z-10">
+      <div className="flex flex-col items-start space-y-2 sm:space-y-3 lg:space-y-6">
+        <h2 className="font-inter text-4xl xs:text-5xl sm:text-6xl lg:text-8xl text-white w-[716px]">
           {totalWebsites.toLocaleString()}
         </h2>
-        <h3 className="text-4xl text-white text-opacity-60 font-bold tracking-wider">
+        <h3 className="text-2xl sm:text-3xl lg:text-4xl text-white text-opacity-60 font-medium sm:font-bold tracking-wider">
           websites on the internet
         </h3>
       </div>
-      <div className="grid grid-cols-4 gap-6 mt-16">
-        <Statistic className="col-span-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-16">
+        <Statistic className="col-span-1 lg:col-span-2 hidden md:block">
           <ImportantNumber>{websitesThisWeek.toLocaleString()}</ImportantNumber>
           <InfoText>
             New websites created <Em>this week</Em>
           </InfoText>
-          <div className="absolute -right-8 -bottom-8 w-60 h-48 bg-rain rounded-3xl" />
+          <div className="absolute -right-8 -bottom-8 w-60 h-48 bg-rain rounded-3xl hidden lg:block" />
         </Statistic>
         <Statistic>
           <ImportantNumber>3</ImportantNumber>
@@ -40,14 +40,14 @@ const WebsiteCounter: React.FC = () => {
             New websites created <Em>every second</Em>
           </InfoText>
         </Statistic>
-        <Statistic className="row-span-2">
+        <Statistic className="row-span-1 lg:row-span-2">
           <ImportantNumber>37%</ImportantNumber>
           <InfoText>
             Of all websites on the internet <Em>are porn</Em>
           </InfoText>
-          <div className="absolute -left-8 -bottom-8 w-60 h-60 bg-rain rounded-xl" />
+          <div className="absolute -left-8 -bottom-8 w-60 h-60 bg-rain rounded-xl hidden lg:block" />
         </Statistic>
-        <Statistic>
+        <Statistic className="hidden md:block">
           <ImportantNumber>{websitesThisHour.toLocaleString()}</ImportantNumber>
           <InfoText>
             New websites created <Em>this hour</Em>
@@ -59,7 +59,7 @@ const WebsiteCounter: React.FC = () => {
             New websites created <Em>today</Em>
           </InfoText>
         </Statistic>
-        <Statistic>
+        <Statistic className="col-span-1 lg:col-span-2 xl:col-span-1">
           <ImportantNumber>{websitesSinceVisitingSite.toLocaleString()}</ImportantNumber>
           <InfoText>
             New websites created since you visited <Em>this site</Em>
