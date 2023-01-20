@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
 
 const WebsiteCounter: React.FC = () => {
@@ -27,39 +27,45 @@ const WebsiteCounter: React.FC = () => {
         </h3>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-16">
-        <Statistic className="col-span-1 lg:col-span-2 hidden md:block">
+        <Statistic
+          intersectionMargin="50px"
+          className="col-span-1 lg:col-span-2 hidden md:block"
+        >
           <ImportantNumber>{websitesThisWeek.toLocaleString()}</ImportantNumber>
           <InfoText>
             New websites created <Em>this week</Em>
           </InfoText>
           <div className="absolute -right-8 -bottom-8 w-60 h-48 bg-rain rounded-3xl hidden lg:block" />
         </Statistic>
-        <Statistic>
+        <Statistic intersectionMargin="0px">
           <ImportantNumber>3</ImportantNumber>
           <InfoText>
             New websites created <Em>every second</Em>
           </InfoText>
         </Statistic>
-        <Statistic className="row-span-1 lg:row-span-2">
+        <Statistic intersectionMargin="-30px" className="row-span-1 lg:row-span-2">
           <ImportantNumber>37%</ImportantNumber>
           <InfoText>
             Of all websites on the internet <Em>are porn</Em>
           </InfoText>
           <div className="absolute -left-8 -bottom-8 w-60 h-60 bg-rain rounded-xl hidden lg:block" />
         </Statistic>
-        <Statistic className="hidden md:block">
+        <Statistic intersectionMargin="40px" className="hidden md:block">
           <ImportantNumber>{websitesThisHour.toLocaleString()}</ImportantNumber>
           <InfoText>
             New websites created <Em>this hour</Em>
           </InfoText>
         </Statistic>
-        <Statistic>
+        <Statistic intersectionMargin="20px">
           <ImportantNumber>{websitesToday.toLocaleString()}</ImportantNumber>
           <InfoText>
             New websites created <Em>today</Em>
           </InfoText>
         </Statistic>
-        <Statistic className="col-span-1 lg:col-span-2 xl:col-span-1">
+        <Statistic
+          intersectionMargin="0px"
+          className="col-span-1 lg:col-span-2 xl:col-span-1"
+        >
           <ImportantNumber>{websitesSinceVisitingSite.toLocaleString()}</ImportantNumber>
           <InfoText>
             New websites created since you visited <Em>this site</Em>
@@ -75,15 +81,49 @@ export default WebsiteCounter;
 interface StatisticProps {
   children: React.ReactNode;
   className?: string;
+  intersectionMargin: string;
 }
 
-const Statistic: React.FC<StatisticProps> = ({ children, className }) => {
+const Statistic: React.FC<StatisticProps> = ({
+  children,
+  className,
+  intersectionMargin,
+}) => {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const options: IntersectionObserverInit = {
+      rootMargin: intersectionMargin,
+      threshold: 1,
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        setVisible(entry.isIntersecting);
+        if (entry.isIntersecting) {
+          observer.unobserve(entry.target);
+        }
+      });
+    }, options);
+
+    if (ref.current) observer.observe(ref.current);
+
+    const cur = ref.current;
+
+    return () => {
+      if (cur) observer.unobserve(cur);
+    };
+  }, [ref, intersectionMargin]);
+
   return (
     <div
       className={cx(
-        'p-10 bg-slate-800 rounded-xl shadow-xl border-gray-700 border-[0.5px] relative overflow-hidden',
+        `p-10 bg-slate-800 rounded-xl shadow-xl border-gray-700 border-[0.5px] relative overflow-hidden transition duration-200`,
+        visible ? `opacity-100` : `opacity-0 translate-y-4`,
         className,
       )}
+      ref={ref}
     >
       {children}
     </div>

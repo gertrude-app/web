@@ -7,7 +7,7 @@ interface Props {
 
 const GlowEffect: React.FC<Props> = ({ className }) => {
   return (
-    <div className={cx('w-176 h-176 absolute bg-fuchsia-radial-gradient', className)} />
+    <div className={cx(`w-176 h-176 absolute bg-fuchsia-radial-gradient`, className)} />
   );
 };
 
