@@ -42,9 +42,8 @@ const Callout: React.FC<Props> = ({ type, title, children, alt }) => {
         {title && (
           <span
             className={cx(`font-lexend m-0 block text-xl mb-2.5`, styles[type].title)}
-          >
-            {title}
-          </span>
+            dangerouslySetInnerHTML={{ __html: title }}
+          />
         )}
         <span className={cx(`prose *mt-2.5 block`, styles[type].body)}>{children}</span>
       </span>
