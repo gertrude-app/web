@@ -30,3 +30,9 @@ Empty.args = {
   ...Default.args,
   days: [],
 };
+
+export const AllUsers = Template.bind({});
+AllUsers.args = {
+  ...Default.args,
+  userName: undefined,
+};

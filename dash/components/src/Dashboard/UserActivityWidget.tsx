@@ -54,6 +54,7 @@ const UserActivityWidget: React.FC<Props> = ({ userActivity, className }) => {
   return (
     <DashboardWidget className={cx(`space-y-3`, className)}>
       <WidgetTitle icon="binoculars" text="Activity" />
+      <Link to="/users/activity">All Activity</Link>
       {writable(userActivity)
         .sort((a, b) => b.numUnreviewed - a.numUnreviewed)
         .map((activity) => (
