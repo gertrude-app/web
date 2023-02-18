@@ -5,28 +5,9 @@ import { UndoMainPadding } from '../../Chrome/Chrome';
 import PartyMessage from '../../PartyMessage';
 import KeystrokesViewer from './KeystrokesViewer';
 import ScreenshotViewer from './ScreenshotViewer';
+import { ActivityItem } from './UserActivityReviewDay';
 import ReviewDayHeader from './ReviewDayHeader';
-import ReviewDayWrapper from './ReviewDayWrapper';
-
-interface Screenshot {
-  type: 'Screenshot';
-  width: number;
-  height: number;
-  url: string;
-}
-
-interface KeystrokeLine {
-  type: 'KeystrokeLine';
-  appName: string;
-  line: string;
-}
-
-export type ActivityItem = (Screenshot | KeystrokeLine) & {
-  id: UUID;
-  ids: UUID[];
-  date: string;
-  deleted?: boolean;
-};
+import { ReviewDayWrapper } from '../..';
 
 interface Props {
   date: Date;
@@ -58,7 +39,6 @@ const UserActivityReviewDay: React.FC<Props> = ({
               setTimeout(() => navigate(`..`, { replace: true }), 100);
             }}
             color="primary"
-            size="large"
           >
             <i className="fa-solid fa-thumbs-up mr-2" />
             Approve all
@@ -103,6 +83,7 @@ function deleteableChunks(
             className="self-center"
             type="button"
             color="secondary-on-violet-bg"
+            small
             onClick={() => {
               deleteItems(toDelete);
               // sometimes scrolling to top seems to fail, possibly because
