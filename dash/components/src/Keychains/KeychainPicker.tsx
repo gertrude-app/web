@@ -51,11 +51,15 @@ const KeychainPicker: React.FC<Props> = ({
     {hasNoOwnKeychains && (
       <EmptyState
         icon="key"
-        heading={mode === `addToUser` ? `No personal keychains` : `No keychains`}
+        heading={
+          mode === `addToUser`
+            ? `No personal keychains`
+            : `No keychains associated with this user`
+        }
         secondaryText={
           mode === `addToUser`
             ? `Select a public keychain or create your own.`
-            : `You'll need a keychain to accept this unlock request.`
+            : `You'll need to add a keychain to this user, or create a new keychain if you don't have any.`
         }
         buttonText="Create a keychain"
         action="/keychains"

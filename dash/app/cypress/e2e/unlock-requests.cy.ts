@@ -62,6 +62,17 @@ describe(`unlock request flow`, () => {
     cy.contains(`rejected`);
   });
 
+  it(`shows empty state if user has no own keychains`, () => {
+    user = mock.user({ id: `1`, keychains: [] });
+    cy.intercept(`/pairql/dashboard/GetUser`, (req) => req.reply(user));
+
+    cy.visit(`/users/1/unlock-requests/2`);
+    cy.url().should(`include`, `/review`);
+    cy.contains(`Accept`).click();
+    cy.location(`pathname`).should(`eq`, `/users/1/unlock-requests/2/select-keychain`);
+    cy.contains(`No keychains associated with this user`);
+  });
+
   it(`displays not found error if not found`, () => {
     cy.intercept(`/pairql/dashboard/GetUnlockRequest`, {
       __cyStubbedError: true,
@@ -81,13 +92,13 @@ describe(`unlock request flow`, () => {
     cy.contains(`try again`);
   });
 
-  it(`shows shows decided status: accepted`, () => {
+  it(`shows decided status: accepted`, () => {
     unlockRequest.status = `accepted`;
     cy.visit(`/users/1/unlock-requests/2`);
     cy.contains(`accepted`);
   });
 
-  it(`shows shows decided status: rejected`, () => {
+  it(`shows decided status: rejected`, () => {
     unlockRequest.status = `rejected`;
     cy.visit(`/users/1/unlock-requests/2`);
     cy.contains(`rejected`);
