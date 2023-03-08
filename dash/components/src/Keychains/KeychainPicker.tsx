@@ -51,31 +51,34 @@ const KeychainPicker: React.FC<Props> = ({
     {hasNoOwnKeychains && (
       <EmptyState
         icon="key"
-        heading={
-          mode === `addToUser`
-            ? `No personal keychains`
-            : `No keychains associated with this user`
-        }
+        heading={`No personal keychains`}
         secondaryText={
           mode === `addToUser`
             ? `Select a public keychain or create your own.`
-            : `You'll need to add a keychain to this user, or create a new keychain if you don't have any.`
+            : `You'll need to create a keychain and add it to this user to accept this unlock request.`
         }
         buttonText="Create a keychain"
         action="/keychains"
       />
     )}
-    {!hasNoOwnKeychains &&
-      selectableOwnKeychains.length === 0 &&
-      mode === `addToUser` && (
-        <EmptyState
-          icon="key"
-          heading="No selectable keychains"
-          secondaryText="This user already has all of your keychains. Add a new one, or choose a public keychain."
-          buttonText="Add a keychain"
-          action="/keychains"
-        />
-      )}
+    {!hasNoOwnKeychains && selectableOwnKeychains.length === 0 && (
+      <EmptyState
+        icon="key"
+        heading={
+          mode === `forUnlockRequestKey`
+            ? `No keychains associated with this user`
+            : `No selectable keychains`
+        }
+        secondaryText={
+          mode === `forUnlockRequestKey`
+            ? `You'll need to add a keychain to this user to accept this unlock request, or create a new keychain if you don't have any.`
+            : `This user already has all of your keychains. Add a new one, or choose a public keychain.`
+        }
+        buttonText="Create a keychain"
+        action="/keychains"
+      />
+    )}
+
     {mode === `addToUser` && selectablePublicKeychains.length > 0 && (
       <div>
         <h2 className={cx(`text-lg font-bold text-gray-600 mb-3`)}>Public keychains:</h2>

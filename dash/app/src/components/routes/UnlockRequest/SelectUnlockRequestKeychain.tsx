@@ -77,7 +77,7 @@ const SelectUnlockRequestKeychain: React.FC = () => {
     >
       <KeychainPicker
         mode="forUnlockRequestKey"
-        hasNoOwnKeychains={selectableKeychains.length === 0}
+        hasNoOwnKeychains={keychains.own.length === 0}
         selectableOwnKeychains={selectableKeychains}
         selectablePublicKeychains={[]}
         onSelect={(keychain) => dispatch(keychainSelected(keychain.id))}

@@ -62,15 +62,25 @@ describe(`unlock request flow`, () => {
     cy.contains(`rejected`);
   });
 
-  it(`shows empty state if user has no own keychains`, () => {
+  it(`shows empty state if user has no keychains`, () => {
     user = mock.user({ id: `1`, keychains: [] });
     cy.intercept(`/pairql/dashboard/GetUser`, (req) => req.reply(user));
-
     cy.visit(`/users/1/unlock-requests/2`);
     cy.url().should(`include`, `/review`);
     cy.contains(`Accept`).click();
     cy.location(`pathname`).should(`eq`, `/users/1/unlock-requests/2/select-keychain`);
     cy.contains(`No keychains associated with this user`);
+  });
+
+  it(`shows alternate empty state if admin has no own keychains`, () => {
+    user = mock.user({ id: `1`, keychains: [] });
+    cy.intercept(`/pairql/dashboard/GetUser`, (req) => req.reply(user));
+    selectable.own = [];
+    cy.visit(`/users/1/unlock-requests/2`);
+    cy.url().should(`include`, `/review`);
+    cy.contains(`Accept`).click();
+    cy.location(`pathname`).should(`eq`, `/users/1/unlock-requests/2/select-keychain`);
+    cy.contains(`No personal keychains`);
   });
 
   it(`displays not found error if not found`, () => {
@@ -129,14 +139,6 @@ describe(`unlock request flow`, () => {
     cy.location(`pathname`).should(`eq`, `/users/1/unlock-requests/2/select-keychain`);
     cy.contains(`Select a keychain`);
     cy.contains(`Music Theory`);
-  });
-
-  it(`prompts to create a keychain if admin has none`, () => {
-    selectable.own = [];
-    cy.visit(`/users/1/unlock-requests/2/review`);
-    cy.contains(`Accept`).click();
-    cy.location(`pathname`).should(`eq`, `/users/1/unlock-requests/2/select-keychain`);
-    cy.contains(`need a keychain to accept`);
   });
 
   it(`only shows keychains attached to a user`, () => {
