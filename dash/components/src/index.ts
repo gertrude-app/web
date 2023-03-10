@@ -45,6 +45,8 @@ export { default as UsersOverviewWidget } from './Dashboard/UsersOverviewWidget'
 export { default as UserActivityReviewDay } from './Users/Activity/UserActivityReviewDay';
 export { default as ReviewDayHeader } from './Users/Activity/ReviewDayHeader';
 export { default as ReviewDayWrapper } from './Users/Activity/ReviewDayWrapper';
+export { default as AllUsersActivityReviewDay } from './Users/Activity/AllUsersActivityReviewDay';
+export { default as UserActivityHeader } from './Users/Activity/UserActivityHeader';
 export { default as Loading } from './Loading';
 export { default as GenericError } from './GenericError';
 export { default as ApiErrorMessage } from './ApiErrorMessage';

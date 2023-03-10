@@ -109,6 +109,8 @@ describe(`upsertUser`, () => {
   });
 });
 
+// add test for fetching all user activity
+
 describe(`fetchActivityOverview`, () => {
   it(`filters out ranges with no items, and orders most recent first`, async () => {
     let state = reducer(void 0, fetchActivityOverview.started({ userId: `user123` }));

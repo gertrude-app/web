@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 import * as mock from '../../src/redux/__tests__/mocks';
+import { entireDay } from '../../src/lib/helpers';
+import { dateFromUrl } from '@dash/datetime';
 
 describe(`user screen`, () => {
   beforeEach(() => {
@@ -58,6 +60,24 @@ describe(`user screen`, () => {
 
       // redirects to /users
       cy.location(`pathname`).should(`eq`, `/users`);
+    });
+  });
+
+  describe(`all users activity`, () => {
+    it.only(`foo`, () => {
+      cy.intercept(`/pairql/dashboard/GetUsersActivityDay`, (req) => {
+        req.alias = `getUsersActivityDay`;
+        req.reply([
+          mock.allUsersActivityDay(),
+          mock.allUsersActivityDay({ userName: `Suzy`, numDeleted: 1 }),
+        ]);
+      });
+
+      cy.visit(`/users/activity/03-06-2023`);
+
+      cy.wait(`@getUsersActivityDay`)
+        .its(`request.body`)
+        .should(`deep.equal`, { range: entireDay(dateFromUrl('03-06-2023')) });
     });
   });
 });

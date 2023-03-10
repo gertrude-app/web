@@ -30,6 +30,8 @@ import Signup from './components/routes/Signup';
 import User from './components/routes/User';
 import useWindowWidth from './hooks/window-width';
 import AllUsersActivityOverview from './components/routes/AllUsersActivityOverview';
+import { AllUsersActivityReviewDay } from '@dash/components';
+import UsersActivityDay from './components/routes/UsersActivityDay';
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -82,7 +84,10 @@ const App: React.FC = () => {
         <Route path="users">
           <Route index element={<Users />} />
 
-          <Route path="activity" element={<AllUsersActivityOverview />} />
+          <Route path="activity">
+            <Route index element={<AllUsersActivityOverview />} />
+            <Route path=":date" element={<UsersActivityDay />} />
+          </Route>
 
           <Route path=":userId">
             <Route index element={<User />} />

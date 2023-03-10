@@ -75,7 +75,7 @@ const UserActivityReviewDay: React.FC<Props> = ({
 
 export default UserActivityReviewDay;
 
-function deleteableChunks(
+export function deleteableChunks(
   items: ActivityItem[],
   chunkSize: number,
   deleteItems: (ids: UUID[]) => unknown,

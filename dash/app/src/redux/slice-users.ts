@@ -6,6 +6,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import type {
   KeychainSummary,
   GetUserActivityDays,
+  GetUserActivityDay,
   DateRangeInput,
   User,
   RequestState,
@@ -17,7 +18,8 @@ import { createResultThunk } from './thunk';
 import * as empty from './empty';
 import { logoutRouteVisited } from './slice-auth';
 
-interface ActivityDay {
+export interface ActivityDay {
+  userName: string;
   numDeleted: number;
   items: Record<UUID, ActivityItem>;
 }
@@ -36,6 +38,7 @@ type DeletableEntity = 'device' | 'user';
 export interface UsersState {
   listRequest: RequestState;
   entities: Record<UUID, Editable<User>>;
+  fetchAllUsersDay: Record<AllUsersActivityDayKey, RequestState>;
   fetchUserRequest: Record<UUID, RequestState>;
   updateUserRequest: Record<UUID, RequestState>;
   addDeviceRequest?: RequestState<number>;
@@ -50,6 +53,7 @@ export function initialState(): UsersState {
   return {
     listRequest: Req.idle(),
     entities: {},
+    fetchAllUsersDay: {},
     fetchUserRequest: {},
     updateUserRequest: {},
     activityOverviews: {},
@@ -135,6 +139,7 @@ export const slice = createSlice({
 
     builder.addCase(fetchActivityDay.succeeded, (state, { payload, meta: { arg } }) => {
       state.activityDays[activityDayKey(arg.userId, arg.day)] = Req.succeed({
+        userName: payload.userName,
         numDeleted: payload.numDeleted,
         items: toMap(
           payload.items.map((item) => {
@@ -268,6 +273,28 @@ export const slice = createSlice({
     builder.addCase(createPendingAppConnection.failed, (state, { error }) => {
       state.addDeviceRequest = Req.fail(error);
     });
+
+    builder.addCase(fetchUsersActivityDay.started, (state, action) => {
+      state.fetchAllUsersDay[formatDate(action.meta.arg, `url`)] = Req.ongoing();
+    });
+
+    builder.addCase(fetchUsersActivityDay.succeeded, (state, { meta, payload }) => {
+      const date = formatDate(meta.arg, `url`);
+      state.fetchAllUsersDay[date] = Req.succeed(void 0);
+
+      for (const activity of payload) {
+        activity.userId;
+        state.activityDays[activityDayKey(activity.userId, meta.arg)] = Req.succeed({
+          userName: activity.userName,
+          numDeleted: activity.numDeleted,
+          items: itemsToMap(activity.items),
+        });
+      }
+    });
+
+    builder.addCase(fetchUsersActivityDay.failed, (state, { meta, error }) => {
+      state.fetchAllUsersDay[formatDate(meta.arg, `url`)] = Req.fail(error);
+    });
   },
 });
 
@@ -286,6 +313,11 @@ export const fetchActivityOverview = createResultThunk(
       userId: arg.userId,
       dateRanges: arg.ranges ?? entireDays(14),
     }),
+);
+
+export const fetchUsersActivityDay = createResultThunk(
+  `${slice.name}/fetchUsersActivityDay`,
+  (arg: Date) => Current.api.getUsersActivityDay({ range: entireDay(arg) }),
 );
 
 export const fetchUsers = createResultThunk(
@@ -384,6 +416,7 @@ export default slice.reducer;
 // helpers
 
 type ActivityDayKey = string;
+type AllUsersActivityDayKey = string;
 
 export function activityDayKey(userId: UUID, date: Date): ActivityDayKey {
   return `${userId}--${formatDate(date, `url`)}`;
@@ -398,4 +431,33 @@ function entireDays(numDays: number): DateRangeInput[] {
     ranges.push(entireDay(day));
   }
   return ranges;
+}
+
+export function itemsToMap(items: GetUserActivityDay.Item[]): Record<UUID, ActivityItem> {
+  const newRecord = toMap(
+    items.map((item) => {
+      if (item.type === `CoalescedKeystrokeLine`) {
+        return {
+          type: `KeystrokeLine` as const,
+          appName: item.value.appName,
+          line: item.value.line,
+          date: item.value.createdAt,
+          id: item.value.id,
+          ids: item.value.ids,
+        };
+      } else {
+        return {
+          type: `Screenshot` as const,
+          width: item.value.width,
+          height: item.value.height,
+          url: item.value.url,
+          date: item.value.createdAt,
+          id: item.value.id,
+          ids: item.value.ids,
+        };
+      }
+    }),
+  );
+
+  return newRecord;
 }
