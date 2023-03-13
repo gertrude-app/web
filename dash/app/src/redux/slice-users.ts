@@ -141,23 +141,7 @@ export const slice = createSlice({
       state.activityDays[activityDayKey(arg.userId, arg.day)] = Req.succeed({
         userName: payload.userName,
         numDeleted: payload.numDeleted,
-        items: toMap(
-          payload.items.map((item) => {
-            if (item.type === `CoalescedKeystrokeLine`) {
-              return {
-                type: `KeystrokeLine`,
-                date: item.value.createdAt,
-                ...item.value,
-              };
-            } else {
-              return {
-                type: `Screenshot`,
-                date: item.value.createdAt,
-                ...item.value,
-              };
-            }
-          }),
-        ),
+        items: itemsToMap(payload.items),
       });
     });
 
@@ -439,21 +423,14 @@ export function itemsToMap(items: GetUserActivityDay.Item[]): Record<UUID, Activ
       if (item.type === `CoalescedKeystrokeLine`) {
         return {
           type: `KeystrokeLine` as const,
-          appName: item.value.appName,
-          line: item.value.line,
           date: item.value.createdAt,
-          id: item.value.id,
-          ids: item.value.ids,
+          ...item.value,
         };
       } else {
         return {
           type: `Screenshot` as const,
-          width: item.value.width,
-          height: item.value.height,
-          url: item.value.url,
           date: item.value.createdAt,
-          id: item.value.id,
-          ids: item.value.ids,
+          ...item.value,
         };
       }
     }),

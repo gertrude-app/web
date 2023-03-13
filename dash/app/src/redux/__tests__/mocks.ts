@@ -119,6 +119,8 @@ export function activityDay(
 export function allUsersActivityDay(
   override: Partial<GetUsersActivityDay.Output[number]> = {},
 ): GetUsersActivityDay.Output[number] {
+  const width = 700;
+  const height = 400;
   return {
     userName: `Bob`,
     numDeleted: 0,
@@ -129,9 +131,9 @@ export function allUsersActivityDay(
         value: {
           id: uuid(),
           ids: [uuid()],
-          url: `https://placekitten.com/750/400`,
-          width: 10,
-          height: 10,
+          url: `https://placekitten.com/${width}/${height}`,
+          width: width,
+          height: height,
           createdAt: new Date().toISOString(),
         },
       },
