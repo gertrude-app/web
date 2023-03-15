@@ -72,7 +72,7 @@ describe(`create keychain`, () => {
     // give the keychain to the user
     cy.contains(`Add keychain`).click();
     cy.contains(`New test keychain`).click();
-    cy.testId('modal-primary-btn').click();
+    cy.testId(`modal-primary-btn`).click();
     cy.contains(`Save user`).click();
     cy.contains(`Add keychain`).click();
     // now check for empty state

@@ -11,6 +11,8 @@ type Props = {
   selectablePublicKeychains: Keychain[];
   onSelect(keychain: Keychain): unknown;
   selectedId?: UUID;
+  userName: string;
+  userId: string;
 };
 
 const KeychainPicker: React.FC<Props> = ({
@@ -20,6 +22,8 @@ const KeychainPicker: React.FC<Props> = ({
   selectedId,
   selectablePublicKeychains,
   onSelect,
+  userId,
+  userName,
 }) => (
   <div
     className={cx(
@@ -55,7 +59,7 @@ const KeychainPicker: React.FC<Props> = ({
         secondaryText={
           mode === `addToUser`
             ? `Select a public keychain below, or create a keychain of your own.`
-            : `Before you can accept this unlock request, <Little Jimmy> needs to have at least one keychain created by you.`
+            : `Before you can accept this unlock request, ${userName} needs to have at least one keychain created by you.`
         }
         buttonText="Create a keychain"
         action="/keychains"
@@ -69,11 +73,20 @@ const KeychainPicker: React.FC<Props> = ({
         }
         secondaryText={
           mode === `forUnlockRequestKey`
-            ? `Before you can accept this unlock request, <Little Jimmy> needs to have at least one keychain created by you.`
-            : `<Little Jimmy> already has all of your keychains. You can create a new one, or choose a public keychain below.`
+            ? `Before you can accept this unlock request, ${userName} needs to have at least one keychain created by you.`
+            : `${userName} already has all of your keychains. You can create a new one, or choose a public keychain below.`
         }
         buttonText="Create a keychain"
         action="/keychains"
+        secondaryButton={
+          mode === `forUnlockRequestKey`
+            ? {
+                text: `Assign a keychain`,
+                action: `/users/${userId}`,
+                icon: `user`,
+              }
+            : undefined
+        }
       />
     )}
 
