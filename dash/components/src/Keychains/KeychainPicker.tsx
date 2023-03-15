@@ -51,11 +51,11 @@ const KeychainPicker: React.FC<Props> = ({
     {hasNoOwnKeychains && (
       <EmptyState
         icon="key"
-        heading={`No personal keychains`}
+        heading={mode === `addToUser` ? `No personal keychains` : `No keychains`}
         secondaryText={
           mode === `addToUser`
-            ? `Select a public keychain or create your own.`
-            : `You'll need to create a keychain and add it to this user to accept this unlock request.`
+            ? `Select a public keychain below, or create a keychain of your own.`
+            : `Before you can accept this unlock request, <Little Jimmy> needs to have at least one keychain created by you.`
         }
         buttonText="Create a keychain"
         action="/keychains"
@@ -65,14 +65,12 @@ const KeychainPicker: React.FC<Props> = ({
       <EmptyState
         icon="key"
         heading={
-          mode === `forUnlockRequestKey`
-            ? `No keychains associated with this user`
-            : `No selectable keychains`
+          mode === `forUnlockRequestKey` ? `No keychains` : `No selectable keychains`
         }
         secondaryText={
           mode === `forUnlockRequestKey`
-            ? `You'll need to add a keychain to this user to accept this unlock request, or create a new keychain if you don't have any.`
-            : `This user already has all of your keychains. Add a new one, or choose a public keychain.`
+            ? `Before you can accept this unlock request, <Little Jimmy> needs to have at least one keychain created by you.`
+            : `<Little Jimmy> already has all of your keychains. You can create a new one, or choose a public keychain below.`
         }
         buttonText="Create a keychain"
         action="/keychains"

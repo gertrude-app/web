@@ -12,12 +12,15 @@ describe(`create keychain`, () => {
     cy.intercept(`/pairql/dashboard/GetUsers`, [mock.user()]);
   });
 
-  it(`allows selection of brand new keychains`, () => {
+  function noKeychains(): void {
     // admin starts with no keychains
     cy.intercept(`/pairql/dashboard/GetAdminKeychains`, []);
     // and no prior selectable keychains
     cy.intercept(`/pairql/dashboard/GetSelectableKeychains`, { own: [], public: [] });
+  }
 
+  it(`allows selection of brand new keychains`, () => {
+    noKeychains();
     cy.visit(`/keychains`);
     cy.contains(`Create keychain`).click();
     cy.get(`input[name=name]`).type(`New test keychain`);
@@ -48,5 +51,31 @@ describe(`create keychain`, () => {
     cy.testId(`edit-user`).click();
     cy.contains(`Add keychain`).click();
     cy.contains(`Existing`).should(`not.exist`);
+  });
+
+  it(`(the keychain picker) shows empty state when admin has no personal keychains to assign`, () => {
+    noKeychains();
+    cy.visit(`/users`);
+    cy.testId(`edit-user`).click();
+    cy.contains(`Add keychain`).click();
+    cy.contains(`No personal keychains`);
+  });
+
+  it(`(the keychain picker) shows empty state when user already has all personal keychains`, () => {
+    noKeychains();
+    cy.visit(`/keychains`);
+    cy.contains(`Create keychain`).click();
+    cy.get(`input[name=name]`).type(`New test keychain`);
+    cy.contains(`Create keychain`).click();
+    cy.sidebarClick(`Users`);
+    cy.testId(`edit-user`).click();
+    // give the keychain to the user
+    cy.contains(`Add keychain`).click();
+    cy.contains(`New test keychain`).click();
+    cy.testId('modal-primary-btn').click();
+    cy.contains(`Save user`).click();
+    cy.contains(`Add keychain`).click();
+    // now check for empty state
+    cy.contains(`No selectable keychains`);
   });
 });

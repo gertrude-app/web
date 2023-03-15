@@ -62,17 +62,17 @@ describe(`unlock request flow`, () => {
     cy.contains(`rejected`);
   });
 
-  it(`shows empty state if user has no keychains`, () => {
+  it(`shows empty state if admin has no personal keychains to assign`, () => {
     user = mock.user({ id: `1`, keychains: [] });
     cy.intercept(`/pairql/dashboard/GetUser`, (req) => req.reply(user));
     cy.visit(`/users/1/unlock-requests/2`);
     cy.url().should(`include`, `/review`);
     cy.contains(`Accept`).click();
     cy.location(`pathname`).should(`eq`, `/users/1/unlock-requests/2/select-keychain`);
-    cy.contains(`No keychains associated with this user`);
+    cy.contains(`No keychains`);
   });
 
-  it(`shows alternate empty state if admin has no own keychains`, () => {
+  it(`shows alternate empty state if user has no personal keychains, but the admin has at least one they could assign`, () => {
     user = mock.user({ id: `1`, keychains: [] });
     cy.intercept(`/pairql/dashboard/GetUser`, (req) => req.reply(user));
     selectable.own = [];
@@ -80,7 +80,7 @@ describe(`unlock request flow`, () => {
     cy.url().should(`include`, `/review`);
     cy.contains(`Accept`).click();
     cy.location(`pathname`).should(`eq`, `/users/1/unlock-requests/2/select-keychain`);
-    cy.contains(`No personal keychains`);
+    cy.contains(`No keychains`);
   });
 
   it(`displays not found error if not found`, () => {
