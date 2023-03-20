@@ -44,17 +44,12 @@ const EmptyState: React.FC<Props> = ({
     <p className="text-gray-500 text-center">{secondaryText}</p>
     <div className="flex flex-col sm:flex-row sm:items-center justify-center items-stretch mt-6 w-full">
       {typeof action === `string` ? (
-        <Button color="primary" type="link" to={action} className="w-[100%] sm:w-auto">
+        <Button color="primary" type="link" to={action}>
           <i className="fa fa-plus mr-4" />
           {buttonText}
         </Button>
       ) : (
-        <Button
-          color="primary"
-          type="button"
-          onClick={action}
-          className="w-[100%] sm:w-auto"
-        >
+        <Button color="primary" type="button" onClick={action}>
           <i className="fa fa-plus mr-4" />
           {buttonText}
         </Button>
@@ -65,7 +60,7 @@ const EmptyState: React.FC<Props> = ({
             color="secondary"
             type="link"
             to={secondaryButton.action}
-            className="sm:ml-4 mt-3 sm:mt-0 w-[100%] sm:w-auto"
+            className="sm:ml-4 mt-3 sm:mt-0"
           >
             <i className={`fa-solid fa-${secondaryButton.icon} mr-4`} />
             {secondaryButton.text}
@@ -75,7 +70,7 @@ const EmptyState: React.FC<Props> = ({
             color="secondary"
             type="button"
             onClick={secondaryButton.action}
-            className="sm:ml-4 mt-3 sm:mt-0 w-[100%] sm:w-auto"
+            className="sm:ml-4 mt-3 sm:mt-0"
           >
             <i className={`fa-solid fa-${secondaryButton.icon} mr-4`} />
             {secondaryButton.text}
