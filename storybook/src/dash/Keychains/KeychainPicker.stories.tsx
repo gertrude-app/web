@@ -49,7 +49,6 @@ AddToUserHasAllPersonalKeychains.args = {
   userName: `Little Jimmy`,
 };
 
-// @screenshot: xs/1000,lg
 export const ForUnlockRequestHappyPath = Template.bind({});
 ForUnlockRequestHappyPath.args = {
   mode: `forUnlockRequestKey`,
