@@ -39,6 +39,7 @@ export interface UsersState {
   listRequest: RequestState;
   entities: Record<UUID, Editable<User>>;
   fetchAllUsersDay: Record<AllUsersActivityDayKey, RequestState>;
+  fetchAllActivityOverviews: RequestState;
   fetchUserRequest: Record<UUID, RequestState>;
   updateUserRequest: Record<UUID, RequestState>;
   addDeviceRequest?: RequestState<number>;
@@ -54,6 +55,7 @@ export function initialState(): UsersState {
     listRequest: Req.idle(),
     entities: {},
     fetchAllUsersDay: {},
+    fetchAllActivityOverviews: Req.idle(),
     fetchUserRequest: {},
     updateUserRequest: {},
     activityOverviews: {},
@@ -267,7 +269,6 @@ export const slice = createSlice({
       state.fetchAllUsersDay[date] = Req.succeed(void 0);
 
       for (const activity of payload) {
-        activity.userId;
         state.activityDays[activityDayKey(activity.userId, meta.arg)] = Req.succeed({
           userName: activity.userName,
           numDeleted: activity.numDeleted,
@@ -278,6 +279,27 @@ export const slice = createSlice({
 
     builder.addCase(fetchUsersActivityDay.failed, (state, { meta, error }) => {
       state.fetchAllUsersDay[formatDate(meta.arg, `url`)] = Req.fail(error);
+    });
+
+    builder.addCase(fetchUsersActivityDays.started, (state, action) => {
+      state.fetchAllActivityOverviews = Req.ongoing();
+    });
+
+    builder.addCase(fetchUsersActivityDays.succeeded, (state, action) => {
+      state.fetchAllActivityOverviews = Req.succeed(void 0);
+
+      for (const overview of action.payload) {
+        state.activityOverviews[overview.userId] = Req.succeed({
+          userName: overview.userName,
+          days: overview.days
+            .sort((a, b) => (a.date < b.date ? 1 : -1))
+            .filter((day) => day.totalItems > 0),
+        });
+      }
+    });
+
+    builder.addCase(fetchUsersActivityDays.failed, (state, { meta, error }) => {
+      state.fetchAllActivityOverviews = Req.fail(error);
     });
   },
 });
@@ -294,7 +316,6 @@ export const fetchActivityOverview = createResultThunk(
   `${slice.name}/fetchActivityOverview`,
   (arg: { userId: UUID; ranges?: DateRangeInput[] }) =>
     Current.api.getUserActivityDays({
-      userId: arg.userId,
       dateRanges: arg.ranges ?? entireDays(14),
     }),
 );
@@ -302,6 +323,11 @@ export const fetchActivityOverview = createResultThunk(
 export const fetchUsersActivityDay = createResultThunk(
   `${slice.name}/fetchUsersActivityDay`,
   (arg: Date) => Current.api.getUsersActivityDay({ range: entireDay(arg) }),
+);
+
+export const fetchUsersActivityDays = createResultThunk(
+  `${slice.name}/fetchUsersActivityDays`,
+  (arg?: DateRangeInput[]) => Current.api.getUsersActivityDays(arg ?? entireDays(14)),
 );
 
 export const fetchUsers = createResultThunk(
@@ -406,7 +432,7 @@ export function activityDayKey(userId: UUID, date: Date): ActivityDayKey {
   return `${userId}--${formatDate(date, `url`)}`;
 }
 
-function entireDays(numDays: number): DateRangeInput[] {
+export function entireDays(numDays: number): DateRangeInput[] {
   const now = new Date();
   const ranges: DateRangeInput[] = [];
   for (let i = 0; i < numDays; i++) {

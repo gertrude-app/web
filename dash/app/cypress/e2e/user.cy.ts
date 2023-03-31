@@ -2,6 +2,7 @@
 import * as mock from '../../src/redux/__tests__/mocks';
 import { entireDay } from '../../src/lib/helpers';
 import { dateFromUrl } from '@dash/datetime';
+import { controlledTime } from '../../../datetime/node_modules/@shared/datetime/src';
 
 describe(`user screen`, () => {
   beforeEach(() => {
@@ -64,7 +65,28 @@ describe(`user screen`, () => {
   });
 
   describe(`all users activity`, () => {
-    it.only(`foo`, () => {
+    it.only(`bar`, () => {
+      cy.intercept(`/pairql/dashboard/GetUsersActivityDays`, (req) => {
+        req.alias = `getUsersActivityDays`;
+        req.reply([
+          mock.allUsersActivityOverviewItem({
+            userId: `1`,
+            days: [
+              mock.activityDay(10, 4, controlledTime.now()),
+              mock.activityDay(1234, 5, controlledTime.subtracting({ days: 1 })),
+            ],
+          }),
+          mock.allUsersActivityOverviewItem({
+            userId: `456`,
+            days: [mock.activityDay(16, 2, controlledTime.now())],
+          }),
+        ]);
+      });
+
+      cy.visit(`/users/activity`);
+    });
+
+    it(`foo`, () => {
       cy.intercept(`/pairql/dashboard/GetUsersActivityDay`, (req) => {
         req.alias = `getUsersActivityDay`;
         req.reply([

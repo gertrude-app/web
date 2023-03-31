@@ -2,7 +2,6 @@
 
 export namespace GetUserActivityDays {
   export interface Input {
-    userId: UUID;
     dateRanges: Array<{
       start: string;
       end: string;
