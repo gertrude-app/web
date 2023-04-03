@@ -54,7 +54,11 @@ const UserActivityWidget: React.FC<Props> = ({ userActivity, className }) => {
   return (
     <DashboardWidget className={cx(`space-y-3`, className)}>
       <WidgetTitle icon="binoculars" text="Activity" />
-      <Link to="/users/activity">All Activity</Link>
+      <UnreviewedItemsCard
+        key={`usersactivitybutton`}
+        userName={`All Activity`}
+        numUnreviewed={120}
+      />
       {writable(userActivity)
         .sort((a, b) => b.numUnreviewed - a.numUnreviewed)
         .map((activity) => (
@@ -72,7 +76,7 @@ const UserActivityWidget: React.FC<Props> = ({ userActivity, className }) => {
 export default UserActivityWidget;
 
 interface UnreviewedItemsCardProps {
-  userId: UUID;
+  userId?: UUID;
   userName: string;
   numUnreviewed: number;
 }
@@ -83,10 +87,11 @@ export const UnreviewedItemsCard: React.FC<UnreviewedItemsCardProps> = ({
   numUnreviewed,
 }) => (
   <Link
-    to={`/users/${userId}/activity`}
+    to={userId ? `/users/${userId}/activity` : `/users/activity`}
     className={cx(
       `ScrollTop bg-white border rounded-xl p-4 flex justify-between items-center relative transition duration-100 cursor-pointer hover:bg-gray-50`,
       numUnreviewed === 0 && `bg-green-50 hover:bg-green-100 hover:bg-opacity-80`,
+      !userId && `bg-slate-100 hover:bg-slate-200 hover:bg-opacity-80`,
     )}
   >
     <h2 className="font-bold">{userName}</h2>

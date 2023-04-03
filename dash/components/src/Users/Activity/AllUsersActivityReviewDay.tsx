@@ -40,7 +40,6 @@ const AllUsersActivityReviewDay: React.FC<Props> = ({
             <>
               <UserActivityHeader>{userName}</UserActivityHeader>
               {deleteableChunks(items, chunkSize, deleteItems)}
-              {/* Sort of smelly, maybe this should be its own ApproveButton component */}
               <Button
                 className="ScrollTop self-center"
                 type="button"
