@@ -66,9 +66,8 @@ describe(`user screen`, () => {
 
   describe(`all users activity`, () => {
     it.only(`overviews page`, () => {
-      cy.intercept(`/pairql/dashboard/GetUsersActivityDays`, (req) => {
-        req.alias = `getUsersActivityDays`;
-        req.reply([
+      cy.intercept(`/pairql/dashboard/GetUsersActivityDays`,
+        [
           mock.allUsersActivityOverviewItem({
             userId: `1`,
             days: [
@@ -81,14 +80,13 @@ describe(`user screen`, () => {
             userName: `Suzy`,
             days: [mock.activityDay(16, 2, controlledTime.now())],
           }),
-        ]);
-      });
+        ]
+      );
 
       cy.visit(`/users/activity`);
-      cy.wait(`@getUsersActivityDays`)
-        .its(`request.body`)
-        .should(`be.an`, `array`)
-        .and(`have.length`, 14);
+
+      cy.contains(`6 out of 26`)
+      cy.contains(`5 out of 1234`)
     });
 
     it(`review day`, () => {

@@ -6,6 +6,7 @@ import reducer, {
   deleteActivityItems,
   deleteDevice,
   fetchActivityOverview,
+  fetchUsersActivityDays,
   newUserRouteVisited,
   upsertUser,
 } from '../slice-users';
@@ -109,9 +110,74 @@ describe(`upsertUser`, () => {
   });
 });
 
-// add test for fetching all user activity
+describe(`fetchUsersActivityDays`, () => {
+  it(`filters out ranges with no items, and orders most recent first`, async () => {
+    let state = reducer(void 0, fetchUsersActivityDays.started({}));
+    expect(state.fetchAllActivityOverviews).toEqual(Req.ongoing());
 
-// win: write a fetchUsersActivityOverview test
+    state = reducer(
+      state,
+      fetchUsersActivityDays.succeeded(
+        [
+          {
+            userId: `123`,
+            userName: `Keith Heijnal`,
+            days: [
+              mock.activityDay(5, 2, `01-01-2022`),
+              mock.activityDay(0, 0, `01-03-2022`), // <-- should be filtered out
+              mock.activityDay(11, 5, `01-05-2022`), // <-- most recent, should be first
+            ],
+          },
+          {
+            userId: `456`,
+            userName: `John Lawrence`,
+            days: [
+              mock.activityDay(137, 0, `01-01-2022`),
+              mock.activityDay(120, 111, `01-03-2022`),
+              mock.activityDay(10, 5, `01-25-2022`), // <-- most recent, should be first
+            ],
+          },
+          {
+            userId: `789`,
+            userName: `Arnold`,
+            days: [
+              mock.activityDay(1234, 1234, `02-14-2022`), // <-- most recent, should be first
+              mock.activityDay(1013, 1013, `01-03-2022`),
+              mock.activityDay(0, 0, `01-25-2022`),
+            ],
+          },
+        ],
+        {},
+      ),
+    );
+
+    expect(state.activityOverviews).toEqual({
+      123: Req.succeed({
+        userName: `Keith Heijnal`,
+        days: [
+          mock.activityDay(11, 5, `01-05-2022`),
+          mock.activityDay(5, 2, `01-01-2022`),
+        ],
+      }),
+      456: Req.succeed({
+        userName: `John Lawrence`,
+        days: [
+          mock.activityDay(10, 5, `01-25-2022`),
+          mock.activityDay(120, 111, `01-03-2022`),
+          mock.activityDay(137, 0, `01-01-2022`),
+        ],
+      }),
+      789: Req.succeed({
+        userName: `Arnold`,
+        days: [
+          mock.activityDay(1234, 1234, `02-14-2022`),
+          mock.activityDay(1013, 1013, `01-03-2022`),
+        ],
+      }),
+    });
+    console.log(state.activityOverviews);
+  });
+});
 
 describe(`fetchActivityOverview`, () => {
   it(`filters out ranges with no items, and orders most recent first`, async () => {
@@ -152,6 +218,7 @@ describe(`deleteActivityItems`, () => {
     const getState = makeGetState((state) => {
       state.users.activityDays = {
         'user123--01-01-2022': Req.succeed({
+          userName: `Bob Dylan`,
           numDeleted: 0,
           items: {
             item1: mock.keystrokeLine({ id: `item1` }),
@@ -178,6 +245,7 @@ describe(`deleteActivityItems`, () => {
     const state = makeState((state) => {
       state.users.activityDays = {
         'user123--01-01-2022': Req.succeed({
+          userName: `Josh`,
           numDeleted: 0,
           items: {
             item1: mock.keystrokeLine({ id: `item1` }),

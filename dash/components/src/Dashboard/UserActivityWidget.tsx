@@ -57,7 +57,7 @@ const UserActivityWidget: React.FC<Props> = ({ userActivity, className }) => {
       <UnreviewedItemsCard
         key={`usersactivitybutton`}
         userName={`All Activity`}
-        numUnreviewed={120}
+        numUnreviewed={userActivity.reduce((acc, item) => (acc += item.numUnreviewed), 0)}
       />
       {writable(userActivity)
         .sort((a, b) => b.numUnreviewed - a.numUnreviewed)

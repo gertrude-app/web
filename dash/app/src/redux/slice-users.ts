@@ -327,7 +327,8 @@ export const fetchUsersActivityDay = createResultThunk(
 
 export const fetchUsersActivityDays = createResultThunk(
   `${slice.name}/fetchUsersActivityDays`,
-  (arg?: DateRangeInput[]) => Current.api.getUsersActivityDays(arg ?? entireDays(14)),
+  (arg: { ranges?: DateRangeInput[] }) =>
+    Current.api.getUsersActivityDays(arg?.ranges ?? entireDays(14)),
 );
 
 export const fetchUsers = createResultThunk(
