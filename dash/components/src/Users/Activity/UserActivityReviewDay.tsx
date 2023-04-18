@@ -1,10 +1,12 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@shared/components';
 import { UndoMainPadding } from '../../Chrome/Chrome';
 import PartyMessage from '../../PartyMessage';
 import KeystrokesViewer from './KeystrokesViewer';
 import ScreenshotViewer from './ScreenshotViewer';
+import ReviewDayHeader from './ReviewDayHeader';
+import ReviewDayWrapper from './ReviewDayWrapper';
 
 interface Screenshot {
   type: 'Screenshot';
@@ -44,31 +46,9 @@ const UserActivityReviewDay: React.FC<Props> = ({
   const navigate = useNavigate();
   return (
     <UndoMainPadding>
-      <header className="flex items-center justify-between py-4 px-6 border-b-2 bg-white">
-        <div className="flex items-center text-md sm:text-l">
-          <Link
-            to="../"
-            className="flex items-center mr-4 text-gray-400 antialiased hover:text-gray-600 transition duration-75"
-          >
-            <i className="fa fa-chevron-left mr-2" aria-hidden /> Back
-          </Link>
-          <h1 className="font-medium text-gray-800">{date.toLocaleDateString()}</h1>
-        </div>
-        {items.length > 0 && (
-          <div className="text-gray-700 self-end sm:self-center flex items-center space-x-0.5 sm:space-x-1">
-            <span className="font-bold sm:text-lg">{numDeleted}</span>
-            <span className="hidden sm:inline">out of</span>
-            <span className="sm:hidden">/</span>
-            <span className="font-bold sm:text-lg">{numDeleted + items.length}</span>
-            <span className="hidden sm:inline">items reviewed</span>
-          </div>
-        )}
-      </header>
+      <ReviewDayHeader date={date} numItems={items.length} numDeleted={numDeleted} />
       {items.length > 0 ? (
-        <div
-          id="delete-focus"
-          className="px-0 md:px-8 lg:px-10 py-5 md:py-10 pb-16 bg-gray-200 md:bg-transparent flex-grow space-y-8 flex flex-col"
-        >
+        <ReviewDayWrapper>
           {deleteableChunks(items, chunkSize, deleteItems)}
           <Button
             className="ScrollTop self-center"
@@ -83,7 +63,7 @@ const UserActivityReviewDay: React.FC<Props> = ({
             <i className="fa-solid fa-thumbs-up mr-2" />
             Approve all
           </Button>
-        </div>
+        </ReviewDayWrapper>
       ) : (
         <div className="flex justify-center p-8">
           <PartyMessage>Nothing to review for this day</PartyMessage>
@@ -95,7 +75,7 @@ const UserActivityReviewDay: React.FC<Props> = ({
 
 export default UserActivityReviewDay;
 
-function deleteableChunks(
+export function deleteableChunks(
   items: ActivityItem[],
   chunkSize: number,
   deleteItems: (ids: UUID[]) => unknown,
@@ -118,9 +98,11 @@ function deleteableChunks(
     if (chunkIndex < numChunks - 1) {
       const toDelete = [...ids];
       elements.push(
-        <div key={`${ids[ids.length - 1] ?? ``}-separator`} className="self-center pb-8">
+        <div
+          key={`${ids[ids.length - 1] ?? ``}-separator`}
+          className="flex justify-center pb-8"
+        >
           <Button
-            className="self-center"
             type="button"
             color="secondary-on-violet-bg"
             onClick={() => {
