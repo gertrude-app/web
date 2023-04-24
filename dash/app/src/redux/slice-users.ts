@@ -451,7 +451,7 @@ export function entireDays(numDays: number): DateRangeInput[] {
 }
 
 function itemsToMap(items: GetUserActivityDay.Item[]): Record<UUID, ActivityItem> {
-  const newRecord = toMap(
+  return toMap(
     items.map((item) => {
       if (item.type === `CoalescedKeystrokeLine`) {
         return {
@@ -468,6 +468,4 @@ function itemsToMap(items: GetUserActivityDay.Item[]): Record<UUID, ActivityItem
       }
     }),
   );
-
-  return newRecord;
 }
