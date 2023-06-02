@@ -1,31 +1,37 @@
-import React, { useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
-import { Loading, Dashboard, ApiErrorMessage } from '@dash/components';
+import { Loading, ApiErrorMessage } from '@dash/components';
+import { useQuery } from '@tanstack/react-query';
+import React from 'react';
+import { Dashboard } from '@dash/components';
 import type { QueryProps } from '../../redux/store';
 import { useDispatch, useSelector } from '../../redux/hooks';
 import { Req, Query } from '../../redux/helpers';
-import { fetchDashboardData } from '../../redux/slice-dashboard';
 import { createKeychainInitiated } from '../../redux/slice-keychains';
+import Current from '../../environment';
 
 const DashboardRoute: React.FC = () => {
   const dispatch = useDispatch();
-  const [query, shouldFetch] = useSelector(queryProps(dispatch));
+  const adminId = useSelector((state) => state.auth.admin?.adminId ?? ``);
 
-  useEffect(() => {
-    if (shouldFetch) {
-      dispatch(fetchDashboardData());
-    }
-  }, [dispatch, shouldFetch]);
+  const query = useQuery([`dashboard`], async () => {
+    const result = await Current.api.getDashboardWidgets();
+    return result.valueOrThrow();
+  });
 
-  if (query.state !== `resolved` && query.state !== `failed`) {
+  if (query.isLoading) {
     return <Loading />;
   }
 
-  if (query.state === `failed`) {
-    return <ApiErrorMessage error={query.error} />;
+  if (query.isError) {
+    return <ApiErrorMessage />;
   }
 
-  return <Dashboard {...query.props} />;
+  return (
+    <Dashboard
+      {...query.data}
+      createKeychain={() => dispatch(createKeychainInitiated({ id: uuid(), adminId }))}
+    />
+  );
 };
 
 export default DashboardRoute;

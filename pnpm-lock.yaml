@@ -93,6 +93,7 @@ importers:
       '@shared/string': workspace:*
       '@shared/tailwind': workspace:*
       '@shared/ts-utils': workspace:*
+      '@tanstack/react-query': 4.29.12
       '@types/dash-ambient': workspace:*
       '@types/react': ^18.0.22
       '@types/react-dom': ^18.0.7
@@ -127,6 +128,7 @@ importers:
       '@shared/string': link:../../shared/string
       '@shared/tailwind': link:../../shared/tailwind
       '@shared/ts-utils': link:../../shared/ts-utils
+      '@tanstack/react-query': 4.29.12_biqbaboplfbrettd7655fr4n2y
       classnames: 2.3.2
       graphql: 16.6.0
       react: 18.2.0
@@ -3797,6 +3799,28 @@ packages:
       lodash.merge: 4.6.2
       postcss-selector-parser: 6.0.10
       tailwindcss: 3.2.4
+    dev: false
+
+  /@tanstack/query-core/4.29.11:
+    resolution: {integrity: sha512-8C+hF6SFAb/TlFZyS9FItgNwrw4PMa7YeX+KQYe2ZAiEz6uzg6yIr+QBzPkUwZ/L0bXvGd1sufTm3wotoz+GwQ==}
+    dev: false
+
+  /@tanstack/react-query/4.29.12_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-zhcN6+zF6cxprxhTHQajHGlvxgK8npnp9uLe9yaWhGc6sYcPWXzyO4raL4HomUzQOPzu3jLvkriJQ7BOrDM8vA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      '@tanstack/query-core': 4.29.11
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
     dev: false
 
   /@tsconfig/node10/1.0.9:

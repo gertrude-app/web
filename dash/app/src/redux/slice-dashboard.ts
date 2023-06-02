@@ -1,8 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { GetDashboardWidgets, RequestState } from '@dash/types';
-import Current from '../environment';
 import { Req } from './helpers';
-import { createResultThunk } from './thunk';
 import { acceptUnlockRequest, rejectUnlockRequest } from './slice-unlock-requests';
 import { logoutRouteVisited } from './slice-auth';
 
@@ -14,7 +12,7 @@ export interface DashboardState {
 
 export function initialState(): DashboardState {
   return {
-    request: Req.idle(),
+    request: Req.idle(), // todo, remove state
   };
 }
 
@@ -23,20 +21,8 @@ export const slice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchDashboardData.started, (state) => {
-      state.request = Req.ongoing();
-    });
-
     builder.addCase(logoutRouteVisited, () => {
       return initialState();
-    });
-
-    builder.addCase(fetchDashboardData.failed, (state, { error }) => {
-      state.request = Req.fail(error);
-    });
-
-    builder.addCase(fetchDashboardData.succeeded, (state, action) => {
-      state.request = Req.succeed(action.payload);
     });
 
     builder.addCase(rejectUnlockRequest.succeeded, (state, action) => {
@@ -58,10 +44,5 @@ export const slice = createSlice({
     });
   },
 });
-
-export const fetchDashboardData = createResultThunk(
-  `${slice.name}/fetchDashboardData`,
-  Current.api.getDashboardWidgets,
-);
 
 export default slice.reducer;

@@ -1,8 +1,12 @@
 import { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { typesafe } from '@shared/ts-utils';
+import type { UseQueryResult } from '@tanstack/react-query';
 import type { KeychainSummary, RequestState } from '@dash/types';
 import { fetchSelectableKeychains } from '../redux/slice-keychains';
 import { useDispatch, useSelector } from '../redux/hooks';
 import { Req } from '../redux/helpers';
+import Current from '../environment';
 
 export default function useSelectableKeychains(
   fetch = true,
@@ -16,6 +20,7 @@ export default function useSelectableKeychains(
   useEffect(() => {
     if (fetch && fetchSelectableKeychainsRequest.state === `idle`) {
       dispatch(fetchSelectableKeychains());
+      // Current.api.getSelectableKeychains,
     }
   }, [dispatch, fetch, fetchSelectableKeychainsRequest.state]);
 
@@ -30,4 +35,17 @@ export default function useSelectableKeychains(
     });
   }
   return fetchSelectableKeychainsRequest;
+}
+
+export function _useSelectableKeychains(adminId: UUID): {
+  queryKey: [string];
+  queryFn: () => Promise<{
+    own: KeychainSummary[];
+    public: KeychainSummary[];
+  }>;
+} {
+  return {
+    queryKey: [`selectable-keychains`],
+    queryFn: async () => (await Current.api.getSelectableKeychains()).valueOrThrow(),
+  };
 }

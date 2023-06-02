@@ -1,10 +1,14 @@
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { v4 as uuid } from 'uuid';
 import { Navigate, useParams } from 'react-router-dom';
-import { Loading, EditUser, ApiErrorMessage } from '@dash/components';
-import type { Device } from '@dash/types';
+import { Loading, ApiErrorMessage } from '@dash/components';
+import { useIsMutating, useQueries, useQuery } from '@tanstack/react-query';
+import React from 'react';
+import { EditUser } from '@dash/components';
+import type { Device, KeychainSummary } from '@dash/types';
 import type { UserUpdate } from '../../redux/slice-users';
 import type { QueryProps } from '../../redux/store';
+import { receivedEditingUser } from '../../redux/slice-users';
 import { newUserRouteVisited } from '../../redux/slice-users';
 import { useDispatch, useSelector } from '../../redux/hooks';
 import {
@@ -23,37 +27,115 @@ import {
   addKeychainModalDismissed,
 } from '../../redux/slice-users';
 import { isDirty, Query, Req } from '../../redux/helpers';
-import useSelectableKeychains from '../../hooks/selectable-keychains';
+import useSelectableKeychains, {
+  _useSelectableKeychains,
+} from '../../hooks/selectable-keychains';
+import Current from '../../environment';
 import { familyToIcon } from './Users';
 
 const User: React.FC = () => {
-  const { userId: id = `` } = useParams<{ userId: string }>();
-  const newUserId = useMemo(() => uuid(), []);
   const dispatch = useDispatch();
-  const [query, shouldFetch] = useSelector(queryProps(dispatch, id));
+  const { userId: id = `` } = useParams<{ userId: string }>();
+  const editableUser = useSelector((state) => state.users.editing[id]);
+  const isSaving = useIsMutating({ mutationKey: [`users`, id] }) > 0;
 
-  useEffect(() => {
-    shouldFetch && dispatch(fetchUser(id));
-    id === `new` && dispatch(newUserRouteVisited(newUserId));
-  }, [dispatch, id, shouldFetch, newUserId]);
+  const [userQuery, keychainQuery] = useQueries({
+    queries: [
+      {
+        queryKey: [`users`, id],
+        queryFn: async () => {
+          const result = await Current.api.getUser(id);
+          const user = result.valueOrThrow();
+          dispatch(receivedEditingUser(user));
+          return user;
+        },
+        enabled: !editableUser,
+      },
+      _useSelectableKeychains(),
+    ],
+  });
 
-  if (id === `new`) {
-    return <Navigate to={`/users/${newUserId}`} replace />;
+  if (userQuery.isError || keychainQuery.isError) {
+    return <ApiErrorMessage />;
   }
 
-  if (query.state === `entityDeleted`) {
-    return <Navigate to={query.redirectUrl} />;
-  }
-
-  if (query.state === `shouldFetch` || query.state === `ongoing`) {
+  if (userQuery.isLoading || keychainQuery.isLoading || !editableUser) {
     return <Loading />;
   }
 
-  if (query.state === `failed`) {
-    return <ApiErrorMessage error={query.error} />;
+  const user = editableUser.draft;
+  const selectableKeychains = keychainQuery.data;
+
+  function set(arg: Partial<UserUpdate>): void {
+    dispatch(userUpdated({ id, ...arg } as UserUpdate));
   }
 
-  return <EditUser {...query.props} />;
+  return (
+    <EditUser
+      isNew={editableUser.isNew || false}
+      name={user.name}
+      id={user.id}
+      setName={(value) => set({ type: `name`, value })}
+      keyloggingEnabled={user.keyloggingEnabled}
+      setKeyloggingEnabled={(value) => set({ type: `keyloggingEnabled`, value })}
+      screenshotsEnabled={user.screenshotsEnabled}
+      setScreenshotsEnabled={(value) => set({ type: `screenshotsEnabled`, value })}
+      screenshotsResolution={user.screenshotsResolution}
+      setScreenshotsResolution={(value) => set({ type: `screenshotsResolution`, value })}
+      screenshotsFrequency={user.screenshotsFrequency}
+      setScreenshotsFrequency={(value) => set({ type: `screenshotsFrequency`, value })}
+      removeKeychain={(keychainId) =>
+        dispatch(userUpdated({ id, type: `removeKeychain`, value: keychainId }))
+      }
+      keychains={user.keychains}
+      devices={user.devices.map(deviceProps)}
+      deleteUser={{
+        start: () => {}, // todo
+        confirm: () => {},
+        cancel: () => {},
+      }}
+      startAddDevice={() => {}}
+      dismissAddDevice={() => {}}
+      deleteDevice={{
+        start: () => {},
+        confirm: () => {},
+        cancel: () => {},
+      }}
+      saveButtonDisabled={!isDirty(editableUser) || user.name.trim() === `` || isSaving}
+      onSave={() => {}}
+      onAddKeychainClicked={() => {}}
+      onSelectKeychainToAdd={() => {}}
+      onConfirmAddKeychain={() => {}}
+      onDismissAddKeychain={() => {}}
+    />
+  );
+
+  // const newUserId = useMemo(() => uuid(), []);
+  // const [query, shouldFetch] = useSelector(queryProps(dispatch, id));
+
+  // useEffect(() => {
+  //   shouldFetch && dispatch(fetchUser(id));
+  //   id === `new` && dispatch(newUserRouteVisited(newUserId));
+  // }, [dispatch, id, shouldFetch, newUserId]);
+
+  // if (id === `new`) {
+  //   return <Navigate to={`/users/${newUserId}`} replace />;
+  // }
+
+  // if (query.state === `entityDeleted`) {
+  //   return <Navigate to={query.redirectUrl} />;
+  // }
+
+  // if (query.state === `shouldFetch` || query.state === `ongoing`) {
+  //   return <Loading />;
+  // }
+
+  // if (query.state === `failed`) {
+  //   return <ApiErrorMessage error={query.error} />;
+  // }
+
+  // return <EditUser {...query.props} />;
+  // return null;
 };
 
 export default User;
