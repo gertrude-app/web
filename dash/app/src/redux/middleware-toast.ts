@@ -1,66 +1,18 @@
 import toast from 'react-hot-toast';
 import { capitalize } from '@shared/string';
-import type { Action, Middleware } from '@reduxjs/toolkit';
-import type { ResultThunk } from './thunk';
-import { deleteActivityItems, deleteDevice, upsertUser, deleteUser } from './slice-users';
-import { updateSuspendFilterRequest } from './slice-filter-suspensions';
-import {
-  deleteKeychain,
-  deleteKeyRecord,
-  upsertKeychain,
-  upsertEditingKeyRecord,
-} from './slice-keychains';
-import {
-  confirmPendingNotificationMethod,
-  createPendingNotificationMethod,
-  deleteNotification,
-  deleteNotificationMethod,
-  upsertNotification,
-} from './slice-admin';
+import type { Middleware } from '@reduxjs/toolkit';
+import { mutationFailed, mutationStarted, mutationSucceeded } from '../hooks/query';
 
-const toastMiddleware: Middleware = (_store) => (next) => (action) => {
-  toastCrud(`save`, `user`, upsertUser, action);
-  toastCrud(`delete`, `keychain`, deleteKeychain, action);
-  toastCrud(`save`, `keychain`, upsertKeychain, action);
-  toastCrud(`save`, `key`, upsertEditingKeyRecord, action);
-  toastCrud(`delete`, `key`, deleteKeyRecord, action);
-  toastCrud(`delete`, `keychain`, deleteKeychain, action);
-  toastCrud(`delete`, `device`, deleteDevice, action);
-  toastCrud(`delete`, `user`, deleteUser, action);
-  toastCrud(`save`, `notification`, upsertNotification, action);
-  toastCrud(`delete`, `notification`, deleteNotification, action);
-  toastCrud(`delete`, `notification method`, deleteNotificationMethod, action);
-  toastCrud(`send`, `verification code`, createPendingNotificationMethod, action);
-  toastCrud(`verify`, `confirmation code`, confirmPendingNotificationMethod, action);
-  toastCrud(`approve`, `activity items`, deleteActivityItems, action);
-  toastCrud(`update`, `suspend filter request`, updateSuspendFilterRequest, action);
-
-  return next(action);
-};
-
-export default toastMiddleware;
-
-function toastCrud(
-  verb:
-    | 'save'
-    | 'update'
-    | 'delete'
-    | 'send'
-    | 'verify'
-    | 'approve'
-    | 'reject'
-    | 'accept',
-  type: string,
-  thunk: ResultThunk<any, any, any>,
-  action: Action<unknown>,
-): void {
-  if (thunk.started.match(action)) {
+const toastMiddleware: Middleware = () => (next) => (action) => {
+  if (mutationStarted.match(action) && action.payload.toast) {
     toast.dismiss();
+    const { verb, type } = action.payload.toast;
     toast.loading(`${capitalize(verb).replace(/e$/, ``)}ing ${type}...`);
   }
 
-  if (thunk.succeeded.match(action)) {
+  if (mutationSucceeded.match(action) && action.payload.toast) {
     toast.dismiss();
+    const { verb, type } = action.payload.toast;
     const pastTense = (() => {
       switch (verb) {
         case `update`:
@@ -80,8 +32,13 @@ function toastCrud(
     toast.success(`${capitalize(type)} ${pastTense}!`);
   }
 
-  if (thunk.failed.match(action)) {
+  if (mutationFailed.match(action) && action.payload.toast) {
     toast.dismiss();
+    const { verb, type } = action.payload.toast;
     toast.error(`Failed to ${verb} ${type}`, { duration: 6000 });
   }
-}
+
+  return next(action);
+};
+
+export default toastMiddleware;

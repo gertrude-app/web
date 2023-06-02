@@ -37,7 +37,11 @@ export type UserUpdate = { id: UUID } & (
 type DeletableEntity = 'device' | 'user';
 
 export interface UsersState {
+  // survive
   editing: Record<UUID, Editable<User>>;
+  adding: { keychain?: KeychainSummary | null };
+  deleting: { device?: UUID; user?: UUID };
+
   listRequest: RequestState;
   entities: Record<UUID, Editable<User>>;
   fetchCombinedUsersActivityFeed: Record<CombinedUsersActivityFeedDayKey, RequestState>;
@@ -47,8 +51,6 @@ export interface UsersState {
   addDeviceRequest?: RequestState<number>;
   userActivitySummaries: Record<UUID, RequestState<UserActivitySummaries.Output>>;
   userActivityFeedDays: Record<ActivityFeedDayKey, RequestState<UserActivityFeedDay>>;
-  deleting: { device?: UUID; user?: UUID };
-  adding: { keychain?: KeychainSummary | null };
   deleted: UUID[];
 }
 
@@ -93,7 +95,7 @@ export const slice = createSlice({
       state.entities[id] = editable(empty.user(id), true);
     },
     userUpdated: (state, { payload }: PayloadAction<UserUpdate>) => {
-      const draft = state.entities[payload.id]?.draft;
+      const draft = state.editing[payload.id]?.draft;
       if (!draft) return;
       switch (payload.type) {
         case `name`:
@@ -436,7 +438,7 @@ export const createPendingAppConnection = createResultThunk(
 // exports
 
 export const {
-  receivedEditingUser,
+  receivedEditingUser, // ActionCreatorWithPayload<User, string>
   userUpdated,
   addDeviceDismissed,
   userEntityDeleteStarted,

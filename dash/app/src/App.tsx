@@ -26,7 +26,7 @@ import Users from './components/routes/Users';
 import UserActivitySummaries from './components/routes/UserActivitySummaries';
 import Keychains from './components/routes/Keychains';
 import Signup from './components/routes/Signup';
-import User from './components/routes/User';
+import UserRoute from './components/routes/User';
 import useWindowWidth from './hooks/window-width';
 import CombinedUsersActivitySummaries from './components/routes/CombinedUsersActivitySummaries';
 import CombinedUsersActivityFeedRoute from './components/routes/CombinedUsersActivityFeed';
@@ -89,7 +89,7 @@ const App: React.FC = () => {
           </Route>
 
           <Route path=":userId">
-            <Route index element={<User />} />
+            <Route index element={<UserRoute />} />
 
             <Route path="unlock-requests">
               <Route index element={<UserUnlockRequests />} />

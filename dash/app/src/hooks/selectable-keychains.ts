@@ -37,7 +37,7 @@ export default function useSelectableKeychains(
   return fetchSelectableKeychainsRequest;
 }
 
-export function _useSelectableKeychains(adminId: UUID): {
+export function _useSelectableKeychains(): {
   queryKey: [string];
   queryFn: () => Promise<{
     own: KeychainSummary[];

@@ -2,17 +2,17 @@ import { useEffect, useMemo } from 'react';
 import { v4 as uuid } from 'uuid';
 import { Navigate, useParams } from 'react-router-dom';
 import { Loading, ApiErrorMessage } from '@dash/components';
-import { useIsMutating, useQueries, useQuery } from '@tanstack/react-query';
+import { useIsMutating, useQueries } from '@tanstack/react-query';
 import React from 'react';
 import { EditUser } from '@dash/components';
-import type { Device, KeychainSummary } from '@dash/types';
+import type { UseQueryResult } from '@tanstack/react-query';
+import type { Device, RequestState, User } from '@dash/types';
 import type { UserUpdate } from '../../redux/slice-users';
 import type { QueryProps } from '../../redux/store';
 import { receivedEditingUser } from '../../redux/slice-users';
 import { newUserRouteVisited } from '../../redux/slice-users';
 import { useDispatch, useSelector } from '../../redux/hooks';
 import {
-  fetchUser,
   userUpdated,
   upsertUser,
   userEntityDeleteStarted,
@@ -31,45 +31,64 @@ import useSelectableKeychains, {
   _useSelectableKeychains,
 } from '../../hooks/selectable-keychains';
 import Current from '../../environment';
+import { ensurePqlError } from '../../pairql/query';
+import { useMutation, Key, useQuery } from '../../hooks/query';
 import { familyToIcon } from './Users';
 
-const User: React.FC = () => {
+const foo = Key.user(`33`);
+
+function requestState<T>(query: UseQueryResult<T>): RequestState<T> {
+  if (query.isLoading) {
+    return { state: `ongoing` };
+  } else if (query.isError) {
+    return { state: `failed`, error: ensurePqlError(query.error) };
+  } else {
+    return { state: `succeeded`, payload: query.data };
+  }
+}
+
+const UserRoute: React.FC = () => {
   const dispatch = useDispatch();
   const { userId: id = `` } = useParams<{ userId: string }>();
   const editableUser = useSelector((state) => state.users.editing[id]);
+  const addingKeychain = useSelector((state) => state.users.adding?.keychain);
+  const deleteDeviceId = useSelector((state) => state.users.deleting.device);
+  const deleteUserId = useSelector((state) => state.users.deleting.user);
   const isSaving = useIsMutating({ mutationKey: [`users`, id] }) > 0;
 
-  const [userQuery, keychainQuery] = useQueries({
-    queries: [
-      {
-        queryKey: [`users`, id],
-        queryFn: async () => {
-          const result = await Current.api.getUser(id);
-          const user = result.valueOrThrow();
-          dispatch(receivedEditingUser(user));
-          return user;
-        },
-        enabled: !editableUser,
-      },
-      _useSelectableKeychains(),
-    ],
+  const keychainQuery = useSelectableKeychains();
+  const userQuery = useQuery(Key.user(id), () => Current.api.getUser(id), {
+    dispatch: receivedEditingUser,
   });
 
-  if (userQuery.isError || keychainQuery.isError) {
+  const saveUser = useMutation(Key.user(id), (editableUser: Editable<User>) =>
+    Current.api.saveUser({
+      id: editableUser.draft.id,
+      name: editableUser.draft.name,
+      keyloggingEnabled: editableUser.draft.keyloggingEnabled,
+      screenshotsEnabled: editableUser.draft.screenshotsEnabled,
+      screenshotsFrequency: editableUser.draft.screenshotsFrequency,
+      screenshotsResolution: editableUser.draft.screenshotsResolution,
+      isNew: editableUser.isNew ?? false,
+      keychainIds: editableUser.draft.keychains.map(({ id }) => id),
+    }),
+  );
+
+  if (userQuery.isError) {
     return <ApiErrorMessage />;
   }
 
-  if (userQuery.isLoading || keychainQuery.isLoading || !editableUser) {
+  if (userQuery.isLoading || !editableUser) {
     return <Loading />;
   }
 
   const user = editableUser.draft;
-  const selectableKeychains = keychainQuery.data;
 
   function set(arg: Partial<UserUpdate>): void {
     dispatch(userUpdated({ id, ...arg } as UserUpdate));
   }
 
+  // console.log(`is dirty`, isDirty(editableUser));
   return (
     <EditUser
       isNew={editableUser.isNew || false}
@@ -90,9 +109,10 @@ const User: React.FC = () => {
       keychains={user.keychains}
       devices={user.devices.map(deviceProps)}
       deleteUser={{
-        start: () => {}, // todo
-        confirm: () => {},
-        cancel: () => {},
+        id: deleteUserId,
+        start: () => dispatch(userEntityDeleteStarted({ type: `user`, id })),
+        confirm: () => dispatch(deleteUser(deleteUserId ?? ``)), // todo, not right
+        cancel: () => dispatch(userEntityDeleteCanceled(`user`)),
       }}
       startAddDevice={() => {}}
       dismissAddDevice={() => {}}
@@ -102,11 +122,15 @@ const User: React.FC = () => {
         cancel: () => {},
       }}
       saveButtonDisabled={!isDirty(editableUser) || user.name.trim() === `` || isSaving}
-      onSave={() => {}}
-      onAddKeychainClicked={() => {}}
-      onSelectKeychainToAdd={() => {}}
-      onConfirmAddKeychain={() => {}}
-      onDismissAddKeychain={() => {}}
+      onSave={() => saveUser.mutate(editableUser)}
+      onAddKeychainClicked={() => dispatch(addKeychainClicked())}
+      onSelectKeychainToAdd={(keychain) => dispatch(keychainSelected(keychain))}
+      onConfirmAddKeychain={() => dispatch(keychainAdded(id))}
+      onDismissAddKeychain={() => dispatch(addKeychainModalDismissed())}
+      selectingKeychain={addingKeychain}
+      fetchSelectableKeychainsRequest={
+        addingKeychain === undefined ? undefined : requestState(keychainQuery)
+      }
     />
   );
 
@@ -138,7 +162,7 @@ const User: React.FC = () => {
   // return null;
 };
 
-export default User;
+export default UserRoute;
 
 export const queryProps: QueryProps<typeof EditUser, UUID> =
   (dispatch, id) => (appState) => {
