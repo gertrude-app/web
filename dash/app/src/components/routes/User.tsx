@@ -1,4 +1,3 @@
-import { useEffect, useMemo } from 'react';
 import { v4 as uuid } from 'uuid';
 import { Navigate, useParams } from 'react-router-dom';
 import { Loading, ApiErrorMessage } from '@dash/components';
@@ -32,10 +31,8 @@ import useSelectableKeychains, {
 } from '../../hooks/selectable-keychains';
 import Current from '../../environment';
 import { ensurePqlError } from '../../pairql/query';
-import { useMutation, Key, useQuery } from '../../hooks/query';
+import { useUpsert, useDelete, Key, useQuery } from '../../hooks/query';
 import { familyToIcon } from './Users';
-
-const foo = Key.user(`33`);
 
 function requestState<T>(query: UseQueryResult<T>): RequestState<T> {
   if (query.isLoading) {
@@ -54,14 +51,18 @@ const UserRoute: React.FC = () => {
   const addingKeychain = useSelector((state) => state.users.adding?.keychain);
   const deleteDeviceId = useSelector((state) => state.users.deleting.device);
   const deleteUserId = useSelector((state) => state.users.deleting.user);
-  const isSaving = useIsMutating({ mutationKey: [`users`, id] }) > 0;
 
-  const keychainQuery = useSelectableKeychains();
-  const userQuery = useQuery(Key.user(id), () => Current.api.getUser(id), {
+  const getKeychains = _useSelectableKeychains();
+  const getUser = useQuery(Key.user(id), () => Current.api.getUser(id), {
     dispatch: receivedEditingUser,
   });
 
-  const saveUser = useMutation(Key.user(id), (editableUser: Editable<User>) =>
+  // usedeleteentity?
+  const deleteUser = useDelete(Key.user(id), (id: UUID) =>
+    Current.api.deleteEntity({ id, type: `User` }),
+  );
+
+  const saveUser = useUpsert(Key.user(id), (editableUser: Editable<User>) =>
     Current.api.saveUser({
       id: editableUser.draft.id,
       name: editableUser.draft.name,
@@ -74,11 +75,11 @@ const UserRoute: React.FC = () => {
     }),
   );
 
-  if (userQuery.isError) {
+  if (getUser.isError) {
     return <ApiErrorMessage />;
   }
 
-  if (userQuery.isLoading || !editableUser) {
+  if (getUser.isLoading || !editableUser) {
     return <Loading />;
   }
 
@@ -88,7 +89,6 @@ const UserRoute: React.FC = () => {
     dispatch(userUpdated({ id, ...arg } as UserUpdate));
   }
 
-  // console.log(`is dirty`, isDirty(editableUser));
   return (
     <EditUser
       isNew={editableUser.isNew || false}
@@ -111,17 +111,20 @@ const UserRoute: React.FC = () => {
       deleteUser={{
         id: deleteUserId,
         start: () => dispatch(userEntityDeleteStarted({ type: `user`, id })),
-        confirm: () => dispatch(deleteUser(deleteUserId ?? ``)), // todo, not right
+        confirm: () => deleteUser.mutate(id),
         cancel: () => dispatch(userEntityDeleteCanceled(`user`)),
       }}
       startAddDevice={() => {}}
       dismissAddDevice={() => {}}
       deleteDevice={{
-        start: () => {},
+        id: deleteDeviceId,
+        start: (id) => dispatch(userEntityDeleteStarted({ type: `device`, id })),
         confirm: () => {},
-        cancel: () => {},
+        cancel: () => dispatch(userEntityDeleteCanceled(`device`)),
       }}
-      saveButtonDisabled={!isDirty(editableUser) || user.name.trim() === `` || isSaving}
+      saveButtonDisabled={
+        !isDirty(editableUser) || user.name.trim() === `` || saveUser.isLoading
+      }
       onSave={() => saveUser.mutate(editableUser)}
       onAddKeychainClicked={() => dispatch(addKeychainClicked())}
       onSelectKeychainToAdd={(keychain) => dispatch(keychainSelected(keychain))}
@@ -129,7 +132,7 @@ const UserRoute: React.FC = () => {
       onDismissAddKeychain={() => dispatch(addKeychainModalDismissed())}
       selectingKeychain={addingKeychain}
       fetchSelectableKeychainsRequest={
-        addingKeychain === undefined ? undefined : requestState(keychainQuery)
+        addingKeychain === undefined ? undefined : requestState(getKeychains)
       }
     />
   );
