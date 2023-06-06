@@ -14,6 +14,7 @@ import type {
 } from '@dash/types';
 import Current from '../environment';
 import { entireDay } from '../lib/helpers';
+import { entityMutationSucceeded } from '../hooks/query';
 import { Req, toMap, toEditableMap, editable, commit, sortActivityDays } from './helpers';
 import { createResultThunk } from './thunk';
 import * as empty from './empty';
@@ -39,6 +40,8 @@ type DeletableEntity = 'device' | 'user';
 export interface UsersState {
   // survive
   editing: Record<UUID, Editable<User>>;
+
+  // rethink ???
   adding: { keychain?: KeychainSummary | null };
   deleting: { device?: UUID; user?: UUID };
 
@@ -75,8 +78,13 @@ export const slice = createSlice({
   name: `users`,
   initialState,
   reducers: {
-    receivedEditingUser(state, { payload: user }: PayloadAction<User>) {
-      state.editing[user.id] = editable(user);
+    receivedEditingUser(state, { payload }: PayloadAction<User>) {
+      const user = state.editing[payload.id];
+      if (user) {
+        user.original = payload;
+      } else {
+        state.editing[payload.id] = editable(payload);
+      }
     },
 
     userEntityDeleteStarted(
@@ -92,7 +100,7 @@ export const slice = createSlice({
       delete state.addDeviceRequest;
     },
     newUserRouteVisited(state, { payload: id }: PayloadAction<UUID>) {
-      state.entities[id] = editable(empty.user(id), true);
+      state.editing[id] = editable(empty.user(id), true);
     },
     userUpdated: (state, { payload }: PayloadAction<UserUpdate>) => {
       const draft = state.editing[payload.id]?.draft;
@@ -140,6 +148,13 @@ export const slice = createSlice({
   },
 
   extraReducers: (builder) => {
+    builder.addCase(entityMutationSucceeded(`upsert:user`), (state, { meta }) => {
+      const user = state.editing[meta.entityId];
+      if (user) {
+        state.editing[meta.entityId] = commit(user);
+      }
+    });
+
     builder.addCase(fetchUserActivityFeed.started, (state, { meta: { arg } }) => {
       state.userActivityFeedDays[activityDayKey(arg.userId, arg.day)] = Req.ongoing();
     });

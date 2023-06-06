@@ -202,6 +202,7 @@ const EditUser: React.FC<Props> = ({
             </Button>
           )}
           <Button
+            className="ScrollTop"
             type="button"
             disabled={saveButtonDisabled}
             onClick={onSave}

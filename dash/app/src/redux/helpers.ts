@@ -136,6 +136,28 @@ export function commit<T extends { id: UUID }>({ draft }: Editable<T>): Editable
   return { ...editable(draft), isNew: false };
 }
 
+export function isEditable<T extends { id: UUID }>(input: unknown): input is Editable<T> {
+  if (typeof input !== `object` || input === null) {
+    return false;
+  } else if (!(`original` in input) || !(`draft` in input)) {
+    return false;
+  }
+  const entity = (input as any).original;
+  return typeof entity === `object` && entity !== null && isUUID(entity.id);
+}
+
+export function isUUID(input: unknown): input is UUID {
+  return (
+    typeof input === `string` &&
+    input.length === 36 &&
+    input.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i) !==
+      null
+  );
+}
+
+// match a v4 uuid with regex
+// https://stackoverflow.com/a/13653180/3406963
+
 export function editable<T extends { id: UUID }>(
   original: T,
   isNew?: boolean,

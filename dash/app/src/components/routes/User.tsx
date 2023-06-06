@@ -1,9 +1,9 @@
 import { v4 as uuid } from 'uuid';
 import { Navigate, useParams } from 'react-router-dom';
 import { Loading, ApiErrorMessage } from '@dash/components';
-import { useIsMutating, useQueries } from '@tanstack/react-query';
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { EditUser } from '@dash/components';
+import { useMutation as useLibMutation } from '@tanstack/react-query';
 import type { UseQueryResult } from '@tanstack/react-query';
 import type { Device, RequestState, User } from '@dash/types';
 import type { UserUpdate } from '../../redux/slice-users';
@@ -31,7 +31,8 @@ import useSelectableKeychains, {
 } from '../../hooks/selectable-keychains';
 import Current from '../../environment';
 import { ensurePqlError } from '../../pairql/query';
-import { useUpsert, useDelete, Key, useQuery } from '../../hooks/query';
+import { useMutation, Key, useDeleteEntity, useQuery } from '../../hooks/query';
+import { useConfirmableDelete } from '../../hooks/delete-entity';
 import { familyToIcon } from './Users';
 
 function requestState<T>(query: UseQueryResult<T>): RequestState<T> {
@@ -45,24 +46,20 @@ function requestState<T>(query: UseQueryResult<T>): RequestState<T> {
 }
 
 const UserRoute: React.FC = () => {
-  const dispatch = useDispatch();
   const { userId: id = `` } = useParams<{ userId: string }>();
   const editableUser = useSelector((state) => state.users.editing[id]);
   const addingKeychain = useSelector((state) => state.users.adding?.keychain);
-  const deleteDeviceId = useSelector((state) => state.users.deleting.device);
-  const deleteUserId = useSelector((state) => state.users.deleting.user);
-
+  const dispatch = useDispatch();
   const getKeychains = _useSelectableKeychains();
+  const deleteUser = useConfirmableDelete(`User`, id);
+  const deleteDevice = useConfirmableDelete(`Device`);
+
   const getUser = useQuery(Key.user(id), () => Current.api.getUser(id), {
-    dispatch: receivedEditingUser,
+    payloadAction: receivedEditingUser,
+    enabled: id !== `new` && editableUser?.isNew !== true,
   });
 
-  // usedeleteentity?
-  const deleteUser = useDelete(Key.user(id), (id: UUID) =>
-    Current.api.deleteEntity({ id, type: `User` }),
-  );
-
-  const saveUser = useUpsert(Key.user(id), (editableUser: Editable<User>) =>
+  const saveUser = useMutation(`upsert:user`, (editableUser: Editable<User>) =>
     Current.api.saveUser({
       id: editableUser.draft.id,
       name: editableUser.draft.name,
@@ -75,11 +72,24 @@ const UserRoute: React.FC = () => {
     }),
   );
 
+  const newUserId = useMemo(() => uuid(), []);
+  useEffect(() => {
+    id === `new` && dispatch(newUserRouteVisited(newUserId));
+  }, [id, newUserId, dispatch]);
+
+  if (id === `new`) {
+    return <Navigate to={`/users/${newUserId}`} replace />;
+  }
+
+  if (deleteUser.state === `success`) {
+    return <Navigate to="/users" />;
+  }
+
   if (getUser.isError) {
     return <ApiErrorMessage />;
   }
 
-  if (getUser.isLoading || !editableUser) {
+  if (!editableUser) {
     return <Loading />;
   }
 
@@ -108,20 +118,10 @@ const UserRoute: React.FC = () => {
       }
       keychains={user.keychains}
       devices={user.devices.map(deviceProps)}
-      deleteUser={{
-        id: deleteUserId,
-        start: () => dispatch(userEntityDeleteStarted({ type: `user`, id })),
-        confirm: () => deleteUser.mutate(id),
-        cancel: () => dispatch(userEntityDeleteCanceled(`user`)),
-      }}
+      deleteUser={deleteUser}
       startAddDevice={() => {}}
       dismissAddDevice={() => {}}
-      deleteDevice={{
-        id: deleteDeviceId,
-        start: (id) => dispatch(userEntityDeleteStarted({ type: `device`, id })),
-        confirm: () => {},
-        cancel: () => dispatch(userEntityDeleteCanceled(`device`)),
-      }}
+      deleteDevice={deleteDevice}
       saveButtonDisabled={
         !isDirty(editableUser) || user.name.trim() === `` || saveUser.isLoading
       }

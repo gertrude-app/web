@@ -1,39 +1,67 @@
+import toast from 'react-hot-toast';
 import { createAction, nanoid } from '@reduxjs/toolkit';
 import {
-  useMutation as libUseMutation,
+  useMutation as useLibMutation,
+  useQuery as useLibQuery,
   useQueryClient,
-  useQuery as libUseQuery,
 } from '@tanstack/react-query';
+import { capitalize, pastTense } from '@shared/string';
+import { useState } from 'react';
 import type { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import type PairQLResult from '@dash/types/src/pairql/Result';
-import type { PqlError, Result } from '@dash/types';
-import type { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
+import type { DeleteEntity, PqlError, Result, SuccessOutput } from '@dash/types';
+import type {
+  UseMutationResult,
+  UseQueryResult,
+  QueryClient,
+} from '@tanstack/react-query';
 import { useDispatch } from '../redux/hooks';
 import { ensurePqlError } from '../pairql/query';
+import Current from '../environment';
+import { isEditable, isUUID } from '../redux/helpers';
+
+type QueryOptions<T> = {
+  enabled?: boolean;
+  payloadAction?: ActionCreatorWithPayload<T, string>;
+};
+
+type MutationId =
+  | 'delete:user'
+  | 'delete:device'
+  | 'upsert:user'
+  | 'delete:keychain'
+  | 'upsert:keychain'
+  | 'upsert:key'
+  | 'delete:key'
+  | 'delete:keychain'
+  | 'upsert:notification'
+  | 'delete:notification'
+  | 'delete:notification-method'
+  | 'create:pending-notification-method'
+  | 'confirm:pending-notification-method'
+  | 'delete:activity-items'
+  | 'update:suspend-filter-request';
 
 export function useQuery<T>(
   key: QueryKey,
   fn: () => Promise<Result<T, PqlError>>,
-  options: {
-    dispatch?: ActionCreatorWithPayload<T, string>;
-    enabled?: boolean;
-  } = {},
-): UseQueryResult<T, PqlError> {
+  options: QueryOptions<T> = {},
+): QueryResult<T> {
   const dispatch = useDispatch();
   const requestId = nanoid();
-  return libUseQuery({
+  return useLibQuery({
     queryKey: key.segments,
     queryFn: async () => {
       try {
-        dispatch(queryStarted(key, requestId));
+        dispatch(queryStarted(key.data, requestId));
         const value = (await fn()).valueOrThrow();
-        dispatch(querySucceeded(key, requestId));
-        if (options.dispatch) {
-          dispatch(options.dispatch(value));
+        dispatch(querySucceeded(key.data, requestId));
+        if (options.payloadAction) {
+          dispatch(options.payloadAction(value));
         }
         return value;
       } catch (error) {
-        dispatch(queryFailed(key, ensurePqlError(error), requestId));
+        dispatch(queryFailed(key.data, ensurePqlError(error), requestId));
         throw error;
       }
     },
@@ -41,64 +69,81 @@ export function useQuery<T>(
   });
 }
 
-function useMutation<T, V>(
-  key: QueryKey,
+export function useMutation<T, V>(
+  id: MutationId,
   fn: (arg: V) => Promise<PairQLResult<T>>,
-  type: MutationType,
-): UseMutationResult<T, PqlError, V> {
+): MutationResult<T, V> {
+  const [arg, setArg] = useState<V | undefined>(undefined);
+  const [entityId, setEntityId] = useState<UUID | undefined>(undefined);
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const requestId = nanoid();
-  return libUseMutation({
-    mutationKey: key.segments,
+  const toasting = getToast(id);
+  return useLibMutation({
     mutationFn: (arg) => fn(arg).then((result) => result.valueOrThrow()),
-    onMutate() {
-      dispatch(mutationStarted(key, type, requestId));
+    onMutate(arg) {
+      setArg(arg);
+      let entityId: UUID | undefined = undefined;
+      if (isUUID(arg)) {
+        entityId = arg;
+        setEntityId(arg);
+      } else if (isEditable(arg)) {
+        entityId = arg.original.id;
+        setEntityId(arg.original.id);
+      }
+      if (entityId) {
+        dispatch(entityMutationStarted(id)(entityId, requestId));
+      } else {
+        dispatch(mutationStarted(id)(arg, requestId));
+      }
+      if (toasting) {
+        toast.dismiss();
+        const { verb, entity } = toasting;
+        toast.loading(`${capitalize(verb).replace(/e$/, ``)}ing ${entity}...`);
+      }
     },
     onError(error) {
-      queryClient.invalidateQueries(key.segments);
-      dispatch(mutationFailed(key, type, error, requestId));
+      if (entityId) {
+        dispatch(entityMutationFailed(id)(error, entityId, requestId));
+      } else {
+        dispatch(mutationFailed(id)(error, arg, requestId));
+      }
+      if (toasting) {
+        toast.dismiss();
+        const { verb, entity } = toasting;
+        toast.error(`Failed to ${verb} ${entity}`, { duration: 6000 });
+      }
+      invalidateCacheAfterMutation(`failure`, id, queryClient);
     },
     onSuccess() {
-      queryClient.invalidateQueries(key.segments);
-      dispatch(mutationSucceeded(key, type, requestId));
+      if (entityId) {
+        dispatch(entityMutationSucceeded(id)(entityId, requestId));
+      } else {
+        dispatch(mutationSucceeded(id)(arg, requestId));
+      }
+      if (toasting) {
+        toast.dismiss();
+        const { verb, entity } = toasting;
+        toast.success(`${capitalize(entity)} ${pastTense(verb)}!`);
+      }
+      invalidateCacheAfterMutation(`success`, id, queryClient);
     },
   });
 }
 
-export function useUpdate<T, V>(
-  key: QueryKey,
-  fn: (arg: V) => Promise<PairQLResult<T>>,
-): UseMutationResult<T, PqlError, V> {
-  return useMutation(key, fn, `update`);
-}
-
-export function useUpsert<T, V>(
-  key: QueryKey,
-  fn: (arg: V) => Promise<PairQLResult<T>>,
-): UseMutationResult<T, PqlError, V> {
-  return useMutation(key, fn, `upsert`);
-}
-
-export function useCreate<T, V>(
-  key: QueryKey,
-  fn: (arg: V) => Promise<PairQLResult<T>>,
-): UseMutationResult<T, PqlError, V> {
-  return useMutation(key, fn, `create`);
-}
-
-export function useDelete<T, V>(
-  key: QueryKey,
-  fn: (arg: V) => Promise<PairQLResult<T>>,
-): UseMutationResult<T, PqlError, V> {
-  return useMutation(key, fn, `delete`);
+export function useDeleteEntity(
+  type: DeleteEntity.Input['type'],
+): MutationResult<SuccessOutput, UUID> {
+  return useMutation(mutationIdFromDeleteEntityType(type), (id: UUID) =>
+    Current.api.deleteEntity({ type, id }),
+  );
 }
 
 // actions
 
 export const queryStarted = createAction(
   `query:started`,
-  (key: QueryKey, requestId: string) => ({
+  (key: QueryKeyData, requestId: string) => ({
     payload: key,
     meta: { requestId },
   }),
@@ -106,7 +151,7 @@ export const queryStarted = createAction(
 
 export const queryFailed = createAction(
   `query:failed`,
-  (key: QueryKey, error: PqlError | undefined, requestId: string) => ({
+  (key: QueryKeyData, error: PqlError | undefined, requestId: string) => ({
     payload: key,
     error,
     meta: { requestId },
@@ -115,66 +160,164 @@ export const queryFailed = createAction(
 
 export const querySucceeded = createAction(
   `query:succeeded`,
-  (key: QueryKey, requestId: string) => ({
+  (key: QueryKeyData, requestId: string) => ({
     payload: key,
     meta: { requestId },
   }),
 );
 
-export const mutationStarted = createAction(
-  `mutation:started`,
-  (key: QueryKey, type: MutationType, requestId: string) => ({
+// eslint-disable-next-line
+export const mutationStarted = (mutationId: MutationId) =>
+  createAction(`mutation:${mutationId}:started`, (arg: unknown, requestId: string) => ({
     payload: undefined,
-    meta: { key, type, requestId },
-  }),
-);
+    meta: { mutationId, arg, requestId },
+  }));
 
-export const mutationFailed = createAction(
-  `mutation:failed`,
-  (key: QueryKey, type: MutationType, error: PqlError, requestId: string) => ({
+// eslint-disable-next-line
+export const entityMutationStarted = (mutationId: MutationId) =>
+  createAction(`mutation:${mutationId}:started`, (entityId: UUID, requestId: string) => ({
     payload: undefined,
-    error,
-    meta: { key, type, requestId },
-  }),
-);
+    meta: { mutationId, entityId, requestId },
+  }));
 
-export const mutationSucceeded = createAction(
-  `mutation:succeeded`,
-  (key: QueryKey, type: MutationType, requestId: string) => ({
+// eslint-disable-next-line
+export const mutationFailed = (mutationId: MutationId) =>
+  createAction(
+    `mutation:${mutationId}:failed`,
+    (error: PqlError, arg: unknown, requestId: string) => ({
+      payload: undefined,
+      error,
+      meta: { mutationId, arg, requestId },
+    }),
+  );
+
+// eslint-disable-next-line
+export const entityMutationFailed = (mutationId: MutationId) =>
+  createAction(
+    `mutation:${mutationId}:failed`,
+    (error: PqlError, entityId: UUID, requestId: string) => ({
+      payload: undefined,
+      error,
+      meta: { mutationId, entityId, requestId },
+    }),
+  );
+
+// eslint-disable-next-line
+export const mutationSucceeded = (mutationId: MutationId) =>
+  createAction(`mutation:${mutationId}:succeeded`, (arg: unknown, requestId: string) => ({
     payload: undefined,
-    meta: { key, type, requestId },
-  }),
-);
+    meta: { mutationId, arg, requestId },
+  }));
 
-// keys
+// eslint-disable-next-line
+export const entityMutationSucceeded = (mutationId: MutationId) =>
+  createAction(
+    `mutation:${mutationId}:succeeded`,
+    (entityId: UUID, requestId: string) => ({
+      payload: undefined,
+      meta: { mutationId, entityId, requestId },
+    }),
+  );
 
-export class Key {
+export class QueryKey {
+  // do not construct directly, use `Key` static methods
+  public readonly __taint: `66e66bd61e2f4e009ca94f3fac98fd33`;
+
+  protected constructor(
+    public readonly path: string,
+    public readonly segments: unknown[],
+    public readonly id?: UUID,
+  ) {
+    this.__taint = `66e66bd61e2f4e009ca94f3fac98fd33`;
+  }
+
+  public get data(): QueryKeyData {
+    return { path: this.path, segments: this.segments, id: this.id };
+  }
+}
+
+export class Key extends QueryKey {
   static user(id: UUID): QueryKey {
-    return key(`users/:id`, [`users`, id], id, `user`);
+    return new QueryKey(`users/:id`, [`users`, id], id);
   }
 
   static get selectableKeychains(): QueryKey {
-    return key(`selectable-keychains`, [`selectable-keychains`]);
+    return new QueryKey(`selectable-keychains`, [`selectable-keychains`]);
   }
 
   static get dashboard(): QueryKey {
-    return key(`dashboard`, [`dashboard`]);
+    return new QueryKey(`dashboard`, [`dashboard`]);
+  }
+
+  private constructor() {
+    super(``, []);
   }
 }
 
 export type MutationResult<T, V> = UseMutationResult<T, PqlError, V>;
 export type MutationType = 'create' | 'upsert' | 'update' | 'delete';
 export type QueryResult<T> = UseQueryResult<T, PqlError>;
+type QueryKeyData = Omit<QueryKey, 'data' | '__taint'>;
 
-// implementation
+function invalidateCacheAfterMutation(
+  status: 'success' | 'failure',
+  mutationId: MutationId,
+  queryClient: QueryClient,
+): void {
+  let invalidations: Array<unknown[]> = [];
+  switch (`${mutationId}:${status}` as const) {
+    case `delete:device:success`:
+      invalidations = [[`users`]];
+      break;
+    default:
+      break;
+  }
+  invalidations.forEach((key) => queryClient.invalidateQueries(key));
+}
 
-type QueryKey = {
-  readonly path: string;
-  readonly id: UUID | undefined;
-  readonly segments: unknown[];
-  readonly toast?: string;
-};
+function getToast(mutationId: MutationId): { verb: string; entity: string } | undefined {
+  const [verb = ``, entitySlug = ``] = mutationId.split(`:`);
+  const entity = entitySlug.replace(/-/g, ` `);
+  switch (mutationId) {
+    case `delete:user`:
+    case `delete:device`:
+    case `delete:notification`:
+    case `delete:keychain`:
+    case `delete:notification-method`:
+    case `delete:key`:
+    case `update:suspend-filter-request`:
+      return { verb, entity };
 
-function key(path: string, segments: unknown[], id?: UUID, toast?: string): QueryKey {
-  return { path, id, segments, toast };
+    case `upsert:user`:
+    case `upsert:keychain`:
+    case `upsert:key`:
+    case `upsert:notification`:
+      return { verb: `save`, entity };
+
+    case `create:pending-notification-method`:
+      return { verb: `send`, entity: `verification code` };
+    case `confirm:pending-notification-method`:
+      return { verb: `verify`, entity: `confirmation code` };
+    case `delete:activity-items`:
+      return { verb: `approve`, entity: `activity items` };
+    default:
+      return undefined;
+  }
+}
+
+function mutationIdFromDeleteEntityType(type: DeleteEntity.Input['type']): MutationId {
+  switch (type) {
+    case `AdminNotification`:
+      return `delete:notification`;
+    case `AdminVerifiedNotificationMethod`:
+      return `delete:notification-method`;
+    case `Device`:
+      return `delete:device`;
+    case `Key`:
+      return `delete:key`;
+    case `Keychain`:
+      return `delete:keychain`;
+    case `User`:
+      return `delete:user`;
+  }
 }
