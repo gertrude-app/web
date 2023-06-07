@@ -4,43 +4,44 @@ import type { User } from '@dash/types';
 import type { EntityLoader } from './loader-types';
 import { useDispatch, useSelector } from '../../../redux/hooks';
 import UnexpectedError from '../../UnexpectedError';
-import { fetchUser } from '../../../redux/slice-users';
+// import { fetchUser } from '../../../redux/slice-users';
 
 export function useUserLoader(id: UUID): EntityLoader<Editable<User>> {
-  const dispatch = useDispatch();
-  const { userReq, user } = useSelector((state) => ({
-    userReq: state.users.fetchUserRequest[id],
-    user: state.users.entities[id],
-  }));
+  throw new Error(`todo`);
+  // const dispatch = useDispatch();
+  // const { userReq, user } = useSelector((state) => ({
+  //   userReq: undefined, // state.users.fetchUserRequest[id],
+  //   user: state.users.entities[id],
+  // }));
 
-  useEffect(() => {
-    if (!user?.original.id && (!userReq?.state || userReq.state === `idle`)) {
-      dispatch(fetchUser(id));
-    }
-  }, [id, dispatch, userReq?.state, user?.original.id]);
+  // useEffect(() => {
+  //   if (!user?.original.id && (!userReq?.state || userReq.state === `idle`)) {
+  //     dispatch(fetchUser(id));
+  //   }
+  // }, [id, dispatch, userReq?.state, user?.original.id]);
 
-  if (user) {
-    return {
-      state: `resolved`,
-      entity: user,
-    };
-  }
+  // if (user) {
+  //   return {
+  //     state: `resolved`,
+  //     entity: user,
+  //   };
+  // }
 
-  if (!userReq || userReq.state === `idle` || userReq.state === `ongoing`) {
-    return { state: `unresolved`, element: <LoadingModal /> };
-  }
+  // if (!userReq || userReq.state === `idle` || userReq.state === `ongoing`) {
+  //   return { state: `unresolved`, element: <LoadingModal /> };
+  // }
 
-  if (userReq.state === `failed`) {
-    return {
-      state: `unresolved`,
-      isError: true,
-      element: <ErrorModal error={userReq.error} />,
-    };
-  }
+  // if (userReq.state === `failed`) {
+  //   return {
+  //     state: `unresolved`,
+  //     isError: true,
+  //     element: <ErrorModal error={userReq.error} />,
+  //   };
+  // }
 
-  // unreachable
-  return {
-    state: `unresolved`,
-    element: <UnexpectedError id="daa166d6" />,
-  };
+  // // unreachable
+  // return {
+  //   state: `unresolved`,
+  //   element: <UnexpectedError id="daa166d6" />,
+  // };
 }

@@ -26,6 +26,7 @@ export class Query {
         id,
         type: `clientError`,
         debugMessage: `Query.unexpectedError: ${message}`,
+        isPqlError: true,
       },
     };
   }
@@ -56,6 +57,7 @@ export class Req {
             id: `651ebe47`,
             type: `clientError`,
             debugMessage: `Req.toUnresolvedQuery: failed request with no error`,
+            isPqlError: true,
           },
         };
       case `succeeded`:
@@ -154,9 +156,6 @@ export function isUUID(input: unknown): input is UUID {
       null
   );
 }
-
-// match a v4 uuid with regex
-// https://stackoverflow.com/a/13653180/3406963
 
 export function editable<T extends { id: UUID }>(
   original: T,

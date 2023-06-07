@@ -85,7 +85,7 @@ const App: React.FC = () => {
 
           <Route path="activity">
             <Route index element={<CombinedUsersActivitySummaries />} />
-            <Route path=":date" element={<CombinedUsersActivityFeedRoute />} />
+            <Route path=":urlDate" element={<CombinedUsersActivityFeedRoute />} />
           </Route>
 
           <Route path=":userId">
@@ -105,7 +105,7 @@ const App: React.FC = () => {
 
             <Route path="activity">
               <Route index element={<UserActivitySummaries />} />
-              <Route path=":date" element={<UserActivityFeed />} />
+              <Route path=":urlDate" element={<UserActivityFeed />} />
             </Route>
           </Route>
         </Route>

@@ -15,7 +15,7 @@ import type {
 import Current from '../environment';
 import { entireDay } from '../lib/helpers';
 import { entityMutationSucceeded } from '../hooks/query';
-import { Req, toMap, toEditableMap, editable, commit, sortActivityDays } from './helpers';
+import { Req, toMap, editable, commit, sortActivityDays } from './helpers';
 import { createResultThunk } from './thunk';
 import * as empty from './empty';
 import { logoutRouteVisited } from './slice-auth';
@@ -33,44 +33,45 @@ export type UserUpdate = { id: UUID } & (
   | { type: 'screenshotsFrequency'; value: number }
   | { type: 'keyloggingEnabled'; value: boolean }
   | { type: 'removeKeychain'; value: UUID }
+  | { type: 'addKeychain'; value: KeychainSummary }
 );
 
-type DeletableEntity = 'device' | 'user';
+// type DeletableEntity = 'device' | 'user';
 
 export interface UsersState {
   // survive
   editing: Record<UUID, Editable<User>>;
 
-  // rethink ???
-  adding: { keychain?: KeychainSummary | null };
-  deleting: { device?: UUID; user?: UUID };
+  // rethink ??? (pretty sure, delete)
+  // adding: { keychain?: KeychainSummary | null };
+  // deleting: { device?: UUID; user?: UUID };
 
-  listRequest: RequestState;
-  entities: Record<UUID, Editable<User>>;
+  // listRequest: RequestState;
+  // entities: Record<UUID, Editable<User>>;
   fetchCombinedUsersActivityFeed: Record<CombinedUsersActivityFeedDayKey, RequestState>;
   fetchCombinedUsersActivitySummaries: RequestState;
-  fetchUserRequest: Record<UUID, RequestState>;
-  updateUserRequest: Record<UUID, RequestState>;
-  addDeviceRequest?: RequestState<number>;
+  // fetchUserRequest: Record<UUID, RequestState>;
+  // updateUserRequest: Record<UUID, RequestState>;
+  // addDeviceRequest?: RequestState<number>;
   userActivitySummaries: Record<UUID, RequestState<UserActivitySummaries.Output>>;
   userActivityFeedDays: Record<ActivityFeedDayKey, RequestState<UserActivityFeedDay>>;
-  deleted: UUID[];
+  // deleted: UUID[];
 }
 
 export function initialState(): UsersState {
   return {
     editing: {},
-    listRequest: Req.idle(),
-    entities: {},
+    // listRequest: Req.idle(),
+    // entities: {},
     fetchCombinedUsersActivityFeed: {},
     fetchCombinedUsersActivitySummaries: Req.idle(),
-    fetchUserRequest: {},
-    updateUserRequest: {},
+    // fetchUserRequest: {},
+    // updateUserRequest: {},
     userActivitySummaries: {},
     userActivityFeedDays: {},
-    deleting: {},
-    adding: {},
-    deleted: [],
+    // deleting: {},
+    // adding: {},
+    // deleted: [],
   };
 }
 
@@ -87,18 +88,18 @@ export const slice = createSlice({
       }
     },
 
-    userEntityDeleteStarted(
-      state,
-      action: PayloadAction<{ type: DeletableEntity; id: UUID }>,
-    ) {
-      state.deleting[action.payload.type] = action.payload.id;
-    },
-    userEntityDeleteCanceled(state, { payload: type }: PayloadAction<DeletableEntity>) {
-      delete state.deleting[type];
-    },
-    addDeviceDismissed(state) {
-      delete state.addDeviceRequest;
-    },
+    // userEntityDeleteStarted(
+    //   state,
+    //   actIon: PayloadAction<{ type: DeletableEntity; id: UUID }>,
+    // ) {
+    //   state.deleting[action.payload.type] = action.payload.id;
+    // },
+    // userEntityDeleteCanceled(state, { payload: type }: PayloadAction<DeletableEntity>) {
+    //   delete state.deleting[type];
+    // },
+    // addDeviceDismissed(state) {
+    //   delete state.addDeviceRequest;
+    // },
     newUserRouteVisited(state, { payload: id }: PayloadAction<UUID>) {
       state.editing[id] = editable(empty.user(id), true);
     },
@@ -124,27 +125,30 @@ export const slice = createSlice({
         case `removeKeychain`:
           draft.keychains = draft.keychains.filter(({ id }) => id !== payload.value);
           break;
+        case `addKeychain`:
+          draft.keychains.push(payload.value);
+          break;
       }
     },
-    addKeychainModalDismissed(state) {
-      state.adding = { keychain: undefined };
-    },
-    addKeychainClicked(state) {
-      state.adding = { keychain: null };
-    },
-    keychainSelected(state, action: PayloadAction<KeychainSummary>) {
-      if (state.adding.keychain?.id === action.payload.id) {
-        state.adding = { keychain: null };
-      } else {
-        state.adding = { keychain: action.payload };
-      }
-    },
-    keychainAdded(state, { payload }: PayloadAction<UUID>) {
-      const keychain = state.adding.keychain;
-      if (!keychain) return;
-      state.entities[payload]?.draft.keychains.push(keychain);
-      state.adding = { keychain: undefined };
-    },
+    // addKeychainModalDismissed(state) {
+    //   state.adding = { keychain: undefined };
+    // },
+    // addKeychainClicked(state) {
+    //   state.adding = { keychain: null };
+    // },
+    // keychainSelected(state, action: PayloadAction<KeychainSummary>) {
+    //   if (state.adding.keychain?.id === action.payload.id) {
+    //     state.adding = { keychain: null };
+    //   } else {
+    //     state.adding = { keychain: action.payload };
+    //   }
+    // },
+    // keychainAdded(state, { payload }: PayloadAction<UUID>) {
+    //   const keychain = state.adding.keychain;
+    //   if (!keychain) return;
+    //   state.entities[payload]?.draft.keychains.push(keychain);
+    //   state.adding = { keychain: undefined };
+    // },
   },
 
   extraReducers: (builder) => {
@@ -178,31 +182,31 @@ export const slice = createSlice({
       state.userActivityFeedDays[activityDayKey(arg.userId, arg.day)] = Req.fail(error);
     });
 
-    builder.addCase(fetchUsers.started, (state) => {
-      state.listRequest = Req.ongoing();
-    });
+    // builder.addCase(fetchUsers.started, (state) => {
+    //   state.listRequest = Req.ongoing();
+    // });
 
-    builder.addCase(fetchUsers.succeeded, (state, action) => {
-      state.listRequest = Req.succeed(void 0);
-      state.entities = { ...state.entities, ...toEditableMap(action.payload) };
-    });
+    // builder.addCase(fetchUsers.succeeded, (state, action) => {
+    //   state.listRequest = Req.succeed(void 0);
+    //   state.entities = { ...state.entities, ...toEditableMap(action.payload) };
+    // });
 
-    builder.addCase(fetchUsers.failed, (state, action) => {
-      state.listRequest = Req.fail(action.error);
-    });
+    // builder.addCase(fetchUsers.failed, (state, action) => {
+    //   state.listRequest = Req.fail(action.error);
+    // });
 
-    builder.addCase(fetchUser.succeeded, (state, { meta, payload }) => {
-      state.fetchUserRequest[meta.arg] = Req.succeed(void 0);
-      state.entities[meta.arg] = editable(payload);
-    });
+    // builder.addCase(fetchUser.succeeded, (state, { meta, payload }) => {
+    //   state.fetchUserRequest[meta.arg] = Req.succeed(void 0);
+    //   state.entities[meta.arg] = editable(payload);
+    // });
 
-    builder.addCase(fetchUser.failed, (state, action) => {
-      state.fetchUserRequest[action.meta.arg] = Req.fail(action.error);
-    });
+    // builder.addCase(fetchUser.failed, (state, action) => {
+    //   state.fetchUserRequest[action.meta.arg] = Req.fail(action.error);
+    // });
 
-    builder.addCase(fetchUser.started, (state, action) => {
-      state.fetchUserRequest[action.meta.arg] = Req.ongoing();
-    });
+    // builder.addCase(fetchUser.started, (state, action) => {
+    //   state.fetchUserRequest[action.meta.arg] = Req.ongoing();
+    // });
 
     builder.addCase(fetchUserActivitySummaries.started, (state, action) => {
       state.userActivitySummaries[action.meta.arg.userId] = Req.ongoing();
@@ -219,22 +223,6 @@ export const slice = createSlice({
       state.userActivitySummaries[action.meta.arg.userId] = Req.fail(action.error);
     });
 
-    builder.addCase(upsertUser.started, (state, { meta }) => {
-      state.updateUserRequest[meta.arg] = Req.ongoing();
-    });
-
-    builder.addCase(upsertUser.failed, (state, { meta, error }) => {
-      state.updateUserRequest[meta.arg] = Req.fail(error);
-    });
-
-    builder.addCase(upsertUser.succeeded, (state, { meta }) => {
-      state.updateUserRequest[meta.arg] = Req.succeed(void 0);
-      const user = state.entities[meta.arg];
-      if (user) {
-        state.entities[meta.arg] = commit(user);
-      }
-    });
-
     builder.addCase(deleteActivityItems.succeeded, (state, action) => {
       const { date, itemRootIds } = action.meta.arg;
       for (const day of matchingActivityDays(state.userActivityFeedDays, date)) {
@@ -246,40 +234,6 @@ export const slice = createSlice({
           }
         }
       }
-    });
-
-    builder.addCase(deleteUser.started, (state) => {
-      delete state.deleting.user;
-    });
-
-    builder.addCase(deleteUser.succeeded, (state, { meta }) => {
-      delete state.entities[meta.arg];
-      state.deleted.push(meta.arg);
-    });
-
-    builder.addCase(deleteDevice.started, (state) => {
-      delete state.deleting.device;
-    });
-
-    builder.addCase(deleteDevice.succeeded, (state, { meta: { arg } }) => {
-      for (const [userId, user] of Object.entries(state.entities)) {
-        if (user.draft.devices.some(({ id }) => id === arg)) {
-          user.draft.devices = user.draft.devices.filter(({ id }) => id !== arg);
-          state.entities[userId] = commit(user);
-        }
-      }
-    });
-
-    builder.addCase(createPendingAppConnection.started, (state) => {
-      state.addDeviceRequest = Req.ongoing();
-    });
-
-    builder.addCase(createPendingAppConnection.succeeded, (state, { payload }) => {
-      state.addDeviceRequest = Req.succeed(payload.code);
-    });
-
-    builder.addCase(createPendingAppConnection.failed, (state, { error }) => {
-      state.addDeviceRequest = Req.fail(error);
     });
 
     builder.addCase(fetchCombinedUsersActivityFeed.started, (state, action) => {
@@ -359,49 +313,6 @@ export const fetchCombinedUsersActivitySummaries = createResultThunk(
     Current.api.combinedUsersActivitySummaries(arg?.ranges ?? entireDays(14)),
 );
 
-export const fetchUsers = createResultThunk(
-  `${slice.name}/fetchUsers`,
-  Current.api.getUsers,
-);
-
-export const fetchUser = createResultThunk(
-  `${slice.name}/fetchUser`,
-  Current.api.getUser,
-);
-
-export const deleteUser = createResultThunk(
-  `${slice.name}/deleteUser`,
-  async (id: UUID) => Current.api.deleteEntity({ id, type: `User` }),
-);
-
-export const deleteDevice = createResultThunk(
-  `${slice.name}/deleteDevice`,
-  async (id: UUID) => Current.api.deleteEntity({ id, type: `Device` }),
-);
-
-export const upsertUser = createResultThunk(
-  `${slice.name}/upsertUser`,
-  async (userId: UUID, { getState }) => {
-    const { users, auth } = getState();
-    const user = users.entities[userId];
-    const adminId = auth.admin?.adminId;
-    if (!user || !adminId) {
-      return Result.unexpectedError(`37abe6aa`, `User or AdminId not found`);
-    }
-
-    return Current.api.saveUser({
-      id: user.draft.id,
-      name: user.draft.name,
-      keyloggingEnabled: user.draft.keyloggingEnabled,
-      screenshotsEnabled: user.draft.screenshotsEnabled,
-      screenshotsFrequency: user.draft.screenshotsFrequency,
-      screenshotsResolution: user.draft.screenshotsResolution,
-      isNew: user.isNew ?? false,
-      keychainIds: user.draft.keychains.map(({ id }) => id),
-    });
-  },
-);
-
 export const deleteActivityItems = createResultThunk(
   `${slice.name}/deleteActivityItems`,
   async (arg: { date: Date; itemRootIds: UUID[] }, { getState }) => {
@@ -445,25 +356,9 @@ function matchingActivityDays(
   return activityDaysSorted;
 }
 
-export const createPendingAppConnection = createResultThunk(
-  `${slice.name}/createPendingAppConnection`,
-  Current.api.createPendingAppConnection,
-);
-
 // exports
 
-export const {
-  receivedEditingUser, // ActionCreatorWithPayload<User, string>
-  userUpdated,
-  addDeviceDismissed,
-  userEntityDeleteStarted,
-  userEntityDeleteCanceled,
-  addKeychainClicked,
-  keychainSelected,
-  keychainAdded,
-  addKeychainModalDismissed,
-  newUserRouteVisited,
-} = slice.actions;
+export const { receivedEditingUser, userUpdated, newUserRouteVisited } = slice.actions;
 
 export default slice.reducer;
 

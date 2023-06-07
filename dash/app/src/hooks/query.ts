@@ -9,7 +9,18 @@ import { capitalize, pastTense } from '@shared/string';
 import { useState } from 'react';
 import type { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import type PairQLResult from '@dash/types/src/pairql/Result';
-import type { DeleteEntity, PqlError, Result, SuccessOutput } from '@dash/types';
+import type {
+  DeleteEntity,
+  GetUsers,
+  GetUser,
+  PqlError,
+  Result,
+  SuccessOutput,
+  UserActivitySummaries,
+  UserActivityFeed,
+  GetSelectableKeychains,
+  GetDashboardWidgets,
+} from '@dash/types';
 import type {
   UseMutationResult,
   UseQueryResult,
@@ -37,13 +48,14 @@ type MutationId =
   | 'upsert:notification'
   | 'delete:notification'
   | 'delete:notification-method'
+  | 'create:pending-app-connection'
   | 'create:pending-notification-method'
   | 'confirm:pending-notification-method'
   | 'delete:activity-items'
   | 'update:suspend-filter-request';
 
 export function useQuery<T>(
-  key: QueryKey,
+  key: QueryKey<T>,
   fn: () => Promise<Result<T, PqlError>>,
   options: QueryOptions<T> = {},
 ): QueryResult<T> {
@@ -69,9 +81,21 @@ export function useQuery<T>(
   });
 }
 
+export function useOptimism(): {
+  update<T>(queryKey: QueryKey<T>, to: T): void;
+} {
+  const queryClient = useQueryClient();
+  return {
+    update<T>(queryKey: QueryKey<T>, to: T) {
+      queryClient.setQueryData(queryKey.segments, to);
+    },
+  };
+}
+
 export function useMutation<T, V>(
   id: MutationId,
   fn: (arg: V) => Promise<PairQLResult<T>>,
+  options: { invalidating?: QueryKey<unknown>[] } = {},
 ): MutationResult<T, V> {
   const [arg, setArg] = useState<V | undefined>(undefined);
   const [entityId, setEntityId] = useState<UUID | undefined>(undefined);
@@ -127,6 +151,13 @@ export function useMutation<T, V>(
         toast.success(`${capitalize(entity)} ${pastTense(verb)}!`);
       }
       invalidateCacheAfterMutation(`success`, id, queryClient);
+    },
+    onSettled() {
+      if (options.invalidating) {
+        options.invalidating.forEach((key) =>
+          queryClient.invalidateQueries(key.segments),
+        );
+      }
     },
   });
 }
@@ -219,7 +250,9 @@ export const entityMutationSucceeded = (mutationId: MutationId) =>
     }),
   );
 
-export class QueryKey {
+export class QueryKey<T> {
+  private phantom?: T;
+
   // do not construct directly, use `Key` static methods
   public readonly __taint: `66e66bd61e2f4e009ca94f3fac98fd33`;
 
@@ -236,16 +269,28 @@ export class QueryKey {
   }
 }
 
-export class Key extends QueryKey {
-  static user(id: UUID): QueryKey {
+export class Key extends QueryKey<never> {
+  static get users(): QueryKey<GetUsers.Output> {
+    return new QueryKey(`users`, [`users`]);
+  }
+
+  static user(id: UUID): QueryKey<GetUser.Output> {
     return new QueryKey(`users/:id`, [`users`, id], id);
   }
 
-  static get selectableKeychains(): QueryKey {
+  static userActivitySummaries(id: UUID): QueryKey<UserActivitySummaries.Output> {
+    return new QueryKey(`users/:id/activity`, [`users`, id, `activity`], id);
+  }
+
+  static userActivityFeed(id: UUID, day: string): QueryKey<UserActivityFeed.Output> {
+    return new QueryKey(`users/:id/activity/:day`, [`users`, id, `activity`, day], id);
+  }
+
+  static get selectableKeychains(): QueryKey<GetSelectableKeychains.Output> {
     return new QueryKey(`selectable-keychains`, [`selectable-keychains`]);
   }
 
-  static get dashboard(): QueryKey {
+  static get dashboard(): QueryKey<GetDashboardWidgets.Output> {
     return new QueryKey(`dashboard`, [`dashboard`]);
   }
 
@@ -257,7 +302,7 @@ export class Key extends QueryKey {
 export type MutationResult<T, V> = UseMutationResult<T, PqlError, V>;
 export type MutationType = 'create' | 'upsert' | 'update' | 'delete';
 export type QueryResult<T> = UseQueryResult<T, PqlError>;
-type QueryKeyData = Omit<QueryKey, 'data' | '__taint'>;
+type QueryKeyData = Omit<QueryKey<any>, 'data' | '__taint' | 'phantom'>;
 
 function invalidateCacheAfterMutation(
   status: 'success' | 'failure',
