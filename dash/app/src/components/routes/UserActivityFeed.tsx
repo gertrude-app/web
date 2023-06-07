@@ -8,7 +8,7 @@ import { useQuery, Key, useMutation, useOptimism } from '../../hooks/query';
 import { entireDay } from '../../lib/helpers';
 import {
   outputItemToActivityFeedItem,
-  prepareActivityDelete,
+  prepareUserActivityDelete,
 } from '../../lib/user-activity';
 
 const UserActivityFeedRoute: React.FC = () => {
@@ -17,38 +17,36 @@ const UserActivityFeedRoute: React.FC = () => {
   const optimistic = useOptimism();
   const queryKey = Key.userActivityFeed(userId, urlDate);
 
-  const getActivity = useQuery(queryKey, () =>
+  const query = useQuery(queryKey, () =>
     Current.api.userActivityFeed({ userId, range: entireDay(date) }),
   );
 
   const deleteItems = useMutation(
     `delete:activity-items`,
     (rootIds: UUID[]) => {
-      const data = getActivity.data;
+      const data = query.data;
       if (!data) return Promise.resolve(Result.unexpectedError(`c86706e8`));
-      const [input, nextState] = prepareActivityDelete(rootIds, data);
+      const [input, nextState] = prepareUserActivityDelete(rootIds, data);
       optimistic.update(queryKey, nextState);
       return Current.api.deleteActivityItems(input);
     },
     { invalidating: [queryKey, Key.userActivitySummaries(userId)] },
   );
 
-  if (getActivity.isLoading) {
+  if (query.isLoading) {
     return <Loading />;
   }
 
-  if (getActivity.isError) {
-    return <ApiErrorMessage error={getActivity.error} />;
+  if (query.isError) {
+    return <ApiErrorMessage error={query.error} />;
   }
-
-  const activity = getActivity.data;
 
   return (
     <UserActivityFeed
       date={date}
-      numDeleted={activity.numDeleted}
+      numDeleted={query.data.numDeleted}
       deleteItems={(rootIds) => deleteItems.mutate(rootIds)}
-      items={activity.items
+      items={query.data.items
         .map(outputItemToActivityFeedItem)
         .filter((item) => !item.deleted)}
     />

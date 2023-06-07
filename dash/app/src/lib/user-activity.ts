@@ -1,4 +1,4 @@
-import type { UserActivityFeed } from '@dash/types';
+import type { CombinedUsersActivityFeed, UserActivityFeed } from '@dash/types';
 import type { ActivityFeedItem } from '@dash/components';
 
 export function outputItemToActivityFeedItem(
@@ -19,7 +19,31 @@ export function outputItemToActivityFeedItem(
   }
 }
 
-export function prepareActivityDelete(
+export function prepareCombinedUsersActivityDelete(
+  itemRootIds: UUID[],
+  queryData: CombinedUsersActivityFeed.Output,
+): [
+  input: { keystrokeLineIds: UUID[]; screenshotIds: UUID[] },
+  optimisticUpdate: CombinedUsersActivityFeed.Output,
+] {
+  const chunked = queryData.map((userChunk) =>
+    prepareUserActivityDelete(itemRootIds, userChunk),
+  );
+  return [
+    chunked
+      .map(([input]) => input)
+      .reduce(
+        (acc, input) => ({
+          keystrokeLineIds: [...acc.keystrokeLineIds, ...input.keystrokeLineIds],
+          screenshotIds: [...acc.screenshotIds, ...input.screenshotIds],
+        }),
+        { keystrokeLineIds: [], screenshotIds: [] },
+      ),
+    chunked.map(([, optimisticUpdate]) => optimisticUpdate),
+  ];
+}
+
+export function prepareUserActivityDelete(
   itemRootIds: UUID[],
   queryData: UserActivityFeed.Output,
 ): [
@@ -28,7 +52,8 @@ export function prepareActivityDelete(
 ] {
   let keystrokeLineIds: UUID[] = [];
   const screenshotIds: UUID[] = [];
-  const remainingItems = queryData.items.filter((item) => {
+  // impure filter function, but prevents iterating twice
+  const remaining = queryData.items.filter((item) => {
     if (itemRootIds.includes(item.value.id)) {
       if (item.type === `CoalescedKeystrokeLine`) {
         keystrokeLineIds = [...keystrokeLineIds, ...item.value.ids];
@@ -43,8 +68,8 @@ export function prepareActivityDelete(
     { keystrokeLineIds, screenshotIds },
     {
       userName: queryData.userName,
-      items: remainingItems,
-      numDeleted: itemRootIds.length + queryData.numDeleted,
+      items: remaining,
+      numDeleted: queryData.numDeleted + queryData.items.length - remaining.length,
     },
   ];
 }

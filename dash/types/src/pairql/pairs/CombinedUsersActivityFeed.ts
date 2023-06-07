@@ -34,7 +34,7 @@ export namespace CombinedUsersActivityFeed {
       };
 
   export type Output = Array<{
-    userId: UUID;
+    // userId: UUID;
     userName: string;
     numDeleted: number;
     items: Array<Item>;
