@@ -20,6 +20,7 @@ import type {
   UserActivityFeed,
   GetSelectableKeychains,
   GetDashboardWidgets,
+  CombinedUsersActivitySummaries,
 } from '@dash/types';
 import type {
   UseMutationResult,
@@ -95,7 +96,7 @@ export function useOptimism(): {
 export function useMutation<T, V>(
   id: MutationId,
   fn: (arg: V) => Promise<PairQLResult<T>>,
-  options: { invalidating?: QueryKey<unknown>[] } = {},
+  options: MutationOptions = {},
 ): MutationResult<T, V> {
   const [arg, setArg] = useState<V | undefined>(undefined);
   const [entityId, setEntityId] = useState<UUID | undefined>(undefined);
@@ -137,7 +138,6 @@ export function useMutation<T, V>(
         const { verb, entity } = toasting;
         toast.error(`Failed to ${verb} ${entity}`, { duration: 6000 });
       }
-      invalidateCacheAfterMutation(`failure`, id, queryClient);
     },
     onSuccess() {
       if (entityId) {
@@ -150,7 +150,6 @@ export function useMutation<T, V>(
         const { verb, entity } = toasting;
         toast.success(`${capitalize(entity)} ${pastTense(verb)}!`);
       }
-      invalidateCacheAfterMutation(`success`, id, queryClient);
     },
     onSettled() {
       if (options.invalidating) {
@@ -164,9 +163,12 @@ export function useMutation<T, V>(
 
 export function useDeleteEntity(
   type: DeleteEntity.Input['type'],
+  options: MutationOptions = {},
 ): MutationResult<SuccessOutput, UUID> {
-  return useMutation(mutationIdFromDeleteEntityType(type), (id: UUID) =>
-    Current.api.deleteEntity({ type, id }),
+  return useMutation(
+    mutationIdFromDeleteEntityType(type),
+    (id: UUID) => Current.api.deleteEntity({ type, id }),
+    options,
   );
 }
 
@@ -294,31 +296,20 @@ export class Key extends QueryKey<never> {
     return new QueryKey(`dashboard`, [`dashboard`]);
   }
 
+  static get combinedUsersActivitySummaries(): QueryKey<CombinedUsersActivitySummaries.Output> {
+    return new QueryKey(`users/activity`, [`users`, `activity`]);
+  }
+
   private constructor() {
     super(``, []);
   }
 }
 
+export type MutationOptions = { invalidating?: QueryKey<unknown>[] };
 export type MutationResult<T, V> = UseMutationResult<T, PqlError, V>;
 export type MutationType = 'create' | 'upsert' | 'update' | 'delete';
 export type QueryResult<T> = UseQueryResult<T, PqlError>;
 type QueryKeyData = Omit<QueryKey<any>, 'data' | '__taint' | 'phantom'>;
-
-function invalidateCacheAfterMutation(
-  status: 'success' | 'failure',
-  mutationId: MutationId,
-  queryClient: QueryClient,
-): void {
-  let invalidations: Array<unknown[]> = [];
-  switch (`${mutationId}:${status}` as const) {
-    case `delete:device:success`:
-      invalidations = [[`users`]];
-      break;
-    default:
-      break;
-  }
-  invalidations.forEach((key) => queryClient.invalidateQueries(key));
-}
 
 function getToast(mutationId: MutationId): { verb: string; entity: string } | undefined {
   const [verb = ``, entitySlug = ``] = mutationId.split(`:`);

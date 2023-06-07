@@ -21,14 +21,15 @@ const UserRoute: React.FC = () => {
   const { userId: id = `` } = useParams<{ userId: string }>();
   const editableUser = useSelector((state) => state.users.editing[id]);
   const dispatch = useDispatch();
+  const queryKey = Key.user(id);
   const getKeychains = _useSelectableKeychains();
-  const deleteUser = useConfirmableDelete(`User`, id);
-  const deleteDevice = useConfirmableDelete(`Device`);
+  const deleteUser = useConfirmableDelete(`User`, { id });
+  const deleteDevice = useConfirmableDelete(`Device`, { invalidating: [queryKey] });
 
   // todo: this seems a little wonky
   const [addKeychain, setAddKeychain] = useState<KeychainSummary | undefined | null>();
 
-  const getUser = useQuery(Key.user(id), () => Current.api.getUser(id), {
+  const getUser = useQuery(queryKey, () => Current.api.getUser(id), {
     payloadAction: receivedEditingUser,
     enabled: id !== `new` && editableUser?.isNew !== true,
   });
@@ -95,7 +96,7 @@ const UserRoute: React.FC = () => {
         dispatch(userUpdated({ id, type: `removeKeychain`, value: keychainId }))
       }
       keychains={user.keychains}
-      devices={user.devices.map(deviceProps)}
+      devices={editableUser.original.devices.map(deviceProps)}
       deleteUser={deleteUser}
       startAddDevice={() => addDevice.mutate(id)}
       dismissAddDevice={() => addDevice.reset()}
