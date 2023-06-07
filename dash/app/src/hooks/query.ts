@@ -21,6 +21,7 @@ import type {
   GetSelectableKeychains,
   GetDashboardWidgets,
   CombinedUsersActivitySummaries,
+  CombinedUsersActivityFeed,
 } from '@dash/types';
 import type {
   UseMutationResult,
@@ -298,6 +299,12 @@ export class Key extends QueryKey<never> {
 
   static get combinedUsersActivitySummaries(): QueryKey<CombinedUsersActivitySummaries.Output> {
     return new QueryKey(`users/activity`, [`users`, `activity`]);
+  }
+
+  static combinedUsersActivityFeed(
+    day: string,
+  ): QueryKey<CombinedUsersActivityFeed.Output> {
+    return new QueryKey(`users/activity/:day`, [`users`, `activity`, day]);
   }
 
   private constructor() {
