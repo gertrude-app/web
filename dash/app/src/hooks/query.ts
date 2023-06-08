@@ -7,14 +7,12 @@ import {
 } from '@tanstack/react-query';
 import { capitalize, pastTense } from '@shared/string';
 import { useState } from 'react';
-import type { ActionCreatorWithPayload } from '@reduxjs/toolkit';
-import type PairQLResult from '@dash/types/src/pairql/Result';
+import { Result } from '@dash/types';
 import type {
   DeleteEntity,
   GetUsers,
   GetUser,
   PqlError,
-  Result,
   SuccessOutput,
   UserActivitySummaries,
   UserActivityFeed,
@@ -22,12 +20,13 @@ import type {
   GetDashboardWidgets,
   CombinedUsersActivitySummaries,
   CombinedUsersActivityFeed,
+  GetAdminKeychains,
+  GetIdentifiedApps,
+  GetAdminKeychain,
 } from '@dash/types';
-import type {
-  UseMutationResult,
-  UseQueryResult,
-  QueryClient,
-} from '@tanstack/react-query';
+import type { ActionCreatorWithPayload } from '@reduxjs/toolkit';
+import type PairQLResult from '@dash/types/src/pairql/Result';
+import type { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
 import { useDispatch } from '../redux/hooks';
 import { ensurePqlError } from '../pairql/query';
 import Current from '../environment';
@@ -36,6 +35,7 @@ import { isEditable, isUUID } from '../redux/helpers';
 type QueryOptions<T> = {
   enabled?: boolean;
   payloadAction?: ActionCreatorWithPayload<T, string>;
+  onSuccess?: (data: T) => unknown;
 };
 
 type MutationId =
@@ -73,6 +73,9 @@ export function useQuery<T>(
         if (options.payloadAction) {
           dispatch(options.payloadAction(value));
         }
+        if (options.onSuccess) {
+          options.onSuccess(value);
+        }
         return value;
       } catch (error) {
         dispatch(queryFailed(key.data, ensurePqlError(error), requestId));
@@ -97,8 +100,39 @@ export function useOptimism(): {
 export function useMutation<T, V>(
   id: MutationId,
   fn: (arg: V) => Promise<PairQLResult<T>>,
-  options: MutationOptions = {},
+  options?: MutationOptions,
+): MutationResult<T, V>;
+
+export function useMutation<T, V>(
+  options: MutationOptions & {
+    id: MutationId;
+    fn: (arg: V) => Promise<PairQLResult<T>>;
+  },
+): MutationResult<T, V>;
+
+export function useMutation<T, V>(
+  param1:
+    | (MutationOptions & {
+        id: MutationId;
+        fn: (arg: V) => Promise<PairQLResult<T>>;
+      })
+    | MutationId,
+  param2?: (arg: V) => Promise<PairQLResult<T>>,
+  param3?: MutationOptions,
 ): MutationResult<T, V> {
+  let id: MutationId;
+  let fn: (arg: V) => Promise<PairQLResult<T>>;
+  let options: MutationOptions;
+  if (typeof param1 === `string`) {
+    id = param1;
+    fn = param2 ?? (() => Promise.resolve(Result.unexpectedError(`0a5c18fe`)));
+    options = param3 ?? {};
+  } else {
+    id = param1.id;
+    fn = param1.fn;
+    options = param1;
+  }
+
   const [arg, setArg] = useState<V | undefined>(undefined);
   const [entityId, setEntityId] = useState<UUID | undefined>(undefined);
   const dispatch = useDispatch();
@@ -305,6 +339,18 @@ export class Key extends QueryKey<never> {
     day: string,
   ): QueryKey<CombinedUsersActivityFeed.Output> {
     return new QueryKey(`users/activity/:day`, [`users`, `activity`, day]);
+  }
+
+  static get adminKeychains(): QueryKey<GetAdminKeychains.Output> {
+    return new QueryKey(`admin-keychains`, [`admin-keychains`]);
+  }
+
+  static adminKeychain(id: UUID): QueryKey<GetAdminKeychain.Output> {
+    return new QueryKey(`admin-keychains/:id`, [`admin-keychains`, id]);
+  }
+
+  static get apps(): QueryKey<GetIdentifiedApps.Output> {
+    return new QueryKey(`apps`, [`apps`]);
   }
 
   private constructor() {

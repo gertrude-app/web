@@ -7,23 +7,23 @@ import { useQuery, Key, useMutation } from '../../hooks/query';
 import ReqState from '../../lib/ReqState';
 
 const Users: React.FC = () => {
-  const getUsers = useQuery(Key.users, () => Current.api.getUsers());
+  const query = useQuery(Key.users, Current.api.getUsers);
 
   const addDevice = useMutation(`create:pending-app-connection`, (userId: UUID) =>
     Current.api.createPendingAppConnection({ userId }),
   );
 
-  if (getUsers.isLoading) {
+  if (query.isLoading) {
     return <Loading />;
   }
 
-  if (getUsers.isError) {
+  if (query.isError) {
     return <ApiErrorMessage />;
   }
 
   return (
     <ListUsers
-      users={getUsers.data.map((user) => ({
+      users={query.data.map((user) => ({
         id: user.id,
         name: user.name,
         numKeychains: user.keychains.length,

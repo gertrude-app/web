@@ -25,7 +25,7 @@ const UserActivityFeedRoute: React.FC = () => {
     `delete:activity-items`,
     (rootIds: UUID[]) => {
       const data = query.data;
-      if (!data) return Promise.resolve(Result.unexpectedError(`c86706e8`));
+      if (!data) return Result.resolveUnexpected(`c86706e8`);
       const [input, nextState] = prepareUserActivityDelete(rootIds, data);
       optimistic.update(queryKey, nextState);
       return Current.api.deleteActivityItems(input);

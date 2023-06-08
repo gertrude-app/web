@@ -208,80 +208,80 @@ export const slice = createSlice({
     //   state.fetchUserRequest[action.meta.arg] = Req.ongoing();
     // });
 
-    builder.addCase(fetchUserActivitySummaries.started, (state, action) => {
-      state.userActivitySummaries[action.meta.arg.userId] = Req.ongoing();
-    });
+    // builder.addCase(fetchUserActivitySummaries.started, (state, action) => {
+    //   state.userActivitySummaries[action.meta.arg.userId] = Req.ongoing();
+    // });
 
-    builder.addCase(fetchUserActivitySummaries.succeeded, (state, action) => {
-      state.userActivitySummaries[action.meta.arg.userId] = Req.succeed({
-        ...action.payload,
-        days: sortActivityDays(action.payload.days),
-      });
-    });
+    // builder.addCase(fetchUserActivitySummaries.succeeded, (state, action) => {
+    //   state.userActivitySummaries[action.meta.arg.userId] = Req.succeed({
+    //     ...action.payload,
+    //     days: sortActivityDays(action.payload.days),
+    //   });
+    // });
 
-    builder.addCase(fetchUserActivitySummaries.failed, (state, action) => {
-      state.userActivitySummaries[action.meta.arg.userId] = Req.fail(action.error);
-    });
+    // builder.addCase(fetchUserActivitySummaries.failed, (state, action) => {
+    //   state.userActivitySummaries[action.meta.arg.userId] = Req.fail(action.error);
+    // });
 
-    builder.addCase(deleteActivityItems.succeeded, (state, action) => {
-      const { date, itemRootIds } = action.meta.arg;
-      for (const day of matchingActivityDays(state.userActivityFeedDays, date)) {
-        day.numDeleted += itemRootIds.length;
-        for (const id of itemRootIds) {
-          const item = day.items[id];
-          if (item) {
-            item.deleted = true;
-          }
-        }
-      }
-    });
+    // builder.addCase(deleteActivityItems.succeeded, (state, action) => {
+    //   const { date, itemRootIds } = action.meta.arg;
+    //   for (const day of matchingActivityDays(state.userActivityFeedDays, date)) {
+    //     day.numDeleted += itemRootIds.length;
+    //     for (const id of itemRootIds) {
+    //       const item = day.items[id];
+    //       if (item) {
+    //         item.deleted = true;
+    //       }
+    //     }
+    //   }
+    // });
 
-    builder.addCase(fetchCombinedUsersActivityFeed.started, (state, action) => {
-      state.fetchCombinedUsersActivityFeed[formatDate(action.meta.arg, `url`)] =
-        Req.ongoing();
-    });
+    // builder.addCase(fetchCombinedUsersActivityFeed.started, (state, action) => {
+    //   state.fetchCombinedUsersActivityFeed[formatDate(action.meta.arg, `url`)] =
+    //     Req.ongoing();
+    // });
 
-    builder.addCase(
-      fetchCombinedUsersActivityFeed.succeeded,
-      (state, { meta, payload }) => {
-        const date = formatDate(meta.arg, `url`);
-        state.fetchCombinedUsersActivityFeed[date] = Req.succeed(void 0);
+    // builder.addCase(
+    //   fetchCombinedUsersActivityFeed.succeeded,
+    //   (state, { meta, payload }) => {
+    //     const date = formatDate(meta.arg, `url`);
+    //     state.fetchCombinedUsersActivityFeed[date] = Req.succeed(void 0);
 
-        for (const activity of payload) {
-          if (activity.items.length > 0) {
-            state.userActivityFeedDays[activityDayKey(activity.userId, meta.arg)] =
-              Req.succeed({
-                userName: activity.userName,
-                numDeleted: activity.numDeleted,
-                items: itemsToMap(activity.items),
-              });
-          }
-        }
-      },
-    );
+    //     for (const activity of payload) {
+    //       if (activity.items.length > 0) {
+    //         state.userActivityFeedDays[activityDayKey(activity.userId, meta.arg)] =
+    //           Req.succeed({
+    //             userName: activity.userName,
+    //             numDeleted: activity.numDeleted,
+    //             items: itemsToMap(activity.items),
+    //           });
+    //       }
+    //     }
+    //   },
+    // );
 
-    builder.addCase(fetchCombinedUsersActivityFeed.failed, (state, { meta, error }) => {
-      state.fetchCombinedUsersActivityFeed[formatDate(meta.arg, `url`)] = Req.fail(error);
-    });
+    // builder.addCase(fetchCombinedUsersActivityFeed.failed, (state, { meta, error }) => {
+    //   state.fetchCombinedUsersActivityFeed[formatDate(meta.arg, `url`)] = Req.fail(error);
+    // });
 
-    builder.addCase(fetchCombinedUsersActivitySummaries.started, (state) => {
-      state.fetchCombinedUsersActivitySummaries = Req.ongoing();
-    });
+    // builder.addCase(fetchCombinedUsersActivitySummaries.started, (state) => {
+    //   state.fetchCombinedUsersActivitySummaries = Req.ongoing();
+    // });
 
-    builder.addCase(fetchCombinedUsersActivitySummaries.succeeded, (state, action) => {
-      state.fetchCombinedUsersActivitySummaries = Req.succeed(void 0);
+    // builder.addCase(fetchCombinedUsersActivitySummaries.succeeded, (state, action) => {
+    //   state.fetchCombinedUsersActivitySummaries = Req.succeed(void 0);
 
-      for (const overview of action.payload) {
-        state.userActivitySummaries[overview.userId] = Req.succeed({
-          userName: overview.userName,
-          days: sortActivityDays(overview.days),
-        });
-      }
-    });
+    //   for (const overview of action.payload) {
+    //     state.userActivitySummaries[overview.userId] = Req.succeed({
+    //       userName: overview.userName,
+    //       days: sortActivityDays(overview.days),
+    //     });
+    //   }
+    // });
 
-    builder.addCase(fetchCombinedUsersActivitySummaries.failed, (state, { error }) => {
-      state.fetchCombinedUsersActivitySummaries = Req.fail(error);
-    });
+    // builder.addCase(fetchCombinedUsersActivitySummaries.failed, (state, { error }) => {
+    //   state.fetchCombinedUsersActivitySummaries = Req.fail(error);
+    // });
   },
 });
 

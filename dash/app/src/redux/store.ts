@@ -45,6 +45,7 @@ export type QueriedProps<Component extends JSXElementConstructor<any>> =
   | { state: 'failed'; error?: PqlError }
   | { state: 'resolved'; props: React.ComponentProps<Component> };
 
+// TODO: can i delete this? and some of above?
 export type QueryProps<Component extends JSXElementConstructor<any>, ExtraArg = void> = (
   dispatch: Dispatch,
   extraArg: ExtraArg,

@@ -13,4 +13,11 @@ export default class PairQLResult<T, E = PqlError> extends Result<T, E> {
       isPqlError: true,
     });
   }
+
+  public static resolveUnexpected(
+    id: string,
+    debugMessage?: string,
+  ): Promise<PairQLResult<never, PqlError>> {
+    return Promise.resolve(this.unexpectedError(id, debugMessage));
+  }
 }

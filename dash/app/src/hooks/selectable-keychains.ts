@@ -7,6 +7,7 @@ import { Req } from '../redux/helpers';
 import Current from '../environment';
 import { useQuery, Key } from './query';
 
+// todo: delete me
 export default function useSelectableKeychains(
   fetch = true,
 ): RequestState<{ own: KeychainSummary[]; public: KeychainSummary[] }> {

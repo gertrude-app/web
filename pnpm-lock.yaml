@@ -102,6 +102,7 @@ importers:
       classnames: ^2.3.1
       glob: 8.0.3
       graphql: ^16.5.0
+      immer: 10.0.2
       node-fetch: 3.3.0
       postcss: ^8.4.13
       react: ^18.2.0
@@ -131,6 +132,7 @@ importers:
       '@tanstack/react-query': 4.29.12_biqbaboplfbrettd7655fr4n2y
       classnames: 2.3.2
       graphql: 16.6.0
+      immer: 10.0.2
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-hot-toast: 2.4.0_biqbaboplfbrettd7655fr4n2y
@@ -7250,6 +7252,10 @@ packages:
   /ignore/5.2.0:
     resolution: {integrity: sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==}
     engines: {node: '>= 4'}
+
+  /immer/10.0.2:
+    resolution: {integrity: sha512-Rx3CqeqQ19sxUtYV9CU911Vhy8/721wRFnJv3REVGWUmoAcIwzifTsdmJte/MV+0/XpM35LZdQMBGkRIoLPwQA==}
+    dev: false
 
   /immer/9.0.16:
     resolution: {integrity: sha512-qenGE7CstVm1NrHQbMh8YaSzTZTFNP3zPqr3YU0S0UY441j4bJTg4A2Hh5KAhwgaiU6ZZ1Ar6y/2f4TblnMReQ==}
