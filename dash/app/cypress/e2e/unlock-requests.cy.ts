@@ -52,7 +52,7 @@ describe(`unlock request flow`, () => {
     cy.visit(`/users/1/unlock-requests/2`);
     cy.url().should(`include`, `/review`);
     cy.contains(`Deny`).click();
-    cy.location(`pathname`).should(`eq`, `/users/1/unlock-requests/2/deny-comment`);
+    cy.location(`pathname`).should(`eq`, `/users/1/unlock-requests/2/deny`);
     cy.contains(`comment`);
     cy.testId(`deny-unlock-req-comment`).type(`nope`);
     cy.contains(`Deny`).click();

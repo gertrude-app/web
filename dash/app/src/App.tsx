@@ -15,7 +15,6 @@ import ReviewUnlockRequest from './components/routes/UnlockRequest/ReviewUnlockR
 import FetchUnlockRequest from './components/routes/UnlockRequest/FetchUnlockRequest';
 import EditUnlockRequestKey from './components/routes/UnlockRequest/EditUnlockRequestKey';
 import DenyUnlockRequest from './components/routes/UnlockRequest/DenyUnlockRequest';
-import DenyUnlockRequestComment from './components/routes/UnlockRequest/DenyUnlockRequestComment';
 import SelectUnlockRequestKeychain from './components/routes/UnlockRequest/SelectUnlockRequestKeychain';
 import UserUnlockRequests from './components/routes/UnlockRequest/UserUnlockRequests';
 import UsersUnlockRequests from './components/routes/UnlockRequest/UsersUnlockRequests';
@@ -93,12 +92,11 @@ const App: React.FC = () => {
 
             <Route path="unlock-requests">
               <Route index element={<UserUnlockRequests />} />
-              <Route path=":unlockRequestId">
+              <Route path=":id">
                 <Route index element={<FetchUnlockRequest />} />
                 <Route path="review" element={<ReviewUnlockRequest />} />
                 <Route path="select-keychain" element={<SelectUnlockRequestKeychain />} />
-                <Route path="edit-key" element={<EditUnlockRequestKey />} />
-                <Route path="deny-comment" element={<DenyUnlockRequestComment />} />
+                <Route path="edit-key/:keychainId" element={<EditUnlockRequestKey />} />
                 <Route path="deny" element={<DenyUnlockRequest />} />
               </Route>
             </Route>

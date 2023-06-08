@@ -8,34 +8,24 @@ import {
 import { capitalize, pastTense } from '@shared/string';
 import { useState } from 'react';
 import { Result } from '@dash/types';
-import type {
-  DeleteEntity,
-  GetUsers,
-  GetUser,
-  PqlError,
-  SuccessOutput,
-  UserActivitySummaries,
-  UserActivityFeed,
-  GetSelectableKeychains,
-  GetDashboardWidgets,
-  CombinedUsersActivitySummaries,
-  CombinedUsersActivityFeed,
-  GetAdminKeychains,
-  GetIdentifiedApps,
-  GetAdminKeychain,
-} from '@dash/types';
+import type { DeleteEntity, PqlError, SuccessOutput } from '@dash/types';
 import type { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import type PairQLResult from '@dash/types/src/pairql/Result';
 import type { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
+import type { QueryKey, QueryKeyData } from './key';
 import { useDispatch } from '../redux/hooks';
 import { ensurePqlError } from '../pairql/query';
 import Current from '../environment';
 import { isEditable, isUUID } from '../redux/helpers';
+import { Key } from './key';
+import { useZip } from './zip';
+
+export { Key, useZip };
 
 type QueryOptions<T> = {
   enabled?: boolean;
   payloadAction?: ActionCreatorWithPayload<T, string>;
-  onSuccess?: (data: T) => unknown;
+  onReceive?: (data: T) => unknown;
 };
 
 type MutationId =
@@ -53,6 +43,8 @@ type MutationId =
   | 'create:pending-app-connection'
   | 'create:pending-notification-method'
   | 'confirm:pending-notification-method'
+  | 'accept:unlock-request'
+  | 'deny:unlock-request'
   | 'delete:activity-items'
   | 'update:suspend-filter-request';
 
@@ -73,8 +65,8 @@ export function useQuery<T>(
         if (options.payloadAction) {
           dispatch(options.payloadAction(value));
         }
-        if (options.onSuccess) {
-          options.onSuccess(value);
+        if (options.onReceive) {
+          options.onReceive(value);
         }
         return value;
       } catch (error) {
@@ -92,6 +84,9 @@ export function useOptimism(): {
   const queryClient = useQueryClient();
   return {
     update<T>(queryKey: QueryKey<T>, to: T) {
+      // cancel already in-flight queries that would overwrite optimistic update
+      queryClient.cancelQueries(queryKey.segments);
+      // update the query data to the new value
       queryClient.setQueryData(queryKey.segments, to);
     },
   };
@@ -125,7 +120,7 @@ export function useMutation<T, V>(
   let options: MutationOptions;
   if (typeof param1 === `string`) {
     id = param1;
-    fn = param2 ?? (() => Promise.resolve(Result.unexpectedError(`0a5c18fe`)));
+    fn = param2 ?? (() => Result.resolveUnexpected(`0a5c18fe`));
     options = param3 ?? {};
   } else {
     id = param1.id;
@@ -287,82 +282,10 @@ export const entityMutationSucceeded = (mutationId: MutationId) =>
     }),
   );
 
-export class QueryKey<T> {
-  private phantom?: T;
-
-  // do not construct directly, use `Key` static methods
-  public readonly __taint: `66e66bd61e2f4e009ca94f3fac98fd33`;
-
-  protected constructor(
-    public readonly path: string,
-    public readonly segments: unknown[],
-    public readonly id?: UUID,
-  ) {
-    this.__taint = `66e66bd61e2f4e009ca94f3fac98fd33`;
-  }
-
-  public get data(): QueryKeyData {
-    return { path: this.path, segments: this.segments, id: this.id };
-  }
-}
-
-export class Key extends QueryKey<never> {
-  static get users(): QueryKey<GetUsers.Output> {
-    return new QueryKey(`users`, [`users`]);
-  }
-
-  static user(id: UUID): QueryKey<GetUser.Output> {
-    return new QueryKey(`users/:id`, [`users`, id], id);
-  }
-
-  static userActivitySummaries(id: UUID): QueryKey<UserActivitySummaries.Output> {
-    return new QueryKey(`users/:id/activity`, [`users`, id, `activity`], id);
-  }
-
-  static userActivityFeed(id: UUID, day: string): QueryKey<UserActivityFeed.Output> {
-    return new QueryKey(`users/:id/activity/:day`, [`users`, id, `activity`, day], id);
-  }
-
-  static get selectableKeychains(): QueryKey<GetSelectableKeychains.Output> {
-    return new QueryKey(`selectable-keychains`, [`selectable-keychains`]);
-  }
-
-  static get dashboard(): QueryKey<GetDashboardWidgets.Output> {
-    return new QueryKey(`dashboard`, [`dashboard`]);
-  }
-
-  static get combinedUsersActivitySummaries(): QueryKey<CombinedUsersActivitySummaries.Output> {
-    return new QueryKey(`users/activity`, [`users`, `activity`]);
-  }
-
-  static combinedUsersActivityFeed(
-    day: string,
-  ): QueryKey<CombinedUsersActivityFeed.Output> {
-    return new QueryKey(`users/activity/:day`, [`users`, `activity`, day]);
-  }
-
-  static get adminKeychains(): QueryKey<GetAdminKeychains.Output> {
-    return new QueryKey(`admin-keychains`, [`admin-keychains`]);
-  }
-
-  static adminKeychain(id: UUID): QueryKey<GetAdminKeychain.Output> {
-    return new QueryKey(`admin-keychains/:id`, [`admin-keychains`, id]);
-  }
-
-  static get apps(): QueryKey<GetIdentifiedApps.Output> {
-    return new QueryKey(`apps`, [`apps`]);
-  }
-
-  private constructor() {
-    super(``, []);
-  }
-}
-
 export type MutationOptions = { invalidating?: QueryKey<unknown>[] };
 export type MutationResult<T, V> = UseMutationResult<T, PqlError, V>;
 export type MutationType = 'create' | 'upsert' | 'update' | 'delete';
 export type QueryResult<T> = UseQueryResult<T, PqlError>;
-type QueryKeyData = Omit<QueryKey<any>, 'data' | '__taint' | 'phantom'>;
 
 function getToast(mutationId: MutationId): { verb: string; entity: string } | undefined {
   const [verb = ``, entitySlug = ``] = mutationId.split(`:`);

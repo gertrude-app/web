@@ -65,7 +65,7 @@ const UserRoute: React.FC = () => {
   }
 
   if (getUser.isError) {
-    return <ApiErrorMessage />;
+    return <ApiErrorMessage error={getUser.error} />;
   }
 
   if (!editableUser) {

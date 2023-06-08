@@ -5,7 +5,7 @@ import { toKeyRecord } from '@dash/keys';
 import { EditKeychain } from '@dash/components';
 import { Result } from '@dash/types';
 import type { KeychainSummary } from '@dash/types';
-import { isDirty, } from '../../redux/helpers';
+import { isDirty } from '../../redux/helpers';
 import { Key, useMutation, useQuery } from '../../hooks/query';
 import Current from '../../environment';
 import reducer from '../../reducers/edit-keychain-reducer';
@@ -21,7 +21,7 @@ const Keychain: React.FC = () => {
   const deleteKey = useConfirmableDelete(`Key`, { invalidating: [queryKey] });
 
   const keychainQuery = useQuery(queryKey, () => Current.api.getAdminKeychain(id), {
-    onSuccess: (keychain) => dispatch({ type: `receivedKeychain`, keychain }),
+    onReceive: (keychain) => dispatch({ type: `receivedKeychain`, keychain }),
   });
 
   const saveKeychain = useMutation({
