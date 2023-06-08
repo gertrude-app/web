@@ -13,6 +13,7 @@ import type {
   GetUnlockRequest,
   GetUserUnlockRequests,
   GetUnlockRequests,
+  GetSuspendFilterRequest,
 } from '@dash/types';
 
 export class QueryKey<T> {
@@ -90,7 +91,11 @@ export class Key extends QueryKey<never> {
   }
 
   static unlockRequest(id: UUID): QueryKey<GetUnlockRequest.Output> {
-    return new QueryKey(`unlock-request/:id`, [`unlock-request`, id]);
+    return new QueryKey(`unlock-requests/:id`, [`unlock-requests`, id]);
+  }
+
+  static suspendFilterRequest(id: UUID): QueryKey<GetSuspendFilterRequest.Output> {
+    return new QueryKey(`suspend-filter-requests/:id`, [`suspend-filter-requests`, id]);
   }
 
   static get apps(): QueryKey<GetIdentifiedApps.Output> {
