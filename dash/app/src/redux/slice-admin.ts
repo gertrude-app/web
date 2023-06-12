@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { isUnsaved, unsavedId } from '@dash/utils';
 import { typesafe } from '@shared/ts-utils';
 import { Result } from '@dash/types';
 import type {
@@ -13,7 +12,7 @@ import type {
 import type { NotificationUpdate } from '@dash/components';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import Current from '../environment';
-import { Req, editable, revert, commit } from './helpers';
+import { Req, editable, revert } from './helpers';
 import { createResultThunk } from './thunk';
 import { logoutRouteVisited } from './slice-auth';
 
@@ -60,10 +59,10 @@ export const slice = createSlice({
       delete state.deleting[type];
     },
     notificationCreated(state) {
-      state.notifications[unsavedId()] = {
+      state.notifications[`lol`] = {
         editing: true,
         ...editable({
-          id: unsavedId(),
+          id: `lol`,
           trigger: `suspendFilterRequestSubmitted`,
           methodId: typesafe.objectValues(state.notificationMethods)[0]?.value.id ?? ``,
         }),

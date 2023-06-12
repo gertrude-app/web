@@ -1,7 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
 import { TextInput, Button } from '@shared/components';
-import { isUnsaved } from '@dash/utils';
 import type {
   AdminSubscriptionStatus,
   AdminNotificationTrigger,
@@ -152,7 +151,6 @@ const Profile: React.FC<Props> = ({
             {notifications.map(({ id, ...props }) => (
               <NotificationCard
                 key={id}
-                focus={isUnsaved(id)}
                 startEdit={() => updateNotification({ id, type: `startEditing` })}
                 cancelEdit={() => updateNotification({ id, type: `cancelEditing` })}
                 onDelete={() => deleteNotification.start(id)}

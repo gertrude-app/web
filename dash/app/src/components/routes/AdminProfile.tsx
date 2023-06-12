@@ -198,6 +198,7 @@ function makeNotificationProps(
         value: method.value.id,
       })),
       editing: editable.editing === true,
+      isNew: editable.isNew === true,
     };
   };
 }
