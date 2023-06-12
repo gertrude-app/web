@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { useDispatch, useRedirect, useSelector } from './redux/hooks';
-import { windowWidthChanged } from './redux/slice-menu';
+import { useRedirect } from './redux/hooks';
 import AuthedChrome from './components/Authed';
 import Dashboard from './components/routes/Dashboard';
 import Login from './components/routes/Login';
@@ -26,22 +25,11 @@ import UserActivitySummaries from './components/routes/UserActivitySummaries';
 import Keychains from './components/routes/Keychains';
 import Signup from './components/routes/Signup';
 import UserRoute from './components/routes/User';
-import useWindowWidth from './hooks/window-width';
 import CombinedUsersActivitySummaries from './components/routes/CombinedUsersActivitySummaries';
 import CombinedUsersActivityFeedRoute from './components/routes/CombinedUsersActivityFeed';
 import UserActivityFeed from './components/routes/UserActivityFeed';
 
 const App: React.FC = () => {
-  const dispatch = useDispatch();
-  const stateWindowWidth = useSelector((state) => state.menu.windowWidth);
-  const currentWindowWidth = useWindowWidth();
-
-  useEffect(() => {
-    if (stateWindowWidth !== currentWindowWidth) {
-      dispatch(windowWidthChanged(currentWindowWidth));
-    }
-  }, [dispatch, currentWindowWidth, stateWindowWidth]);
-
   useEffect(() => {
     document.addEventListener(`click`, (e) => {
       if (e.target instanceof HTMLElement && e.target.classList.contains(`ScrollTop`)) {

@@ -23,6 +23,8 @@ import { useZip } from './zip';
 export { Key, useZip };
 
 type MutationId =
+  | 'signup'
+  | 'verify-signup-email'
   | 'delete:user'
   | 'delete:device'
   | 'upsert:user'
@@ -70,6 +72,19 @@ export function useQuery<T>(
       }
     },
     enabled: options.enabled,
+    ...(options.neverRefetch
+      ? {
+          retry: false,
+          retryonMount: false,
+          cacheTime: Infinity,
+          retryDelay: Infinity,
+          refetchOnMount: false,
+          refetchOnWindowFocus: false,
+          refetchInterval: false,
+          refetchIntervalInBackground: false,
+          refetchOnReconnect: false,
+        }
+      : {}),
   });
 }
 
@@ -285,6 +300,7 @@ export const entityMutationSucceeded = (mutationId: MutationId) =>
 
 type QueryOptions<T> = {
   enabled?: boolean;
+  neverRefetch?: boolean;
   payloadAction?: ActionCreatorWithPayload<T, string>;
   onReceive?: (data: T) => unknown;
 };
