@@ -5,9 +5,9 @@ import type { EditKey } from '@dash/keys';
 import type { AdminKeychain, Key, KeychainSummary } from '@dash/types';
 import { editable } from '../redux/helpers';
 import editKeyReducer from '../redux/edit-key-reducer';
+import * as empty from '../redux/empty';
 
 type EditKeychainState = {
-  // should this be a record?
   keychain?: Editable<KeychainSummary>;
   keys: Key[]; // maybe should put these back together in pairql output...
   editingKey?: EditKey.State;
@@ -15,7 +15,9 @@ type EditKeychainState = {
 
 type EditKeychainAction =
   | { type: 'receivedKeychain'; keychain: AdminKeychain }
+  | { type: 'createNewKeychain'; id: UUID; adminId: UUID }
   | { type: 'beginEditKey'; id: UUID }
+  | { type: 'keychainSaved' }
   | { type: 'cancelEditKey' }
   | { type: 'createNewKey' }
   | { type: 'updateEditingKey'; event: EditKey.Event }
@@ -26,7 +28,15 @@ function reducer(
   state: EditKeychainState,
   action: EditKeychainAction,
 ): EditKeychainState | undefined {
-  // console.log({ action, state: JSON.parse(JSON.stringify(state)) });
+  if (action.type === `createNewKeychain`) {
+    state.keychain = {
+      ...editable(empty.keychain(action.id, action.adminId)),
+      isNew: true,
+    };
+    state.keys = [];
+    return;
+  }
+
   if (!state.keychain) {
     if (action.type === `receivedKeychain`) {
       state.keychain = editable(action.keychain.summary);
@@ -39,6 +49,10 @@ function reducer(
     case `receivedKeychain`:
       state.keychain.original = action.keychain.summary;
       state.keys = action.keychain.keys;
+      return;
+
+    case `keychainSaved`:
+      state.keychain.isNew = false;
       return;
 
     case `createNewKey`:

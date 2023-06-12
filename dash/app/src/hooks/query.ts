@@ -23,6 +23,8 @@ import { useZip } from './zip';
 export { Key, useZip };
 
 type MutationId =
+  | 'login'
+  | 'request-magic-link'
   | 'signup'
   | 'verify-signup-email'
   | 'delete:user'

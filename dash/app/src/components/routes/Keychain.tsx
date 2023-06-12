@@ -1,4 +1,5 @@
-import React, { useReducer } from 'react';
+import { v4 as uuid } from 'uuid';
+import React, { useEffect, useMemo, useReducer } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { Loading, ApiErrorMessage } from '@dash/components';
 import { toKeyRecord } from '@dash/keys';
@@ -10,9 +11,11 @@ import { Key, useMutation, useQuery } from '../../hooks/query';
 import Current from '../../environment';
 import reducer from '../../reducers/edit-keychain-reducer';
 import { useConfirmableDelete } from '../../hooks/delete-entity';
+import { useAuth } from '../../hooks/auth';
 
 const Keychain: React.FC = () => {
   const { keychainId: id = `` } = useParams<{ keychainId: string }>();
+  const { admin } = useAuth();
   const [state, dispatch] = useReducer(reducer, { keys: [] });
   const editableKeychain = state.keychain;
   const queryKey = Key.adminKeychain(id);
@@ -20,8 +23,19 @@ const Keychain: React.FC = () => {
   const deleteKeychain = useConfirmableDelete(`Keychain`, { id });
   const deleteKey = useConfirmableDelete(`Key`, { invalidating: [queryKey] });
 
+  const newKeychainId = useMemo(() => uuid(), []);
+  useEffect(() => {
+    id === `new` &&
+      dispatch({
+        type: `createNewKeychain`,
+        id: newKeychainId,
+        adminId: admin?.id ?? ``,
+      });
+  }, [newKeychainId, id, admin, dispatch]);
+
   const keychainQuery = useQuery(queryKey, () => Current.api.getAdminKeychain(id), {
     onReceive: (keychain) => dispatch({ type: `receivedKeychain`, keychain }),
+    enabled: id !== `new` && state.keychain?.isNew !== true,
   });
 
   const saveKeychain = useMutation({
@@ -35,6 +49,7 @@ const Keychain: React.FC = () => {
         isPublic: keychain.draft.isPublic,
       }),
     invalidating: [queryKey],
+    onSuccess: () => dispatch({ type: `keychainSaved` }),
   });
 
   const saveKey = useMutation({
@@ -53,6 +68,10 @@ const Keychain: React.FC = () => {
     },
     invalidating: [queryKey],
   });
+
+  if (id === `new`) {
+    return <Navigate to={`/keychains/${newKeychainId}`} replace />;
+  }
 
   if (deleteKeychain.state === `success`) {
     return <Navigate to="/keychains" />;
