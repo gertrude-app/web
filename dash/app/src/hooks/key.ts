@@ -14,6 +14,7 @@ import type {
   GetUserUnlockRequests,
   GetUnlockRequests,
   GetSuspendFilterRequest,
+  GetAdmin,
 } from '@dash/types';
 
 export class QueryKey<T> {
@@ -96,6 +97,10 @@ export class Key extends QueryKey<never> {
 
   static suspendFilterRequest(id: UUID): QueryKey<GetSuspendFilterRequest.Output> {
     return new QueryKey(`suspend-filter-requests/:id`, [`suspend-filter-requests`, id]);
+  }
+
+  static get admin(): QueryKey<GetAdmin.Output> {
+    return new QueryKey(`admin`, [`admin`]);
   }
 
   static get apps(): QueryKey<GetIdentifiedApps.Output> {

@@ -22,12 +22,6 @@ import { useZip } from './zip';
 
 export { Key, useZip };
 
-type QueryOptions<T> = {
-  enabled?: boolean;
-  payloadAction?: ActionCreatorWithPayload<T, string>;
-  onReceive?: (data: T) => unknown;
-};
-
 type MutationId =
   | 'delete:user'
   | 'delete:device'
@@ -40,6 +34,7 @@ type MutationId =
   | 'upsert:notification'
   | 'delete:notification'
   | 'delete:notification-method'
+  | 'create:billing-portal-session'
   | 'create:pending-app-connection'
   | 'create:pending-notification-method'
   | 'confirm:pending-notification-method'
@@ -95,11 +90,11 @@ export function useOptimism(): {
 export function useMutation<T, V>(
   id: MutationId,
   fn: (arg: V) => Promise<PairQLResult<T>>,
-  options?: MutationOptions,
+  options?: MutationOptions<T>,
 ): MutationResult<T, V>;
 
 export function useMutation<T, V>(
-  options: MutationOptions & {
+  options: MutationOptions<T> & {
     id: MutationId;
     fn: (arg: V) => Promise<PairQLResult<T>>;
   },
@@ -107,17 +102,17 @@ export function useMutation<T, V>(
 
 export function useMutation<T, V>(
   param1:
-    | (MutationOptions & {
+    | (MutationOptions<T> & {
         id: MutationId;
         fn: (arg: V) => Promise<PairQLResult<T>>;
       })
     | MutationId,
   param2?: (arg: V) => Promise<PairQLResult<T>>,
-  param3?: MutationOptions,
+  param3?: MutationOptions<T>,
 ): MutationResult<T, V> {
   let id: MutationId;
   let fn: (arg: V) => Promise<PairQLResult<T>>;
-  let options: MutationOptions;
+  let options: MutationOptions<T>;
   if (typeof param1 === `string`) {
     id = param1;
     fn = param2 ?? (() => Result.resolveUnexpected(`0a5c18fe`));
@@ -163,17 +158,23 @@ export function useMutation<T, V>(
       } else {
         dispatch(mutationFailed(id)(error, arg, requestId));
       }
+      if (options.onError) {
+        options.onError(error, entityId);
+      }
       if (toasting) {
         toast.dismiss();
         const { verb, entity } = toasting;
         toast.error(`Failed to ${verb} ${entity}`, { duration: 6000 });
       }
     },
-    onSuccess() {
+    onSuccess(payload) {
       if (entityId) {
         dispatch(entityMutationSucceeded(id)(entityId, requestId));
       } else {
         dispatch(mutationSucceeded(id)(arg, requestId));
+      }
+      if (options.onSuccess) {
+        options.onSuccess(payload, entityId);
       }
       if (toasting) {
         toast.dismiss();
@@ -193,7 +194,7 @@ export function useMutation<T, V>(
 
 export function useDeleteEntity(
   type: DeleteEntity.Input['type'],
-  options: MutationOptions = {},
+  options: MutationOptions<SuccessOutput> = {},
 ): MutationResult<SuccessOutput, UUID> {
   return useMutation(
     mutationIdFromDeleteEntityType(type),
@@ -282,7 +283,18 @@ export const entityMutationSucceeded = (mutationId: MutationId) =>
     }),
   );
 
-export type MutationOptions = { invalidating?: QueryKey<unknown>[] };
+type QueryOptions<T> = {
+  enabled?: boolean;
+  payloadAction?: ActionCreatorWithPayload<T, string>;
+  onReceive?: (data: T) => unknown;
+};
+
+export type MutationOptions<T> = {
+  invalidating?: QueryKey<unknown>[];
+  onSuccess?: (payload: T, entityId?: UUID) => unknown;
+  onError?: (error: PqlError, entityId?: UUID) => unknown;
+};
+
 export type MutationResult<T, V> = UseMutationResult<T, PqlError, V>;
 export type MutationType = 'create' | 'upsert' | 'update' | 'delete';
 export type QueryResult<T> = UseQueryResult<T, PqlError>;

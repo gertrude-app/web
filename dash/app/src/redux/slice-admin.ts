@@ -95,7 +95,7 @@ export const slice = createSlice({
       { payload }: PayloadAction<NewAdminNotificationMethodEvent>,
     ) {
       switch (payload.type) {
-        case `create_clicked`:
+        case `createClicked`:
           state.pendingNotificationMethod = {
             sendCodeRequest: Req.idle(),
             confirmationRequest: Req.idle(),
@@ -104,40 +104,40 @@ export const slice = createSlice({
             value: { email: `` },
           };
           break;
-        case `cancel_clicked`:
+        case `cancelClicked`:
           delete state.pendingNotificationMethod;
           break;
-        case `code_updated`:
+        case `codeUpdated`:
           if (state.pendingNotificationMethod) {
             state.pendingNotificationMethod.confirmationCode = payload.code;
           }
           break;
-        case `email_address_updated`:
+        case `emailAddressUpdated`:
           if (state.pendingNotificationMethod?.type === `Email`) {
             state.pendingNotificationMethod.value.email = payload.email;
           }
           break;
-        case `slack_channel_name_updated`:
+        case `slackChannelNameUpdated`:
           if (state.pendingNotificationMethod?.type === `Slack`) {
             state.pendingNotificationMethod.value.channelName = payload.channelName;
           }
           break;
-        case `slack_channel_id_updated`:
+        case `slackChannelIdUpdated`:
           if (state.pendingNotificationMethod?.type === `Slack`) {
             state.pendingNotificationMethod.value.channelId = payload.channelId;
           }
           break;
-        case `slack_token_updated`:
+        case `slackTokenUpdated`:
           if (state.pendingNotificationMethod?.type === `Slack`) {
             state.pendingNotificationMethod.value.token = payload.token;
           }
           break;
-        case `text_phone_number_updated`:
+        case `textPhoneNumberUpdated`:
           if (state.pendingNotificationMethod?.type === `Text`) {
             state.pendingNotificationMethod.value.phoneNumber = payload.phoneNumber;
           }
           break;
-        case `method_type_updated`:
+        case `methodTypeUpdated`:
           if (state.pendingNotificationMethod) {
             state.pendingNotificationMethod.type = payload.methodType;
           }
@@ -212,18 +212,18 @@ export const slice = createSlice({
       state.saveNotificationRequests[arg] = Req.fail(error);
     });
 
-    builder.addCase(upsertNotification.succeeded, (state, { payload, meta: { arg } }) => {
-      state.saveNotificationRequests[arg] = Req.succeed(void 0);
-      const notification = state.notifications[payload.id] ?? state.notifications[arg];
-      if (notification) {
-        notification.original.id = payload.id;
-        notification.draft.id = payload.id;
-        state.notifications[payload.id] = { editing: false, ...commit(notification) };
-        if (isUnsaved(arg)) {
-          delete state.notifications[arg];
-        }
-      }
-    });
+    // builder.addCase(upsertNotification.succeeded, (state, { payload, meta: { arg } }) => {
+    //   state.saveNotificationRequests[arg] = Req.succeed(void 0);
+    //   const notification = state.notifications[payload.id] ?? state.notifications[arg];
+    //   if (notification) {
+    //     notification.original.id = payload.id;
+    //     notification.draft.id = payload.id;
+    //     state.notifications[payload.id] = { editing: false, ...commit(notification) };
+    //     if (isUnsaved(arg)) {
+    //       delete state.notifications[arg];
+    //     }
+    //   }
+    // });
 
     builder.addCase(createPendingNotificationMethod.started, (state) => {
       if (state.pendingNotificationMethod) {
@@ -242,6 +242,8 @@ export const slice = createSlice({
         state.pendingNotificationMethod.sendCodeRequest = Req.succeed(payload.methodId);
       }
     });
+
+    //
 
     builder.addCase(confirmPendingNotificationMethod.started, (state) => {
       if (state.pendingNotificationMethod) {
@@ -297,7 +299,8 @@ export const upsertNotification = createResultThunk(
       return Result.unexpectedError(`1662407a`, `Notification ${id} not found`);
     }
     return Current.api.saveNotification({
-      id: isUnsaved(notification.draft.id) ? undefined : notification.draft.id,
+      isNew: true,
+      id: `whoowhoo`, // isUnsaved(notification.draft.id) ? undefined : notification.draft.id,
       methodId: notification.draft.methodId,
       trigger: notification.draft.trigger,
     });

@@ -12,25 +12,22 @@ import reducer, {
 import { makeState } from './test-helpers';
 import * as mock from './mocks';
 
-describe(`createNotification flow`, () => {
-  test(`happy path, replacing temporary client id`, () => {
-    const tempId = unsavedId();
-    let state = reducer(undefined, notificationCreated());
-    expect(state.notifications[tempId]).toBeDefined();
+// describe(`createNotification flow`, () => {
+//   test(`happy path, replacing temporary client id`, () => {
+//     const tempId = unsavedId();
+//     let state = reducer(undefined, notificationCreated());
+//     expect(state.notifications[tempId]).toBeDefined();
 
-    state = reducer(state, upsertNotification.succeeded({ id: `apiId` }, tempId));
-    expect(state.notifications[tempId]).toBeUndefined();
-    expect(state.notifications.apiId).toBeDefined();
-  });
-});
+// state = reducer(state, upsertNotification.succeeded({ id: `apiId` }, tempId));
+// expect(state.notifications[tempId]).toBeUndefined();
+// expect(state.notifications.apiId).toBeDefined();
+// });
+// });
 
 describe(`create new notification method flow`, () => {
   test(`happy path`, () => {
     // step 1: create a new pending notification method
-    let state = reducer(
-      undefined,
-      newNotificationMethodEvent({ type: `create_clicked` }),
-    );
+    let state = reducer(undefined, newNotificationMethodEvent({ type: `createClicked` }));
     expect(state.pendingNotificationMethod).toEqual({
       sendCodeRequest: Req.idle(),
       confirmationRequest: Req.idle(),
@@ -44,7 +41,7 @@ describe(`create new notification method flow`, () => {
     // step 2: update the email address to a valid state
     state = reducer(
       state,
-      newNotificationMethodEvent({ type: `email_address_updated`, email: `foo@bar.com` }),
+      newNotificationMethodEvent({ type: `emailAddressUpdated`, email: `foo@bar.com` }),
     );
     expect(state.pendingNotificationMethod).toMatchObject({
       value: { email: `foo@bar.com` },

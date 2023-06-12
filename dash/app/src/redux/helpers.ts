@@ -161,7 +161,12 @@ export function editable<T extends { id: UUID }>(
   original: T,
   isNew?: boolean,
 ): Editable<T> {
-  return { original, draft: JSON.parse(JSON.stringify(original)), isNew };
+  return {
+    id: original.id,
+    original,
+    draft: JSON.parse(JSON.stringify(original)),
+    isNew,
+  };
 }
 
 export function original<T extends { id: UUID }>(editable: Editable<T>): T {

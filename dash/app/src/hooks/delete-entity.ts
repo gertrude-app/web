@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import type { ConfirmableEntityAction, DeleteEntity } from '@dash/types';
+import type { ConfirmableEntityAction, DeleteEntity, SuccessOutput } from '@dash/types';
 import type { MutationOptions } from './query';
 import { useDeleteEntity } from './query';
 
 export function useConfirmableDelete(
   entityType: DeleteEntity.Input['type'],
-  options: MutationOptions & { id?: UUID } = {},
+  options: MutationOptions<SuccessOutput> & { id?: UUID } = {},
 ): ConfirmableEntityAction<UUID | void> & {
   state: 'idle' | 'loading' | 'error' | 'success';
 } {
