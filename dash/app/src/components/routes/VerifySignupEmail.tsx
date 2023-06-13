@@ -1,25 +1,17 @@
 import React from 'react';
 import { FullscreenModalForm } from '@dash/components';
 import { useParams } from 'react-router-dom';
-import { useQuery, Key } from '../../hooks/query';
+import { useFireAndForget } from '../../hooks/query';
 import Current from '../../environment';
 
 const VerifySignupEmail: React.FC = () => {
   const { token = `` } = useParams<{ token: UUID }>();
 
-  const verifyEmail = useQuery(
-    Key.verifySignupEmail(token),
-    () => Current.api.verifySignupEmail({ token }),
-    { neverRefetch: true },
-  );
+  const verifyEmail = useFireAndForget(() => Current.api.verifySignupEmail({ token }));
 
-  const getCheckoutUrl = useQuery(
-    Key.checkoutUrl,
+  const getCheckoutUrl = useFireAndForget(
     () => Current.api.getCheckoutUrl({ adminId: verifyEmail.data?.adminId ?? `` }),
-    {
-      enabled: verifyEmail.isSuccess,
-      neverRefetch: true,
-    },
+    { when: verifyEmail.isSuccess },
   );
 
   if (verifyEmail.isError) {

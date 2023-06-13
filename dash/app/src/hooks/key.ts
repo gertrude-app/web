@@ -106,18 +106,6 @@ export class Key extends QueryKey<never> {
     return new QueryKey(`admin`, [`admin`]);
   }
 
-  static verifySignupEmail(token: UUID): QueryKey<VerifySignupEmail.Output> {
-    return new QueryKey(`verify-signup-email/:token`, [`verify-signup-email`, token]);
-  }
-
-  static get checkoutUrl(): QueryKey<GetCheckoutUrl.Output> {
-    return new QueryKey(`checkout-url`, [`checkout-url`]);
-  }
-
-  static get loginMagicLink(): QueryKey<LoginMagicLink.Output> {
-    return new QueryKey(`login-from-magic-link`, [`login-from-magic-link`]);
-  }
-
   static get apps(): QueryKey<GetIdentifiedApps.Output> {
     return new QueryKey(`apps`, [`apps`]);
   }

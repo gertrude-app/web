@@ -2,7 +2,7 @@ import { ApiErrorMessage, FullscreenModalForm } from '@dash/components';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
 import React from 'react';
 import useLoginRedirect from '../../hooks/login-redirect';
-import { useQuery, Key } from '../../hooks/query';
+import { useFireAndForget } from '../../hooks/query';
 import Current from '../../environment';
 import { useAuth } from '../../hooks/auth';
 
@@ -12,14 +12,9 @@ const MagicLink: React.FC = () => {
   const { login } = useAuth();
   const redirectUrl = useLoginRedirect();
 
-  const query = useQuery(
-    Key.loginMagicLink,
-    () => Current.api.loginMagicLink({ token }),
-    {
-      neverRefetch: true,
-      onReceive: ({ adminId, token }) => login(adminId, token),
-    },
-  );
+  const query = useFireAndForget(() => Current.api.loginMagicLink({ token }), {
+    onReceive: ({ adminId, token }) => login(adminId, token),
+  });
 
   if (query.isError) {
     let error: React.ReactNode = <ApiErrorMessage wrapped={false} error={query.error} />;

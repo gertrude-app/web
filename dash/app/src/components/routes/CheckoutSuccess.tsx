@@ -1,47 +1,42 @@
-import { useEffect } from 'react';
+import React from 'react';
 import { useSearchParams, Navigate } from 'react-router-dom';
 import { FullscreenModalForm } from '@dash/components';
-import type React from 'react';
-// import { useDispatch, useSelector } from '../../redux/hooks';
-// import { handleSignupPaymentSuccess } from '../../redux/slice-signup';
+import { Result } from '@dash/types';
+import { useFireAndForget } from '../../hooks/query';
+import Current from '../../environment';
 
-const CheckoutSuccess: React.FC = () => 
-   null
-  // const [params] = useSearchParams();
-  // const dispatch = useDispatch();
-  // const req = useSelector((state) => state.signup.checkoutSuccessReq);
-  // const reqState = req.state;
-  // const sessionId = params.get(`session_id`);
+const CheckoutSuccess: React.FC = () => {
+  const [params] = useSearchParams();
+  const sessionId = params.get(`session_id`);
 
-  // useEffect(() => {
-  //   if (reqState === `idle` && sessionId) {
-  //     dispatch(handleSignupPaymentSuccess({ stripeCheckoutSessionId: sessionId }));
-  //   }
-  // }, [dispatch, sessionId, reqState]);
+  const query = useFireAndForget(() => {
+    if (!sessionId) return Result.resolveUnexpected(`4c61dc17`);
+    return Current.api.handleCheckoutSuccess({ stripeCheckoutSessionId: sessionId });
+  });
 
-  // if (req.state === `ongoing` || req.state === `idle`) {
-  //   return <FullscreenModalForm request="ongoing" text="Completing signup..." />;
-  // }
+  if (query.isError && !sessionId) {
+    return (
+      <FullscreenModalForm
+        request="failed"
+        error="Error completing signup: missing checkout session id."
+      />
+    );
+  }
 
-  // if (!sessionId) {
-  //   return (
-  //     <FullscreenModalForm
-  //       request="failed"
-  //       error="Error completing signup: missing checkout session id."
-  //     />
-  //   );
-  // }
+  if (query.isError) {
+    return (
+      <FullscreenModalForm
+        request="failed"
+        error="Error completing signup. Please try again, or contact support for more help."
+      />
+    );
+  }
 
-  // if (req.state === `failed`) {
-  //   return (
-  //     <FullscreenModalForm
-  //       request="failed"
-  //       error="Error completing signup. Please try again, or contact support for more help."
-  //     />
-  //   );
-  // }
+  if (query.isLoading) {
+    return <FullscreenModalForm request="ongoing" text="Completing signup..." />;
+  }
 
-  // return <Navigate to="/" replace />;
-;
+  return <Navigate to="/" replace />;
+};
 
 export default CheckoutSuccess;

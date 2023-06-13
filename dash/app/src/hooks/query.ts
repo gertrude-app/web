@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid';
 import toast from 'react-hot-toast';
 import {
   useMutation as useLibMutation,
@@ -9,7 +10,11 @@ import { useState } from 'react';
 import { Result } from '@dash/types';
 import type { DeleteEntity, PqlError, SuccessOutput } from '@dash/types';
 import type PairQLResult from '@dash/types/src/pairql/Result';
-import type { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
+import type {
+  UseMutationResult,
+  UseQueryResult,
+  UseQueryOptions,
+} from '@tanstack/react-query';
 import type { QueryKey } from './key';
 import Current from '../environment';
 import { isEditable, isUUID } from '../redux/helpers';
@@ -43,13 +48,40 @@ type MutationId =
   | 'delete:activity-items'
   | 'update:suspend-filter-request';
 
+export function useFireAndForget<T>(
+  fn: () => Promise<Result<T, PqlError>>,
+  options: FireAndForgetOptions<T> = {},
+): QueryResult<T> {
+  return useQueryResult([`fire-and-forget`, uuid()], fn, {
+    ...options,
+    enabled: options.when,
+    retry: false,
+    retryOnMount: false,
+    cacheTime: Infinity,
+    retryDelay: Infinity,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchInterval: false,
+    refetchIntervalInBackground: false,
+    refetchOnReconnect: false,
+  });
+}
+
 export function useQuery<T>(
   key: QueryKey<T>,
   fn: () => Promise<Result<T, PqlError>>,
   options: QueryOptions<T> = {},
 ): QueryResult<T> {
+  return useQueryResult(key.segments, fn, options);
+}
+
+function useQueryResult<T>(
+  key: unknown[],
+  fn: () => Promise<Result<T, PqlError>>,
+  options: QueryOptions<T> & Partial<UseQueryOptions> = {},
+): QueryResult<T> {
   return useLibQuery({
-    queryKey: key.segments,
+    queryKey: key,
     queryFn: async () => {
       const value = (await fn()).valueOrThrow();
       if (options.onReceive) {
@@ -58,19 +90,6 @@ export function useQuery<T>(
       return value;
     },
     enabled: options.enabled,
-    ...(options.neverRefetch
-      ? {
-          retry: false,
-          retryonMount: false,
-          cacheTime: Infinity,
-          retryDelay: Infinity,
-          refetchOnMount: false,
-          refetchOnWindowFocus: false,
-          refetchInterval: false,
-          refetchIntervalInBackground: false,
-          refetchOnReconnect: false,
-        }
-      : {}),
   });
 }
 
@@ -182,9 +201,13 @@ export function useDeleteEntity(
   );
 }
 
+type FireAndForgetOptions<T> = {
+  when?: boolean;
+  onReceive?: (data: T) => unknown;
+};
+
 type QueryOptions<T> = {
   enabled?: boolean;
-  neverRefetch?: boolean;
   onReceive?: (data: T) => unknown;
 };
 
