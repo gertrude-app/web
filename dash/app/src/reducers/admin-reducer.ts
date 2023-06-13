@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid';
 import { produce } from 'immer';
 import { typesafe } from '@shared/ts-utils';
 import type { NotificationUpdate } from '@dash/components';

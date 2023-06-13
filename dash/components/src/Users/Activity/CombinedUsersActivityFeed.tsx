@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@shared/components';
 import { posessive } from '@shared/string';
-import { typesafe } from '@shared/ts-utils';
 import type { ActivityFeedItem } from './UserActivityFeed';
 import { FeedCaughtUp } from './UserActivityFeed';
 import { deleteableChunks } from './UserActivityFeed';

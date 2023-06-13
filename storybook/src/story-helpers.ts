@@ -180,33 +180,42 @@ export const keychains = [
   }),
 ];
 
-export const activity = {
-  'Little Jimmy': [
-    keystrokeLine(
-      `Xcode`,
-      `importFoundationhereisareallylonglinethatwillcauseproblemspotentiallyblahblahblahlorem`,
-    ),
-    screenshot(400, 600, true),
-    keystrokeLine(`Brave`, `Hello world`),
-    keystrokeLine(`Xcode`, `import Foundation`),
-    screenshot(),
-  ],
-  Henry: [
-    keystrokeLine(`Firefox`, `turtles`),
-    screenshot(400, 600, true),
-    keystrokeLine(`Brave`, `Hello world`),
-    keystrokeLine(`Xcode`, `import Foundation`),
-    screenshot(),
-    screenshot(),
-    keystrokeLine(`Messages`, `Sounds good, thanks`),
-    screenshot(),
-  ],
-  Sally: [
-    keystrokeLine(`Skype`, `No puedo nadar.`),
-    screenshot(400, 600, true),
-    keystrokeLine(`Brave`, `Hello world`),
-  ],
-};
+export const activity = [
+  {
+    userName: `Little Jimmy`,
+    items: [
+      keystrokeLine(
+        `Xcode`,
+        `importFoundationhereisareallylonglinethatwillcauseproblemspotentiallyblahblahblahlorem`,
+      ),
+      screenshot(400, 600, true),
+      keystrokeLine(`Brave`, `Hello world`),
+      keystrokeLine(`Xcode`, `import Foundation`),
+      screenshot(),
+    ],
+  },
+  {
+    userName: `Henry`,
+    items: [
+      keystrokeLine(`Firefox`, `turtles`),
+      screenshot(400, 600, true),
+      keystrokeLine(`Brave`, `Hello world`),
+      keystrokeLine(`Xcode`, `import Foundation`),
+      screenshot(),
+      screenshot(),
+      keystrokeLine(`Messages`, `Sounds good, thanks`),
+      screenshot(),
+    ],
+  },
+  {
+    userName: `Sally`,
+    items: [
+      keystrokeLine(`Skype`, `No puedo nadar.`),
+      screenshot(400, 600, true),
+      keystrokeLine(`Brave`, `Hello world`),
+    ],
+  },
+];
 
 const PLACEHOLDERS: Record<string, string> = {
   '400x600': Placeholder400x600,

@@ -2,7 +2,7 @@
 import { betsy } from '../fixtures/helpers';
 
 describe(`signup`, () => {
-  it.only(`handles signup flow, minus stripe redirect`, () => {
+  it(`handles signup flow, minus stripe redirect`, () => {
     cy.intercept(`/pairql/dashboard/VerifySignupEmail`, (req) => {
       // use betsy's id for stripe direct checkout test
       req.reply({ adminId: betsy.id });

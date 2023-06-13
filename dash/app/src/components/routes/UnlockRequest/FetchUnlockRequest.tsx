@@ -4,7 +4,6 @@ import { ErrorModal, LoadingModal, Modal, UserInputText } from '@dash/components
 import { useUnlockRequest } from '../../../hooks';
 
 const FetchUnlockRequest: React.FC = () => {
-  console.log(`FetchUnlockRequest`);
   const { id = `` } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const query = useUnlockRequest(id);
