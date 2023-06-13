@@ -21,7 +21,7 @@ export type State = {
 
 type Action =
   | { type: 'receivedAdmin'; admin: GetAdmin.Output }
-  | { type: 'notificationCreated' }
+  | { type: 'notificationCreated'; id: UUID }
   | { type: `newNotificationMethodEvent`; event: NewAdminNotificationMethodEvent }
   | { type: `updateNotification`; update: NotificationUpdate };
 
@@ -44,7 +44,7 @@ export function reducer(state: State, action: Action): State | undefined {
       return;
 
     case `notificationCreated`: {
-      const id = uuid();
+      const id = action.id;
       state.notifications[id] = {
         editing: true,
         ...editable(

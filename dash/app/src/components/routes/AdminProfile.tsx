@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid';
 import React, { useReducer } from 'react';
 import { ApiErrorMessage, Loading, Profile } from '@dash/components';
 import { capitalize } from '@shared/string';
@@ -70,7 +71,7 @@ const AdminProfile: React.FC = () => {
       });
     },
     {
-      onSuccess: () => dispatch(PendingMethod.confirmStarted),
+      onSuccess: () => dispatch(PendingMethod.confirmSucceeded),
       onError: () => dispatch(PendingMethod.confirmFailed),
       toast: `confirm:pending-notification-method`,
       invalidating: [Key.admin],
@@ -107,7 +108,7 @@ const AdminProfile: React.FC = () => {
       pendingMethod={state.pendingNotificationMethod}
       updateNotification={(update) => dispatch({ type: `updateNotification`, update })}
       saveNotification={(id) => saveNotification.mutate(id)}
-      createNotification={() => dispatch({ type: `notificationCreated` })}
+      createNotification={() => dispatch({ type: `notificationCreated`, id: uuid() })}
       manageSubscription={() => createBillingPortalSession.mutate()}
       newMethodEventHandler={(event) => {
         switch (event.type) {
@@ -229,6 +230,10 @@ const PendingMethod = {
     } as const;
   },
   confirmStarted: {
+    type: `newNotificationMethodEvent`,
+    event: { type: `confirmPendingMethodStarted` },
+  },
+  confirmSucceeded: {
     type: `newNotificationMethodEvent`,
     event: { type: `confirmPendingMethodSucceeded` },
   },

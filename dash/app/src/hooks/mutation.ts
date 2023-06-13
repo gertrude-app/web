@@ -7,15 +7,15 @@ import type {
   DeleteEntity,
   PqlError,
   SuccessOutput,
+  Result,
 } from '@dash/types';
-import type PairQLResult from '@dash/types/src/pairql/Result';
 import type { UseMutationResult } from '@tanstack/react-query';
 import type { QueryKey } from './key';
 import Current from '../environment';
 import { isEditable, isUUID } from '../lib/helpers';
 
 export function useMutation<T, V>(
-  fn: (arg: V) => Promise<PairQLResult<T>>,
+  fn: (arg: V) => Promise<Result<T>>,
   options: MutationOptions<T> = {},
 ): MutationResult<T, V> {
   const [entityId, setEntityId] = useState<UUID | undefined>(undefined);
@@ -96,7 +96,7 @@ export function useConfirmableDelete(
   };
 }
 
-export type MutationOptions<T> = {
+type MutationOptions<T> = {
   toast?: ToastId;
   invalidating?: QueryKey<unknown>[];
   onSuccess?: (payload: T, entityId?: UUID) => unknown;
