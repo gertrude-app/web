@@ -1,5 +1,4 @@
 import toast from 'react-hot-toast';
-import { createAction } from '@reduxjs/toolkit';
 import {
   useMutation as useLibMutation,
   useQuery as useLibQuery,
@@ -11,7 +10,7 @@ import { Result } from '@dash/types';
 import type { DeleteEntity, PqlError, SuccessOutput } from '@dash/types';
 import type PairQLResult from '@dash/types/src/pairql/Result';
 import type { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
-import type { QueryKey, QueryKeyData } from './key';
+import type { QueryKey } from './key';
 import Current from '../environment';
 import { isEditable, isUUID } from '../redux/helpers';
 import { Key } from './key';
@@ -182,86 +181,6 @@ export function useDeleteEntity(
     options,
   );
 }
-
-// actions
-
-export const queryStarted = createAction(
-  `query:started`,
-  (key: QueryKeyData, requestId: string) => ({
-    payload: key,
-    meta: { requestId },
-  }),
-);
-
-export const queryFailed = createAction(
-  `query:failed`,
-  (key: QueryKeyData, error: PqlError | undefined, requestId: string) => ({
-    payload: key,
-    error,
-    meta: { requestId },
-  }),
-);
-
-export const querySucceeded = createAction(
-  `query:succeeded`,
-  (key: QueryKeyData, requestId: string) => ({
-    payload: key,
-    meta: { requestId },
-  }),
-);
-
-// eslint-disable-next-line
-export const mutationStarted = (mutationId: MutationId) =>
-  createAction(`mutation:${mutationId}:started`, (arg: unknown, requestId: string) => ({
-    payload: undefined,
-    meta: { mutationId, arg, requestId },
-  }));
-
-// eslint-disable-next-line
-export const entityMutationStarted = (mutationId: MutationId) =>
-  createAction(`mutation:${mutationId}:started`, (entityId: UUID, requestId: string) => ({
-    payload: undefined,
-    meta: { mutationId, entityId, requestId },
-  }));
-
-// eslint-disable-next-line
-export const mutationFailed = (mutationId: MutationId) =>
-  createAction(
-    `mutation:${mutationId}:failed`,
-    (error: PqlError, arg: unknown, requestId: string) => ({
-      payload: undefined,
-      error,
-      meta: { mutationId, arg, requestId },
-    }),
-  );
-
-// eslint-disable-next-line
-export const entityMutationFailed = (mutationId: MutationId) =>
-  createAction(
-    `mutation:${mutationId}:failed`,
-    (error: PqlError, entityId: UUID, requestId: string) => ({
-      payload: undefined,
-      error,
-      meta: { mutationId, entityId, requestId },
-    }),
-  );
-
-// eslint-disable-next-line
-export const mutationSucceeded = (mutationId: MutationId) =>
-  createAction(`mutation:${mutationId}:succeeded`, (arg: unknown, requestId: string) => ({
-    payload: undefined,
-    meta: { mutationId, arg, requestId },
-  }));
-
-// eslint-disable-next-line
-export const entityMutationSucceeded = (mutationId: MutationId) =>
-  createAction(
-    `mutation:${mutationId}:succeeded`,
-    (entityId: UUID, requestId: string) => ({
-      payload: undefined,
-      meta: { mutationId, entityId, requestId },
-    }),
-  );
 
 type QueryOptions<T> = {
   enabled?: boolean;

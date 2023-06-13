@@ -26,10 +26,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   function login(id: UUID, token: UUID): void {
     setAdmin({ id, token });
+    Current.localStorage.setItem(`admin_id`, id);
+    Current.localStorage.setItem(`admin_token`, token);
+    Current.localStorage.removeItem(`dev_logged_out`);
   }
 
   function logout(): void {
     setAdmin(null);
+    Current.sessionStorage.removeItem(`admin_id`);
+    Current.sessionStorage.removeItem(`admin_token`);
+    Current.localStorage.removeItem(`admin_id`);
+    Current.localStorage.removeItem(`admin_token`);
+    if (!Current.env.isProd()) {
+      Current.localStorage.setItem(`dev_logged_out`, `true`);
+    }
   }
 
   return (

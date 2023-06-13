@@ -1,48 +1,46 @@
-import { useEffect } from 'react';
 import { ApiErrorMessage, FullscreenModalForm } from '@dash/components';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
-import type React from 'react';
-// import { useDispatch, useSelector } from '../../redux/hooks';
-// import { loginFromMagicLink } from '../../redux/slice-auth';
+import React from 'react';
 import useLoginRedirect from '../../hooks/login-redirect';
+import { useQuery, Key } from '../../hooks/query';
+import Current from '../../environment';
+import { useAuth } from '../../hooks/auth';
 
-const MagicLink: React.FC = () => 
-   null
-  // const { token = `` } = useParams<{ token: string }>();
-  // const location = useLocation();
-  // const dispatch = useDispatch();
-  // const request = useSelector((state) => state.auth.loginFromMagicLinkRequest);
-  // const redirectUrl = useLoginRedirect();
+const MagicLink: React.FC = () => {
+  const { token = `` } = useParams<{ token: string }>();
+  const location = useLocation();
+  const { login } = useAuth();
+  const redirectUrl = useLoginRedirect();
 
-  // useEffect(() => {
-  //   dispatch(loginFromMagicLink({ token }));
-  // }, [dispatch, token]);
+  const query = useQuery(
+    Key.loginMagicLink,
+    () => Current.api.loginMagicLink({ token }),
+    {
+      neverRefetch: true,
+      onReceive: ({ adminId, token }) => login(adminId, token),
+    },
+  );
 
-  // switch (request.state) {
-  //   case `idle`:
-  //   case `ongoing`:
-  //     return <FullscreenModalForm request="ongoing" />;
+  if (query.isError) {
+    let error: React.ReactNode = <ApiErrorMessage wrapped={false} error={query.error} />;
+    if (query.error.tag === `magicLinkTokenNotFound`) {
+      error = (
+        <span className="text-slate-900 antialiased">
+          Magic Link token not found, or expired. Please{` `}
+          <a href="/login" className="underline text-blue-700 hover:text-blue-600">
+            try again.
+          </a>
+        </span>
+      );
+    }
+    return <FullscreenModalForm request="failed" error={error} />;
+  }
 
-  //   case `succeeded`:
-  //     return <Navigate to={redirectUrl ?? `/`} replace state={{ from: location }} />;
+  if (query.isLoading) {
+    return <FullscreenModalForm request="ongoing" />;
+  }
 
-  //   case `failed`: {
-  //     let error: React.ReactNode = (
-  //       <ApiErrorMessage wrapped={false} error={request.error} />
-  //     );
-  //     if (request.error?.tag === `magicLinkTokenNotFound`) {
-  //       error = (
-  //         <span className="text-slate-900 antialiased">
-  //           Magic Link token not found, or expired. Please{` `}
-  //           <a href="/login" className="underline text-blue-700 hover:text-blue-600">
-  //             try again.
-  //           </a>
-  //         </span>
-  //       );
-  //     }
-  //     return <FullscreenModalForm request="failed" error={error} />;
-  //   }
-  // }
-;
+  return <Navigate to={redirectUrl ?? `/`} replace state={{ from: location }} />;
+};
 
 export default MagicLink;

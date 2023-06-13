@@ -17,6 +17,7 @@ import type {
   GetAdmin,
   VerifySignupEmail,
   GetCheckoutUrl,
+  LoginMagicLink,
 } from '@dash/types';
 
 export class QueryKey<T> {
@@ -111,6 +112,10 @@ export class Key extends QueryKey<never> {
 
   static get checkoutUrl(): QueryKey<GetCheckoutUrl.Output> {
     return new QueryKey(`checkout-url`, [`checkout-url`]);
+  }
+
+  static get loginMagicLink(): QueryKey<LoginMagicLink.Output> {
+    return new QueryKey(`login-from-magic-link`, [`login-from-magic-link`]);
   }
 
   static get apps(): QueryKey<GetIdentifiedApps.Output> {
