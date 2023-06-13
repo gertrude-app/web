@@ -15,9 +15,6 @@ import type {
   GetUnlockRequests,
   GetSuspendFilterRequest,
   GetAdmin,
-  VerifySignupEmail,
-  GetCheckoutUrl,
-  LoginMagicLink,
 } from '@dash/types';
 
 export class QueryKey<T> {

@@ -38,9 +38,8 @@ const Keychain: React.FC = () => {
     enabled: id !== `new` && state.keychain?.isNew !== true,
   });
 
-  const saveKeychain = useMutation({
-    id: `upsert:keychain`,
-    fn: (keychain: Editable<KeychainSummary>) =>
+  const saveKeychain = useMutation(
+    (keychain: Editable<KeychainSummary>) =>
       Current.api.saveKeychain({
         isNew: keychain.isNew ?? false,
         id: keychain.draft.id,
@@ -48,13 +47,15 @@ const Keychain: React.FC = () => {
         description: keychain.draft.description,
         isPublic: keychain.draft.isPublic,
       }),
-    invalidating: [queryKey],
-    onSuccess: () => dispatch({ type: `keychainSaved` }),
-  });
+    {
+      onSuccess: () => dispatch({ type: `keychainSaved` }),
+      toast: `save:keychain`,
+      invalidating: [queryKey],
+    },
+  );
 
-  const saveKey = useMutation({
-    id: `upsert:key`,
-    fn: () => {
+  const saveKey = useMutation(
+    () => {
       const keyRecord = toKeyRecord(state.editingKey);
       if (!keyRecord) return Result.resolveUnexpected(`aa11e7f2`);
       return Current.api.saveKey({
@@ -66,8 +67,8 @@ const Keychain: React.FC = () => {
         expiration: keyRecord.expiration,
       });
     },
-    invalidating: [queryKey],
-  });
+    { toast: `save:key`, invalidating: [queryKey] },
+  );
 
   if (id === `new`) {
     return <Navigate to={`/keychains/${newKeychainId}`} replace />;

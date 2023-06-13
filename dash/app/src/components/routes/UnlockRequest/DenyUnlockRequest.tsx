@@ -13,7 +13,7 @@ const DenyUnlockRequest: React.FC = () => {
   const queryKey = Key.unlockRequest(id);
   const query = useQuery(queryKey, () => Current.api.getUnlockRequest(id));
 
-  const deny = useMutation(`deny:unlock-request`, () => {
+  const deny = useMutation(() => {
     if (query.data) {
       optimistic.update(queryKey, { ...query.data, status: `rejected` });
     }

@@ -12,11 +12,8 @@ export const Login: React.FC = () => {
   const [email, setEmail] = useState(``);
   const [password, setPassword] = useState(``);
 
-  const login = useMutation(`login`, () => Current.api.login({ email, password }));
-
-  const requestMagicLink = useMutation(`request-magic-link`, () =>
-    Current.api.requestMagicLink({ email }),
-  );
+  const login = useMutation(() => Current.api.login({ email, password }));
+  const requestMagicLink = useMutation(() => Current.api.requestMagicLink({ email }));
 
   if (admin !== null || login.isSuccess) {
     return <Navigate to={redirectUrl ?? `/`} replace />;

@@ -23,10 +23,7 @@ const AdminProfile: React.FC = () => {
     onReceive: (admin) => dispatch({ type: `receivedAdmin`, admin }),
   });
 
-  const createBillingPortalSession = useMutation(
-    `create:billing-portal-session`,
-    Current.api.createBillingPortalSession,
-  );
+  const createBillingPortalSession = useMutation(Current.api.createBillingPortalSession);
 
   const deleteNotification = useConfirmableDelete(`AdminNotification`, {
     invalidating: [Key.admin],
@@ -36,9 +33,8 @@ const AdminProfile: React.FC = () => {
     invalidating: [Key.admin],
   });
 
-  const saveNotification = useMutation({
-    id: `upsert:notification`,
-    fn: (id: UUID) => {
+  const saveNotification = useMutation(
+    (id: UUID) => {
       const notification = state.notifications[id];
       if (!notification) return Result.resolveUnexpected(`1662407a`);
       return Current.api.saveNotification({
@@ -48,35 +44,39 @@ const AdminProfile: React.FC = () => {
         trigger: notification.draft.trigger,
       });
     },
-    invalidating: [Key.admin],
-  });
+    { toast: `save:notification`, invalidating: [Key.admin] },
+  );
 
-  const createPendingNotificationMethod = useMutation({
-    id: `create:pending-notification-method`,
-    fn: () => {
+  const createPendingNotificationMethod = useMutation(
+    () => {
       const method = state.pendingNotificationMethod;
       if (!method) return Result.resolveUnexpected(`bc7511bb`);
       dispatch(PendingMethod.createStarted);
       return Current.api.createPendingNotificationMethod(toInput(method));
     },
-    onSuccess: ({ methodId }) => dispatch(PendingMethod.createSucceeded(methodId)),
-    onError: () => dispatch(PendingMethod.createFailed),
-    invalidating: [Key.admin],
-  });
+    {
+      onSuccess: ({ methodId }) => dispatch(PendingMethod.createSucceeded(methodId)),
+      onError: () => dispatch(PendingMethod.createFailed),
+      toast: `create:pending-notification-method`,
+      invalidating: [Key.admin],
+    },
+  );
 
-  const confirmPendingNotificationMethod = useMutation({
-    id: `confirm:pending-notification-method`,
-    fn: () => {
+  const confirmPendingNotificationMethod = useMutation(
+    () => {
       dispatch(PendingMethod.confirmStarted);
       return Current.api.confirmPendingNotificationMethod({
         id: Req.payload(state.pendingNotificationMethod?.sendCodeRequest) ?? ``,
         code: Number(state.pendingNotificationMethod?.confirmationCode),
       });
     },
-    onSuccess: () => dispatch(PendingMethod.confirmStarted),
-    onError: () => dispatch(PendingMethod.confirmFailed),
-    invalidating: [Key.admin],
-  });
+    {
+      onSuccess: () => dispatch(PendingMethod.confirmStarted),
+      onError: () => dispatch(PendingMethod.confirmFailed),
+      toast: `confirm:pending-notification-method`,
+      invalidating: [Key.admin],
+    },
+  );
 
   const notificationProps = makeNotificationProps(state, saveNotification.isLoading);
 
@@ -87,8 +87,6 @@ const AdminProfile: React.FC = () => {
   if (query.isError) {
     return <ApiErrorMessage error={query.error} />;
   }
-
-  // return <pre>{JSON.stringify(query.data, null, 2)}</pre>;
 
   return (
     <Profile

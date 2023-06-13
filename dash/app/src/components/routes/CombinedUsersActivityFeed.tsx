@@ -22,7 +22,6 @@ const CombinedUsersActivityFeedRoute: React.FC = () => {
   );
 
   const deleteItems = useMutation(
-    `delete:activity-items`,
     (rootIds: UUID[]) => {
       const data = query.data;
       if (!data) return Result.resolveUnexpected(`af6a2372`);
@@ -30,7 +29,10 @@ const CombinedUsersActivityFeedRoute: React.FC = () => {
       optimistic.update(queryKey, nextState);
       return Current.api.deleteActivityItems(input);
     },
-    { invalidating: [Key.combinedUsersActivitySummaries] },
+    {
+      invalidating: [Key.combinedUsersActivitySummaries],
+      toast: `delete:activity-items`,
+    },
   );
 
   if (query.isLoading) {

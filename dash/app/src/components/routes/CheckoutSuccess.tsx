@@ -14,6 +14,10 @@ const CheckoutSuccess: React.FC = () => {
     return Current.api.handleCheckoutSuccess({ stripeCheckoutSessionId: sessionId });
   });
 
+  if (query.isLoading) {
+    return <FullscreenModalForm request="ongoing" text="Completing signup..." />;
+  }
+
   if (query.isError && !sessionId) {
     return (
       <FullscreenModalForm
@@ -30,10 +34,6 @@ const CheckoutSuccess: React.FC = () => {
         error="Error completing signup. Please try again, or contact support for more help."
       />
     );
-  }
-
-  if (query.isLoading) {
-    return <FullscreenModalForm request="ongoing" text="Completing signup..." />;
   }
 
   return <Navigate to="/" replace />;

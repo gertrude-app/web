@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-query';
 import { capitalize, pastTense } from '@shared/string';
 import { useState } from 'react';
-import { Result } from '@dash/types';
+import type { Result } from '@dash/types';
 import type { DeleteEntity, PqlError, SuccessOutput } from '@dash/types';
 import type PairQLResult from '@dash/types/src/pairql/Result';
 import type {
@@ -22,31 +22,6 @@ import { Key } from './key';
 import { useZip } from './zip';
 
 export { Key, useZip };
-
-type MutationId =
-  | 'login'
-  | 'request-magic-link'
-  | 'signup'
-  | 'verify-signup-email'
-  | 'delete:user'
-  | 'delete:device'
-  | 'upsert:user'
-  | 'delete:keychain'
-  | 'upsert:keychain'
-  | 'upsert:key'
-  | 'delete:key'
-  | 'delete:keychain'
-  | 'upsert:notification'
-  | 'delete:notification'
-  | 'delete:notification-method'
-  | 'create:billing-portal-session'
-  | 'create:pending-app-connection'
-  | 'create:pending-notification-method'
-  | 'confirm:pending-notification-method'
-  | 'accept:unlock-request'
-  | 'deny:unlock-request'
-  | 'delete:activity-items'
-  | 'update:suspend-filter-request';
 
 export function useFireAndForget<T>(
   fn: () => Promise<Result<T, PqlError>>,
@@ -108,44 +83,12 @@ export function useOptimism(): {
 }
 
 export function useMutation<T, V>(
-  id: MutationId,
   fn: (arg: V) => Promise<PairQLResult<T>>,
-  options?: MutationOptions<T>,
-): MutationResult<T, V>;
-
-export function useMutation<T, V>(
-  options: MutationOptions<T> & {
-    id: MutationId;
-    fn: (arg: V) => Promise<PairQLResult<T>>;
-  },
-): MutationResult<T, V>;
-
-export function useMutation<T, V>(
-  param1:
-    | (MutationOptions<T> & {
-        id: MutationId;
-        fn: (arg: V) => Promise<PairQLResult<T>>;
-      })
-    | MutationId,
-  param2?: (arg: V) => Promise<PairQLResult<T>>,
-  param3?: MutationOptions<T>,
+  options: MutationOptions<T> = {},
 ): MutationResult<T, V> {
-  let id: MutationId;
-  let fn: (arg: V) => Promise<PairQLResult<T>>;
-  let options: MutationOptions<T>;
-  if (typeof param1 === `string`) {
-    id = param1;
-    fn = param2 ?? (() => Result.resolveUnexpected(`0a5c18fe`));
-    options = param3 ?? {};
-  } else {
-    id = param1.id;
-    fn = param1.fn;
-    options = param1;
-  }
-
   const [entityId, setEntityId] = useState<UUID | undefined>(undefined);
   const queryClient = useQueryClient();
-  const toasting = getToast(id);
+  const toasting = getToast(options.toast);
   return useLibMutation({
     mutationFn: (arg) => fn(arg).then((result) => result.valueOrThrow()),
     onMutate(arg) {
@@ -194,11 +137,10 @@ export function useDeleteEntity(
   type: DeleteEntity.Input['type'],
   options: MutationOptions<SuccessOutput> = {},
 ): MutationResult<SuccessOutput, UUID> {
-  return useMutation(
-    mutationIdFromDeleteEntityType(type),
-    (id: UUID) => Current.api.deleteEntity({ type, id }),
-    options,
-  );
+  return useMutation((id: UUID) => Current.api.deleteEntity({ type, id }), {
+    toast: toastIdFromDeleteEntityType(type),
+    ...options,
+  });
 }
 
 type FireAndForgetOptions<T> = {
@@ -212,6 +154,7 @@ type QueryOptions<T> = {
 };
 
 export type MutationOptions<T> = {
+  toast?: ToastId;
   invalidating?: QueryKey<unknown>[];
   onSuccess?: (payload: T, entityId?: UUID) => unknown;
   onError?: (error: PqlError, entityId?: UUID) => unknown;
@@ -221,10 +164,29 @@ export type MutationResult<T, V> = UseMutationResult<T, PqlError, V>;
 export type MutationType = 'create' | 'upsert' | 'update' | 'delete';
 export type QueryResult<T> = UseQueryResult<T, PqlError>;
 
-function getToast(mutationId: MutationId): { verb: string; entity: string } | undefined {
-  const [verb = ``, entitySlug = ``] = mutationId.split(`:`);
+type ToastId =
+  | 'delete:user'
+  | 'delete:device'
+  | 'delete:notification'
+  | 'delete:notification-method'
+  | 'delete:keychain'
+  | 'delete:key'
+  | 'delete:activity-items'
+  | 'update:suspend-filter-request'
+  | 'create:pending-notification-method'
+  | 'confirm:pending-notification-method'
+  | 'save:user'
+  | 'save:keychain'
+  | 'save:key'
+  | 'save:notification';
+
+function getToast(toastId?: ToastId): { verb: string; entity: string } | undefined {
+  if (!toastId) {
+    return undefined;
+  }
+  const [verb = ``, entitySlug = ``] = toastId.split(`:`);
   const entity = entitySlug.replace(/-/g, ` `);
-  switch (mutationId) {
+  switch (toastId) {
     case `delete:user`:
     case `delete:device`:
     case `delete:notification`:
@@ -232,13 +194,11 @@ function getToast(mutationId: MutationId): { verb: string; entity: string } | un
     case `delete:notification-method`:
     case `delete:key`:
     case `update:suspend-filter-request`:
+    case `save:user`:
+    case `save:keychain`:
+    case `save:key`:
+    case `save:notification`:
       return { verb, entity };
-
-    case `upsert:user`:
-    case `upsert:keychain`:
-    case `upsert:key`:
-    case `upsert:notification`:
-      return { verb: `save`, entity };
 
     case `create:pending-notification-method`:
       return { verb: `send`, entity: `verification code` };
@@ -246,12 +206,10 @@ function getToast(mutationId: MutationId): { verb: string; entity: string } | un
       return { verb: `verify`, entity: `confirmation code` };
     case `delete:activity-items`:
       return { verb: `approve`, entity: `activity items` };
-    default:
-      return undefined;
   }
 }
 
-function mutationIdFromDeleteEntityType(type: DeleteEntity.Input['type']): MutationId {
+function toastIdFromDeleteEntityType(type: DeleteEntity.Input['type']): ToastId {
   switch (type) {
     case `AdminNotification`:
       return `delete:notification`;

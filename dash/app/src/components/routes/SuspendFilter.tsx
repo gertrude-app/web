@@ -29,7 +29,6 @@ const SuspendFilter: React.FC = () => {
   );
 
   const update = useMutation(
-    `update:suspend-filter-request`,
     (status: 'accepted' | 'rejected') =>
       Current.api.updateSuspendFilterRequest({
         id,
@@ -37,7 +36,7 @@ const SuspendFilter: React.FC = () => {
         responseComment: state.responseComment.trim() || undefined,
         status,
       }),
-    { invalidating: [queryKey] },
+    { invalidating: [queryKey], toast: `update:suspend-filter-request` },
   );
 
   if (query.isLoading) {

@@ -7,7 +7,7 @@ import Current from '../../environment';
 const Signup: React.FC = () => {
   const [email, setEmail] = useState(``);
   const [password, setPassword] = useState(``);
-  const signup = useMutation(`signup`, () => Current.api.signup({ email, password }));
+  const signup = useMutation(() => Current.api.signup({ email, password }));
 
   if (signup.isLoading) {
     return <FullscreenModalForm request="ongoing" />;

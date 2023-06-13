@@ -9,7 +9,7 @@ import ReqState from '../../lib/ReqState';
 const Users: React.FC = () => {
   const query = useQuery(Key.users, Current.api.getUsers);
 
-  const addDevice = useMutation(`create:pending-app-connection`, (userId: UUID) =>
+  const addDevice = useMutation((userId: UUID) =>
     Current.api.createPendingAppConnection({ userId }),
   );
 

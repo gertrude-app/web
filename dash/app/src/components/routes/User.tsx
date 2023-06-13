@@ -27,12 +27,11 @@ const UserRoute: React.FC = () => {
     enabled: id !== `new` && state.user?.isNew !== true,
   });
 
-  const addDevice = useMutation(`create:pending-app-connection`, (userId: UUID) =>
+  const addDevice = useMutation((userId: UUID) =>
     Current.api.createPendingAppConnection({ userId }),
   );
 
   const saveUser = useMutation(
-    `upsert:user`,
     (editableUser: Editable<User>) =>
       Current.api.saveUser({
         id: editableUser.draft.id,
@@ -44,7 +43,7 @@ const UserRoute: React.FC = () => {
         isNew: editableUser.isNew ?? false,
         keychainIds: editableUser.draft.keychains.map(({ id }) => id),
       }),
-    { invalidating: [queryKey] },
+    { invalidating: [queryKey], toast: `save:user` },
   );
 
   const newUserId = useMemo(() => uuid(), []);

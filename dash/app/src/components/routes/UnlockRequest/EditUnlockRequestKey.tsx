@@ -22,7 +22,7 @@ const EditUnlockRequestKey: React.FC = () => {
     }),
   );
 
-  const accept = useMutation(`accept:unlock-request`, async (key: EditKey.State) => {
+  const accept = useMutation(async (key: EditKey.State) => {
     const keyRecord = convert.toKeyRecord(key);
     if (!keyRecord) return Result.resolveUnexpected(`76cfc4ee`);
     const insert = await Current.api.saveKey({ isNew: true, ...keyRecord });
