@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ErrorModal, LoadingModal, Modal } from '@dash/components';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { TextInput } from '@shared/components';
-import { useQuery, useMutation, useOptimism, Key } from '../../../hooks/query';
+import { useMutation, useOptimism, Key, useUnlockRequest } from '../../../hooks';
 import Current from '../../../environment';
 
 const DenyUnlockRequest: React.FC = () => {
@@ -10,12 +10,11 @@ const DenyUnlockRequest: React.FC = () => {
   const [comment, setComment] = useState(``);
   const navigate = useNavigate();
   const optimistic = useOptimism();
-  const queryKey = Key.unlockRequest(id);
-  const query = useQuery(queryKey, () => Current.api.getUnlockRequest(id));
+  const query = useUnlockRequest(id);
 
   const deny = useMutation(() => {
     if (query.data) {
-      optimistic.update(queryKey, { ...query.data, status: `rejected` });
+      optimistic.update(Key.unlockRequest(id), { ...query.data, status: `rejected` });
     }
     return Current.api.updateUnlockRequest({
       id,

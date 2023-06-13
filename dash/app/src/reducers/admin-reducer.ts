@@ -7,7 +7,7 @@ import type {
   NewAdminNotificationMethodEvent,
   PendingNotificationMethod,
 } from '@dash/types';
-import { editable, Req, revert } from '../redux/helpers';
+import { editable, Req, revert } from '../lib/helpers';
 
 export type State = {
   notifications: Record<UUID, Editable<GetAdmin.Notification> & { editing?: boolean }>;

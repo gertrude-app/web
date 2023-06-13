@@ -4,8 +4,8 @@ import { dateFromUrl } from '@dash/datetime';
 import { ApiErrorMessage, Loading, UserActivityFeed } from '@dash/components';
 import { Result } from '@dash/types';
 import Current from '../../environment';
-import { useQuery, Key, useMutation, useOptimism } from '../../hooks/query';
-import { entireDay } from '../../lib/helpers';
+import { useQuery, Key, useMutation, useOptimism } from '../../hooks';
+import { entireDay } from '../../lib/days';
 import {
   outputItemToActivityFeedItem,
   prepareUserActivityDelete,

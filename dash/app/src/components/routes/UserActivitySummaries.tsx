@@ -1,8 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { ApiErrorMessage, Loading, ActivitySummaries } from '@dash/components';
-import { entireDays } from '../../lib/helpers';
-import { useQuery, Key } from '../../hooks/query';
+import { entireDays } from '../../lib/days';
+import { useQuery, Key } from '../../hooks';
 import Current from '../../environment';
 
 const UserActivitySummariesRoute: React.FC = () => {

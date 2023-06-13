@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FullscreenModalForm, EmailInputForm } from '@dash/components';
 import { Link } from 'react-router-dom';
-import { useMutation } from '../../hooks/query';
+import { useMutation } from '../../hooks';
 import Current from '../../environment';
 
 const Signup: React.FC = () => {

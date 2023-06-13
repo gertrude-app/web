@@ -1,6 +1,6 @@
 import { expect, test, describe, beforeEach } from 'vitest';
 import { newKeyState, EditKey, convert } from '@dash/keys';
-import reducer from '../edit-key-reducer';
+import reducer from '../../reducers/edit-key-reducer';
 
 describe(`editKeyReducer()`, () => {
   let state: EditKey.State;

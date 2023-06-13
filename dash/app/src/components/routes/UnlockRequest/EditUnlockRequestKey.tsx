@@ -6,8 +6,8 @@ import { convert, toKeyRecord } from '@dash/keys';
 import { Result } from '@dash/types';
 import type { EditKey } from '@dash/keys';
 import Current from '../../../environment';
-import { useQuery, Key, useZip, useMutation } from '../../../hooks/query';
-import editKeyReducer from '../../../redux/edit-key-reducer';
+import { useQuery, Key, useZip, useMutation, useApps } from '../../../hooks';
+import editKeyReducer from '../../../reducers/edit-key-reducer';
 
 const EditUnlockRequestKey: React.FC = () => {
   const { id = ``, keychainId = `` } = useParams<{ id: string; keychainId: string }>();
@@ -15,7 +15,7 @@ const EditUnlockRequestKey: React.FC = () => {
   const navigate = useNavigate();
 
   const query = useZip(
-    useQuery(Key.apps, Current.api.getIdentifiedApps),
+    useApps(),
     useQuery(Key.unlockRequest(id), () => Current.api.getUnlockRequest(id), {
       onReceive: (unlockRequest) =>
         setKey(convert.unlockRequestToState(uuid(), keychainId, unlockRequest)),

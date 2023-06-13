@@ -12,7 +12,7 @@ import type {
   CombinedUsersActivitySummaries,
 } from '@dash/types';
 import type { ActivityFeedItem } from '@dash/components';
-import * as empty from '../../redux/empty';
+import * as empty from '../../lib/empty';
 
 type Admin = GetAdmin.Output;
 

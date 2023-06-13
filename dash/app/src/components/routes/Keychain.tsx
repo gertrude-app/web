@@ -6,11 +6,10 @@ import { toKeyRecord } from '@dash/keys';
 import { EditKeychain } from '@dash/components';
 import { Result } from '@dash/types';
 import type { KeychainSummary } from '@dash/types';
-import { isDirty } from '../../redux/helpers';
-import { Key, useMutation, useQuery } from '../../hooks/query';
+import { isDirty } from '../../lib/helpers';
+import { Key, useMutation, useQuery, useConfirmableDelete } from '../../hooks';
 import Current from '../../environment';
 import reducer from '../../reducers/edit-keychain-reducer';
-import { useConfirmableDelete } from '../../hooks/delete-entity';
 import { useAuth } from '../../hooks/auth';
 
 const Keychain: React.FC = () => {

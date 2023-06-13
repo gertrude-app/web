@@ -1,5 +1,5 @@
 import { expect, it, describe } from 'vitest';
-// import { editable, Query, Req } from '../../../redux/helpers';
+// import { editable, Query, Req } from '../../../lib/helpers';
 // import { makeState } from '../../../redux/__tests__/test-helpers';
 // import { queryProps } from '../AdminProfile';
 

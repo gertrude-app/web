@@ -2,7 +2,7 @@ import React from 'react';
 import { useSearchParams, Navigate } from 'react-router-dom';
 import { FullscreenModalForm } from '@dash/components';
 import { Result } from '@dash/types';
-import { useFireAndForget } from '../../hooks/query';
+import { useFireAndForget } from '../../hooks';
 import Current from '../../environment';
 
 const CheckoutSuccess: React.FC = () => {

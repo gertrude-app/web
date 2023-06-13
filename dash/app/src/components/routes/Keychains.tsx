@@ -1,8 +1,7 @@
 import React from 'react';
 import { Loading, ListKeychains, ApiErrorMessage } from '@dash/components';
-import { useQuery, Key } from '../../hooks/query';
+import { useQuery, useConfirmableDelete, Key } from '../../hooks';
 import Current from '../../environment';
-import { useConfirmableDelete } from '../../hooks/delete-entity';
 
 const Keychains: React.FC = () => {
   const query = useQuery(Key.adminKeychains, Current.api.getAdminKeychains);

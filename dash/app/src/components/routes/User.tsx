@@ -4,12 +4,16 @@ import { Loading, ApiErrorMessage } from '@dash/components';
 import React, { useEffect, useMemo, useReducer } from 'react';
 import { EditUser } from '@dash/components';
 import type { User } from '@dash/types';
-import * as empty from '../../redux/empty';
-import { isDirty } from '../../redux/helpers';
-import { useSelectableKeychains } from '../../hooks/selectable-keychains';
+import * as empty from '../../lib/empty';
+import { isDirty } from '../../lib/helpers';
 import Current from '../../environment';
-import { useMutation, Key, useQuery } from '../../hooks/query';
-import { useConfirmableDelete } from '../../hooks/delete-entity';
+import {
+  useMutation,
+  Key,
+  useQuery,
+  useSelectableKeychains,
+  useConfirmableDelete,
+} from '../../hooks';
 import ReqState from '../../lib/ReqState';
 import reducer from '../../reducers/user-reducer';
 import { deviceProps } from './Users';

@@ -12,7 +12,7 @@ import reducer, {
   initialState,
   durationInSeconds,
 } from '../../reducers/suspend-filter-request-reducer';
-import { useQuery, useMutation, Key } from '../../hooks/query';
+import { useQuery, useMutation, Key } from '../../hooks';
 import Current from '../../environment';
 
 const SuspendFilter: React.FC = () => {

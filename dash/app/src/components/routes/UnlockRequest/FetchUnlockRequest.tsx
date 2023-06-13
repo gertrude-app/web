@@ -1,13 +1,12 @@
 import React from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { ErrorModal, LoadingModal, Modal, UserInputText } from '@dash/components';
-import Current from '../../../environment';
-import { useQuery, Key } from '../../../hooks/query';
+import { useUnlockRequest } from '../../../hooks';
 
 const FetchUnlockRequest: React.FC = () => {
   const { id = `` } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const query = useQuery(Key.unlockRequest(id), () => Current.api.getUnlockRequest(id));
+  const query = useUnlockRequest(id);
 
   if (query.isLoading) {
     return <LoadingModal />;

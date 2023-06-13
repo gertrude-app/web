@@ -53,7 +53,7 @@ export function useAuth(): Auth {
   return useContext(AuthContext);
 }
 
-export function getInitialAdmin(): Admin | null {
+function getInitialAdmin(): Admin | null {
   if (import.meta.env.VITEST) {
     return null;
   }

@@ -3,9 +3,9 @@ import { useParams } from 'react-router-dom';
 import { dateFromUrl } from '@dash/datetime';
 import { CombinedUsersActivityFeed, ApiErrorMessage, Loading } from '@dash/components';
 import React from 'react';
-import { useOptimism, Key, useMutation, useQuery } from '../../hooks/query';
+import { useOptimism, Key, useMutation, useQuery } from '../../hooks';
 import Current from '../../environment';
-import { entireDay } from '../../lib/helpers';
+import { entireDay } from '../../lib/days';
 import {
   outputItemToActivityFeedItem,
   prepareCombinedUsersActivityDelete,

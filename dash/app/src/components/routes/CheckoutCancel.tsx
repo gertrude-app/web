@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { FullscreenModalForm } from '@dash/components';
-import { useFireAndForget } from '../../hooks/query';
+import { useFireAndForget } from '../../hooks';
 import Current from '../../environment';
 
 const CheckoutCancel: React.FC = () => {

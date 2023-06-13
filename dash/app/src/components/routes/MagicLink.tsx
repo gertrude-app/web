@@ -1,8 +1,7 @@
 import { ApiErrorMessage, FullscreenModalForm } from '@dash/components';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
 import React from 'react';
-import useLoginRedirect from '../../hooks/login-redirect';
-import { useFireAndForget } from '../../hooks/query';
+import { useFireAndForget, useLoginRedirect } from '../../hooks';
 import Current from '../../environment';
 import { useAuth } from '../../hooks/auth';
 

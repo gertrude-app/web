@@ -1,19 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Modal, KeychainPicker, LoadingModal, ErrorModal } from '@dash/components';
-import { useSelectableKeychains } from '../../../hooks/selectable-keychains';
-import Current from '../../../environment';
-import { useQuery, Key, useZip } from '../../../hooks/query';
+import { useZip, useSelectableKeychains, useUser } from '../../../hooks';
 
 const SelectUnlockRequestKeychain: React.FC = () => {
   const { userId = `` } = useParams<{ id: UUID; userId: UUID }>();
   const [keychainId, setKeychainId] = useState<UUID | undefined>();
   const navigate = useNavigate();
-
-  const query = useZip(
-    useSelectableKeychains(),
-    useQuery(Key.user(userId), () => Current.api.getUser(userId)),
-  );
+  const query = useZip(useSelectableKeychains(), useUser(userId));
 
   if (query.isLoading) {
     return <LoadingModal />;

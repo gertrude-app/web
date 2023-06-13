@@ -9,12 +9,11 @@ import type {
   PendingNotificationMethod,
 } from '@dash/types';
 import type { State } from '../../reducers/admin-reducer';
-import { isDirty, Req } from '../../redux/helpers';
-import { useQuery, Key, useMutation } from '../../hooks/query';
+import { isDirty, Req } from '../../lib/helpers';
+import { useQuery, Key, useMutation, useConfirmableDelete } from '../../hooks';
 import Current from '../../environment';
 import ReqState from '../../lib/ReqState';
 import reducer, { initialState } from '../../reducers/admin-reducer';
-import { useConfirmableDelete } from '../../hooks/delete-entity';
 
 const AdminProfile: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);

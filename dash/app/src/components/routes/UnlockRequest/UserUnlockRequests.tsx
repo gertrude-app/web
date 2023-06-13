@@ -2,13 +2,13 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Loading, ListUnlockRequests, ApiErrorMessage } from '@dash/components';
 import Current from '../../../environment';
-import { useQuery, Key, useZip } from '../../../hooks/query';
+import { useQuery, useUser, Key, useZip } from '../../../hooks';
 
 const UserUnlockRequests: React.FC = () => {
   const { userId: id = `` } = useParams<{ userId: string }>();
   const query = useZip(
     useQuery(Key.userUnlockRequests(id), () => Current.api.getUserUnlockRequests(id)),
-    useQuery(Key.user(id), () => Current.api.getUser(id)),
+    useUser(id),
   );
 
   if (query.isLoading) {

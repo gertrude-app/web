@@ -2,7 +2,7 @@
 import { dateFromUrl } from '@dash/datetime';
 import { time } from '@shared/datetime';
 import * as mock from '../../src/redux/__tests__/mocks';
-import { entireDay } from '../../src/lib/helpers';
+import { entireDay } from '../../src/lib/days';
 
 describe(`user screen`, () => {
   beforeEach(() => {

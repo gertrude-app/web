@@ -3,7 +3,7 @@ import { Loading, ListUsers, ApiErrorMessage } from '@dash/components';
 import type { EditUser } from '@dash/components';
 import type { Device, DeviceModelFamily } from '@dash/types';
 import Current from '../../environment';
-import { useQuery, Key, useMutation } from '../../hooks/query';
+import { useQuery, Key, useMutation } from '../../hooks';
 import ReqState from '../../lib/ReqState';
 
 const Users: React.FC = () => {

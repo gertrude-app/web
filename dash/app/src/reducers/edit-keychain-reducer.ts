@@ -3,9 +3,9 @@ import { produce } from 'immer';
 import { convert, newKeyState } from '@dash/keys';
 import type { EditKey } from '@dash/keys';
 import type { AdminKeychain, Key, KeychainSummary } from '@dash/types';
-import { editable } from '../redux/helpers';
-import editKeyReducer from '../redux/edit-key-reducer';
-import * as empty from '../redux/empty';
+import { editable } from '../lib/helpers';
+import editKeyReducer from '../reducers/edit-key-reducer';
+import * as empty from '../lib/empty';
 
 type EditKeychainState = {
   keychain?: Editable<KeychainSummary>;

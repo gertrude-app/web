@@ -1,6 +1,6 @@
 import { produce } from 'immer';
 import type { KeychainSummary, User } from '@dash/types';
-import { editable } from '../redux/helpers';
+import { editable } from '../lib/helpers';
 
 type State = {
   user?: Editable<User>;
