@@ -1,5 +1,5 @@
-import { v4 as uuid } from 'uuid';
 import { useQuery as useLibQuery, useQueryClient } from '@tanstack/react-query';
+import { env } from '@shared/components';
 import type { Result } from '@dash/types';
 import type { PqlError } from '@dash/types';
 import type { UseQueryResult, UseQueryOptions } from '@tanstack/react-query';
@@ -9,7 +9,7 @@ export function useFireAndForget<T>(
   fn: () => Promise<Result<T, PqlError>>,
   options: FireAndForgetOptions<T> = {},
 ): QueryResult<T> {
-  return useQueryResult([`fire-and-forget`, uuid()], fn, {
+  return useQueryResult([`fire-and-forget`, fn.toString()], fn, {
     ...options,
     enabled: options.when,
     retry: false,
@@ -47,6 +47,7 @@ function useQueryResult<T>(
       return value;
     },
     enabled: options.enabled,
+    retry: env.isCypress() ? false : 3,
   });
 }
 

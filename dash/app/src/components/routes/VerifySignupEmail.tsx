@@ -19,10 +19,12 @@ const VerifySignupEmail: React.FC = () => {
   }
 
   if (getCheckoutUrl.isError) {
-    <FullscreenModalForm request="failed" error="Unexpected error, please try again." />;
+    return (
+      <FullscreenModalForm request="failed" error="Unexpected error, please try again." />
+    );
   }
 
-  if (verifyEmail.isLoading || !getCheckoutUrl.isSuccess) {
+  if (verifyEmail.isLoading || getCheckoutUrl.isLoading) {
     return <FullscreenModalForm request="ongoing" />;
   }
 

@@ -18,7 +18,7 @@ const Users: React.FC = () => {
   }
 
   if (query.isError) {
-    return <ApiErrorMessage />;
+    return <ApiErrorMessage error={query.error} />;
   }
 
   return (

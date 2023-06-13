@@ -47,7 +47,11 @@ const UserRoute: React.FC = () => {
         isNew: editableUser.isNew ?? false,
         keychainIds: editableUser.draft.keychains.map(({ id }) => id),
       }),
-    { invalidating: [queryKey], toast: `save:user` },
+    {
+      onSuccess: () => dispatch({ type: `userSaved` }),
+      invalidating: [queryKey],
+      toast: `save:user`,
+    },
   );
 
   const newUserId = useMemo(() => uuid(), []);

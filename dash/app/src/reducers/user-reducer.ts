@@ -10,6 +10,7 @@ type State = {
 export type Action =
   | { type: 'setUser'; user: User; new?: boolean }
   | { type: 'setName'; name: string }
+  | { type: 'userSaved' }
   | { type: 'setScreenshotsEnabled'; enabled: boolean }
   | { type: 'setScreenshotsResolution'; resolution: number }
   | { type: 'setScreenshotsFrequency'; frequency: number }
@@ -29,6 +30,10 @@ function reducer(state: State, action: Action): State | undefined {
     return;
   }
   switch (action.type) {
+    case `userSaved`:
+      state.user.isNew = false;
+      return;
+
     case `setName`:
       state.user.draft.name = action.name;
       return;

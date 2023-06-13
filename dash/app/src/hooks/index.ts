@@ -9,12 +9,12 @@ import type { QueryResult } from './query';
 import Current from '../environment';
 import { useQuery } from './query';
 import { Key } from './key';
+import { useAuth } from './auth';
 
 export { useFireAndForget, useOptimism } from './query';
 export { useMutation, useDeleteEntity, useConfirmableDelete } from './mutation';
-export { useQuery, Key };
+export { useQuery, useAuth, Key };
 export { useZip } from './zip';
-export { useAuth } from './auth';
 export { default as useWindowWidth } from './window-width';
 
 export function useSelectableKeychains(): QueryResult<{

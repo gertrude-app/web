@@ -12,7 +12,7 @@ const DashboardRoute: React.FC = () => {
   }
 
   if (query.isError) {
-    return <ApiErrorMessage />;
+    return <ApiErrorMessage error={query.error} />;
   }
 
   return <Dashboard {...query.data} />;

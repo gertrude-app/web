@@ -6,19 +6,27 @@ import { useMutation, useLoginRedirect } from '../../hooks';
 import Current from '../../environment';
 
 export const Login: React.FC = () => {
-  const { admin } = useAuth();
+  const { admin, login } = useAuth();
   const redirectUrl = useLoginRedirect();
   const [email, setEmail] = useState(``);
   const [password, setPassword] = useState(``);
 
-  const login = useMutation(() => Current.api.login({ email, password }));
-  const requestMagicLink = useMutation(() => Current.api.requestMagicLink({ email }));
+  const requestMagicLink = useMutation(() =>
+    Current.api.requestMagicLink({
+      email,
+      redirect: new URLSearchParams(window.location.search).get(`redirect`) ?? undefined,
+    }),
+  );
 
-  if (admin !== null || login.isSuccess) {
+  const loginMutation = useMutation(() => Current.api.login({ email, password }), {
+    onSuccess: ({ adminId, token }) => login(adminId, token),
+  });
+
+  if (admin !== null || loginMutation.isSuccess) {
     return <Navigate to={redirectUrl ?? `/`} replace />;
   }
 
-  if (login.isLoading || requestMagicLink.isLoading) {
+  if (loginMutation.isLoading || requestMagicLink.isLoading) {
     return <FullscreenModalForm request="ongoing" />;
   }
 
@@ -31,14 +39,14 @@ export const Login: React.FC = () => {
     );
   }
 
-  if (login.isError || requestMagicLink.isError) {
+  if (loginMutation.isError || requestMagicLink.isError) {
     return (
       <FullscreenModalForm
         request="failed"
         error={
           <ApiErrorMessage
             wrapped={false}
-            error={login.error ?? requestMagicLink.error ?? undefined}
+            error={loginMutation.error ?? requestMagicLink.error ?? undefined}
           />
         }
       />
@@ -52,7 +60,7 @@ export const Login: React.FC = () => {
         setEmail={setEmail}
         password={password}
         setPassword={setPassword}
-        onSubmit={() => login.mutate(undefined)}
+        onSubmit={() => loginMutation.mutate(undefined)}
         onSendMagicLink={() => requestMagicLink.mutate(undefined)}
       />
     </FullscreenModalForm>
