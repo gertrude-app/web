@@ -1,8 +1,11 @@
-import { expect, test, it, describe, vi } from 'vitest';
-import { Result } from '@dash/types';
-import { formatDate } from '@dash/datetime';
-import { Req, editable } from '../helpers';
-import Current from '../../environment';
+// import { expect, test, it, describe, vi } from 'vitest';
+// import { Result } from '@dash/types';
+// import { formatDate } from '@dash/datetime';
+// import { Req, editable } from '../helpers';
+// import Current from '../../environment';
+
+export const lol = 3;
+
 // import reducer, {
 //   deleteActivityItems,
 //   deleteDevice,
@@ -12,8 +15,8 @@ import Current from '../../environment';
 //   newUserRouteVisited,
 //   upsertUser,
 // } from '../slice-users';
-import { makeGetState, makeState } from './test-helpers';
-import * as mock from './mocks';
+// import { makeGetState, makeState } from './test-helpers';
+// import * as mock from './mocks';
 
 // describe(`deleteDevice`, () => {
 //   it(`removes device from root users state on success`, () => {

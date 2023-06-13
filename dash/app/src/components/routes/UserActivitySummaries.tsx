@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { ApiErrorMessage, Loading, ActivitySummaries } from '@dash/components';
-import { entireDays } from '../../redux/slice-users';
+import { entireDays } from '../../lib/helpers';
 import { useQuery, Key } from '../../hooks/query';
 import Current from '../../environment';
 

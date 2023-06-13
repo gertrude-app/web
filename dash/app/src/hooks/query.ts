@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast';
-import { createAction, nanoid } from '@reduxjs/toolkit';
+import { createAction } from '@reduxjs/toolkit';
 import {
   useMutation as useLibMutation,
   useQuery as useLibQuery,
@@ -9,12 +9,9 @@ import { capitalize, pastTense } from '@shared/string';
 import { useState } from 'react';
 import { Result } from '@dash/types';
 import type { DeleteEntity, PqlError, SuccessOutput } from '@dash/types';
-import type { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import type PairQLResult from '@dash/types/src/pairql/Result';
 import type { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
 import type { QueryKey, QueryKeyData } from './key';
-import { useDispatch } from '../redux/hooks';
-import { ensurePqlError } from '../pairql/query';
 import Current from '../environment';
 import { isEditable, isUUID } from '../redux/helpers';
 import { Key } from './key';
@@ -52,26 +49,14 @@ export function useQuery<T>(
   fn: () => Promise<Result<T, PqlError>>,
   options: QueryOptions<T> = {},
 ): QueryResult<T> {
-  const dispatch = useDispatch();
-  const requestId = nanoid();
   return useLibQuery({
     queryKey: key.segments,
     queryFn: async () => {
-      try {
-        dispatch(queryStarted(key.data, requestId));
-        const value = (await fn()).valueOrThrow();
-        dispatch(querySucceeded(key.data, requestId));
-        if (options.payloadAction) {
-          dispatch(options.payloadAction(value));
-        }
-        if (options.onReceive) {
-          options.onReceive(value);
-        }
-        return value;
-      } catch (error) {
-        dispatch(queryFailed(key.data, ensurePqlError(error), requestId));
-        throw error;
+      const value = (await fn()).valueOrThrow();
+      if (options.onReceive) {
+        options.onReceive(value);
       }
+      return value;
     },
     enabled: options.enabled,
     ...(options.neverRefetch
@@ -140,28 +125,16 @@ export function useMutation<T, V>(
     options = param1;
   }
 
-  const [arg, setArg] = useState<V | undefined>(undefined);
   const [entityId, setEntityId] = useState<UUID | undefined>(undefined);
-  const dispatch = useDispatch();
   const queryClient = useQueryClient();
-  const requestId = nanoid();
   const toasting = getToast(id);
   return useLibMutation({
     mutationFn: (arg) => fn(arg).then((result) => result.valueOrThrow()),
     onMutate(arg) {
-      setArg(arg);
-      let entityId: UUID | undefined = undefined;
       if (isUUID(arg)) {
-        entityId = arg;
         setEntityId(arg);
       } else if (isEditable(arg)) {
-        entityId = arg.original.id;
         setEntityId(arg.original.id);
-      }
-      if (entityId) {
-        dispatch(entityMutationStarted(id)(entityId, requestId));
-      } else {
-        dispatch(mutationStarted(id)(arg, requestId));
       }
       if (toasting) {
         toast.dismiss();
@@ -170,11 +143,6 @@ export function useMutation<T, V>(
       }
     },
     onError(error) {
-      if (entityId) {
-        dispatch(entityMutationFailed(id)(error, entityId, requestId));
-      } else {
-        dispatch(mutationFailed(id)(error, arg, requestId));
-      }
       if (options.onError) {
         options.onError(error, entityId);
       }
@@ -185,11 +153,6 @@ export function useMutation<T, V>(
       }
     },
     onSuccess(payload) {
-      if (entityId) {
-        dispatch(entityMutationSucceeded(id)(entityId, requestId));
-      } else {
-        dispatch(mutationSucceeded(id)(arg, requestId));
-      }
       if (options.onSuccess) {
         options.onSuccess(payload, entityId);
       }
@@ -303,7 +266,6 @@ export const entityMutationSucceeded = (mutationId: MutationId) =>
 type QueryOptions<T> = {
   enabled?: boolean;
   neverRefetch?: boolean;
-  payloadAction?: ActionCreatorWithPayload<T, string>;
   onReceive?: (data: T) => unknown;
 };
 

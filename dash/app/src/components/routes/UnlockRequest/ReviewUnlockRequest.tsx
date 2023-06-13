@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { ErrorModal, LoadingModal, Modal, ReviewUnlockRequest } from '@dash/components';
-import { _useSelectableKeychains } from '../../../hooks/selectable-keychains';
+import { useSelectableKeychains } from '../../../hooks/selectable-keychains';
 import { useQuery, Key } from '../../../hooks/query';
 import Current from '../../../environment';
 
@@ -13,7 +13,7 @@ const ReviewUnlockRequestRoute: React.FC = () => {
   // used by subsequent screens, prefetch to minimize spinners
   useQuery(Key.apps, Current.api.getIdentifiedApps);
   useQuery(Key.user(userId), () => Current.api.getUser(userId));
-  _useSelectableKeychains();
+  useSelectableKeychains();
 
   const query = useQuery(Key.unlockRequest(id), () => Current.api.getUnlockRequest(id));
 

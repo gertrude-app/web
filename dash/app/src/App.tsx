@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { useRedirect } from './redux/hooks';
+import { Route, Routes } from 'react-router-dom';
 import AuthedChrome from './components/Authed';
 import Dashboard from './components/routes/Dashboard';
 import Login from './components/routes/Login';
@@ -17,7 +16,6 @@ import DenyUnlockRequest from './components/routes/UnlockRequest/DenyUnlockReque
 import SelectUnlockRequestKeychain from './components/routes/UnlockRequest/SelectUnlockRequestKeychain';
 import UserUnlockRequests from './components/routes/UnlockRequest/UserUnlockRequests';
 import UsersUnlockRequests from './components/routes/UnlockRequest/UsersUnlockRequests';
-import JoinWaitlist from './components/routes/JoinWaitlist';
 import AdminProfile from './components/routes/AdminProfile';
 import Keychain from './components/routes/Keychain';
 import Users from './components/routes/Users';
@@ -38,18 +36,12 @@ const App: React.FC = () => {
     });
   }, []);
 
-  const redirect = useRedirect();
-  if (redirect) {
-    return <Navigate to={redirect} />;
-  }
-
   return (
     <Routes>
       {/* unauthed routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="/otp/:token" element={<MagicLink />} />
-      <Route path="/join-waitlist" element={<JoinWaitlist />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/verify-signup-email/:token" element={<VerifySignupEmail />} />
       <Route path="/checkout-success" element={<CheckoutSuccess />} />

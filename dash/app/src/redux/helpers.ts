@@ -1,68 +1,8 @@
-import { env } from '@shared/components';
 import type { RequestState, PqlError } from '@dash/types';
-import type { JSXElementConstructor } from 'react';
-import type { QueriedProps } from './store';
-
-export class Query {
-  static resolve<T extends JSXElementConstructor<any>>(
-    props: React.ComponentProps<T>,
-  ): QueriedProps<T> {
-    return { state: `resolved`, props };
-  }
-
-  static props<T extends JSXElementConstructor<any>>(
-    query: QueriedProps<T>,
-  ): React.ComponentProps<T> | undefined {
-    if (query.state === `resolved`) {
-      return query.props;
-    }
-    return undefined;
-  }
-
-  public static unexpectedError(id: string, message: string): QueriedProps<never> {
-    return {
-      state: `failed`,
-      error: {
-        id,
-        type: `clientError`,
-        debugMessage: `Query.unexpectedError: ${message}`,
-        isPqlError: true,
-      },
-    };
-  }
-
-  public static redirectDeleted(redirectUrl: string): QueriedProps<never> {
-    return { state: `entityDeleted`, redirectUrl };
-  }
-}
 
 export class Req {
   static succeed<T>(payload: T): RequestState<T> {
     return { state: `succeeded`, payload };
-  }
-
-  static toUnresolvedQuery<E extends PqlError>(
-    req?: RequestState<never, E>,
-  ): QueriedProps<never> {
-    switch (req?.state) {
-      case undefined: /* fallthrough */
-      case `idle`:
-        return { state: `shouldFetch` };
-      case `ongoing`:
-        return { state: `ongoing` };
-      case `failed`:
-        return {
-          state: `failed`,
-          error: req.error ?? {
-            id: `651ebe47`,
-            type: `clientError`,
-            debugMessage: `Req.toUnresolvedQuery: failed request with no error`,
-            isPqlError: true,
-          },
-        };
-      case `succeeded`:
-        throw new Error(`unreachable`);
-    }
   }
 
   static fail(error: PqlError | undefined = undefined): RequestState<never> {
@@ -184,25 +124,4 @@ export function isDirty<T extends { id: UUID }>(
   const draft = prop ? editable.draft[prop] : editable.draft;
   const original = prop ? editable.original[prop] : editable.original;
   return JSON.stringify(original) !== JSON.stringify(draft);
-}
-
-export async function spinnerMin<T>(
-  promise: Promise<T>,
-  delayMs = env.isCypress() ? 0 : 400,
-): Promise<T> {
-  const start = Date.now();
-  const result = await promise;
-  const elapsed = Date.now() - start;
-  if (elapsed >= delayMs) {
-    return result;
-  }
-  return new Promise((res) => setTimeout(() => res(result), delayMs - elapsed));
-}
-
-export function sortActivityDays<T extends { date: string; totalItems: number }>(
-  days: Array<T>,
-): Array<T> {
-  return days
-    .sort((a, b) => (a.date < b.date ? 1 : -1))
-    .filter((day) => day.totalItems > 0);
 }

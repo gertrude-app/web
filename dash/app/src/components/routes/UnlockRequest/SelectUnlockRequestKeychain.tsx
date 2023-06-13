@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Modal, KeychainPicker, LoadingModal, ErrorModal } from '@dash/components';
-import { _useSelectableKeychains } from '../../../hooks/selectable-keychains';
+import { useSelectableKeychains } from '../../../hooks/selectable-keychains';
 import Current from '../../../environment';
 import { useQuery, Key, useZip } from '../../../hooks/query';
 
@@ -11,7 +11,7 @@ const SelectUnlockRequestKeychain: React.FC = () => {
   const navigate = useNavigate();
 
   const query = useZip(
-    _useSelectableKeychains(),
+    useSelectableKeychains(),
     useQuery(Key.user(userId), () => Current.api.getUser(userId)),
   );
 

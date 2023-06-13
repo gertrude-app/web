@@ -19,7 +19,6 @@ type Props = {
   onSave(): unknown;
   saveButtonDisabled: boolean;
   isNew: boolean;
-  // focus?: boolean;
 };
 
 const NotificationCard: React.FC<Props> = ({
