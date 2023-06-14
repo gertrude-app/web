@@ -30,7 +30,7 @@ const UserActivityFeedRoute: React.FC = () => {
       return Current.api.deleteActivityItems(input);
     },
     {
-      invalidating: [queryKey, Key.userActivitySummaries(userId)],
+      invalidating: [queryKey, Key.userActivitySummaries(userId), Key.dashboard],
       toast: `delete:activity-items`,
     },
   );

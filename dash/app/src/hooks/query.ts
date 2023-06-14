@@ -5,25 +5,6 @@ import type { PqlError } from '@dash/types';
 import type { UseQueryResult, UseQueryOptions } from '@tanstack/react-query';
 import type { QueryKey } from './key';
 
-export function useFireAndForget<T>(
-  fn: () => Promise<Result<T, PqlError>>,
-  options: FireAndForgetOptions<T> = {},
-): QueryResult<T> {
-  return useQueryResult([`fire-and-forget`, fn.toString()], fn, {
-    ...options,
-    enabled: options.when,
-    retry: false,
-    retryOnMount: false,
-    cacheTime: Infinity,
-    retryDelay: Infinity,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchInterval: false,
-    refetchIntervalInBackground: false,
-    refetchOnReconnect: false,
-  });
-}
-
 export function useQuery<T>(
   key: QueryKey<T>,
   fn: () => Promise<Result<T, PqlError>>,
@@ -63,6 +44,33 @@ export function useOptimism(): {
       queryClient.setQueryData(queryKey.segments, to);
     },
   };
+}
+
+export function useFireAndForget<T>(
+  fn: () => Promise<Result<T, PqlError>>,
+  options: FireAndForgetOptions<T> = {},
+): QueryResult<T> {
+  // react-query doesn't have a great story for mutations that fire
+  // on component mount, putting them in useEffect is problematic due
+  // to react strict mode double-mount. sending these request as queries
+  // works, and the query key generated from the function string just
+  // ensures that each fire and forget is cached uniquely, so we don't
+  // have to pass in some sort of key/id at the call site. all of the
+  // retry/cache stuff are set so these will run once, and neve refetch.
+  // struggled with naming, perhaps `useDeclarativeMutation` is better?
+  return useQueryResult([`fire-and-forget`, fn.toString()], fn, {
+    ...options,
+    enabled: options.when,
+    retry: false,
+    retryOnMount: false,
+    cacheTime: Infinity,
+    retryDelay: Infinity,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchInterval: false,
+    refetchIntervalInBackground: false,
+    refetchOnReconnect: false,
+  });
 }
 
 type QueryOptions<T> = {

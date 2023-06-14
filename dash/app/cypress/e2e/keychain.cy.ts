@@ -57,7 +57,6 @@ describe(`create keychain`, () => {
     cy.testId(`edit-user`).click();
     cy.contains(`Test keychain`);
     cy.contains(`Add keychain`).click();
-    // cy.contains(`No selectable keychains`);
   });
 
   describe(`no keychains to start`, () => {
