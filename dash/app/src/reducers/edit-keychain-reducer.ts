@@ -3,7 +3,7 @@ import { produce } from 'immer';
 import { convert, newKeyState } from '@dash/keys';
 import type { EditKey } from '@dash/keys';
 import type { AdminKeychain, Key, KeychainSummary } from '@dash/types';
-import { editable } from '../lib/helpers';
+import { commit, editable } from '../lib/helpers';
 import editKeyReducer from '../reducers/edit-key-reducer';
 import * as empty from '../lib/empty';
 
@@ -53,6 +53,7 @@ function reducer(
 
     case `keychainSaved`:
       state.keychain.isNew = false;
+      state.keychain = commit(state.keychain);
       return;
 
     case `createNewKey`:

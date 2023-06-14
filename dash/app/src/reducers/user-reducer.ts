@@ -1,6 +1,6 @@
 import { produce } from 'immer';
 import type { KeychainSummary, User } from '@dash/types';
-import { editable } from '../lib/helpers';
+import { commit, editable } from '../lib/helpers';
 
 type State = {
   user?: Editable<User>;
@@ -32,6 +32,7 @@ function reducer(state: State, action: Action): State | undefined {
   switch (action.type) {
     case `userSaved`:
       state.user.isNew = false;
+      state.user = commit(state.user);
       return;
 
     case `setName`:

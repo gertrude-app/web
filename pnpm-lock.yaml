@@ -94,6 +94,7 @@ importers:
       '@shared/ts-utils': workspace:*
       '@tanstack/react-query': 4.29.12
       '@types/dash-ambient': workspace:*
+      '@types/lodash.isequal': 4.5.6
       '@types/react': ^18.0.22
       '@types/react-dom': ^18.0.7
       '@types/uuid': 8.3.4
@@ -102,6 +103,7 @@ importers:
       glob: 8.0.3
       graphql: ^16.5.0
       immer: 10.0.2
+      lodash.isequal: 4.5.0
       node-fetch: 3.3.0
       postcss: ^8.4.13
       react: ^18.2.0
@@ -130,6 +132,7 @@ importers:
       classnames: 2.3.2
       graphql: 16.6.0
       immer: 10.0.2
+      lodash.isequal: 4.5.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-hot-toast: 2.4.0_biqbaboplfbrettd7655fr4n2y
@@ -139,6 +142,7 @@ importers:
     devDependencies:
       '@dash/types': link:../types
       '@types/dash-ambient': link:../ambient
+      '@types/lodash.isequal': 4.5.6
       '@types/react': 18.0.24
       '@types/react-dom': 18.0.8
       '@types/uuid': 8.3.4
@@ -3954,9 +3958,14 @@ packages:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
     dev: true
 
+  /@types/lodash.isequal/4.5.6:
+    resolution: {integrity: sha512-Ww4UGSe3DmtvLLJm2F16hDwEQSv7U0Rr8SujLUA2wHI2D2dm8kPu6Et+/y303LfjTIwSBKXB/YTUcAKpem/XEg==}
+    dependencies:
+      '@types/lodash': 4.14.187
+    dev: true
+
   /@types/lodash/4.14.187:
     resolution: {integrity: sha512-MrO/xLXCaUgZy3y96C/iOsaIqZSeupyTImKClHunL5GrmaiII2VwvWmLBu2hwa0Kp0sV19CsyjtrTc/Fx8rg/A==}
-    dev: false
 
   /@types/mdx/2.0.3:
     resolution: {integrity: sha512-IgHxcT3RC8LzFLhKwP3gbMPeaK7BM9eBH46OdapPA7yvuIUJ8H6zHZV53J8hGZcTSnt95jANt+rTBNUUc22ACQ==}
@@ -7930,6 +7939,10 @@ packages:
 
   /lodash.deburr/4.1.0:
     resolution: {integrity: sha512-m/M1U1f3ddMCs6Hq2tAsYThTBDaAKFDX3dwDo97GEYzamXi9SqUpjWi/Rrj/gf3X2n8ktwgZrlP1z6E3v/IExQ==}
+    dev: false
+
+  /lodash.isequal/4.5.0:
+    resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
     dev: false
 
   /lodash.isplainobject/4.0.6:

@@ -1,3 +1,4 @@
+import isEqual from 'lodash.isequal';
 import type { RequestState, PqlError } from '@dash/types';
 
 export class Req {
@@ -70,5 +71,5 @@ export function isDirty<T extends { id: UUID }>(
 ): boolean {
   const draft = prop ? editable.draft[prop] : editable.draft;
   const original = prop ? editable.original[prop] : editable.original;
-  return JSON.stringify(original) !== JSON.stringify(draft);
+  return !isEqual(original, draft);
 }
