@@ -9,6 +9,7 @@ import type {
   SuspendFilterRequest,
   GetIdentifiedApps,
   CombinedUsersActivitySummaries,
+  AdminNotification,
 } from '@dash/types';
 import type { ActivityFeedItem } from '@dash/components';
 import * as empty from '../../lib/empty';
@@ -55,8 +56,8 @@ export function suspendFilterRequest(
 }
 
 export function adminNotification(
-  override: Partial<GetAdmin.Notification> = {},
-): GetAdmin.Notification {
+  override: Partial<AdminNotification> = {},
+): AdminNotification {
   return {
     id: uuid(),
     trigger: `suspendFilterRequestSubmitted`,
