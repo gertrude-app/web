@@ -33,6 +33,14 @@ export const LightMode = props({
   },
 });
 
+export const Wide = props({
+  ...LightMode.args,
+  width: 1200,
+  props: {
+    ...LightMode.args.props,
+  },
+});
+
 export const LightModeSelected = props({
   ...LightMode.args,
   props: {
