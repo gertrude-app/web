@@ -6,6 +6,8 @@ interface Props {
   iconOnly?: boolean;
   className?: string;
   type?: 'default' | 'inverted';
+  parentSite?: boolean;
+  spaceTight?: boolean;
   textSize?:
     | 'text-base'
     | 'text-lg'
@@ -23,6 +25,8 @@ const Logo: React.FC<Props> = ({
   iconOnly,
   type = `default`,
   textSize = `text-4xl`,
+  parentSite = false,
+  spaceTight = false,
 }) => {
   let color = ``;
 
@@ -60,14 +64,29 @@ const Logo: React.FC<Props> = ({
         </svg>
       </div>
       {!iconOnly && (
-        <div
-          className={cx(
-            `font-lato whitespace-nowrap ml-2.5`,
-            type === `inverted` ? `text-white` : `text-slate-700`,
-            textSize,
+        <div className="flex flex-col ml-2.5">
+          <span
+            className={cx(
+              `font-lato whitespace-nowrap`,
+              type === `inverted` ? `text-white` : `text-slate-700`,
+              textSize,
+            )}
+          >
+            Gertrude
+          </span>
+          {parentSite && (
+            <span
+              className={cx(
+                type === `inverted`
+                  ? `from-indigo-400 to-fuchsia-400`
+                  : `from-indigo-500 to-fuchsia-500`,
+                `bg-gradient-to-r w-fit bg-clip-text [-webkit-background-clip:text] text-transparent tracking-wider text-sm font-medium uppercase`,
+                spaceTight && `-mt-0.5 border border-slate-900`,
+              )}
+            >
+              For parents
+            </span>
           )}
-        >
-          Gertrude
         </div>
       )}
     </div>
