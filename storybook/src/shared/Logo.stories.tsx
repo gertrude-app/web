@@ -20,15 +20,10 @@ export const Default: Story = {
 };
 
 export const DefaultParentSite: Story = {
-  decorators: [
-    (Story) => (
-      <div className="py-8 flex justify-center">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: Default.decorators,
   args: {
-    parentSite: true,
+    type: `default`,
+    withForParents: true,
   },
 };
 
@@ -66,7 +61,7 @@ export const InvertedParentSite: Story = {
   args: {
     type: `inverted`,
     iconOnly: false,
-    parentSite: true,
+    withForParents: true,
   },
 };
 

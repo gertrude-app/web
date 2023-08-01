@@ -39,7 +39,7 @@ const SidebarNav: React.FC<Props> = ({
           )}
           type="inverted"
           iconOnly={collapsed}
-          parentSite
+          withForParents
         />
       </a>
       <div className={cx(`pb-4`)}>

@@ -6,8 +6,7 @@ interface Props {
   iconOnly?: boolean;
   className?: string;
   type?: 'default' | 'inverted';
-  parentSite?: boolean;
-  spaceTight?: boolean;
+  withForParents?: boolean | 'condensed';
   textSize?:
     | 'text-base'
     | 'text-lg'
@@ -25,8 +24,7 @@ const Logo: React.FC<Props> = ({
   iconOnly,
   type = `default`,
   textSize = `text-4xl`,
-  parentSite = false,
-  spaceTight = false,
+  withForParents = false,
 }) => {
   let color = ``;
 
@@ -74,14 +72,14 @@ const Logo: React.FC<Props> = ({
           >
             Gertrude
           </span>
-          {parentSite && (
+          {withForParents && (
             <span
               className={cx(
                 type === `inverted`
                   ? `from-indigo-400 to-fuchsia-400`
                   : `from-indigo-500 to-fuchsia-500`,
                 `bg-gradient-to-r w-fit bg-clip-text [-webkit-background-clip:text] text-transparent tracking-wider text-sm font-medium uppercase`,
-                spaceTight && `-mt-0.5 border border-slate-900`,
+                withForParents === `condensed` && `-mt-0.5 border border-slate-900`,
               )}
             >
               For parents

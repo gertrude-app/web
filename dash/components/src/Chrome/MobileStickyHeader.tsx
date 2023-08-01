@@ -17,7 +17,7 @@ const MobileStickyHeader: React.FC<MobileStickyHeaderProps> = ({
 }) => (
   <header
     className={cx(
-      `h-[64px] sm:h-[72px] top-0 justify-between items-center px-1 sm:px-2 z-30 bg-slate-900 flex shadow-md shadow-slate-300/20 rounded-xlx`,
+      `h-[64px] sm:h-[72px] top-0 justify-between items-center px-1 sm:px-2 z-30 bg-slate-900 flex shadow-md shadow-slate-300/20`,
       className,
     )}
   >
@@ -38,8 +38,7 @@ const MobileStickyHeader: React.FC<MobileStickyHeaderProps> = ({
     >
       <Logo
         className="scale-75 sm:scale-90 antialiased"
-        spaceTight
-        parentSite
+        withForParents="condensed"
         type="inverted"
       />
     </Link>
