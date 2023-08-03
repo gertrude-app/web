@@ -45,6 +45,7 @@ importers:
       '@dash/components': workspace:*
       '@headlessui/react': 1.7.12
       '@shared/components': workspace:*
+      '@shared/datetime': workspace:*
       '@shared/string': workspace:*
       '@shared/tailwind': workspace:*
       '@shared/ts-utils': workspace:*
@@ -61,6 +62,7 @@ importers:
       '@dash/components': link:../dash/components
       '@headlessui/react': 1.7.12_biqbaboplfbrettd7655fr4n2y
       '@shared/components': link:../shared/components
+      '@shared/datetime': link:../shared/datetime
       '@shared/string': link:../shared/string
       '@shared/tailwind': link:../shared/tailwind
       '@shared/ts-utils': link:../shared/ts-utils
@@ -246,7 +248,10 @@ importers:
       react-router-dom: 6.4.3_biqbaboplfbrettd7655fr4n2y
 
   shared/datetime:
-    specifiers: {}
+    specifiers:
+      '@shared/string': workspace:*
+    dependencies:
+      '@shared/string': link:../string
 
   shared/string:
     specifiers: {}
