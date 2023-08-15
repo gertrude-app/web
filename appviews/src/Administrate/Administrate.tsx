@@ -6,7 +6,7 @@ import { containerize } from '../lib/store';
 import InactiveAccountScreen from '../components/InactiveAccountBlock';
 import AccountPastDueBanner from '../components/AccountPastDueBanner';
 import SidebarNav from './subcomponents/SidebarNav';
-import HomeScreen from './screens/HomeScreen';
+import ActionsScreen from './screens/ActionsScreen';
 import HealthCheckScreen from './screens/HealthCheckScreen';
 import ExemptUsersScreen from './screens/ExemptUsersScreen';
 import HiddenAdvancedScreen from './screens/HiddenAdvancedScreen';
@@ -39,22 +39,6 @@ export const Administrate: React.FC<Props> = ({
   let pageElement: JSX.Element;
 
   switch (screen) {
-    case `home`:
-      pageElement = (
-        <HomeScreen
-          releaseChannel={releaseChannel}
-          emit={emit}
-          setScreen={(screen) => emit({ case: `gotoScreenClicked`, screen })}
-          filterState={filterState}
-          failingChecksCount={health.failingChecksCount}
-          appVersion={installedAppVersion}
-          userName={userName}
-          keystrokeMonitoringEnabled={keystrokeMonitoringEnabled}
-          screenshotMonitoringEnabled={screenshotMonitoringEnabled}
-          quitting={quitting}
-        />
-      );
-      break;
     case `healthCheck`:
       pageElement = (
         <HealthCheckScreen
@@ -63,6 +47,23 @@ export const Administrate: React.FC<Props> = ({
           screenshotMonitoringEnabled={keystrokeMonitoringEnabled}
           keystrokeMonitoringEnabled={screenshotMonitoringEnabled}
           emit={(action) => emit({ case: `healthCheck`, action })}
+        />
+      );
+      break;
+    case `actions`:
+      pageElement = (
+        <ActionsScreen
+          releaseChannel={releaseChannel}
+          emit={emit}
+          setScreen={(screen) => emit({ case: `gotoScreenClicked`, screen })}
+          filterState={filterState}
+          failingChecksCount={health.failingChecksCount}
+          installedAppVersion={installedAppVersion}
+          newestAvailableVersion={{ version: `2.0.1`, required: false }} // TODO
+          userName={userName}
+          keystrokeMonitoringEnabled={keystrokeMonitoringEnabled}
+          screenshotMonitoringEnabled={screenshotMonitoringEnabled}
+          quitting={quitting}
         />
       );
       break;
@@ -96,12 +97,12 @@ export const Administrate: React.FC<Props> = ({
       {valueOf(healthCheck.accountStatus) === `needsAttention` && (
         <AccountPastDueBanner />
       )}
-      <div className="flex overflow-hidden flex-grow">
+      <div className="flex overflow-hidden flex-grow relative">
         <SidebarNav
           screen={screen}
           setScreen={(screen) => emit({ case: `gotoScreenClicked`, screen })}
         />
-        <main className="flex-grow bg-white dark:bg-slate-900">{pageElement}</main>
+        <main className="flex-grow bg-white dark:bg-slate-900 ml-16">{pageElement}</main>
       </div>
     </div>
   );

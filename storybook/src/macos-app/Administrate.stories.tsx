@@ -10,8 +10,8 @@ const meta = {
 
 type Story = StoryObj<typeof meta>;
 
-export const HomeChecksPassing: Story = props({
-  screen: `home`,
+export const ActionsChecksPassing: Story = props({
+  screen: `actions`,
   windowOpen: true,
   healthCheck: {
     latestAppVersion: { case: `ok`, value: `2.0.0` },
@@ -38,26 +38,26 @@ export const HomeChecksPassing: Story = props({
   dispatch: () => {},
 });
 
-export const HomeAccountNeedsAttention: Story = props({
-  ...HomeChecksPassing.args,
+export const ActionsAccountNeedsAttention: Story = props({
+  ...ActionsChecksPassing.args,
   healthCheck: {
-    ...HomeChecksPassing.args.healthCheck,
+    ...ActionsChecksPassing.args.healthCheck,
     accountStatus: { case: `ok`, value: `needsAttention` },
   },
 });
 
-export const HomeAccountInactive: Story = props({
-  ...HomeChecksPassing.args,
+export const ActionsAccountInactive: Story = props({
+  ...ActionsChecksPassing.args,
   healthCheck: {
-    ...HomeChecksPassing.args.healthCheck,
+    ...ActionsChecksPassing.args.healthCheck,
     accountStatus: { case: `ok`, value: `inactive` },
   },
 });
 
-export const HomeChecksFailing: Story = props({
-  ...HomeChecksPassing.args,
+export const ActionsChecksFailing: Story = props({
+  ...ActionsChecksPassing.args,
   healthCheck: {
-    ...HomeChecksPassing.args.healthCheck,
+    ...ActionsChecksPassing.args.healthCheck,
     screenshotMonitoringEnabled: false,
     notificationsSetting: `none`,
   },
@@ -65,7 +65,7 @@ export const HomeChecksFailing: Story = props({
 });
 
 export const HealthCheckLoading: Story = props({
-  ...HomeChecksPassing.args,
+  ...ActionsChecksPassing.args,
   screen: `healthCheck`,
   healthCheck: {},
 });
@@ -101,7 +101,7 @@ export const HealthCheckError: Story = props({
 });
 
 export const ExemptUsers: Story = props({
-  ...HomeChecksPassing.args,
+  ...ActionsChecksPassing.args,
   screen: `exemptUsers`,
   exemptableUsers: {
     case: `ok`,
@@ -118,7 +118,7 @@ export const ExemptUsersError: Story = props({
 });
 
 export const Advanced: Story = props({
-  ...HomeChecksPassing.args,
+  ...ActionsChecksPassing.args,
   screen: `advanced`,
   advanced: {
     pairqlEndpointDefault: `https://api.getrude.app/pairql`,
