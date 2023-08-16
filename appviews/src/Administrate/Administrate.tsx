@@ -11,7 +11,6 @@ import ActionsScreen from './screens/ActionsScreen';
 import HealthCheckScreen from './screens/HealthCheckScreen';
 import ExemptUsersScreen from './screens/ExemptUsersScreen';
 import HiddenAdvancedScreen from './screens/HiddenAdvancedScreen';
-import HealthChecker from './HealthChecker';
 import store from './administrate-store';
 
 type Props = PropsOf<AppState, ViewState, AppEvent, ViewAction>;
@@ -30,13 +29,6 @@ export const Administrate: React.FC<Props> = ({
   advanced,
   quitting,
 }) => {
-  const health = new HealthChecker(
-    healthCheck,
-    installedAppVersion,
-    screenshotMonitoringEnabled,
-    keystrokeMonitoringEnabled,
-  );
-
   let pageElement: JSX.Element;
 
   switch (screen) {
@@ -98,7 +90,7 @@ export const Administrate: React.FC<Props> = ({
       )}
       <div
         className={cx(
-          'flex flex-grow relative',
+          `flex flex-grow relative`,
           valueOf(healthCheck.accountStatus) === `needsAttention` && `mt-[79px]`,
         )}
       >

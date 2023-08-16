@@ -1,5 +1,4 @@
 import React from 'react';
-import cx from 'classnames';
 import WarningBanner from './WarningBanner';
 
 const AccountPastDueBanner: React.FC<{

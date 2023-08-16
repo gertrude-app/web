@@ -25,7 +25,7 @@ const PillBadge: React.FC<Props> = ({ type, className, children, size }) => {
       break;
     case `blue`:
     case `info`:
-      colors = `bg-indigo-50 dark:bg-indigo-500/10 border-indigo-200 dark:border-indigo-500/50 text-indigo-600 dark:text-indigo-300`;
+      colors = `bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/50 text-blue-600 dark:text-blue-300`;
       break;
   }
 

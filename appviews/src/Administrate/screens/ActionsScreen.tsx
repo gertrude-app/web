@@ -1,8 +1,8 @@
-import React, { version } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@shared/components';
-import type { AppEvent, Screen } from '../administrate-store';
-import type { FilterState } from '../../lib/shared-types';
 import cx from 'classnames';
+import type { AppEvent } from '../administrate-store';
+import type { FilterState } from '../../lib/shared-types';
 import { PillBadge } from '../../../../dash/components/src';
 
 interface Props {
@@ -31,6 +31,11 @@ const ActionsScreen: React.FC<Props> = ({
   quitting,
   releaseChannel,
 }) => {
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const [confirmationModalAction, setConfirmationModalAction] = useState<
+    'quitApp' | 'stopFilter'
+  >(`quitApp`);
+
   let versionMessage = ``;
   let badgeColor: 'green' | 'yellow' | 'red' = `green`;
   let badgeText = ``;
@@ -49,12 +54,75 @@ const ActionsScreen: React.FC<Props> = ({
   }
 
   return (
-    <div className="p-4 h-full flex flex-col justify-between gap-4">
+    <div className="p-4 h-full flex flex-col justify-between gap-4 relative">
+      <div
+        className={cx(
+          `w-full h-full left-0 top-0 bg-slate-100 dark:bg-slate-900 z-10 transition-[backdrop-filter,background-color] duration-300 flex justify-center items-center fixed`,
+          confirmationModalOpen
+            ? `bg-opacity-30 dark:bg-opacity-90 dark:backdrop-blur-sm backdrop-blur-md pointer-events-auto`
+            : `bg-opacity-0 dark:bg-opacity-0 backdrop-blur-none pointer-events-none`,
+        )}
+        onClick={() => setConfirmationModalOpen(false)}
+      >
+        <div
+          className={cx(
+            `bg-white dark:bg-slate-800 shadow-lg shadow-slate-300/50 dark:shadow-black/20 rounded-2xl transition-[transform,opacity] duration-300`,
+            confirmationModalOpen
+              ? `pointer-events-auto`
+              : `pointer-events-none scale-75 opacity-0`,
+          )}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="p-8">
+            <h3 className="font-bold text-xl text-slate-900 dark:text-slate-200 ">
+              Are you sure you want to
+              {confirmationModalAction === `quitApp`
+                ? ` quit Gertrude?`
+                : ` stop the filter?`}
+            </h3>
+            <p className="max-w-md text-sm text-slate-500 dark:text-slate-400 mt-4">
+              {confirmationModalAction === `quitApp` // TODO:
+                ? `Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, laboriosam vero optio delectus eius sequi perferendis temporibus ipsa dicta.`
+                : `Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, laboriosam vero optio delectus eius sequi perferendis temporibus ipsa dicta.`}
+            </p>
+          </div>
+          <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-b-2xl flex justify-between gap-4">
+            <Button
+              type="button"
+              onClick={() => setConfirmationModalOpen(false)}
+              color="tertiary"
+              className="flex-grow"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              onClick={() =>
+                emit({
+                  case:
+                    confirmationModalAction === `quitApp`
+                      ? `quitAppClicked`
+                      : `stopFilterClicked`,
+                })
+              }
+              color="warning"
+              className="flex-grow"
+              disabled={confirmationModalAction === `quitApp` && quitting}
+            >
+              {quitting
+                ? `Quitting...`
+                : `Yes, ${
+                    confirmationModalAction === `quitApp` ? `quit app` : `stop filter`
+                  }`}
+            </Button>
+          </div>
+        </div>
+      </div>
       <div className="flex flex-col gap-4 flex-grow">
-        <div className="border border-slate-200 dark:border-slate-800 rounded-2xl shrink-0 flex-grow">
+        <div className="border border-slate-200 dark:border-slate-800 rounded-2xl shrink-0 flex-grow flex flex-col justify-between">
           <div className="p-4">
             <h1 className="font-bold text-xl text-slate-800 dark:text-slate-300">
-              Connected to user{' '}
+              Connected to user{` `}
               <span className="text-slate-900 dark:text-white font-extrabold">
                 {userName}
               </span>
@@ -63,7 +131,7 @@ const ActionsScreen: React.FC<Props> = ({
               <div className="flex items-center gap-2">
                 <div
                   className={cx(
-                    'w-6 h-6 rounded-full flex justify-center items-center',
+                    `w-6 h-6 rounded-full flex justify-center items-center`,
                     screenshotMonitoringEnabled
                       ? `bg-indigo-100 dark:bg-indigo-500/30 text-indigo-500 dark:text-indigo-400`
                       : `bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-600`,
@@ -72,7 +140,7 @@ const ActionsScreen: React.FC<Props> = ({
                   <i className="fa-solid fas fa-binoculars text-xs" />
                 </div>
                 <span className="text-sm text-slate-500">
-                  Screenshot monitoring{' '}
+                  Screenshot monitoring{` `}
                   <span
                     className={cx(
                       screenshotMonitoringEnabled
@@ -88,7 +156,7 @@ const ActionsScreen: React.FC<Props> = ({
               <div className="flex items-center gap-2">
                 <div
                   className={cx(
-                    'w-6 h-6 rounded-full flex justify-center items-center',
+                    `w-6 h-6 rounded-full flex justify-center items-center`,
                     keystrokeMonitoringEnabled
                       ? `bg-indigo-100 dark:bg-indigo-500/30 text-indigo-500 dark:text-indigo-400`
                       : `bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-600`,
@@ -97,7 +165,7 @@ const ActionsScreen: React.FC<Props> = ({
                   <i className="fa-solid fas fa-keyboard text-xs" />
                 </div>
                 <span className="text-sm text-slate-500">
-                  Keystroke monitoring{' '}
+                  Keystroke monitoring{` `}
                   <span
                     className={cx(
                       keystrokeMonitoringEnabled
@@ -129,12 +197,16 @@ const ActionsScreen: React.FC<Props> = ({
               {badgeText}
             </PillBadge>
             <h2 className="text-lg font-semibold text-slate-600 dark:text-slate-300">
-              Currently running Gertrude{' '}
+              Currently running Gertrude{` `}
               <span className="font-bold text-slate-900 dark:text-white">
                 v{installedAppVersion}
-              </span>{' '}
-              and updating to{' '}
-              <span className="font-bold text-slate-900 dark:text-white">beta</span>{' '}
+              </span>
+              {` `}
+              and updating to{` `}
+              <span className="font-bold text-slate-900 dark:text-white">
+                {releaseChannel}
+              </span>
+              {` `}
               releases.
             </h2>
             <p className="text-slate-500 mt-2">{versionMessage}</p>
@@ -165,7 +237,10 @@ const ActionsScreen: React.FC<Props> = ({
           {filterState.case !== `off` && (
             <Button
               type="button"
-              onClick={() => emit({ case: `stopFilterClicked` })}
+              onClick={() => {
+                setConfirmationModalAction(`stopFilter`);
+                setConfirmationModalOpen(true);
+              }}
               color="warning"
             >
               Stop filter
@@ -173,7 +248,10 @@ const ActionsScreen: React.FC<Props> = ({
           )}
           <Button
             type="button"
-            onClick={() => emit({ case: `quitAppClicked` })}
+            onClick={() => {
+              setConfirmationModalAction(`quitApp`);
+              setConfirmationModalOpen(true);
+            }}
             color="warning"
           >
             Quit app
