@@ -10,7 +10,7 @@ const meta = {
 
 type Story = StoryObj<typeof meta>;
 
-export const ActionsChecksPassing: Story = props({
+export const Actions: Story = props({
   screen: `actions`,
   windowOpen: true,
   healthCheck: {
@@ -39,33 +39,23 @@ export const ActionsChecksPassing: Story = props({
 });
 
 export const ActionsAccountNeedsAttention: Story = props({
-  ...ActionsChecksPassing.args,
+  ...Actions.args,
   healthCheck: {
-    ...ActionsChecksPassing.args.healthCheck,
+    ...Actions.args.healthCheck,
     accountStatus: { case: `ok`, value: `needsAttention` },
   },
 });
 
 export const ActionsAccountInactive: Story = props({
-  ...ActionsChecksPassing.args,
+  ...Actions.args,
   healthCheck: {
-    ...ActionsChecksPassing.args.healthCheck,
+    ...Actions.args.healthCheck,
     accountStatus: { case: `ok`, value: `inactive` },
   },
 });
 
-export const ActionsChecksFailing: Story = props({
-  ...ActionsChecksPassing.args,
-  healthCheck: {
-    ...ActionsChecksPassing.args.healthCheck,
-    screenshotMonitoringEnabled: false,
-    notificationsSetting: `none`,
-  },
-  filterState: { case: `on` },
-});
-
 export const HealthCheckLoading: Story = props({
-  ...ActionsChecksPassing.args,
+  ...Actions.args,
   screen: `healthCheck`,
   healthCheck: {},
 });
@@ -100,8 +90,17 @@ export const HealthCheckError: Story = props({
   },
 });
 
+export const HealthCheckAccountNeedsAttention: Story = props({
+  ...HealthCheckFailing.args,
+  screen: `healthCheck`,
+  healthCheck: {
+    ...HealthCheckFailing.args.healthCheck,
+    accountStatus: { case: `ok`, value: `needsAttention` },
+  },
+});
+
 export const ExemptUsers: Story = props({
-  ...ActionsChecksPassing.args,
+  ...Actions.args,
   screen: `exemptUsers`,
   exemptableUsers: {
     case: `ok`,
@@ -112,13 +111,20 @@ export const ExemptUsers: Story = props({
   },
 });
 
+export const ExemptUsersAccountNeedsAttention: Story = props({
+  ...ExemptUsers.args,
+  healthCheck: {
+    accountStatus: { case: `ok`, value: `needsAttention` },
+  },
+});
+
 export const ExemptUsersError: Story = props({
   ...ExemptUsers.args,
   exemptableUsers: { case: `error` },
 });
 
 export const Advanced: Story = props({
-  ...ActionsChecksPassing.args,
+  ...Actions.args,
   screen: `advanced`,
   advanced: {
     pairqlEndpointDefault: `https://api.getrude.app/pairql`,

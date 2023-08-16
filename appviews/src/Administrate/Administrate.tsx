@@ -1,4 +1,5 @@
 import React from 'react';
+import cx from 'classnames';
 import type { AppEvent, AppState, ViewState, ViewAction } from './administrate-store';
 import type { PropsOf } from '../lib/store';
 import { valueOf } from '../lib/failable';
@@ -55,9 +56,7 @@ export const Administrate: React.FC<Props> = ({
         <ActionsScreen
           releaseChannel={releaseChannel}
           emit={emit}
-          setScreen={(screen) => emit({ case: `gotoScreenClicked`, screen })}
           filterState={filterState}
-          failingChecksCount={health.failingChecksCount}
           installedAppVersion={installedAppVersion}
           newestAvailableVersion={{ version: `2.0.1`, required: false }} // TODO
           userName={userName}
@@ -93,16 +92,24 @@ export const Administrate: React.FC<Props> = ({
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-screen">
       {valueOf(healthCheck.accountStatus) === `needsAttention` && (
-        <AccountPastDueBanner />
+        <AccountPastDueBanner className="fixed top-0 w-screen z-20" />
       )}
-      <div className="flex overflow-hidden flex-grow relative">
+      <div
+        className={cx(
+          'flex flex-grow relative',
+          valueOf(healthCheck.accountStatus) === `needsAttention` && `mt-[79px]`,
+        )}
+      >
         <SidebarNav
+          accountPastDue={valueOf(healthCheck.accountStatus) === `needsAttention`}
           screen={screen}
           setScreen={(screen) => emit({ case: `gotoScreenClicked`, screen })}
         />
-        <main className="flex-grow bg-white dark:bg-slate-900 ml-16">{pageElement}</main>
+        <main className="flex-grow bg-white dark:bg-slate-900 ml-16 height-[calc(100vh-80px)]">
+          {pageElement}
+        </main>
       </div>
     </div>
   );

@@ -5,12 +5,18 @@ import type { Screen } from '../administrate-store';
 interface Props {
   screen: Screen;
   setScreen(screen: Screen): unknown;
+  accountPastDue: boolean;
 }
 
-const SidebarNav: React.FC<Props> = ({ screen, setScreen }) => {
+const SidebarNav: React.FC<Props> = ({ screen, setScreen, accountPastDue }) => {
   const [timesHiddenClicked, setTimesHiddenClicked] = useState(0);
   return (
-    <nav className="border-slate-200 dark:border-slate-800 border-r p-2 font-bold flex flex-col items-stretch space-y-1 bg-white dark:bg-slate-900 fixed top-0 h-full z-20">
+    <nav
+      className={cx(
+        'border-slate-200 dark:border-slate-800 border-r p-2 font-bold flex flex-col items-stretch space-y-1 bg-white dark:bg-slate-900 fixed h-full z-20',
+        !accountPastDue && `top-0`,
+      )}
+    >
       <SidebarButton
         isActive={screen === `healthCheck`}
         onClick={() => setScreen(`healthCheck`)}
