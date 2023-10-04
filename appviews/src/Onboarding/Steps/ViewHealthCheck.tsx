@@ -1,37 +1,43 @@
 import React from 'react';
-import type { AppEvent } from '../onboarding-store';
+import type { AppEvent, OSGroup } from '../onboarding-store';
+import ExpandableImage from '../ExpandableImage';
+import Callout from '../Callout';
+import * as Onboarding from '../UtilityComponents';
 
 interface Props {
   emit: (event: AppEvent) => unknown;
+  os: OSGroup;
 }
 
-const ViewHealthCheck: React.FC<Props> = ({ emit }) => (
-  <div>
-    <h1 className="text-3xl">Admin Health Check</h1>
-    <p className="my-3">
-      One good thing to know about is the <b>Health Check Screen</b>. It's a quick way to
-      see if everything is working correctly, and sometimes can help you fix issues.
-    </p>
-    <div className="my-4 bg-blue-100 p-5 rounded-lg">
-      <b>Good to know:</b>
-      <p>
+const ViewHealthCheck: React.FC<Props> = ({ emit, os }) => (
+  <Onboarding.Centered className="gap-12" direction="row">
+    <div>
+      <Onboarding.Heading>Admin health check</Onboarding.Heading>
+      <Onboarding.Text className="mt-2 mb-8 max-w-2xl">
+        One good thing to know about is the <b>Health Check Screen</b>. It's a quick way
+        to see if everything is working correctly, and sometimes can help you fix issues.
+      </Onboarding.Text>
+      <Callout type="info" heading="Good to know">
         The health check screen will show a warning about you having <b>zero keys.</b>
         {` `}
-        That's expected at this point, since you're just getting setup. 👍
-      </p>
+        That's expected at this point, since you're just getting setup.
+      </Callout>
+      <Onboarding.PrimaryButton
+        icon="fa-solid fa-arrow-right"
+        className="mt-6"
+        emit={emit}
+      >
+        Found it, next
+      </Onboarding.PrimaryButton>
     </div>
-    <img
-      className="h-[280px] rounded-lg mb-4"
-      src="https://gertrude.nyc3.digitaloceanspaces.com/appview-assets/onboarding/administrate.png"
-      alt=""
+    <ExpandableImage
+      fileName="administrate.png"
+      os={os}
+      alt="Admin health check screen"
+      width={500 * 0.75}
+      height={285 * 0.75}
     />
-    <button
-      className="bg-blue-500 text-white font-bold py-2 px-4"
-      onClick={() => emit({ case: `primaryBtnClicked` })}
-    >
-      Done, next &rarr;
-    </button>
-  </div>
+  </Onboarding.Centered>
 );
 
 export default ViewHealthCheck;

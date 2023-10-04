@@ -138,6 +138,11 @@ export const AllowNotificationsGrant: Story = props({
   step: `allowNotifications_grant`,
 });
 
+export const AllowNotificationsFailed: Story = props({
+  ...Welcome.args,
+  step: `allowNotifications_failed`,
+});
+
 export const AllowScreenshotsRequired: Story = props({
   ...Welcome.args,
   step: `allowScreenshots_required`,
@@ -156,6 +161,11 @@ export const AllowScreenshotsGrant: Story = props({
 export const AllowScreenshotsSuccess: Story = props({
   ...Welcome.args,
   step: `allowScreenshots_success`,
+});
+
+export const AllowScreenshotsFailed: Story = props({
+  ...Welcome.args,
+  step: `allowScreenshots_failed`,
 });
 
 export const AllowKeyloggingRequired: Story = props({
@@ -178,22 +188,12 @@ export const AllowKeyloggingFailed: Story = props({
   step: `allowKeylogging_failed`,
 });
 
-export const AllowKeyloggingSuccess: Story = props({
-  ...Welcome.args,
-  step: `allowKeylogging_success`,
-});
-
 export const InstallSysExtExplain: Story = props({
   ...Welcome.args,
   step: `installSysExt_explain`,
 });
 
-export const InstallSysExtStart: Story = props({
-  ...Welcome.args,
-  step: `installSysExt_start`,
-});
-
-export const InstallSysExtAllow: Story = props({
+export const InstallSysExtAllowInstall: Story = props({
   ...Welcome.args,
   step: `installSysExt_allowInstall`,
 });

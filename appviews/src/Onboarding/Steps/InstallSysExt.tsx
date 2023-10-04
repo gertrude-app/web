@@ -1,147 +1,115 @@
 import React from 'react';
-import type { AppEvent } from '../onboarding-store';
+import type { AppEvent, OSGroup } from '../onboarding-store';
+import Callout from '../Callout';
+import ExpandableImage from '../ExpandableImage';
+import * as Onboarding from '../UtilityComponents';
 
 interface Props {
   emit(event: AppEvent): unknown;
-  os: 'catalina' | 'bigSurOrMonterey' | 'venturaOrLater';
+  os: OSGroup;
   step:
     | 'installSysExt_explain'
-    | 'installSysExt_start'
     | 'installSysExt_allowInstall'
     | 'installSysExt_allowFiltering'
     | 'installSysExt_failed'
     | 'installSysExt_success';
 }
 
-const InstallSysExt: React.FC<Props> = ({ emit, step, os }) => (
-  <div>
-    <h1 className="text-3xl mb-3">Install System Extension</h1>
-    <AllowKeyloggingStep emit={emit} step={step} os={os} />
-  </div>
-);
-
-const AllowKeyloggingStep: React.FC<Props> = ({ emit, step, os }) => {
+const InstallSysExt: React.FC<Props> = ({ emit, step, os }) => {
   const systemSettings =
     os === `venturaOrLater` ? `System Settings` : `System Preferences`;
   switch (step) {
     case `installSysExt_explain`:
       return (
-        <>
-          <p className="my-4">
+        <Onboarding.Centered>
+          <Onboarding.Heading>Just one more step!</Onboarding.Heading>
+          <Onboarding.Text className="my-4 max-w-2xl mb-8" centered>
             What gives Gertrude it's superpowers is something called a{` `}
             <b>system extension</b>. Because it's so powerful, you have to give it special
             permission to do it's job.
-          </p>
-          <div className="my-4 bg-blue-100 px-4 py-2 rounded-lg">
-            <b>Good to know:</b>
-            <ul className="list-disc list-inside">
-              <li>You can disable and remove the system extension at any time</li>
-            </ul>
-          </div>
-          <button
-            className="bg-blue-500 text-white font-bold py-2 px-4"
-            onClick={() => emit({ case: `primaryBtnClicked` })}
+          </Onboarding.Text>
+          <Callout heading="Good to know:" type="info">
+            <p>You can disable and remove the system extension at any time.</p>
+          </Callout>
+          <Onboarding.PrimaryButton
+            emit={emit}
+            icon="fa-solid fa-arrow-right"
+            className="mt-8"
           >
-            Next &rarr;
-          </button>
-        </>
-      );
-    case `installSysExt_start`:
-      return (
-        <>
-          <p className="my-4">
-            When you click the button below, then be sure to choose the <b>GRAY</b> button
-            to open {systemSettings}.
-          </p>
-          <img
-            className="h-[380px] rounded-lg mb-4"
-            src="https://gertrude.nyc3.digitaloceanspaces.com/appview-assets/onboarding/dont-block-install-sys-ext.png"
-            alt=""
-          />
-          <button
-            className="bg-blue-500 text-white font-bold py-2 px-4"
-            onClick={() => emit({ case: `primaryBtnClicked` })}
-          >
-            Start the installation &rarr;
-          </button>
-        </>
+            Next
+          </Onboarding.PrimaryButton>
+        </Onboarding.Centered>
       );
     case `installSysExt_allowInstall`:
       return (
-        <>
-          <ol className="my-4">
-            Next, in the {systemSettings} app follow the steps shown below to allow the
-            installation:
-          </ol>
-          <img
-            className="h-[280px] rounded-lg mb-4"
-            src="https://gertrude.nyc3.digitaloceanspaces.com/appview-assets/onboarding/allow-sys-ext.png"
-            alt=""
+        <Onboarding.Centered className="gap-12" direction="row">
+          <div className="flex flex-col">
+            <Onboarding.Heading>Allow system extenson</Onboarding.Heading>
+            <Onboarding.Text className="my-4 max-w-xl">
+              Next, in the {systemSettings} app follow the steps shown to allow the
+              installation:
+            </Onboarding.Text>
+            <Onboarding.ButtonGroup
+              primary={{ text: `Done`, icon: `fa-solid fa-arrow-right` }}
+              secondary={{ text: `Help, I'm stuck...`, shadow: true }}
+              emit={emit}
+              className="w-80 mt-4"
+            />
+          </div>
+          <ExpandableImage
+            fileName="finish-install-sys-ext.gif"
+            os={os}
+            alt={`Allow system extension install`}
+            width={800 / 2}
+            height={600 / 2}
           />
-          <button
-            className="bg-blue-500 text-white font-bold py-2 px-4"
-            onClick={() => emit({ case: `primaryBtnClicked` })}
-          >
-            Done &rarr;
-          </button>
-          <button
-            className="bg-gray-400 text-white font-bold py-2 px-4"
-            onClick={() => emit({ case: `secondaryBtnClicked` })}
-          >
-            Help, I'm stuck...
-          </button>
-        </>
+        </Onboarding.Centered>
       );
     case `installSysExt_failed`:
       return (
-        <>
-          <p>
+        <Onboarding.Centered className="h-full flex flex-col justify-center items-center">
+          <Onboarding.Heading className="mb-2">
+            Hmm, somthing didn't work...
+          </Onboarding.Heading>
+          <Onboarding.Text className="max-w-2xl" centered>
             Shucks! The system extension did not install correctly. Watch this short video
             for troubleshooting tips.
-          </p>
+          </Onboarding.Text>
           <iframe
-            className="my-4"
+            className="my-6 rounded-xl"
             width="560"
             height="315"
             src="https://www.youtube-nocookie.com/embed/ytN1HhQX3xo?rel=0"
             title="YouTube video player"
-            frameBorder="0"
             allowFullScreen
           />
-          <button
-            className="bg-blue-500 text-white font-bold py-2 px-4"
-            onClick={() => emit({ case: `primaryBtnClicked` })}
-          >
-            Try again &rarr;
-          </button>
-          <button
-            className="bg-gray-400 text-white font-bold py-2 px-4"
-            onClick={() => emit({ case: `secondaryBtnClicked` })}
-          >
-            Skip install for now...
-          </button>
-        </>
+          <Onboarding.ButtonGroup
+            primary={{ text: `Try again`, icon: `fa-solid fa-arrow-right` }}
+            secondary={{ text: `Skip install for now...`, shadow: true }}
+            emit={emit}
+            className="w-80"
+          />
+        </Onboarding.Centered>
       );
     case `installSysExt_success`:
       return (
-        <>
-          <p>
-            🎉 Hooray, we've confirmed the system extension is <em>ready to go!</em>
-          </p>
-          <div className="my-4 bg-blue-100 p-5 rounded-lg">
-            <b>Good to know:</b>
-            <p>
-              You're past all the hard parts, all that's left it to briefly show you
-              around a bit.
-            </p>
-          </div>
-          <button
-            className="bg-blue-500 text-white font-bold py-2 px-4"
-            onClick={() => emit({ case: `primaryBtnClicked` })}
+        <Onboarding.Centered>
+          <Onboarding.Heading>System extension installed!</Onboarding.Heading>
+          <Onboarding.Text className="mt-4 mb-8">
+            Hooray, we've confirmed the system extension is <em>ready to go!</em>
+          </Onboarding.Text>
+          <Callout type="info" heading="Good to know:">
+            You're past all the hard parts, all that's left it to briefly show you around
+            a bit.
+          </Callout>
+          <Onboarding.PrimaryButton
+            icon="fa-solid fa-arrow-right"
+            emit={emit}
+            className="mt-8"
           >
-            Next &rarr;
-          </button>
-        </>
+            Next
+          </Onboarding.PrimaryButton>
+        </Onboarding.Centered>
       );
     default:
       return <h1>{step}</h1>;
