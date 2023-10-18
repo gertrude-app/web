@@ -4,14 +4,16 @@ import * as Onboarding from '../UtilityComponents';
 
 const LocateMenuBarIcon: React.FC = () => (
   <Onboarding.Centered>
-    <Onboarding.Heading>Find the menu bar icon</Onboarding.Heading>
-    <Onboarding.Text className="mt-4 mb-3 max-w-2xl" centered>
-      From now on, you'll click the <b>menu bar icon</b> whenever you or your child needs
-      to <em>interact with the Gertrude app.</em>
-    </Onboarding.Text>
-    <Onboarding.Text className="mb-6 max-w-2xl" centered>
-      Look up in the top right corner of your screen to find it, and give it a click.
-    </Onboarding.Text>
+    <Onboarding.HighContrastArea className="flex flex-col items-center">
+      <Onboarding.Heading>Find the menu bar icon</Onboarding.Heading>
+      <Onboarding.Text className="mt-4 mb-3 max-w-2xl" centered>
+        From now on, you'll click the <b>menu bar icon</b> whenever you or your child
+        needs to <em>interact with the Gertrude app.</em>
+      </Onboarding.Text>
+      <Onboarding.Text className="mb-6 max-w-2xl" centered>
+        Look up in the top right corner of your screen to find it, and give it a click.
+      </Onboarding.Text>
+    </Onboarding.HighContrastArea>
     <ExpandableImage
       fileName="locate-menubar-icon.gif"
       lessRounded

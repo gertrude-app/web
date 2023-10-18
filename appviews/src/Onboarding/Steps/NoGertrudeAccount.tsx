@@ -4,7 +4,7 @@ import * as Onboarding from '../UtilityComponents';
 
 const NoGertrudeAccount: React.FC = () => (
   <Onboarding.Centered direction="row" className="ml-2 space-x-4">
-    <div>
+    <Onboarding.HighContrastArea>
       <Onboarding.Heading>No problem, let’s make one!</Onboarding.Heading>
       <Onboarding.Text className="mt-4 max-w-lg">
         We recommend you <b>sign up on your phone,</b> instead of this computer.{` `}
@@ -19,7 +19,7 @@ const NoGertrudeAccount: React.FC = () => (
         secondary={{ text: `I don’t want an account, quit...`, shadow: true }}
         className="mt-6 max-w-md"
       />
-    </div>
+    </Onboarding.HighContrastArea>
     <QRCode url="gertrude.app/start" />
   </Onboarding.Centered>
 );

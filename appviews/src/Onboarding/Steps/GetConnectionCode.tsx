@@ -28,7 +28,7 @@ const GetConnectionCode: React.FC = () => {
           <QRCode url="gertrude.app/a-c" />
         </div>
       </InformationModal>
-      <div className="!ml-0">
+      <Onboarding.HighContrastArea containerClassName="!ml-0">
         <Onboarding.Heading>Get Connection Code</Onboarding.Heading>
         <Onboarding.Text className="mt-4 mb-6 max-w-2xl">
           On your <b>phone,</b> open the Gertrude parents website at{` `}
@@ -50,7 +50,7 @@ const GetConnectionCode: React.FC = () => {
             },
           }}
         />
-      </div>
+      </Onboarding.HighContrastArea>
       <ExpandableImage
         fileName="get-connection-code.png"
         width={682 / 2}

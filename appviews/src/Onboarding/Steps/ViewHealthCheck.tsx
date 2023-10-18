@@ -5,7 +5,7 @@ import * as Onboarding from '../UtilityComponents';
 
 const ViewHealthCheck: React.FC = () => (
   <Onboarding.Centered className="space-x-12" direction="row">
-    <div>
+    <Onboarding.HighContrastArea>
       <Onboarding.Heading>Admin health check</Onboarding.Heading>
       <Onboarding.Text className="mt-3 mb-8 max-w-2xl">
         One good thing to know about is the <b>Health Check Screen</b>. It’s a quick way
@@ -19,7 +19,7 @@ const ViewHealthCheck: React.FC = () => (
       <Onboarding.PrimaryButton icon="fa-solid fa-arrow-right" className="mt-8">
         Found it, next
       </Onboarding.PrimaryButton>
-    </div>
+    </Onboarding.HighContrastArea>
     <ExpandableImage
       fileName="administrate.png"
       lessRounded

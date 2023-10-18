@@ -11,7 +11,7 @@ const Finish: React.FC = () => {
     if (shown) {
       setTimeout(() => {
         setFadeIn(true);
-      }, 2000);
+      }, 500);
     }
   });
 

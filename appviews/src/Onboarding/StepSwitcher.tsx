@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import ConfettiExplosion from 'react-confetti-explosion';
 import cx from 'classnames';
 import type { OnboardingStep } from './onboarding-store';
+import NoisyGrain from '../assets/noisy-grain.svg';
 import ProgressIndicator from './ProgressIndicator';
 import OnboardingContext from './OnboardingContext';
 
@@ -10,7 +11,7 @@ interface Props {
 }
 
 const StepSwitcher: React.FC<Props> = ({ children }) => {
-  const [expandBlurs, setExpandBlurs] = useState(false);
+  const [bgCloudPosition, setBgCloudPosition] = useState({ x: 100, y: 100 });
   const { currentStep } = useContext(OnboardingContext);
   const progressStep = (() => {
     switch (currentStep) {
@@ -43,43 +44,34 @@ const StepSwitcher: React.FC<Props> = ({ children }) => {
   })();
 
   useEffect(() => {
-    if (currentStep === `finish`) {
-      setTimeout(() => {
-        setExpandBlurs(true);
-      }, 500);
-    }
-  }, [currentStep]);
+    const animateBg: FrameRequestCallback = (t: number) => {
+      setBgCloudPosition({
+        x: (Math.sin(t / 3000) + 1) * 50,
+        y: (Math.sin(t / 1800) + 1) * 50 + 50,
+      });
+      requestAnimationFrame(animateBg);
+    };
+    requestAnimationFrame(animateBg);
+  }, []);
 
   return (
     <div className="w-screen h-screen relative overflow-hidden bg-slate-50">
       <div
-        className={cx(
-          `absolute -left-96 -bottom-72 w-152 h-152 [background:radial-gradient(#8b5cf656_0%,transparent_70%,transparent)] transition-transform duration-[2s] ease-in`,
-          expandBlurs && `scale-[350%]`,
-        )}
-      />
+        className="absolute left-0 top-0 w-full h-full [filter:contrast(150%)_brightness(700%)] opacity-10 !bg-cover bg-center"
+        style={{
+          background: `radial-gradient(circle at ${bgCloudPosition.x}% ${bgCloudPosition.y}%, rgba(0,3,255,0.77), rgba(0,3,255,0.57), transparent), url(${NoisyGrain})`,
+        }}
+      ></div>
       <div
         className={cx(
-          `absolute left-0 -bottom-96 w-152 h-152 [background:radial-gradient(#d946ef56_0%,transparent_70%,transparent)] transition-transform duration-[2s] ease-in`,
-          expandBlurs && `scale-[350%]`,
-        )}
-      />
-      <div
-        className={cx(
-          `absolute -right-80 -bottom-80 w-152 h-152 [background:radial-gradient(#8b5cf656_0%,transparent_70%,transparent)] transition-transform duration-[2s] ease-in`,
-          expandBlurs && `scale-[350%]`,
-        )}
-      />
-      {children}
-      <div
-        className={cx(
-          `absolute top-0 left-0 w-full p-5 flex justify-center items-center transition-[opacity,transform] duration-500`,
+          `absolute top-0 left-0 w-full p-2 flex justify-center items-center transition-[opacity,transform] duration-500`,
           (currentStep === `welcome` || currentStep === `finish`) &&
             `-translate-y-16 opacity-0`,
         )}
       >
         <ProgressIndicator step={progressStep} />
       </div>
+      {children}
     </div>
   );
 };

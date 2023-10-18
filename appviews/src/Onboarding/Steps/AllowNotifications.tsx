@@ -18,21 +18,23 @@ const AllowNotifications: React.FC<Props> = ({ step }) => {
     case `allowNotifications_start`:
       return (
         <Onboarding.Centered>
-          <Onboarding.Heading>Now let’s allow notifications</Onboarding.Heading>
-          <Onboarding.Text className="mt-2 mb-8 max-w-xl" centered>
-            Gertrude sends <b>a small number of important notifications</b>, so it’s
-            important that your child sees them.
-          </Onboarding.Text>
-          <img
-            src="https://gertrude.nyc3.digitaloceanspaces.com/appview-assets/onboarding/notifications.png"
-            alt="Allow notifications"
-            className="rounded-xl mb-8 w-[580px]"
-          />
-          <Onboarding.ButtonGroup
-            primary={`Open ${systemSettingsName}`}
-            secondary={{ text: `Skip this step`, shadow: true }}
-            direction="row"
-          />
+          <Onboarding.HighContrastArea className="flex flex-col items-center">
+            <Onboarding.Heading>Now let’s allow notifications</Onboarding.Heading>
+            <Onboarding.Text className="mt-2 mb-8 max-w-xl" centered>
+              Gertrude sends <b>a small number of important notifications</b>, so it’s
+              important that your child sees them.
+            </Onboarding.Text>
+            <img
+              src="https://gertrude.nyc3.digitaloceanspaces.com/appview-assets/onboarding/notifications.png"
+              alt="Allow notifications"
+              className="rounded-xl mb-8 w-[580px]"
+            />
+            <Onboarding.ButtonGroup
+              primary={`Open ${systemSettingsName}`}
+              secondary={{ text: `Skip this step`, shadow: true }}
+              direction="row"
+            />
+          </Onboarding.HighContrastArea>
         </Onboarding.Centered>
       );
     case `allowNotifications_grant`:
@@ -48,7 +50,10 @@ const AllowNotifications: React.FC<Props> = ({ step }) => {
             <Onboarding.TextButton>click here</Onboarding.TextButton>
             {` `}to watch a short troubleshooting video.
           </InformationModal>
-          <div className="flex flex-col !ml-0">
+          <Onboarding.HighContrastArea
+            containerClassName="!ml-0"
+            className="flex flex-col"
+          >
             <Onboarding.Heading>Set notifications to “Alerts”</Onboarding.Heading>
             <Onboarding.Text className="mt-4 max-w-xl">
               We just opened the {systemSettingsName} app. Set Gertrude’s notifications to
@@ -71,7 +76,7 @@ const AllowNotifications: React.FC<Props> = ({ step }) => {
               }}
               className="mt-8"
             />
-          </div>
+          </Onboarding.HighContrastArea>
           <ExpandableImage
             fileName="allow-notifications.gif"
             width={800 / 2}
@@ -82,26 +87,28 @@ const AllowNotifications: React.FC<Props> = ({ step }) => {
     case `allowNotifications_failed`:
       return (
         <Onboarding.Centered>
-          <Onboarding.Heading>
-            <i className="fas fa-exclamation-triangle text-yellow-600 mr-4" />
-            Notifications are still not allowed
-          </Onboarding.Heading>
-          <Onboarding.Text className="mt-2">
-            Watch the short video below for more troubleshooting steps.
-          </Onboarding.Text>
-          <iframe
-            className="my-6 rounded-xl"
-            width="560"
-            height="315"
-            src="https://www.youtube-nocookie.com/embed/ytN1HhQX3xo?rel=0"
-            title="YouTube video player"
-            allowFullScreen
-          />
-          <Onboarding.ButtonGroup
-            primary="Try again"
-            secondary={{ text: `Skip for now`, shadow: true }}
-            className="w-80"
-          />
+          <Onboarding.HighContrastArea className="flex flex-col items-center">
+            <Onboarding.Heading>
+              <i className="fas fa-exclamation-triangle text-yellow-500 mr-4" />
+              Notifications are still not allowed
+            </Onboarding.Heading>
+            <Onboarding.Text className="mt-2">
+              Watch the short video below for more troubleshooting steps.
+            </Onboarding.Text>
+            <iframe
+              className="my-6 rounded-xl"
+              width="560"
+              height="315"
+              src="https://www.youtube-nocookie.com/embed/ytN1HhQX3xo?rel=0"
+              title="YouTube video player"
+              allowFullScreen
+            />
+            <Onboarding.ButtonGroup
+              direction="row"
+              primary="Try again"
+              secondary={{ text: `Skip for now`, shadow: true }}
+            />
+          </Onboarding.HighContrastArea>
         </Onboarding.Centered>
       );
   }

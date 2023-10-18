@@ -6,13 +6,13 @@ interface Props {
 }
 
 const ProgressIndicator: React.FC<Props> = ({ step }) => (
-  <div className="flex space-x-8 relative items-center">
+  <div className="flex space-x-8 relative items-center bg-slate-50/80 backdrop-blur-md p-3 rounded-3xl">
     <div
       className={cx(
         `absolute h-[3px] bg-violet-300 transition-[width] duration-1000 rounded-full`,
       )}
       style={{
-        width: `calc(${((step - 1) * 100) / 6}%)`,
+        width: `calc(${((step - 1) * 100) / 6}% - ${(step - 1) * 4}px)`,
       }}
     />
     {new Array(7).fill(null).map((_, i) => (

@@ -168,3 +168,25 @@ export const Centered: React.FC<CenteredProps> = ({
     {children}
   </div>
 );
+
+interface HighContrastAreaProps {
+  children: React.ReactNode;
+  className?: string;
+  containerClassName?: string;
+}
+
+export const HighContrastArea: React.FC<HighContrastAreaProps> = ({
+  children,
+  className,
+  containerClassName,
+}) => (
+  <div className={cx(`relative`, containerClassName)}>
+    <div
+      className="absolute w-[180%] h-[180%] -left-[40%] -top-[40%]"
+      style={{
+        background: `radial-gradient(ellipse at 50% 50%, #f8fafc, #f8fafc, transparent 70%)`,
+      }}
+    />
+    <div className={cx(`relative`, className)}>{children}</div>
+  </div>
+);

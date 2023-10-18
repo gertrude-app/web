@@ -108,13 +108,14 @@ const ConnectChild: React.FC<Props> = ({ connectionCode, request }) => {
           Next
         </Onboarding.PrimaryButton>
       </div>
-      <div
-        className={cx(
-          `absolute transition-[opacity,transform] duration-500 flex flex-col items-center border-2 p-16 rounded-3xl border-slate-200/50 border-dashed`,
+      <Onboarding.HighContrastArea
+        containerClassName={cx(
+          `absolute transition-[opacity,transform] duration-500`,
           request.case === `failed`
             ? `opacity-100`
             : `opacity-0 translate-y-12 pointer-events-none`,
         )}
+        className="flex flex-col items-center border-2 p-16 rounded-3xl border-slate-200/50 border-dashed"
       >
         <h1 className="text-3xl font-bold">Uh-oh, something went wrong</h1>
         <p className="mt-2 mb-6 text-lg text-slate-500">
@@ -125,7 +126,7 @@ const ConnectChild: React.FC<Props> = ({ connectionCode, request }) => {
           secondary={{ text: `Get help` }}
           className="w-80"
         />
-      </div>
+      </Onboarding.HighContrastArea>
     </Onboarding.Centered>
   );
 };

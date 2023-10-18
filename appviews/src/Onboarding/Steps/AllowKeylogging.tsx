@@ -19,25 +19,27 @@ const AllowKeylogging: React.FC<Props> = ({ step }) => {
   switch (step) {
     case `allowKeylogging_required`:
       return (
-        <Onboarding.Centered className="h-full flex flex-col justify-center items-center">
-          <Onboarding.Heading>Now let’s allow keylogging</Onboarding.Heading>
-          <Onboarding.Text className="mt-4 mb-8 max-w-2xl" centered>
-            Gertrude needs your permission to record what your child types
-          </Onboarding.Text>
-          <Callout heading="Good to know:" type="info">
-            <ul className="list-disc list-inside ml-2">
-              <li>You control if and when we record typing</li>
-              <li>Your child is shown when their typing is being recorded</li>
-              <li>
-                We can’t record passwords, credit card numbers, or other sensitive info
-              </li>
-            </ul>
-          </Callout>
-          <Onboarding.ButtonGroup
-            primary="Grant permission"
-            secondary={{ text: `Skip this step...`, shadow: true }}
-            className="mt-8 w-80"
-          />
+        <Onboarding.Centered>
+          <Onboarding.HighContrastArea className="flex flex-col items-center">
+            <Onboarding.Heading>Now let’s allow keylogging</Onboarding.Heading>
+            <Onboarding.Text className="mt-4 mb-8 max-w-2xl" centered>
+              Gertrude needs your permission to record what your child types
+            </Onboarding.Text>
+            <Callout heading="Good to know:" type="info">
+              <ul className="list-disc list-inside ml-2">
+                <li>You control if and when we record typing</li>
+                <li>Your child is shown when their typing is being recorded</li>
+                <li>
+                  We can’t record passwords, credit card numbers, or other sensitive info
+                </li>
+              </ul>
+            </Callout>
+            <Onboarding.ButtonGroup
+              primary="Grant permission"
+              secondary={{ text: `Skip this step...`, shadow: true }}
+              className="mt-8 w-80"
+            />
+          </Onboarding.HighContrastArea>
         </Onboarding.Centered>
       );
     case `allowKeylogging_openSysSettings`:
@@ -51,7 +53,10 @@ const AllowKeylogging: React.FC<Props> = ({ step }) => {
             you’re in that area, scroll to and click “Accessibility.” That will put you in
             the <em>same spot</em> as clicking the popup.
           </InformationModal>
-          <div className="flex flex-col !ml-0">
+          <Onboarding.HighContrastArea
+            containerClassName="!ml-0"
+            className="flex flex-col"
+          >
             <Onboarding.Heading>Open {systemSettingsName}</Onboarding.Heading>
             <Onboarding.Text className="max-w-lg mt-4">
               Just now, a system popup should have appeared that looks like this. Find it
@@ -74,7 +79,7 @@ const AllowKeylogging: React.FC<Props> = ({ step }) => {
               }}
               className="mt-8 w-80"
             />
-          </div>
+          </Onboarding.HighContrastArea>
           <ExpandableImage
             fileName="accessibility-access.png"
             width={640 / 2}
@@ -85,46 +90,51 @@ const AllowKeylogging: React.FC<Props> = ({ step }) => {
     case `allowKeylogging_grant`:
       return (
         <Onboarding.Centered>
-          <Onboarding.Heading>Allow keylogging</Onboarding.Heading>
-          <Onboarding.Text className="max-w-xl mt-4 mb-16" centered>
-            Now, in the {systemSettingsName} app, follow the steps shown below.
-          </Onboarding.Text>
+          <Onboarding.HighContrastArea className="flex flex-col items-center">
+            <Onboarding.Heading>Allow keylogging</Onboarding.Heading>
+            <Onboarding.Text className="max-w-xl mt-4 mb-16" centered>
+              Now, in the {systemSettingsName} app, follow the steps shown below.
+            </Onboarding.Text>
+          </Onboarding.HighContrastArea>
           <ExpandableImage
             fileName="allow-keylogging.png"
             width={900 / 2}
             height={650 / 2}
           />
-          <Onboarding.ButtonGroup
-            direction="row"
-            primary="Done"
-            secondary={{ text: `Help, I'm having trouble...`, shadow: true }}
-            className="mt-8"
-          />
+          <Onboarding.HighContrastArea containerClassName="-m-12 -mt-4" className="p-12">
+            <Onboarding.ButtonGroup
+              direction="row"
+              primary="Done"
+              secondary={{ text: `Help, I'm having trouble...`, shadow: true }}
+            />
+          </Onboarding.HighContrastArea>
         </Onboarding.Centered>
       );
     case `allowKeylogging_failed`:
       return (
         <Onboarding.Centered>
-          <Onboarding.Heading className="mb-2">
-            <i className="fas fa-exclamation-triangle text-yellow-600 mr-4" />
-            Keylogging permission not granted
-          </Onboarding.Heading>
-          <Onboarding.Text className="max-w-2xl" centered>
-            Watch the short video below for troubleshooting steps:
-          </Onboarding.Text>
-          <iframe
-            className="my-6 rounded-xl"
-            width="560"
-            height="315"
-            src="https://www.youtube-nocookie.com/embed/ytN1HhQX3xo?rel=0"
-            title="YouTube video player"
-            allowFullScreen
-          />
-          <Onboarding.ButtonGroup
-            primary="Try recheck"
-            secondary={{ text: `Skip this for now...`, shadow: true }}
-            className="w-80"
-          />
+          <Onboarding.HighContrastArea className="flex flex-col items-center">
+            <Onboarding.Heading className="mb-2">
+              <i className="fas fa-exclamation-triangle text-yellow-500 mr-4" />
+              Keylogging permission not granted
+            </Onboarding.Heading>
+            <Onboarding.Text className="max-w-2xl" centered>
+              Watch the short video below for troubleshooting steps:
+            </Onboarding.Text>
+            <iframe
+              className="my-6 rounded-xl"
+              width="560"
+              height="315"
+              src="https://www.youtube-nocookie.com/embed/ytN1HhQX3xo?rel=0"
+              title="YouTube video player"
+              allowFullScreen
+            />
+            <Onboarding.ButtonGroup
+              primary="Try recheck"
+              secondary={{ text: `Skip this for now...`, shadow: true }}
+              className="w-80"
+            />
+          </Onboarding.HighContrastArea>
         </Onboarding.Centered>
       );
   }
