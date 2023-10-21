@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
 import Callout from '../Callout';
-import ExpandableImage from '../ExpandableImage';
+import ExpandableContent from '../ExpandableContent';
 import * as Onboarding from '../UtilityComponents';
+import assets from '../cdn-assets';
 import OnboardingContext from '../OnboardingContext';
 import InformationModal from '../InformationModal';
 
@@ -15,7 +16,7 @@ interface Props {
 
 const AllowScreenshots: React.FC<Props> = ({ step }) => {
   const [showModal, setShowModal] = useState(false);
-  const { systemSettingsName, emit } = useContext(OnboardingContext);
+  const { systemSettingsName, os, currentStep, emit } = useContext(OnboardingContext);
   switch (step) {
     case `allowScreenshots_required`:
       return (
@@ -25,7 +26,7 @@ const AllowScreenshots: React.FC<Props> = ({ step }) => {
           </Onboarding.Heading>
           <Onboarding.Text className="mt-4 mb-8 max-w-2xl" centered>
             Gertrude needs your permission to record the screen, so it can take
-            screenshots of your child's activity.
+            screenshots of your child’s activity.
           </Onboarding.Text>
           <Callout heading="Good to know:" type="info">
             <ul className="list-disc list-inside ml-2">
@@ -51,7 +52,12 @@ const AllowScreenshots: React.FC<Props> = ({ step }) => {
             &amp; Security.” Once you’re in that area, scroll down and select “Screen
             Recording” then follow the steps shown in the animated image below this popup.
             If you’re still stuck,{` `}
-            <Onboarding.TextButton onClick={() => emit({ case: `primaryBtnClicked` })}>
+            <Onboarding.TextButton
+              onClick={() => {
+                setShowModal(false);
+                emit({ case: `primaryBtnClicked` });
+              }}
+            >
               click here
             </Onboarding.TextButton>
             {` `} to watch a short troubleshooting video. Or, it’s OK to skip this step
@@ -76,8 +82,8 @@ const AllowScreenshots: React.FC<Props> = ({ step }) => {
               Help, I’m stuck...
             </Onboarding.SecondaryButton>
           </div>
-          <ExpandableImage
-            fileName="allow-screen-recording.gif"
+          <ExpandableContent
+            asset={assets.osImg(os, `allow-screen-recording.gif`)}
             width={800 / 1.9}
             height={600 / 1.9}
           />
@@ -112,13 +118,16 @@ const AllowScreenshots: React.FC<Props> = ({ step }) => {
           <Onboarding.Text className="mt-2">
             Watch the short video below for more troubleshooting steps.
           </Onboarding.Text>
-          <iframe
-            className="my-6 rounded-xl"
-            width="560"
-            height="315"
-            src="https://www.youtube-nocookie.com/embed/ytN1HhQX3xo?rel=0"
-            title="YouTube video player"
-            allowFullScreen
+          <ExpandableContent
+            width={640 * 0.8}
+            height={360 * 0.8}
+            asset={assets.osVideo(
+              os,
+              `troubleshoot-screen-recording`,
+              currentStep === `allowScreenshots_failed`,
+            )}
+            className="mt-4 mb-6"
+            showInstructions={false}
           />
           <Onboarding.ButtonGroup
             primary="Try again"

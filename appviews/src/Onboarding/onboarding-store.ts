@@ -23,7 +23,6 @@ export type OnboardingStep =
   | 'allowScreenshots_failed'
   | 'allowScreenshots_success'
   | 'allowKeylogging_required'
-  | 'allowKeylogging_openSysSettings'
   | 'allowKeylogging_grant'
   | 'allowKeylogging_failed'
   | 'installSysExt_explain'
@@ -66,7 +65,11 @@ export type AppEvent =
   | { case: 'chooseDemoteAdminClicked' };
 // end codegen
 
-export type ViewState = { connectionCode: string };
+export type ViewState = {
+  connectionCode: string;
+  receivedAppState: boolean;
+  didResume: boolean;
+};
 export type ViewAction = { type: 'connectionCodeUpdated'; code: string };
 
 export type Action = ActionOf<AppState, AppEvent, ViewAction>;
@@ -82,6 +85,8 @@ export class OnboardingStore extends Store<AppState, AppEvent, ViewState, ViewAc
       currentUser: { id: 501, name: ``, isAdmin: false },
       users: [],
       connectionCode: ``,
+      receivedAppState: false,
+      didResume: false,
     };
   }
 
@@ -93,7 +98,13 @@ export class OnboardingStore extends Store<AppState, AppEvent, ViewState, ViewAc
       case `connectionCodeUpdated`:
         return { ...state, connectionCode: action.code };
       case `receivedUpdatedAppState`:
-        return { ...state, ...action.appState };
+        return {
+          ...state,
+          ...action.appState,
+          didResume:
+            state.receivedAppState === false && action.appState.step !== `welcome`,
+          receivedAppState: true,
+        };
       case `appEventEmitted`:
         switch (action.event.case) {
           case `connectChildSubmitted`:

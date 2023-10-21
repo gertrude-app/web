@@ -23,6 +23,8 @@ export const Welcome: Story = props({
     { id: 502, name: `Suzy`, isAdmin: false },
   ],
   connectionCode: ``,
+  didResume: false,
+  receivedAppState: true,
 });
 
 export const ConfirmGertrudeAcct: Story = props({
@@ -147,11 +149,6 @@ export const AllowScreenshotsFailed: Story = props({
 export const AllowKeyloggingRequired: Story = props({
   ...Welcome.args,
   step: `allowKeylogging_required`,
-});
-
-export const AllowKeyloggingOpenSettings: Story = props({
-  ...Welcome.args,
-  step: `allowKeylogging_openSysSettings`,
 });
 
 export const AllowKeyloggingGrant: Story = props({

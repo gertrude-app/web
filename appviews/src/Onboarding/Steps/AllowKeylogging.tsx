@@ -1,28 +1,51 @@
 import React, { useContext, useState } from 'react';
 import Callout from '../Callout';
-import ExpandableImage from '../ExpandableImage';
+import ExpandableContent from '../ExpandableContent';
 import * as Onboarding from '../UtilityComponents';
+import assets from '../cdn-assets';
 import OnboardingContext from '../OnboardingContext';
 import InformationModal from '../InformationModal';
+import TellMeMoreButton from '../TellMeMoreButton';
 
 interface Props {
-  step:
-    | 'allowKeylogging_required'
-    | 'allowKeylogging_openSysSettings'
-    | 'allowKeylogging_grant'
-    | 'allowKeylogging_failed';
+  step: 'allowKeylogging_required' | 'allowKeylogging_grant' | 'allowKeylogging_failed';
 }
 
 const AllowKeylogging: React.FC<Props> = ({ step }) => {
-  const { systemSettingsName, emit } = useContext(OnboardingContext);
+  const { systemSettingsName, os, currentStep, emit } = useContext(OnboardingContext);
   const [showModal, setShowModal] = useState(false);
   switch (step) {
     case `allowKeylogging_required`:
       return (
         <Onboarding.Centered className="h-full flex flex-col justify-center items-center">
+          <InformationModal open={showModal} setOpen={setShowModal}>
+            Having a record of everything your child types can be a powerful form of
+            accountability and oversight for you as the parent. We’ll only{` `}
+            <b>
+              <i>use </i>
+            </b>
+            this permission if you enable it from the parents website, but it’s important
+            that we <i>have the permission ready,</i> so that at any time and from
+            anywhere you can turn it on. For example, if your child requests a temporary
+            filter suspension, you can instruct Gertrude from wherever you are to record
+            their typing <i>only during the filter suspension,</i> provided the permission
+            has already been granted.
+          </InformationModal>
           <Onboarding.Heading>Now let’s allow keylogging</Onboarding.Heading>
-          <Onboarding.Text className="mt-4 mb-8 max-w-2xl" centered>
-            Gertrude needs your permission to record what your child types
+          <Onboarding.Text className="mt-4 mb-8 max-w-3xl" centered>
+            Gertrude needs your permission to record what your child types.
+            <TellMeMoreButton
+              onClick={() => {
+                setShowModal(true);
+                emit({
+                  case: `infoModalOpened`,
+                  step: `allowKeylogging_required`,
+                  detail: `why?`,
+                });
+              }}
+            >
+              Why?
+            </TellMeMoreButton>
           </Onboarding.Text>
           <Callout heading="Good to know:" type="info">
             <ul className="list-disc list-inside ml-2">
@@ -40,7 +63,7 @@ const AllowKeylogging: React.FC<Props> = ({ step }) => {
           />
         </Onboarding.Centered>
       );
-    case `allowKeylogging_openSysSettings`:
+    case `allowKeylogging_grant`:
       return (
         <Onboarding.Centered className="space-x-12" direction="row">
           <InformationModal open={showModal} setOpen={setShowModal}>
@@ -49,14 +72,14 @@ const AllowKeylogging: React.FC<Props> = ({ step }) => {
             Apple icon () in the far upper left corner of your screen, choose “
             {systemSettingsName}...” and then search for “Privacy &amp; Security.” Once
             you’re in that area, scroll to and click “Accessibility.” That will put you in
-            the <em>same spot</em> as clicking the popup.
+            the <em>same spot</em> as clicking the popup. Still stuck? Just click “Done”
+            and you’ll be able to watch a short troubleshooting video.
           </InformationModal>
           <div className="flex flex-col !ml-0">
-            <Onboarding.Heading>Open {systemSettingsName}</Onboarding.Heading>
+            <Onboarding.Heading>Allow keylogging</Onboarding.Heading>
             <Onboarding.Text className="max-w-lg mt-4">
-              Just now, a system popup should have appeared that looks like this. Find it
-              and click{` `}
-              <b>Open {systemSettingsName}.</b>
+              Just now, a system popup should have appeared. Find it and click{` `}
+              <b>Open {systemSettingsName},</b> then toggle to grant permission.
             </Onboarding.Text>
             <Onboarding.ButtonGroup
               primary="Done"
@@ -67,7 +90,7 @@ const AllowKeylogging: React.FC<Props> = ({ step }) => {
                   setShowModal(true);
                   emit({
                     case: `infoModalOpened`,
-                    step: `allowKeylogging_openSysSettings`,
+                    step: `allowKeylogging_grant`,
                     detail: `noPopup`,
                   });
                 },
@@ -75,30 +98,10 @@ const AllowKeylogging: React.FC<Props> = ({ step }) => {
               className="mt-8 w-80"
             />
           </div>
-          <ExpandableImage
-            fileName="accessibility-access.png"
-            width={640 / 2}
-            height={490 / 2}
-          />
-        </Onboarding.Centered>
-      );
-    case `allowKeylogging_grant`:
-      return (
-        <Onboarding.Centered>
-          <Onboarding.Heading>Allow keylogging</Onboarding.Heading>
-          <Onboarding.Text className="max-w-xl mt-4 mb-16" centered>
-            Now, in the {systemSettingsName} app, follow the steps shown below.
-          </Onboarding.Text>
-          <ExpandableImage
-            fileName="allow-keylogging.png"
-            width={900 / 2}
-            height={650 / 2}
-          />
-          <Onboarding.ButtonGroup
-            direction="row"
-            primary="Done"
-            secondary={{ text: `Help, I'm having trouble...`, shadow: true }}
-            className="mt-8"
+          <ExpandableContent
+            asset={assets.osImg(os, `allow-keylogging.gif`)}
+            width={640 / 1.7}
+            height={490 / 1.7}
           />
         </Onboarding.Centered>
       );
@@ -112,13 +115,16 @@ const AllowKeylogging: React.FC<Props> = ({ step }) => {
           <Onboarding.Text className="max-w-2xl" centered>
             Watch the short video below for troubleshooting steps:
           </Onboarding.Text>
-          <iframe
-            className="my-6 rounded-xl"
-            width="560"
-            height="315"
-            src="https://www.youtube-nocookie.com/embed/ytN1HhQX3xo?rel=0"
-            title="YouTube video player"
-            allowFullScreen
+          <ExpandableContent
+            width={640 * 0.8}
+            height={360 * 0.8}
+            asset={assets.osVideo(
+              os,
+              `troubleshoot-keylogging`,
+              currentStep === `allowKeylogging_failed`,
+            )}
+            className="mt-4 mb-6"
+            showInstructions={false}
           />
           <Onboarding.ButtonGroup
             primary="Try recheck"

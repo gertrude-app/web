@@ -7,9 +7,10 @@ import OnboardingContext from './OnboardingContext';
 
 interface Props {
   children: React.ReactNode;
+  ready: boolean;
 }
 
-const StepSwitcher: React.FC<Props> = ({ children }) => {
+const StepSwitcher: React.FC<Props> = ({ children, ready }) => {
   const [expandBlurs, setExpandBlurs] = useState(false);
   const { currentStep } = useContext(OnboardingContext);
   const progressStep = (() => {
@@ -33,7 +34,6 @@ const StepSwitcher: React.FC<Props> = ({ children }) => {
       case `allowScreenshots_failed`:
         return 5;
       case `allowKeylogging_required`:
-      case `allowKeylogging_openSysSettings`:
       case `allowKeylogging_grant`:
       case `allowKeylogging_failed`:
         return 6;
@@ -49,6 +49,10 @@ const StepSwitcher: React.FC<Props> = ({ children }) => {
       }, 500);
     }
   }, [currentStep]);
+
+  // we can't render until we know we've gotten a real step from
+  // the app, or else we'll flash the welcome screen on resume
+  if (!ready) return null;
 
   return (
     <div className="w-screen h-screen relative overflow-hidden bg-slate-50">

@@ -11,14 +11,15 @@ interface Props {
 
 const ConnectChild: React.FC<Props> = ({ connectionCode, request }) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { currentStep, emit, dispatch } = useContext(OnboardingContext);
+  const { currentStep, emit, dispatch, os } = useContext(OnboardingContext);
   const codeValid = connectionCode.match(/^\d{6}$/) !== null;
 
   useEffect(() => {
-    if (currentStep === `connectChild`) {
+    // catalina and big sur both showed wonky layout issues, caused by the focus
+    if (currentStep === `connectChild` && os === `venturaOrLater`) {
       inputRef.current?.focus({ preventScroll: true });
     }
-  });
+  }, [currentStep, os]);
 
   useEffect(() => {
     const listener: (event: KeyboardEvent) => void = (event: KeyboardEvent) => {
@@ -42,7 +43,7 @@ const ConnectChild: React.FC<Props> = ({ connectionCode, request }) => {
       >
         <h1 className="text-3xl font-bold">Connect a child</h1>
         <p className="text-lg text-slate-500 mt-4">
-          Enter the 6-digit connection code from the Gertrude parent's site:
+          Enter the 6-digit connection code from the Gertrude parent’s site:
         </p>
         <div className="flex mt-8 space-x-4">
           <input
@@ -98,7 +99,7 @@ const ConnectChild: React.FC<Props> = ({ connectionCode, request }) => {
       >
         <h1 className="text-3xl font-bold">Success!</h1>
         <p className="mt-2 mb-6 text-lg text-slate-500">
-          You've connected this computer to the child{` `}
+          You’ve connected this computer to the child{` `}
           <span className="font-medium text-slate-600">
             {request.case === `succeeded` && request.payload}
           </span>

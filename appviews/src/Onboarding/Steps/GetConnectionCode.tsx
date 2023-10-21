@@ -1,13 +1,14 @@
 import React, { useState, useContext } from 'react';
-import ExpandableImage from '../ExpandableImage';
+import ExpandableContent from '../ExpandableContent';
 import * as Onboarding from '../UtilityComponents';
 import OnboardingContext from '../OnboardingContext';
+import assets from '../cdn-assets';
 import InformationModal from '../InformationModal';
 import QRCode from '../QRCode';
 
 const GetConnectionCode: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
-  const { emit } = useContext(OnboardingContext);
+  const { emit, currentStep } = useContext(OnboardingContext);
   return (
     <Onboarding.Centered direction="row" className="space-x-12">
       <InformationModal open={showModal} setOpen={setShowModal}>
@@ -21,8 +22,8 @@ const GetConnectionCode: React.FC = () => {
               computer.
             </p>
             <p>
-              Aim your phone's camera at the QR code to navigate to the right screen to
-              get this code, or to create a child if you haven't already.
+              Aim your phone’s camera at the QR code to navigate to the right screen to
+              get this code, or to create a child if you haven’t already.
             </p>
           </div>
           <QRCode url="gertrude.app/a-c" />
@@ -51,10 +52,13 @@ const GetConnectionCode: React.FC = () => {
           }}
         />
       </div>
-      <ExpandableImage
-        fileName="get-connection-code.png"
-        width={682 / 2}
-        height={443 / 2}
+      <ExpandableContent
+        asset={assets.video(
+          `get-connection-code`,
+          currentStep === `getChildConnectionCode`,
+        )}
+        width={640 * 0.5}
+        height={360 * 0.5}
       />
     </Onboarding.Centered>
   );
