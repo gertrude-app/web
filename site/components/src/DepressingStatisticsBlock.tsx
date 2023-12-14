@@ -24,21 +24,23 @@ const DepressingStatisticsBlock: React.FC = () => {
   }, 343);
 
   return (
-    <div className="bg-slate-900 px-20 pt-40 pb-40 flex items-center flex-col gap-20">
-      <div className="flex justify-center gap-20 relative">
+    <div className="bg-slate-900 px-8 md:px-12 lg:px-20 py-24 md:py-32 lg:py-40 flex items-center flex-col gap-20">
+      <div className="flex flex-col 2xl:flex-row justify-center items-center 2xl:items-start gap-12 lg:gap-20 relative">
         <div className="">
           <h2
             className={cx(
-              `text-[120px] leading-[124px] font-bold w-fit [background-image:radial-gradient(at_top_left,white,transparent_50%),radial-gradient(at_center_150px,#d946ef,transparent_60%),linear-gradient(#8b5cf6,#8b5cf6)] bg-clip-text text-transparent`,
+              `text-7xl md:text-8xl lg:text-[120px] lg:leading-[124px] font-bold w-fit [background-image:radial-gradient(at_top_left,white,transparent_50%),radial-gradient(at_center_150px,#d946ef,transparent_60%),linear-gradient(#8b5cf6,#8b5cf6)] bg-clip-text text-transparent text-center 2xl:text-left`,
             )}
           >
-            A losing
-            <br />
-            game
+            A losing game
           </h2>
         </div>
-        <div className="flex flex-col">
-          <p className={cx(`text-2xl text-violet-300 max-w-2xl mb-20`)}>
+        <div className="flex flex-col items-center 2xl:items-start">
+          <p
+            className={cx(
+              `text-xl md:text-2xl text-violet-300 max-w-2xl mb-20 text-center 2xl:text-left`,
+            )}
+          >
             Most internet safety tools try to block{` `}
             <span className="font-bold text-violet-200">specific categories</span> of the
             internet. With{` `}
@@ -48,35 +50,63 @@ const DepressingStatisticsBlock: React.FC = () => {
             websites.
           </p>
           <TotalWebsitesCounter />
-          <span className="text-violet-300 text-3xl self-end mt-2">
+          <span className="text-violet-300 text-xl xs:text-2xl sm:text-3xl 2xl:self-end mt-1 xs:mt-2 sm:mt-4 2xl:mt-2">
             websites on the internet
           </span>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-8 max-w-[1500px]">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 max-w-[1500px] -mx-6 xs:mx-0">
         <Statistic
           statistic={websitesThisWeek}
-          label={<span>New websites created this week</span>}
-          className="col-span-2"
+          label={
+            <span>
+              New websites created <Bold>this week</Bold>
+            </span>
+          }
+          className="lg:col-span-2"
         />
         <Statistic
           statistic={`37%`}
-          label={<span>Of all websites on the internet are porn</span>}
-          className="row-span-2"
+          label={
+            <span>
+              Of all websites on the internet <Bold>are porn</Bold>
+            </span>
+          }
+          className="lg:row-span-2"
         />
         <Statistic
           statistic={websitesThisHour}
-          label={<span>New websites in the last hour</span>}
+          label={
+            <span>
+              New websites in the <Bold>last hour</Bold>
+            </span>
+          }
         />
         <Statistic
           statistic={websitesToday}
-          label={<span>New websites created in the last 24 hours</span>}
+          label={
+            <span>
+              New websites created in the <Bold>last 24 hours</Bold>
+            </span>
+          }
         />
         <Statistic
           statistic={websitesSinceVisitingSite}
-          label={<span>New websites created since you visited this site</span>}
+          label={
+            <span>
+              New websites created since you visited <Bold>this site</Bold>
+            </span>
+          }
+          className="lg:col-span-2 xl:col-span-1"
         />
-        <Statistic statistic={3} label={<span>New websites created every second</span>} />
+        <Statistic
+          statistic={3}
+          label={
+            <span>
+              New websites created <Bold>every second</Bold>
+            </span>
+          }
+        />
       </div>
     </div>
   );
@@ -95,7 +125,7 @@ const TotalWebsitesCounter: React.FC = () => {
     setTotalWebsites(totalWebsites + 1);
   }, 333);
   return (
-    <div className="text-white text-9xl font-mono font-bold flex overflow-hidden">
+    <div className="text-white text-5xl xs:text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-mono font-bold flex overflow-hidden">
       {totalWebsites
         .toLocaleString()
         .split(``)
@@ -104,7 +134,12 @@ const TotalWebsitesCounter: React.FC = () => {
           return (
             <div
               key={index}
-              className={cx(`h-32 relative`, isComma ? `w-16` : `w-[72px]`)}
+              className={cx(
+                `relative`,
+                isComma
+                  ? `!-left-2 xs:!-left-3 md:!-left-3 lg:!-left-2 w-4 xs:w-5 md:w-10 lg:w-14`
+                  : `w-[32px] xs:w-[40px] sm:w-[48px] md:w-[60px] lg:w-[72px]`,
+              )}
             >
               {isComma
                 ? digit
@@ -138,10 +173,16 @@ interface StatisticProps {
 }
 
 const Statistic: React.FC<StatisticProps> = ({ statistic, label, className }) => (
-  <div className={cx(`p-12 rounded-3xl bg-slate-800`, className)}>
-    <h3 className="text-5xl font-mono font-bold text-white">
+  <div className={cx(`p-8 lg:p-10 2xl:p-12 rounded-3xl bg-slate-800`, className)}>
+    <h3 className="text-4xl xs:text-5xl font-mono font-bold text-white">
       {typeof statistic === `string` ? statistic : statistic.toLocaleString()}
     </h3>
-    <p className="text-violet-300 text-xl mt-4">{label}</p>
+    <p className="text-violet-300 text-xl mt-2 xs:mt-4">{label}</p>
   </div>
+);
+
+const Bold: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <span className="font-semibold bg-gradient-to-r from-violet-100 to-fuchsia-300 bg-clip-text text-transparent italic">
+    {children}
+  </span>
 );

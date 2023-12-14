@@ -17,6 +17,35 @@ export function useInterval(callback: () => void, delay: number): void {
   }, [delay]);
 }
 
+export function useWindowDimensions(): { width: number; height: number } {
+  const [width, setWidth] = useState(window.innerWidth);
+  const [height, setHeight] = useState(window.innerHeight);
+
+  useEffect(() => {
+    const debouncedHandler = debounce(() => {
+      setWidth(window.innerWidth);
+      setHeight(window.innerHeight);
+    }, 10);
+    window.addEventListener(`resize`, debouncedHandler);
+    return () => window.removeEventListener(`resize`, debouncedHandler);
+  }, []);
+
+  return { width, height };
+}
+
+function debounce(fn: () => unknown, ms: number): () => void {
+  let timer: ReturnType<typeof setTimeout> | undefined = undefined;
+  return () => {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {
+      timer = undefined;
+      fn();
+    }, ms);
+  };
+}
+
 export function useIntersectionObserver(options: IntersectionObserverInit): {
   intersected: boolean;
   ref: React.MutableRefObject<null>;

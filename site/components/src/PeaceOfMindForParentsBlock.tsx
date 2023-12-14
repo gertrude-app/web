@@ -2,27 +2,49 @@ import React from 'react';
 import cx from 'classnames';
 import Link from 'next/link';
 import { RocketLaunchIcon, VideoCameraIcon } from '@heroicons/react/24/outline';
-import { useIntersectionObserver } from '../../app/lib/hooks';
+import {
+  useIntersectionObserver,
+  useScrollY,
+  useWindowDimensions,
+} from '../../app/lib/hooks';
 import WebsiteGraphic from './WebsiteGraphic';
 
 const PeaceOfMindForParentsBlock: React.FC = () => {
   const { intersected, ref: illustration } = useIntersectionObserver({ threshold: 1 });
+  const scrollY = useScrollY();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   return (
-    <div className="bg-fuchsia-500 px-20 py-28 pb-48 flex gap-16 items-center justify-center">
-      <div className="flex-grow max-w-3xl relative">
-        <h1 className={cx(`text-6xl font-semibold text-white`)}>
+    <div className="bg-fuchsia-500 px-6 sm:px-8 xs:px-12 md:px-20 py-28 pb-64 min-[1450px]:pb-48 flex flex-col min-[1450px]:flex-row gap-80 min-[1450px]:gap-16 items-center justify-center">
+      <div
+        className="flex-grow max-w-3xl sticky top-[calc(50vh-200px)] min-[1450px]:top-0 min-[1450px]:relative flex flex-col items-center min-[1450px]:items-start"
+        style={{
+          transform:
+            windowWidth < 1450
+              ? `scale(${Math.max(2 - Math.max(scrollY / windowHeight, 1), 0.5)})`
+              : ``,
+          filter:
+            windowWidth < 1450
+              ? `blur(${Math.max(0, scrollY - windowHeight) / 10}px)`
+              : ``,
+        }}
+      >
+        <h1
+          className={cx(
+            `text-4xl xs:text-5xl md:text-6xl font-semibold text-white text-center min-[1450px]:text-left`,
+          )}
+        >
           Peace of mind for parents
         </h1>
-        <p className="mt-8 text-white/80 text-2xl leading-[1.5em]">
+        <p className="mt-8 text-white/80 text-lg xs:text-xl md:text-2xl leading-[1.5em] text-center min-[1450px]:text-left">
           Gertrude lets you block the entire internet, only unlocking the portions you
           choose. Keep your kids only and exactly where you want them to be online. Plus,
           review screenshots and keystrokes of their activity from your own computer or
           phone. Mac parental controls have never been this good.
         </p>
-        <div className="flex gap-6 mt-12">
+        <div className="flex flex-col md:flex-row gap-6 mt-12 self-stretch sm:self-center min-[1450px]:self-start">
           <Link
             href="https://parents.gertrude.app/signup"
-            className="bg-white px-8 py-4 rounded-3xl flex items-center gap-4"
+            className="bg-white px-6 xs:px-8 py-4 rounded-3xl flex items-center justify-center gap-4"
           >
             <RocketLaunchIcon className="w-8 h-8 text-violet-600" />
             <span className="w-fit bg-gradient-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent font-semibold text-2xl">
@@ -31,7 +53,7 @@ const PeaceOfMindForParentsBlock: React.FC = () => {
           </Link>
           <Link
             href="https://parents.gertrude.app/signup"
-            className="bg-white/10 px-8 py-4 rounded-3xl flex items-center gap-4 text-white text-2xl font-semibold"
+            className="bg-white/10 px-6 xs:px-8 py-4 rounded-3xl flex items-center justify-center gap-4 text-white text-2xl font-semibold"
           >
             <VideoCameraIcon className="w-8 h-8" />
             Watch demo video
@@ -40,9 +62,9 @@ const PeaceOfMindForParentsBlock: React.FC = () => {
       </div>
       <div
         ref={illustration}
-        className="flex-grow relative h-112 flex justify-center items-center max-w-[640px] min-w-[600px]"
+        className="flex-grow relative h-112 flex justify-center items-center max-w-[640px] min-w-[600px] scale-[55%] xs:scale-75 sm:scale-90 md:scale-100"
       >
-        <div className="w-176 h-176 [background:radial-gradient(rgb(255_255_255/0.5),transparent_70%)]" />
+        <div className="w-176 h-176 [background:radial-gradient(rgb(255_255_255/0.5),transparent_70%)] hidden min-[1450px]:block" />
         <WebsiteGraphic
           variant={1}
           initiallyAllowed={true}
