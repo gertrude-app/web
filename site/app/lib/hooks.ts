@@ -49,3 +49,17 @@ export function useIntersectionObserver(options: IntersectionObserverInit): {
 
   return { intersected, ref };
 }
+
+export function useScrollY(): number {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = (): void => {
+      setScrollY(window.scrollY);
+    };
+    window.addEventListener(`scroll`, handleScroll);
+    return () => window.removeEventListener(`scroll`, handleScroll);
+  }, [scrollY]);
+
+  return scrollY;
+}

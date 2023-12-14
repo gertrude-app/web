@@ -7,7 +7,7 @@ const Document: React.FC<{ ctx: DocumentContext }> = (ctx) => {
   return (
     <Html lang={lang} className="[font-feature-settings:'ss01'] js-focus-visible">
       <Head />
-      <body>
+      <body className="bg-violet-500">
         <Main />
         <NextScript />
       </body>
