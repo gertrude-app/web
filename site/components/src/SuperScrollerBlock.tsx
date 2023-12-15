@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import cx from 'classnames';
 import { useIntersectionObserver } from '../../app/lib/hooks';
 import SuperScrollerIllustration from './SuperScrollerIllusration';
 
@@ -82,8 +83,16 @@ const SuperScrollerBlock: React.FC = () => {
           consectetur cupidatat.
         </Step>
       </div>
-      <div className="w-1/2 sticky top-0 border-l border-slate-200 flex justify-center items-center h-screen overflow-hidden">
+      <div className="w-1/2 sticky top-0 flex justify-center items-center h-screen overflow-hidden">
         <SuperScrollerIllustration step={step} />
+        <div className="h-[50px] w-full bottom-0 flex justify-center items-center gap-2 absolute">
+          <StepMarker index={1} step={step} duration={4400} />
+          <StepMarker index={2} step={step} duration={4900} />
+          <StepMarker index={3} step={step} duration={1500} />
+          <StepMarker index={4} step={step} duration={1500} />
+          <StepMarker index={5} step={step} duration={1500} />
+          <StepMarker index={6} step={step} duration={1500} />
+        </div>
       </div>
     </section>
   );
@@ -100,7 +109,7 @@ interface StepProps {
 
 const Step: React.FC<StepProps> = ({ children, title, index, intersectionRef }) => (
   <div
-    className="h-screen p-32 flex flex-col justify-center even:bg-slate-50"
+    className="h-screen p-24 flex flex-col justify-center even:bg-slate-50 rounded-[40px]"
     ref={intersectionRef}
   >
     <div className="text-2xl bg-violet-100 text-violet-500 font-bold w-10 h-10 rounded-full flex justify-center items-center">
@@ -108,5 +117,31 @@ const Step: React.FC<StepProps> = ({ children, title, index, intersectionRef }) 
     </div>
     <h2 className="text-4xl font-bold mt-6 mb-4">{title}</h2>
     <div className="text-xl text-slate-700">{children}</div>
+  </div>
+);
+
+interface StepMarkerProps {
+  index: number;
+  step: number;
+  duration: number;
+}
+
+const StepMarker: React.FC<StepMarkerProps> = ({ index, step, duration }) => (
+  <div
+    className={cx(
+      `h-4 bg-violet-100 rounded-full transition-[width] duration-500 overflow-hidden relative`,
+      index === step ? `w-20` : `w-4`,
+    )}
+  >
+    <div
+      className={cx(
+        `bg-violet-400 h-4 absolute top-0 left-0`,
+        index !== step && `opacity-0`,
+      )}
+      style={{
+        width: `${index === step ? 100 : 0}%`,
+        transition: `width ${duration}ms ease-in-out, opacity 300ms ease-in-out`,
+      }}
+    />
   </div>
 );

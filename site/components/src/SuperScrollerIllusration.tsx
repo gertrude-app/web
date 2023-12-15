@@ -41,8 +41,10 @@ const SuperScrollerIllustration: React.FC<Props> = ({ step }) => {
     <div className="w-152 h-152 flex justify-center items-center relative">
       <Logo
         className={cx(
-          `absolute transition-[top] opacity duration-500 ease-in left-48 delay-[800ms]`,
-          downloadButtonClicked ? `top-28` : `-top-[calc(50vh-150px)]`,
+          `absolute transition-[top,transform] opacity duration-500 ease-in left-48 delay-[800ms]`,
+          downloadButtonClicked
+            ? `top-28 rotate-90`
+            : `-top-[calc(50vh-150px)] -rotate-90`,
         )}
         iconOnly
         size={160}
@@ -53,7 +55,8 @@ const SuperScrollerIllustration: React.FC<Props> = ({ step }) => {
           {
             'opacity-0 translate-y-20 scale-90 bottom-0 right-0': step === 0,
             'opacity-100 scale-100 bottom-0 right-0': step === 1,
-            'opacity-20 scale-50 -bottom-40 -right-64': step === 2,
+            'opacity-20 scale-50 bottom-40 -right-64':
+              step === 2 || step === 3 || step === 4,
           },
         )}
       >
@@ -63,8 +66,8 @@ const SuperScrollerIllustration: React.FC<Props> = ({ step }) => {
         className={cx(
           `absolute transition-[opacity,transform,bottom,left] duration-500`,
           {
-            'opacity-0 scale-0 translate-y-112': step === 0 || step === 1,
-            'opacity-100 scale-100 left-0': step === 2,
+            'opacity-0 scale-0 translate-y-112 top-20': step === 0 || step === 1,
+            'opacity-100 scale-100 left-12 top-8': step === 2 || step === 3,
           },
         )}
       >
@@ -219,6 +222,7 @@ const ComputerScreen: React.FC<ComputerScreenProps> = ({
       className={cx(
         `w-4 h-4 bg-black/30 rounded-full absolute transition[opacity,top,left] duration-500 delay-[1.8s]`,
         macOpened ? `left-52 top-44` : `left-8 top-64 opacity-0`,
+        downloadButtonClicked && `!opacity-0`,
       )}
     ></div>
     <div
