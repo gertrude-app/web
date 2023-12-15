@@ -7,7 +7,7 @@ const HeroBlock: React.FC = () => {
   const scrollY = useScrollY();
 
   return (
-    <section className="bg-gradient-to-b from-violet-500 to-fuchsia-500 p-20 h-screen flex flex-col justify-center items-center relative snap-center">
+    <section className="bg-gradient-to-b from-violet-500 to-fuchsia-500 p-20 h-screen flex flex-col justify-center items-center relative snap-center -mt-20">
       <h1
         className={cx(
           `text-5xl xs:text-6xl sm:text-7xl text-center text-white font-semibold fixed px-12 xs:px-16 sm:px-20 !leading-[1.1em]`,

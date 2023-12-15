@@ -46,21 +46,31 @@ function debounce(fn: () => unknown, ms: number): () => void {
   };
 }
 
-export function useIntersectionObserver(options: IntersectionObserverInit): {
+export function useIntersectionObserver(
+  options: IntersectionObserverInit,
+  stick?: boolean,
+): {
   intersected: boolean;
   ref: React.MutableRefObject<null>;
 } {
   const ref = useRef(null);
   const [intersected, setIntersected] = useState(false);
+  const hasIntersected = useRef(false);
   const { root, rootMargin, threshold } = options;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries, observer) => {
+      (entries) => {
         entries.forEach((entry) => {
-          setIntersected(entry.isIntersecting);
-          if (entry.isIntersecting) {
-            observer.unobserve(entry.target);
+          const coords = entry.target.getBoundingClientRect();
+          if (stick && hasIntersected.current) {
+            return;
+          }
+          if (entry.isIntersecting || coords.y < 0) {
+            setIntersected(true);
+            hasIntersected.current = true;
+          } else {
+            setIntersected(false);
           }
         });
       },
@@ -74,7 +84,7 @@ export function useIntersectionObserver(options: IntersectionObserverInit): {
     return () => {
       if (cur) observer.unobserve(cur);
     };
-  }, [ref, root, rootMargin, threshold]);
+  }, [ref, root, rootMargin, threshold, stick]);
 
   return { intersected, ref };
 }
