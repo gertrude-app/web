@@ -1,10 +1,8 @@
 name: smoke
 
 on:
-  push:
   schedule:
-    # every 6 hours
-    - cron: 0 */6 * * *
+    - cron: '*/5 * * * *'
 
 jobs:
   smoke:
