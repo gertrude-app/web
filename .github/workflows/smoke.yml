@@ -1,12 +1,13 @@
 name: smoke
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'
+  push:
+  # schedule:
+  #   - cron: '* * * * *'
 
 jobs:
-  smoke:
-    name: smoke
+  smoke-test:
+    name: smoke-test
     runs-on: ubuntu-latest
     steps:
       - name: test-slack
