@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import cx from 'classnames';
 import { useIntersectionObserver } from '../../app/lib/hooks';
-import SuperScrollerIllustration from './SuperScrollerIllusration';
+import SuperScrollerIllustration from './super-scroller-illustration/SuperScrollerIllustration';
 
 const SuperScrollerBlock: React.FC = () => {
   const { ref: firstStepRef, intersected: firstStepIntersected } =
@@ -88,8 +88,8 @@ const SuperScrollerBlock: React.FC = () => {
         <div className="h-[50px] w-full bottom-0 flex justify-center items-center gap-2 absolute">
           <StepMarker index={1} step={step} duration={4400} />
           <StepMarker index={2} step={step} duration={4900} />
-          <StepMarker index={3} step={step} duration={1500} />
-          <StepMarker index={4} step={step} duration={1500} />
+          <StepMarker index={3} step={step} duration={800} />
+          <StepMarker index={4} step={step} duration={2900} />
           <StepMarker index={5} step={step} duration={1500} />
           <StepMarker index={6} step={step} duration={1500} />
         </div>
@@ -129,13 +129,13 @@ interface StepMarkerProps {
 const StepMarker: React.FC<StepMarkerProps> = ({ index, step, duration }) => (
   <div
     className={cx(
-      `h-4 bg-violet-100 rounded-full transition-[width] duration-500 overflow-hidden relative`,
-      index === step ? `w-20` : `w-4`,
+      `h-3 bg-violet-100 rounded-full transition-[width] duration-500 overflow-hidden relative`,
+      index === step ? `w-20` : `w-3`,
     )}
   >
     <div
       className={cx(
-        `bg-violet-400 h-4 absolute top-0 left-0`,
+        `bg-violet-400 h-3 absolute top-0 left-0`,
         index !== step && `opacity-0`,
       )}
       style={{

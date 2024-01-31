@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import Link from 'next/link';
-import { RocketLaunchIcon, VideoCameraIcon } from '@heroicons/react/24/outline';
+import { RocketIcon, VideoIcon } from 'lucide-react';
 import {
   useIntersectionObserver,
   useScrollY,
@@ -46,7 +46,7 @@ const PeaceOfMindForParentsBlock: React.FC = () => {
             href="https://parents.gertrude.app/signup"
             className="bg-white px-6 xs:px-8 py-4 rounded-3xl flex items-center justify-center gap-4"
           >
-            <RocketLaunchIcon className="w-8 h-8 text-violet-600" />
+            <RocketIcon className="w-8 h-8 text-violet-600" />
             <span className="w-fit bg-gradient-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent font-semibold text-2xl">
               Get started
             </span>
@@ -55,7 +55,7 @@ const PeaceOfMindForParentsBlock: React.FC = () => {
             href="https://parents.gertrude.app/signup"
             className="bg-white/10 px-6 xs:px-8 py-4 rounded-3xl flex items-center justify-center gap-4 text-white text-2xl font-semibold"
           >
-            <VideoCameraIcon className="w-8 h-8" />
+            <VideoIcon className="w-8 h-8" />
             Watch demo video
           </Link>
         </div>

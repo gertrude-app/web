@@ -1,6 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
-import { CheckIcon, NoSymbolIcon } from '@heroicons/react/24/outline';
+import { BanIcon, CheckIcon } from 'lucide-react';
 
 interface Props {
   variant: 1 | 2 | 3;
@@ -162,11 +162,12 @@ const WebsiteGraphic: React.FC<Props> = ({
           raised ? `opacity-0 backdrop-blur-none` : `opacity-100 backdrop-blur-sm`,
         )}
       />
-      <NoSymbolIcon
+      <BanIcon
         className={cx(
-          `absolute w-32 text-red-400 transition-opacity duration-300`,
+          `absolute w-32 h-32 text-red-400 transition-opacity duration-300`,
           raised && `opacity-0`,
         )}
+        strokeWidth={1.5}
       />
       <div
         className={cx(
