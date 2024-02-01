@@ -61,7 +61,7 @@ const SuperScrollerIllustration: React.FC<Props> = ({ step }) => {
   }, [step]);
 
   return (
-    <div className="w-152 h-152 flex justify-center items-center relative border">
+    <div className="w-152 h-152 flex justify-center items-center relative">
       <Logo
         className={cx(
           `absolute transition-[top,transform] opacity duration-500 ease-in left-56 delay-[800ms]`,

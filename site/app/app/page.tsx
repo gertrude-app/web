@@ -3,6 +3,7 @@
 import React from 'react';
 import {
   DepressingStatisticsBlock,
+  FeaturesBlock,
   HeroBlock,
   MainHeader,
   PeaceOfMindForParentsBlock,
@@ -17,6 +18,7 @@ const HomePage: NextPage = () => (
     <PeaceOfMindForParentsBlock />
     <DepressingStatisticsBlock />
     <SuperScrollerBlock />
+    <FeaturesBlock />
   </main>
 );
 export default HomePage;

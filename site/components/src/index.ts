@@ -3,3 +3,4 @@ export { default as MainHeader } from './MainHeader';
 export { default as PeaceOfMindForParentsBlock } from './PeaceOfMindForParentsBlock';
 export { default as DepressingStatisticsBlock } from './DepressingStatisticsBlock';
 export { default as SuperScrollerBlock } from './SuperScrollerBlock';
+export { default as FeaturesBlock } from './FeaturesBlock';
