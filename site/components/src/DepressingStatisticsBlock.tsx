@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import cx from 'classnames';
 import { useInterval } from '../../app/lib/hooks';
+import Stars from './Stars';
 
 const REF_DATE = new Date(2022, 8, 12).getTime();
 
@@ -24,91 +25,97 @@ const DepressingStatisticsBlock: React.FC = () => {
   }, 343);
 
   return (
-    <div className="bg-slate-900 px-8 md:px-12 lg:px-20 py-24 md:py-32 lg:py-40 flex items-center flex-col gap-20">
-      <div className="flex flex-col 2xl:flex-row justify-center items-center 2xl:items-start gap-12 lg:gap-20 relative">
-        <div className="">
-          <h2
-            className={cx(
-              `text-7xl md:text-8xl lg:text-[120px] lg:leading-[124px] font-bold w-fit [background-image:radial-gradient(at_top_left,white,transparent_50%),radial-gradient(at_center_150px,#d946ef,transparent_60%),linear-gradient(#8b5cf6,#8b5cf6)] bg-clip-text text-transparent text-center 2xl:text-left 2xl:max-w-xl`,
-            )}
-          >
-            A losing game
-          </h2>
+    <section className="p-8 bg-gradient-to-b from-fuchsia-500 to-white">
+      <div className="bg-slate-900 px-8 md:px-12 lg:px-20 py-24 md:py-32 lg:py-40 flex items-center flex-col gap-20 rounded-[40px] relative overflow-hidden">
+        <Stars className="absolute left-0 top-0 w-full h-80" />
+        <div className="[background:radial-gradient(#e879f933,transparent_70%)] w-176 h-176 absolute -right-80 -bottom-80" />
+        <div className="[background:radial-gradient(#e879f933,transparent_70%)] w-176 h-176 absolute -left-80 -bottom-80" />
+        <div className="[background:radial-gradient(#a78bfa33,transparent_70%)] w-176 h-176 absolute left-20 -bottom-96" />
+        <div className="flex flex-col 2xl:flex-row justify-center items-center 2xl:items-start gap-12 lg:gap-20 relative">
+          <div className="">
+            <h2
+              className={cx(
+                `text-7xl md:text-8xl lg:text-[120px] lg:leading-[124px] font-bold w-fit [background-image:radial-gradient(at_top_left,white,transparent_50%),radial-gradient(at_center_150px,#d946ef,transparent_60%),linear-gradient(#8b5cf6,#8b5cf6)] bg-clip-text text-transparent text-center 2xl:text-left 2xl:max-w-xl`,
+              )}
+            >
+              A losing game
+            </h2>
+          </div>
+          <div className="flex flex-col items-center 2xl:items-start">
+            <p
+              className={cx(
+                `text-xl md:text-2xl text-violet-300 max-w-2xl mb-20 text-center 2xl:text-left`,
+              )}
+            >
+              Most internet safety tools try to block{` `}
+              <span className="font-bold text-violet-200">specific categories</span> of
+              the internet. With{` `}
+              <span className="font-bold text-violet-200">2 billion websites,</span> and
+              tens of thousands more being added every day, it's simply impossible to
+              maintain up-to-date lists correctly categorizing even a fraction of
+              dangerous websites.
+            </p>
+            <TotalWebsitesCounter />
+            <span className="text-violet-300 text-xl xs:text-2xl sm:text-3xl 2xl:self-end mt-1 xs:mt-2 sm:mt-4 2xl:mt-2">
+              websites on the internet
+            </span>
+          </div>
         </div>
-        <div className="flex flex-col items-center 2xl:items-start">
-          <p
-            className={cx(
-              `text-xl md:text-2xl text-violet-300 max-w-2xl mb-20 text-center 2xl:text-left`,
-            )}
-          >
-            Most internet safety tools try to block{` `}
-            <span className="font-bold text-violet-200">specific categories</span> of the
-            internet. With{` `}
-            <span className="font-bold text-violet-200">2 billion websites,</span> and
-            tens of thousands more being added every day, it's simply impossible to
-            maintain up-to-date lists correctly categorizing even a fraction of dangerous
-            websites.
-          </p>
-          <TotalWebsitesCounter />
-          <span className="text-violet-300 text-xl xs:text-2xl sm:text-3xl 2xl:self-end mt-1 xs:mt-2 sm:mt-4 2xl:mt-2">
-            websites on the internet
-          </span>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 max-w-[1500px] -mx-6 xs:mx-0 z-10">
+          <Statistic
+            statistic={websitesThisWeek}
+            label={
+              <span>
+                New websites created <Bold>this week</Bold>
+              </span>
+            }
+            className="lg:col-span-2"
+          />
+          <Statistic
+            statistic={`37%`}
+            label={
+              <span>
+                Of all websites on the internet <Bold>are porn</Bold>
+              </span>
+            }
+            className="lg:row-span-2"
+          />
+          <Statistic
+            statistic={websitesThisHour}
+            label={
+              <span>
+                New websites in the <Bold>last hour</Bold>
+              </span>
+            }
+          />
+          <Statistic
+            statistic={websitesToday}
+            label={
+              <span>
+                New websites created in the <Bold>last 24 hours</Bold>
+              </span>
+            }
+          />
+          <Statistic
+            statistic={websitesSinceVisitingSite}
+            label={
+              <span>
+                New websites created since you visited <Bold>this site</Bold>
+              </span>
+            }
+            className="lg:col-span-2 xl:col-span-1"
+          />
+          <Statistic
+            statistic={3}
+            label={
+              <span>
+                New websites created <Bold>every second</Bold>
+              </span>
+            }
+          />
         </div>
       </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 max-w-[1500px] -mx-6 xs:mx-0">
-        <Statistic
-          statistic={websitesThisWeek}
-          label={
-            <span>
-              New websites created <Bold>this week</Bold>
-            </span>
-          }
-          className="lg:col-span-2"
-        />
-        <Statistic
-          statistic={`37%`}
-          label={
-            <span>
-              Of all websites on the internet <Bold>are porn</Bold>
-            </span>
-          }
-          className="lg:row-span-2"
-        />
-        <Statistic
-          statistic={websitesThisHour}
-          label={
-            <span>
-              New websites in the <Bold>last hour</Bold>
-            </span>
-          }
-        />
-        <Statistic
-          statistic={websitesToday}
-          label={
-            <span>
-              New websites created in the <Bold>last 24 hours</Bold>
-            </span>
-          }
-        />
-        <Statistic
-          statistic={websitesSinceVisitingSite}
-          label={
-            <span>
-              New websites created since you visited <Bold>this site</Bold>
-            </span>
-          }
-          className="lg:col-span-2 xl:col-span-1"
-        />
-        <Statistic
-          statistic={3}
-          label={
-            <span>
-              New websites created <Bold>every second</Bold>
-            </span>
-          }
-        />
-      </div>
-    </div>
+    </section>
   );
 };
 
@@ -173,7 +180,12 @@ interface StatisticProps {
 }
 
 const Statistic: React.FC<StatisticProps> = ({ statistic, label, className }) => (
-  <div className={cx(`p-8 lg:p-10 2xl:p-12 rounded-3xl bg-slate-800`, className)}>
+  <div
+    className={cx(
+      `p-8 lg:p-10 2xl:p-12 rounded-3xl bg-slate-800 border-slate-900 border`,
+      className,
+    )}
+  >
     <h3 className="text-4xl xs:text-5xl font-mono font-bold text-white">
       {typeof statistic === `string` ? statistic : statistic.toLocaleString()}
     </h3>

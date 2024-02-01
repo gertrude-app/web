@@ -2,6 +2,7 @@
 
 import React from 'react';
 import {
+  DefenseInDepthBlock,
   DepressingStatisticsBlock,
   FeaturesBlock,
   HeroBlock,
@@ -19,6 +20,7 @@ const HomePage: NextPage = () => (
     <DepressingStatisticsBlock />
     <SuperScrollerBlock />
     <FeaturesBlock />
+    <DefenseInDepthBlock />
   </main>
 );
 export default HomePage;

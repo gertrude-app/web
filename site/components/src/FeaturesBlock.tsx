@@ -2,7 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 
 const FeaturesBlock: React.FC = () => (
-  <section className="[background:radial-gradient(#ede9fe,white_70%)] px-20 py-40 flex flex-col items-center">
+  <section className="[background:radial-gradient(#ede9fe,white_70%)] px-20 pt-40 pb-20 flex flex-col items-center">
     <div className="grid grid-cols-3 w-full max-w-[1300px] gap-8">
       <Feature className="col-span-2">
         <h2 className="font-semibold text-3xl">Take complete control</h2>
