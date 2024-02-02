@@ -27,7 +27,7 @@ const stars = new Array(100).fill(0).map((_) => {
               left: size / 4,
               top: -size * 1.5,
             }}
-            className="absolute bg-white/50 rounded-[100%]"
+            className="absolute bg-white/40 rounded-[100%]"
           />
           <div
             style={{
@@ -36,7 +36,7 @@ const stars = new Array(100).fill(0).map((_) => {
               top: size / 4,
               left: -size * 1.5,
             }}
-            className="absolute bg-white/50 rounded-[100%]"
+            className="absolute bg-white/40 rounded-[100%]"
           />
         </>
       )}

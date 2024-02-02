@@ -2,12 +2,12 @@ import React from 'react';
 import Stars from './Stars';
 
 const DefenseInDepthBlock: React.FC = () => (
-  <section className="bg-white p-8">
-    <div className="p-28 bg-slate-900 rounded-[40px] flex flex-col items-center relative overflow-hidden">
+  <section className="bg-white p-8 pb-0">
+    <div className="p-28 bg-slate-900 rounded-t-[40px] flex flex-col items-center relative overflow-hidden">
       <Stars className="absolute left-0 top-0 w-full h-128" />
-      <div className="[background:radial-gradient(#e879f944,transparent_70%)] w-176 h-176 absolute -right-80 -bottom-80" />
-      <div className="[background:radial-gradient(#e879f944,transparent_70%)] w-176 h-176 absolute -left-80 -bottom-80" />
-      <div className="[background:radial-gradient(#a78bfa44,transparent_70%)] w-176 h-176 absolute left-20 -bottom-96" />
+      <div className="[background:radial-gradient(#e879f944,transparent_70%)] w-176 h-176 absolute -right-80 -top-80" />
+      <div className="[background:radial-gradient(#e879f944,transparent_70%)] w-176 h-176 absolute -left-80 -top-80" />
+      <div className="[background:radial-gradient(#a78bfa44,transparent_70%)] w-176 h-176 absolute left-20 -top-96" />
       <h2 className="font-bold text-7xl bg-gradient-to-r from-white to-violet-300 bg-clip-text text-transparent pt-0.5 z-10">
         Defense in depth.
       </h2>

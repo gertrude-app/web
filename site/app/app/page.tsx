@@ -9,6 +9,9 @@ import {
   MainHeader,
   PeaceOfMindForParentsBlock,
   SuperScrollerBlock,
+  TestimonialsBlock,
+  CTABlock,
+  MainFooter,
 } from '@site/components';
 import type { NextPage } from 'next';
 
@@ -21,6 +24,9 @@ const HomePage: NextPage = () => (
     <SuperScrollerBlock />
     <FeaturesBlock />
     <DefenseInDepthBlock />
+    <TestimonialsBlock />
+    <CTABlock />
+    <MainFooter />
   </main>
 );
 export default HomePage;

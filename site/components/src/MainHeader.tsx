@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import { Logo } from '@shared/components';
-import Link from 'next/link';
+import FancyLink from './FancyLink';
 
 const MainHeader: React.FC = () => (
   <header
@@ -11,20 +11,17 @@ const MainHeader: React.FC = () => (
   >
     <Logo className={cx(`transition-opacity duration-500`)} type="inverted" />
     <div className={cx(`flex gap-4 transition-opacity duration-500`)}>
-      <Link
-        className="rounded-2xl px-6 py-2 text-lg font-semibold hover:bg-white/10 transition-[background-color,transform] duration-300 active:bg-white/20 active:scale-95 text-white"
-        href="https://parents.gertrude.app/login"
-      >
+      <FancyLink href="https://parents.gertrude.app" size="sm" color="secondary" inverted>
         Log in
-      </Link>
-      <Link
-        className="bg-white rounded-2xl px-6 py-2 text-lg font-semibold text-white transition-transform hover:scale-105 active:scale-95"
+      </FancyLink>
+      <FancyLink
         href="https://parents.gertrude.app/signup"
+        size="sm"
+        color="primary"
+        inverted
       >
-        <span className="w-fit bg-gradient-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
-          Sign up
-        </span>
-      </Link>
+        Sign up
+      </FancyLink>
     </div>
   </header>
 );

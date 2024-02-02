@@ -1,6 +1,5 @@
 import React from 'react';
 import cx from 'classnames';
-import Link from 'next/link';
 import { RocketIcon, VideoIcon } from 'lucide-react';
 import {
   useIntersectionObserver,
@@ -8,6 +7,7 @@ import {
   useWindowDimensions,
 } from '../../app/lib/hooks';
 import WebsiteGraphic from './WebsiteGraphic';
+import FancyLink from './FancyLink';
 
 const PeaceOfMindForParentsBlock: React.FC = () => {
   const { intersected, ref: illustration } = useIntersectionObserver({ threshold: 1 });
@@ -42,22 +42,16 @@ const PeaceOfMindForParentsBlock: React.FC = () => {
           phone. Mac parental controls have never been this good.
         </p>
         <div className="flex flex-col md:flex-row gap-6 mt-12 self-stretch sm:self-center min-[1450px]:self-start">
-          <Link
+          <FancyLink
             href="https://parents.gertrude.app/signup"
-            className="bg-white px-6 xs:px-8 py-4 rounded-3xl flex items-center justify-center gap-4"
+            Icon={RocketIcon}
+            inverted
           >
-            <RocketIcon className="w-8 h-8 text-violet-600" />
-            <span className="w-fit bg-gradient-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent font-semibold text-2xl">
-              Get started
-            </span>
-          </Link>
-          <Link
-            href="https://parents.gertrude.app/signup"
-            className="bg-white/10 px-6 xs:px-8 py-4 rounded-3xl flex items-center justify-center gap-4 text-white text-2xl font-semibold"
-          >
-            <VideoIcon className="w-8 h-8" />
+            Get started
+          </FancyLink>
+          <FancyLink href="#" Icon={VideoIcon} color="secondary" inverted>
             Watch demo video
-          </Link>
+          </FancyLink>
         </div>
       </div>
       <div
