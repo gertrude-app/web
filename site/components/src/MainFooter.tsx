@@ -12,12 +12,12 @@ const MainFooter: React.FC = () => (
         </Link>
       </div>
       <div className="flex gap-12">
-        <ul>
+        <ul className="flex flex-col gap-1">
           <FooterLink href="/">Home</FooterLink>
           <FooterLink href="/download">Download</FooterLink>
           <FooterLink href="/contact">Contact</FooterLink>
         </ul>
-        <ul>
+        <ul className="flex flex-col gap-1">
           <FooterLink href="https://parents.gertrude.app/signup">Sign up</FooterLink>
           <FooterLink href="https://parents.gertrude.app">Log in</FooterLink>
           <FooterLink href="https://parents.gertrude.app">Documentation</FooterLink>
