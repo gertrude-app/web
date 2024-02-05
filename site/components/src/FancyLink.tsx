@@ -37,7 +37,7 @@ const FancyLink: React.FC<FancyLinkProps> = ({
     )}
     <div
       className={cx(
-        `flex items-center relative transition-[transform,background-color] duration-200 overflow-hidden`,
+        `flex items-center justify-center relative transition-[transform,background-color] duration-200 overflow-hidden`,
         {
           'group-hover:-translate-y-0.5': color === `primary`,
           'group-active:translate-y-0.5': color === `primary`,
