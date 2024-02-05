@@ -36,8 +36,8 @@ const SuperScrollerBlock: React.FC = () => {
   ]);
 
   return (
-    <section className="bg-white flex relative">
-      <div className="w-1/2">
+    <section className="bg-white flex flex-col-reverse lg:flex-row relative">
+      <div className="lg:w-5/12 xl:w-2/5 2xl:w-1/2">
         <Step index={1} title="Create an account" intersectionRef={firstStepRef}>
           Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint
           consectetur cupidatat.
@@ -83,9 +83,9 @@ const SuperScrollerBlock: React.FC = () => {
           consectetur cupidatat.
         </Step>
       </div>
-      <div className="w-1/2 sticky top-0 flex justify-center items-center h-screen overflow-hidden">
+      <div className="lg:w-7/12 xl:w-3/5 2xl:w-1/2 sticky top-0 flex justify-center items-center h-[55vh] lg:h-screen overflow-hidden [background:linear-gradient(white_90%,transparent)] to-trasnsparent lg:bg-white overflow-hidden">
         <SuperScrollerIllustration step={step} />
-        <div className="h-[50px] w-full bottom-0 flex justify-center items-center gap-2 absolute">
+        <div className="h-[50px] w-full top-0 lg:top-auto lg:bottom-0 flex justify-center items-center gap-2 absolute">
           <StepMarker index={1} step={step} duration={4400} />
           <StepMarker index={2} step={step} duration={4900} />
           <StepMarker index={3} step={step} duration={800} />
@@ -109,14 +109,14 @@ interface StepProps {
 
 const Step: React.FC<StepProps> = ({ children, title, index, intersectionRef }) => (
   <div
-    className="h-screen p-24 flex flex-col justify-center even:bg-slate-50 rounded-[40px]"
+    className="h-[55vh] lg:h-screen p-8 xs:p-12 xl:p-16 2xl:p-24 flex flex-col justify-center bg-slate-50 lg:bg-white lg:even:bg-slate-50 lg:rounded-[40px]"
     ref={intersectionRef}
   >
-    <div className="text-2xl bg-violet-100 text-violet-500 font-bold w-10 h-10 rounded-full flex justify-center items-center">
+    <div className="text-xl xs:text-2xl bg-violet-100 text-violet-500 font-bold w-8 xs:w-10 h-8 xs:h-10 rounded-full flex justify-center items-center">
       <span className="-mb-0.5">{index}</span>
     </div>
-    <h2 className="text-4xl font-bold mt-6 mb-4">{title}</h2>
-    <div className="text-xl text-slate-700">{children}</div>
+    <h2 className="text-2xl xs:text-3xl sm:text-4xl font-bold mt-6 mb-4">{title}</h2>
+    <div className="text-lg xs:text-xl text-slate-700">{children}</div>
   </div>
 );
 

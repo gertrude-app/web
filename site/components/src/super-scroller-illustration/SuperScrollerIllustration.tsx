@@ -61,13 +61,13 @@ const SuperScrollerIllustration: React.FC<Props> = ({ step }) => {
   }, [step]);
 
   return (
-    <div className="w-152 h-152 flex justify-center items-center relative">
+    <div className="w-152 h-152 flex justify-center items-center relative scale-50 lg:scale-75 xl:scale-100 shrink-0">
       <Logo
         className={cx(
-          `absolute transition-[top,transform] opacity duration-500 ease-in left-56 delay-[800ms]`,
+          `absolute transition-[top,transform,opacity] duration-500 ease-in left-56 delay-[800ms]`,
           hasHappened(`2-2_clickDownloadButton`)
             ? `top-28 rotate-90`
-            : `-top-[calc(50vh-150px)] -rotate-90`,
+            : `-top-[calc(50vh-150px)] opacity-0 -rotate-90`,
           step > 2 && `hidden`,
         )}
         iconOnly
