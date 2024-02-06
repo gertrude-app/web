@@ -25,7 +25,7 @@ const DepressingStatisticsBlock: React.FC = () => {
   }, 343);
 
   return (
-    <section className="p-8 bg-gradient-to-b from-fuchsia-500 to-white">
+    <section className="xl:p-8 bg-gradient-to-b from-fuchsia-500 to-white">
       <div className="bg-slate-900 px-8 md:px-12 lg:px-20 py-24 md:py-32 lg:py-40 flex items-center flex-col gap-20 rounded-[40px] relative overflow-hidden">
         <Stars className="absolute left-0 top-0 w-full h-176" />
         <div className="[background:radial-gradient(#e879f944,transparent_70%)] w-176 h-176 absolute -right-80 -top-80" />

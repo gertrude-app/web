@@ -4,20 +4,20 @@ import Link from 'next/link';
 import React from 'react';
 
 const MainFooter: React.FC = () => (
-  <footer className="px-20 pt-20 pb-8 gap-20 relative border-t border-violet-400 flex flex-col">
-    <div className="flex justify-between">
-      <div>
+  <footer className="px-8 sm:px-12 lg:px-20 pt-20 pb-8 gap-20 relative border-t border-violet-400 flex flex-col">
+    <div className="flex flex-col sm:flex-row justify-between">
+      <div className="self-center sm:self-start">
         <Link href="/">
           <Logo type="inverted" />
         </Link>
       </div>
-      <div className="flex gap-12">
-        <ul className="flex flex-col gap-1">
+      <div className="flex gap-12 mt-12 sm:mt-0 self-center sm:self-start">
+        <ul className="flex flex-col items-center sm:items-start gap-1">
           <FooterLink href="/">Home</FooterLink>
           <FooterLink href="/download">Download</FooterLink>
           <FooterLink href="/contact">Contact</FooterLink>
         </ul>
-        <ul className="flex flex-col gap-1">
+        <ul className="flex flex-col items-center sm:items-start gap-1">
           <FooterLink href="https://parents.gertrude.app/signup">Sign up</FooterLink>
           <FooterLink href="https://parents.gertrude.app">Log in</FooterLink>
           <FooterLink href="https://parents.gertrude.app">Documentation</FooterLink>

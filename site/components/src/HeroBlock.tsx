@@ -1,6 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon } from 'lucide-react';
 import { useScrollY } from '../../app/lib/hooks';
 
 const HeroBlock: React.FC = () => {
@@ -16,13 +16,14 @@ const HeroBlock: React.FC = () => {
           transform: `scale(${1 + scrollY / 500})`,
           filter: `blur(${scrollY / 30}px)`,
           opacity: 1 - scrollY / 500,
+          display: scrollY > 500 ? `none` : `block`,
         }}
       >
         Finally, real internet safety is possible.
       </h1>
       <div
         className={cx(
-          `absolute bottom-4 flex flex-col items-center transition-[opacity,transform] duration-500`,
+          `absolute bottom-6 flex flex-col items-center transition-[opacity,transform] duration-500`,
           scrollY !== 0 && `opacity-0 translate-y-4`,
         )}
       >
