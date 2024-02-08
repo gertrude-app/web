@@ -2,6 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import cx from 'classnames';
 import type { ArrowUpIcon } from 'lucide-react';
+import { axiforma } from '../../app/lib/fonts';
 
 type LucideIcon = typeof ArrowUpIcon;
 
@@ -24,7 +25,7 @@ const FancyLink: React.FC<FancyLinkProps> = ({
   inverted = false,
   className,
 }) => (
-  <Link href={href} className={cx(`relative group select-none`, className)}>
+  <Link href={href} className={cx(`relative group select-none`, axiforma, className)}>
     {color === `primary` && (
       <div
         className={cx(`absolute w-full h-full bg-black`, {

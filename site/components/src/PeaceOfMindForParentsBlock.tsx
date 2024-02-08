@@ -6,6 +6,7 @@ import {
   useScrollY,
   useWindowDimensions,
 } from '../../app/lib/hooks';
+import { axiforma } from '../../app/lib/fonts';
 import WebsiteGraphic from './WebsiteGraphic';
 import FancyLink from './FancyLink';
 
@@ -31,6 +32,7 @@ const PeaceOfMindForParentsBlock: React.FC = () => {
         <h1
           className={cx(
             `text-4xl xs:text-5xl md:text-6xl font-semibold text-white text-center min-[1450px]:text-left`,
+            axiforma,
           )}
         >
           Peace of mind for parents

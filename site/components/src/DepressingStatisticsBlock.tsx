@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import cx from 'classnames';
 import { useInterval } from '../../app/lib/hooks';
+import { axiforma } from '../../app/lib/fonts';
 import Stars from './Stars';
 
 const REF_DATE = new Date(2022, 8, 12).getTime();
@@ -36,6 +37,7 @@ const DepressingStatisticsBlock: React.FC = () => {
             <h2
               className={cx(
                 `text-7xl md:text-8xl lg:text-[120px] lg:leading-[124px] font-bold w-fit [background-image:radial-gradient(at_top_left,white,transparent_50%),radial-gradient(at_center_150px,#d946ef,transparent_60%),linear-gradient(#8b5cf6,#8b5cf6)] bg-clip-text text-transparent text-center 2xl:text-left 2xl:max-w-xl`,
+                axiforma,
               )}
             >
               A losing game
@@ -194,7 +196,12 @@ const Statistic: React.FC<StatisticProps> = ({ statistic, label, className }) =>
 );
 
 const Bold: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <span className="font-semibold bg-gradient-to-r from-violet-100 to-fuchsia-300 bg-clip-text text-transparent italic">
+  <span
+    className={cx(
+      `font-semibold bg-gradient-to-r from-violet-100 to-fuchsia-300 bg-clip-text text-transparent italic`,
+      axiforma,
+    )}
+  >
     {children}
   </span>
 );
