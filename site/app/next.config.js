@@ -14,8 +14,7 @@ const nextConfig = {
   ],
   experimental: {
     scrollRestoration: true,
-    appDir: true,
   },
 };
 
-module.exports = withMarkdoc(nextConfig);
+module.exports = nextConfig;
