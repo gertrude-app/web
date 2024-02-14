@@ -20,6 +20,6 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": false,
     "noUncheckedIndexedAccess": true,
-    "downlevelIteration": true
+    "skipLibCheck": true
   }
 }

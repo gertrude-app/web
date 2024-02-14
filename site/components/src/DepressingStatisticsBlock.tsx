@@ -152,7 +152,7 @@ const TotalWebsitesCounter: React.FC = () => {
             >
               {isComma
                 ? digit
-                : [...Array(10).keys()].map((i) => (
+                : new Array(10).fill(0).map((_, i) => (
                     <div
                       className={cx(`absolute transition-[top,opacity] duration-300`, {
                         'left-0 top-0': i === Number(digit),

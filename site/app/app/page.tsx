@@ -25,4 +25,5 @@ const HomePage: NextPage = () => (
     <CTABlock />
   </main>
 );
+
 export default HomePage;

@@ -379,11 +379,11 @@ importers:
         specifier: ^1.6.6
         version: 1.7.3(react-dom@18.2.0)(react@18.2.0)
       '@markdoc/markdoc':
-        specifier: 0.2.2
-        version: 0.2.2(@types/react@18.2.42)(react@18.2.0)
+        specifier: 0.4.0
+        version: 0.4.0(@types/react@18.2.42)(react@18.2.0)
       '@markdoc/next.js':
-        specifier: 0.2.2
-        version: 0.2.2(@markdoc/markdoc@0.2.2)(next@14.0.3)(react@18.2.0)
+        specifier: 0.3.7
+        version: 0.3.7(@markdoc/markdoc@0.4.0)(next@14.0.3)(react@18.2.0)
       '@shared/components':
         specifier: workspace:*
         version: link:../../shared/components
@@ -3690,8 +3690,8 @@ packages:
     resolution: {integrity: sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==}
     dev: false
 
-  /@markdoc/markdoc@0.2.2(@types/react@18.2.42)(react@18.2.0):
-    resolution: {integrity: sha512-0TiD9jmA5h5znN4lxo7HECAu3WieU5g5vUsfByeucrdR/x88hEilpt16EydFyJwJddQ/3w5HQgW7Ovy62r4cyw==}
+  /@markdoc/markdoc@0.4.0(@types/react@18.2.42)(react@18.2.0):
+    resolution: {integrity: sha512-fSh4P3Y4E7oaKYc2oNzSIJVPDto7SMzAuQN1Iyx53UxzleA6QzRdNWRxmiPqtVDaDi5dELd2yICoG91csrGrAw==}
     engines: {node: '>=14.7.0'}
     peerDependencies:
       '@types/react': '*'
@@ -3708,14 +3708,14 @@ packages:
       '@types/markdown-it': 12.2.3
     dev: false
 
-  /@markdoc/next.js@0.2.2(@markdoc/markdoc@0.2.2)(next@14.0.3)(react@18.2.0):
-    resolution: {integrity: sha512-qHCwcTwyHOHrvxmUcueL+RREhHJxef9p6MS45CxHIChV9JHBcWOJt9v++T8HCf4iCbCdnIVCcR9OYzOj3Kq7XQ==}
+  /@markdoc/next.js@0.3.7(@markdoc/markdoc@0.4.0)(next@14.0.3)(react@18.2.0):
+    resolution: {integrity: sha512-lp/J0Lfx8YPWes82HOMSDvXBfIkJxPKfEwgzGTwfFBJUGBNM1TBvchaaAzDP2X+HRORP4jNcGbJrZoXSdon0BQ==}
     peerDependencies:
       '@markdoc/markdoc': '*'
       next: '*'
       react: '*'
     dependencies:
-      '@markdoc/markdoc': 0.2.2(@types/react@18.2.42)(react@18.2.0)
+      '@markdoc/markdoc': 0.4.0(@types/react@18.2.42)(react@18.2.0)
       js-yaml: 4.1.0
       next: 14.0.3(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
