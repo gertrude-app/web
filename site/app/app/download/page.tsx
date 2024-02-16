@@ -1,14 +1,12 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FancyLink } from '@site/components';
 import { ArrowDownIcon, DownloadIcon } from 'lucide-react';
 import { AppIcon } from '@shared/components';
-import Computer from '@site/components/src/super-scroller-illustration/Computer';
 import type { NextPage } from 'next';
 import type { StaticImageData } from 'next/image';
+import FancyLink from '../../components/FancyLink';
+import Computer from '../../components/super-scroller-illustration/Computer';
 
 import Catalina from '../../public/supported-os/macos-catalina.png';
 import BigSur from '../../public/supported-os/macos-big-sur.png';

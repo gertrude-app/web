@@ -1,7 +1,9 @@
+'use client';
+
 import React, { useState } from 'react';
 import cx from 'classnames';
-import { useInterval } from '../../app/lib/hooks';
-import { axiforma } from '../../app/lib/fonts';
+import { useInterval } from '../lib/hooks';
+import { axiforma } from '../lib/fonts';
 import Stars from './Stars';
 
 const REF_DATE = new Date(2022, 8, 12).getTime();

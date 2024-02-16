@@ -1,11 +1,9 @@
-'use client';
-
 import React from 'react';
 import cx from 'classnames';
 import { axiforma } from 'lib/fonts';
-import { FancyLink } from '@site/components';
 import { SendIcon } from 'lucide-react';
 import type { NextPage } from 'next';
+import FancyLink from '../../components/FancyLink';
 
 const ContactPage: NextPage = () => (
   <div className="flex justify-center items-center px-0 xs:px-8 py-8 sm:px-12 sm:py-12 md:px-20 md:py-20">

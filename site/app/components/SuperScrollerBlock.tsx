@@ -1,7 +1,9 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import cx from 'classnames';
-import { useIntersectionObserver } from '../../app/lib/hooks';
-import { axiforma } from '../../app/lib/fonts';
+import { useIntersectionObserver } from '../lib/hooks';
+import { axiforma } from '../lib/fonts';
 import SuperScrollerIllustration from './super-scroller-illustration/SuperScrollerIllustration';
 
 const SuperScrollerBlock: React.FC = () => {

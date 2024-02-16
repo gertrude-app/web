@@ -1,12 +1,10 @@
+'use client';
+
 import React from 'react';
 import cx from 'classnames';
 import { RocketIcon, VideoIcon } from 'lucide-react';
-import {
-  useIntersectionObserver,
-  useScrollY,
-  useWindowDimensions,
-} from '../../app/lib/hooks';
-import { axiforma } from '../../app/lib/fonts';
+import { useIntersectionObserver, useScrollY, useWindowDimensions } from '../lib/hooks';
+import { axiforma } from '../lib/fonts';
 import WebsiteGraphic from './WebsiteGraphic';
 import FancyLink from './FancyLink';
 
@@ -14,6 +12,7 @@ const PeaceOfMindForParentsBlock: React.FC = () => {
   const { intersected, ref: illustration } = useIntersectionObserver({ threshold: 1 });
   const scrollY = useScrollY();
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+
   return (
     <div className="bg-fuchsia-500 px-6 sm:px-8 xs:px-12 md:px-20 py-28 pb-64 min-[1450px]:pb-48 flex flex-col min-[1450px]:flex-row gap-80 min-[1450px]:gap-16 items-center justify-center">
       <div

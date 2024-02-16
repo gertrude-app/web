@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React from 'react';
 import cx from 'classnames';
 import type { ArrowUpIcon } from 'lucide-react';
-import { axiforma } from '../../app/lib/fonts';
+import { axiforma } from '../lib/fonts';
 
 type LucideIcon = typeof ArrowUpIcon;
 

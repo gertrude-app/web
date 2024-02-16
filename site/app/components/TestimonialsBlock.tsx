@@ -1,6 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
-import { axiforma } from '../../app/lib/fonts';
+import { axiforma } from '../lib/fonts';
 
 const TestimonialsBlock: React.FC = () => (
   <section className="xl:px-8 bg-gradient-to-b from-white to-violet-500">

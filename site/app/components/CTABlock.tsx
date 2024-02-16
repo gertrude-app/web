@@ -1,7 +1,7 @@
 import React from 'react';
 import { RocketIcon, RouteIcon } from 'lucide-react';
 import cx from 'classnames';
-import { axiforma } from '../../app/lib/fonts';
+import { axiforma } from '../lib/fonts';
 import FancyLink from './FancyLink';
 
 const CTABlock: React.FC = () => (

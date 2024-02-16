@@ -1,6 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
-import { axiforma } from '../../app/lib/fonts';
+import { axiforma } from '../lib/fonts';
 
 const FeaturesBlock: React.FC = () => (
   <section className="[background:radial-gradient(#ede9fe,white_70%)] px-20 pt-40 pb-20 flex flex-col items-center">

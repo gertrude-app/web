@@ -1,8 +1,10 @@
+'use client';
+
 import React from 'react';
 import cx from 'classnames';
 import { ChevronDownIcon } from 'lucide-react';
-import { useScrollY } from '../../app/lib/hooks';
-import { axiforma } from '../../app/lib/fonts';
+import { useScrollY } from '../lib/hooks';
+import { axiforma } from '../lib/fonts';
 
 const HeroBlock: React.FC = () => {
   const scrollY = useScrollY();

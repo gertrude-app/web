@@ -1,6 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
-import { axiforma } from '../../app/lib/fonts';
+import { axiforma } from '../lib/fonts';
 import Stars from './Stars';
 
 const DefenseInDepthBlock: React.FC = () => (
