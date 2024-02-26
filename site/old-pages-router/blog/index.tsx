@@ -5,7 +5,7 @@ import { sync as glob } from 'glob';
 import Markdoc from '@markdoc/markdoc';
 import yaml from 'js-yaml';
 import type { GetStaticProps } from 'next';
-import DocsLayout from '../../app/docs/components/Chrome';
+import DocsLayout from '../../components/docs/Chrome';
 
 interface Post {
   title: string;
