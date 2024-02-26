@@ -7,7 +7,7 @@ dash:
 	@pnpm --filter @dash/app start
 
 site:
-	@pnpm --filter @site/app start
+	@pnpm --filter site start
 
 storybook:
 	@pnpm --filter @storybook/app start
@@ -30,8 +30,8 @@ clean:
 	@rm -rf dash/app/node_modules/.vite
 	@rm -rf storybook/node_modules/.cache/storybook
 	@rm -rf node_modules/.cache/nx
-	@rm -rf site/app/.next
-	@rm -rf site/app/out
+	@rm -rf site/.next
+	@rm -rf site/out
 	@rm -rf dash/app/build
 
 codegen:
@@ -43,9 +43,9 @@ appviews isolate="":
 	@cd appviews && pnpm typecheck && node generate.cjs {{isolate}}
 
 build-site:
-	@pnpm --filter @site/app build
-	@pnpm --filter @site/app export
-	@cp site/app/_redirects site/app/out
+	@pnpm --filter site build
+	@pnpm --filter site export
+	@cp site/_redirects site/out
 
 build-storybook:
 	@pnpm --filter @storybook/app build
