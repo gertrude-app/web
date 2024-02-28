@@ -1,13 +1,11 @@
 ---
 title: 'Setting up a Vapor + Postgres Github Action Test Workflow'
-date: '2021-10-01T10:26:37Z'
 slug: vapor-swift-postgres-github-action-test-workflow
+date: '2021-10-01T10:26:37Z'
 description:
   Took me a bit of fiddling to figure out how to test my PostgreSQL+Vapor app on Github
   actions. Posting the basic workflow file for future googlers
-categories:
-  - Swift
-  - Vapor
+category: engineering
 ---
 
 Took me a bit of fiddling to figure out how to test my PostgreSQL+Vapor app on Github

@@ -6,9 +6,7 @@ description:
   If you want to list out all of the _currently running applications_ in a MacOS app, you
   can call `NSWorkspace.shared.runningApplications`, and filter down the ones you're
   interested in using the apps `.activationPolicy`.
-categories:
-  - Swift
-  - MacOS
+category: engineering
 ---
 
 If you want to list out all of the currently running applications in a MacOS app, you can

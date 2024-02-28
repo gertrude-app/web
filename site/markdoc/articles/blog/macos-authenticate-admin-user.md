@@ -6,9 +6,7 @@ description:
   I needed to challenge for an admin _user/password_ to protect an area of a MacOS app I'm
   developing. After much pain and sorrow navigating the incredibly lacking and confusing
   Apple documentation, I got the basic challenge working.
-categories:
-  - Swift
-  - MacOS
+category: engineering
 ---
 
 I needed to challenge for an _admin user/password_ to protect an area of a MacOS app I'm

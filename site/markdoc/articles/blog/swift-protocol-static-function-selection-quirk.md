@@ -6,8 +6,7 @@ description:
   (to me at least) to be a really useful quirk/edge-case having to do with how Swift
   selects between a protocol extension _static_ method, and a static method implemented on
   a conforming type.
-categories:
-  - Swift
+category: engineering
 ---
 
 I've been writing a lot of heavily generic Swift code lately, and figured out what seems
