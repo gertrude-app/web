@@ -6,6 +6,7 @@ description:
   Building a re-usable, typesafe radio or select component shows why we might need a
   generic React component. This tutorial explains how you can build your own well-typed
   and ergonomic generic components in typescript.
+category: engineering
 ---
 
 Creating generic React components isn't something you need to do every day, but when you

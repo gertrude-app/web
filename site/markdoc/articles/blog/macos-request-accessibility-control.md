@@ -7,9 +7,7 @@ description:
   that the app is granted authorization to _control your computer_ in the _Security and
   Privacy_ pane of system extensions, you can prompt the user for this privilege with the
   below code
-categories:
-  - Swift
-  - MacOS
+category: engineering
 ---
 
 If you need your app to have access to global events (like keystrokes) which require that
