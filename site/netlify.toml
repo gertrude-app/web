@@ -7,9 +7,6 @@
   cp site/_redirects site/out
   """
 
-# removed    pnpm --filter site export && \
-
-
 [[redirects]]
   from = "/support" # in case i entered the url wrong somewhere...
   to = "/contact"
