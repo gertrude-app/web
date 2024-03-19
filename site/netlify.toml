@@ -3,8 +3,7 @@
   ignore = "false"
   command = """
   cd ../../ && \
-	pnpm --filter site build && \
-  cp site/_redirects site/out
+	pnpm --filter site build
   """
 
 [[redirects]]

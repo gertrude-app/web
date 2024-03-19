@@ -1,6 +1,14 @@
 import './index.css';
 import { MemoryRouter } from 'react-router-dom';
 import type { Preview } from '@storybook/react';
+// import * as NextImage from 'next/image';
+//
+// const OriginalNextImage = NextImage.default;
+//
+// Object.defineProperty(NextImage, 'default', {
+//   configurable: true,
+//   value: (props) => <OriginalNextImage {...props} unoptimized />,
+// });
 
 export const decorators = [
   (Story) => (
