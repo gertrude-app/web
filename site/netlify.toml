@@ -1,7 +1,7 @@
 [build]
   ignore = "false"
   command = """
-  cd ../../ && \
+  cd ../ && \
 	pnpm --filter site build
   """
 
