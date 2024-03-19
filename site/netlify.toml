@@ -1,5 +1,4 @@
 [build]
-  publish = "out/"
   ignore = "false"
   command = """
   cd ../../ && \
