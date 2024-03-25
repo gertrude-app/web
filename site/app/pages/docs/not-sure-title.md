@@ -169,15 +169,15 @@ The basic conceptual methodology of the experiment is conceptually this:
 3. If no publicly reachable website can be found at the root (`cats.com`) or www subdomain
    (`www.cats.com`), note the domain as unreachable, and go back to step #2.
 4. If a reachable site is found, check if it's just a "domain is parked" placeholder site,
-   and if so, make a note and return to step #2.
+   and if so, record the result and return to step #2.
 5. If we get to this step, we have found a reachable, non-parked public website. Time to
    check it for pornographic content.
 6. Next we download and collect all of the human-facing text from the website's HTML, and
    test it for words and phrases strongly correlated with pornography (weighting different
    portions of the text differently, e.g. the `<title>` tags, `<h1>` and `<image />` `alt`
    attributes are weighed more heavily). If the score from this step indicates an
-   overwhelming likelihood of the site being pornographic, make a note and skip to step
-   #8.
+   overwhelming likelihood of the site being pornographic, record the result and skip to
+   step #8.
 7. Many pornographic sites are not clearly discernable from text alone (some porn sites
    have very few words, and even for the ones with lots of text content, I only checked
    English words and phrases), so it's fair to consider step #6 as a performance
