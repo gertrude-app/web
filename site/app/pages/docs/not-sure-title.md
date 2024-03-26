@@ -154,12 +154,6 @@ So, taking it together, if we can agree that "websites discoverable from a list 
 domain" is a useful proxy for "every website in the world", and that "all the dot com
 domains" is a useful proxy for "every domain", then we're in business!
 
-## Todo...
-
-- add a section showing the first 15 values from the database dump...
-- make note that this falls down on javascript-heavy SPA's
-- add a note at the beginning that i'm not a scientist, so i'm using terms wrong, etc.
-
 ## Methodology
 
 The basic conceptual methodology of the experiment is conceptually this:
@@ -187,6 +181,83 @@ The basic conceptual methodology of the experiment is conceptually this:
 8. If we've discovered and tested enough reachable websites to hit our sample size target,
    we're done! We can check our records and find out what percentage of sites are porn. If
    we're not there yet, just go back to #2.
+
+## Flaws 💩
+
+With that basic outline of the methodology in place (implementation details, open source
+code, and steps to replicate below), now seems like a good time to talk about it's obvious
+and not-so-obvious flaws.
+
+I've already alluded to several, but for the sake of completeness, here's all of the
+noteworthy flaws I can see with my approach.
+
+#### 1. `.com` bias
+
+As noted earlier, `.com` domains constitute less than 50% of all domains, and while that
+is a hefty percentage, it's probable and likely that when objectively researching the
+magnitude of porn sites, that this introduces some statistically significant abnormalities
+into the data. There could easily be more or less porn in this sub-section of all domains.
+For instance, there is at least one TLD 100% devoted to porn. It would be preferable to
+have a truly complete list of domains to work from, or a fully representative sample.
+
+#### 2. Extrapolating from domains to websites
+
+This was also mostly covered in the preceding sections, but it's worth restating that
+extrapolating from a domain to a website is not straightforward. While it may be granted
+that most websites exist at the root of the domain, it is also clear that there is a
+non-trivial percentage of websites that aren't. Furthermore, precisely defining what a
+website _is_ is also hard. It's especially worth noting that some domains which host
+thousands or millions of websites on free subdomains (like `wordpress.com`, `wixsite.com`,
+etc.) might very well turn out to be corners of the internet densely populated with porn.
+These huge networks of websites were not at all explored by this experiment.
+
+#### 3. SPAs
+
+The rust app I wrote to execute this experiment deals only with html sent by responding
+web server. It makes no attempt to execute client-side javascript before examining the
+HTML. This means that it certainly would be giving false negatives for porn sites built
+purely as single-page-applications (SPAs). One would think that purveyors of internet porn
+would care enough about SEO best practices to not take this approach, but it's likely
+there are many sites like this out there. Future refinements of the experiment could use a
+headless browser, or some javascript runtime to mitigate this issue.
+
+#### 4. Weakness in the machine learning model
+
+At it's core, the experiment relies on image classification to identify porn sites, so the
+results are only as good as the model. The [model](https://nsfwjs.com) I used (NSFW.js)
+[definitely has known issues](/#fixme), especially with pictures of
+[Jeff Goldblum](/#fixme) for some odd reason. I attempted to mitigate the margin of error
+here by requiring multiple images to test positive, but there is clearly going to be some
+false positives and false negatives.
+
+## Implementation Details
+
+(this section is rough-drafty...)
+
+The core of the experiment relies on a CLI tool I wrote in Rust,
+[available here.](/#fixme) It requires a couple key dependencies: `rust/cargo` (>=
+v1.7.5), `postgresql`, `bun` (>= v1.0.21 -- to run the image classification model, which
+is in javascript), and a dump of `.com` domainms obtained from
+[https://czds.icann.org](https://czds.icann.org).
+
+- `rust` (>= v1.75), `cargo`
+- postgresql database
+- list of `.com` domains obtained from https://czds.icann.org
+- `bun` `v1.0.21` or higher (https://bun.sh/docs/installation)
+
+One way in which I tried to reach for some modicum of plausible scientific credibility was
+by designing the experiment to be replicatable. To that end, the app I wrote (a cli tool
+written in Rust) is open source. The source code for the app I wrote (did I mention it's
+written in Rust?) is freely available online, and it should be relatively straightforward
+to replicate.
+
+One needs only to obtain a dump from
+
+## Todo...
+
+- porn detector api toolish thing...
+- add a section showing the first 15 values from the database dump...
+- add a note at the beginning that i'm not a scientist, so i'm using terms wrong, etc.
 
 ## stats
 
