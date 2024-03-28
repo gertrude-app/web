@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "storybook dev -p 6006 --ci",
+    "start": "storybook dev --port 6006 --config-dir ./config --ci",
     "typecheck": "tsc --noEmit",
     "build-storybook": "storybook build"
   },

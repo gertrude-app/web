@@ -1,7 +1,7 @@
 import './index.css';
 import React from 'react';
-import type { Preview } from '@storybook/react';
 import { MemoryRouter } from 'react-router-dom';
+import type { Preview } from '@storybook/react';
 
 export const decorators = [
   (Story) => (
