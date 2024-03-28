@@ -1,15 +1,16 @@
 import './index.css';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import type { Preview } from '@storybook/react';
+import type { Preview, Decorator } from '@storybook/react';
 
-export const decorators = [
-  (Story) => (
+export const decorators: [Decorator] = [
+  (Story: React.FC): JSX.Element => (
     <MemoryRouter>
       <Story />
     </MemoryRouter>
   ),
 ];
+
 const preview: Preview = {
   parameters: {
     controls: {
