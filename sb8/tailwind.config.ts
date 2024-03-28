@@ -4,9 +4,9 @@ const config: Config = {
   content: [
     `./src/**/*.tsx`,
     `../dash/components/src/**/*.tsx`,
-    // `../site/**/*.tsx`,
+    `../site/**/*.tsx`,
     `../shared/components/src/**/*.tsx`,
-    // `../appviews/src/**/*.tsx`,
+    `../appviews/src/**/*.tsx`,
   ],
   presets: [require(`@shared/tailwind`)],
 };

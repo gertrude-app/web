@@ -9,5 +9,6 @@ const config: StorybookConfig = {
   ],
   framework: `@storybook/nextjs`,
   typescript: { reactDocgen: false },
+  staticDirs: [`../public`],
 };
 export default config;
