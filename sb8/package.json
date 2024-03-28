@@ -13,7 +13,6 @@
     "react-router-dom": "^6.22.3"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^1.2.25",
     "@dash/components": "workspace:*",
     "@dash/keys": "workspace:*",
     "@dash/types": "workspace:*",
