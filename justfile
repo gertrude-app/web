@@ -9,6 +9,9 @@ dash:
 site:
 	@pnpm --filter site start
 
+sb8:
+  @pnpm --filter @storybook/sb8 start
+
 storybook:
 	@pnpm --filter @storybook/app start
 
