@@ -5,8 +5,6 @@ const config: StorybookConfig = {
   addons: [`@storybook/addon-essentials`],
   framework: `@storybook/nextjs`,
   typescript: { reactDocgen: false },
-  // @ts-ignore
-  features: { buildStoriesJson: true },
   staticDirs: [`../../dash/app/public`],
 };
 export default config;
