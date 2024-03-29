@@ -77,7 +77,7 @@ jobs:
           pnpm dlx @argos-ci/cli upload storybook/visual-tests/screenshots/argos || true
       - name: create screenshots pr
         id: pr
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v6
         if: github.event_name == 'pull_request'
         with:
           base: ${{ github.head_ref }}
@@ -122,7 +122,7 @@ jobs:
       - name: build dashboard
         run: just build-dash
       - name: cypress
-        uses: cypress-io/github-action@v4.2.0
+        uses: cypress-io/github-action@v6.6.0
         with:
           start: pnpm --filter @dash/app preview
           project: dash/app
