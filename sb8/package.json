@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "start": "storybook dev --port 6006 --config-dir ./config --ci --disable-telemetry",
-    "build-storybook": "storybook build --config-dir ./config",
+    "build-storybook": "storybook build --config-dir ./config --disable-telemetry",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@argos-ci/puppeteer": "0.0.2",
     "@dash/components": "workspace:*",
     "@dash/keys": "workspace:*",
     "@dash/types": "workspace:*",
@@ -25,6 +26,7 @@
     "autoprefixer": "^10.0.1",
     "classnames": "2.3.2",
     "postcss": "^8",
+    "puppeteer": "19.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "6.22.3",
