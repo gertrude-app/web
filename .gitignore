@@ -7,7 +7,6 @@ Session.vim*
 node_modules/
 appviews/src/main.tsx
 storybook/storybook-static/
-sb8/storybook-static/
 dash/app/build
 dash/app/cypress/screenshots
 smoke/cypress.env.json

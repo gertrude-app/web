@@ -4,5 +4,4 @@ packages:
   - 'site'
   - 'shared/*'
   - 'storybook'
-  - 'sb8'
   - 'smoke'

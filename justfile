@@ -9,9 +9,6 @@ dash:
 site:
 	@pnpm --filter site start
 
-sb8:
-  @pnpm --filter @storybook/sb8 start
-
 storybook:
 	@pnpm --filter @storybook/app start
 
@@ -51,8 +48,6 @@ appviews isolate="":
 
 build-site:
 	@pnpm --filter site build
-	@pnpm --filter site export
-	@cp site/_redirects site/out
 
 build-storybook:
 	@pnpm --filter @storybook/app build
