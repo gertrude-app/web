@@ -4,5 +4,5 @@ export function isCypress(): boolean {
 
 export function isScreenshotTest(): boolean {
   // @ts-ignore
-  return import.meta.env?.STORYBOOK_SCREENSHOT_TESTING !== undefined;
+  return process?.env?.STORYBOOK_SCREENSHOT_TESTING !== undefined;
 }
