@@ -374,9 +374,6 @@ importers:
       '@storybook/react':
         specifier: ^8.0.4
         version: 8.0.5(react-dom@18.2.0)(react@18.2.0)(typescript@5.4.2)
-      '@storybook/test':
-        specifier: ^8.0.4
-        version: 8.0.5(vitest@1.0.1)
       '@types/dash-ambient':
         specifier: workspace:*
         version: link:../dash/ambient
