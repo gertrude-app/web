@@ -1,13 +1,13 @@
 import type { StoryObj, Meta } from '@storybook/react';
-import FeaturesBlock from '../../../site/components/FeaturesBlock';
+import CTABlock from '../../../site/components/CTABlock';
 
 const meta = {
-  title: 'Site/FeaturesBlock', // eslint-disable-line
-  component: FeaturesBlock,
+  title: 'Site/CTABlock', // eslint-disable-line
+  component: CTABlock,
   parameters: {
     layout: `fullscreen`,
   },
-} satisfies Meta<typeof FeaturesBlock>;
+} satisfies Meta<typeof CTABlock>;
 
 type Story = StoryObj<typeof meta>;
 
