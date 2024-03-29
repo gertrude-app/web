@@ -59,7 +59,6 @@ async function main(): Promise<void> {
     await page.goto(`${url}?id=${test.id}&viewMode=story`);
 
     for (const size of test.sizes) {
-      process.stderr.write(`story id: ${test.id}, size: ${JSON.stringify(size)}\n`);
       await page.setViewport({ width: size.width, height: size.height });
       try {
         await page.waitForSelector(`#storybook-root > *`);
@@ -75,12 +74,11 @@ async function main(): Promise<void> {
             document.querySelector(`.sb-errordisplay`)?.textContent ??
             document.body.textContent,
         );
-        console.error(`got an error!`, error); // eslint-disable-line no-console
-        console.error(errorText ?? error); // eslint-disable-line no-console
+        console.error(`error:`, error); // eslint-disable-line no-console
+        console.error(errorText); // eslint-disable-line no-console
         process.exit(1);
       }
     }
-    process.stderr.write(`story id: ${test.id}, finished\n`);
   }
   await browser.close();
 }
