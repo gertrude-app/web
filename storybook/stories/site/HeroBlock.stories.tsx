@@ -1,5 +1,5 @@
+import HeroBlock from '@site/components/HeroBlock';
 import type { StoryObj, Meta } from '@storybook/react';
-import HeroBlock from '../../../site/components/HeroBlock';
 
 const meta = {
   title: 'Site/HeroBlock', // eslint-disable-line

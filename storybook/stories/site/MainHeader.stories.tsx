@@ -1,6 +1,6 @@
 import cx from 'classnames';
+import MainHeader from '@site/components/MainHeader';
 import type { StoryObj, Meta } from '@storybook/react';
-import MainHeader from '../../../site/components/MainHeader';
 import { props } from '../story-helpers';
 
 const Container: React.FC<{ theme: `white` | `violet` }> = ({ theme }) => (

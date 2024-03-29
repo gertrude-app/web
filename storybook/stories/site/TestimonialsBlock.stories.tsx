@@ -1,5 +1,5 @@
+import TestimonialsBlock from '@site/components/TestimonialsBlock';
 import type { StoryObj, Meta } from '@storybook/react';
-import TestimonialsBlock from '../../../site/components/TestimonialsBlock';
 
 const meta = {
   title: 'Site/TestimonialsBlock', // eslint-disable-line

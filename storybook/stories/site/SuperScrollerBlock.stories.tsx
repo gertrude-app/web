@@ -1,5 +1,5 @@
+import SuperScrollerBlock from '@site/components/SuperScrollerBlock';
 import type { StoryObj, Meta } from '@storybook/react';
-import SuperScrollerBlock from '../../../site/components/SuperScrollerBlock';
 
 const meta = {
   title: 'Site/SuperScrollerBlock', // eslint-disable-line

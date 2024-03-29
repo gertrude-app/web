@@ -1,5 +1,5 @@
+import FeaturesBlock from '@site/components/FeaturesBlock';
 import type { StoryObj, Meta } from '@storybook/react';
-import FeaturesBlock from '../../../site/components/FeaturesBlock';
 
 const meta = {
   title: 'Site/FeaturesBlock', // eslint-disable-line
