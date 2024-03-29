@@ -8,7 +8,7 @@ import { extractScreenshotTest } from './extract-screenshot-test';
 async function main(): Promise<void> {
   const STORIES_JSON_PATH = `../storybook-static/stories.json`;
   if (!existsSync(STORIES_JSON_PATH)) {
-    throw new Error(`No stories.json file found. Did you run \`make build-storybook\`?`);
+    throw new Error(`No stories.json file found. Did you run \`just build-storybook\`?`);
   }
 
   const json = readFileSync(STORIES_JSON_PATH, `utf-8`);
