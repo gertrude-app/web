@@ -74,7 +74,7 @@ async function main(): Promise<void> {
             document.querySelector(`.sb-errordisplay`)?.textContent ??
             document.body.textContent,
         );
-        console.error(errorText); // eslint-disable-line no-console
+        console.error(errorText ?? error); // eslint-disable-line no-console
         process.exit(1);
       }
     }
