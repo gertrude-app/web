@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "storybook dev --port 6006 --config-dir ./config --ci --loglevel=notice",
-    "typecheck": "tsc --noEmit",
-    "build-storybook": "storybook build"
+    "start": "storybook dev --port 6006 --config-dir ./config --ci --disable-telemetry",
+    "build-storybook": "storybook build --config-dir ./config",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@dash/components": "workspace:*",

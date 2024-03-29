@@ -2,7 +2,7 @@ import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
-    `./src/**/*.tsx`,
+    `./stories/**/*.tsx`,
     `../dash/components/src/**/*.tsx`,
     `../site/**/*.tsx`,
     `../shared/components/src/**/*.tsx`,
