@@ -3,6 +3,9 @@ export function isCypress(): boolean {
 }
 
 export function isScreenshotTest(): boolean {
+  if (typeof globalThis.window === `undefined`) {
+    return false;
+  }
   // @ts-ignore
-  return globalThis.process?.env?.STORYBOOK_SCREENSHOT_TESTING !== undefined;
+  return process?.env?.STORYBOOK_SCREENSHOT_TESTING !== undefined;
 }
