@@ -3,6 +3,8 @@ title: 'How Much of the Internet is Porn? A Detective Story'
 description: TODO
 ---
 
+_NB: This is a draft article, should be published within a few days._
+
 {% .lead %} **TL;DR**&mdash;In February of 2024, I randomly sampled an exhaustive list of
 over **167 million** `.com` registrable domains using a combination of manual hueristics
 and machine learning to test each for pornagraphic content. I was able to test a
@@ -25,8 +27,6 @@ For the interested reader, the rest of this post gives much greater detail on:
 - Interesting facts
 - Steps to replicate
 - Possible next steps
-
-a detective story ???
 
 ## Backstory
 
