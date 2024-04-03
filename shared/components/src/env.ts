@@ -3,7 +3,7 @@ export function isCypress(): boolean {
 }
 
 export function isScreenshotTest(): boolean {
-  if (isCypress()) {
+  if (isCypress() || typeof window !== `undefined`) {
     return false;
   }
   // @ts-ignore
