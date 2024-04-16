@@ -4,16 +4,8 @@ import GlowEffect from './GlowEffect';
 import WebsiteCounter from './WebsiteCounter';
 
 const LosingGameBlock: React.FC = () => (
-  <>
-    <section
-      className="h-24 flex border-l-2 border-none relative"
-      style={{
-        background: `linear-gradient(to bottom right, transparent 50%, #111827 50%)`,
-      }}
-    >
-      <div className="h-full w-20 ml-0.5 z-20 hidden lg:block"></div>
-    </section>
-    <section className="bg-slate-900 relative p-8 sm:p-12 pt-16 md:pt-20 md:p-20 pb-8 lg:pb-12 lg:py-28 z-20">
+  <div className="h-screen overflow-hidden">
+    <section className="bg-slate-900 relative p-8 sm:p-12 pt-16 md:pt-20 md:p-20 pb-8 *lg:pb-12 lg:pt-24 lg:px-[32rem] z-20">
       <GlowEffect className="lg:-right-20 -right-72 -top-32 lg:-top-12" />
       <GlowEffect className="-left-40 -bottom-24" />
       <GlowEffect className="left-56 -bottom-80" />
@@ -51,7 +43,7 @@ const LosingGameBlock: React.FC = () => (
     >
       <div className="hidden lg:block h-full w-20 ml-0.5  z-20"></div>
     </section>
-  </>
+  </div>
 );
 
 export default LosingGameBlock;

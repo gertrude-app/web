@@ -11,18 +11,6 @@ import {
 } from '@site/components';
 import type { NextPage } from 'next';
 
-const Home: NextPage = () => (
-  <main className="overflow-hidden">
-    <MainHeader />
-    <HeroBlock />
-    <PeaceOfMindBlock />
-    <LosingGameBlock />
-    <SafeIsNowPossibleBlock />
-    <DefenseInDepthBlock />
-    <TestimonialsBlock />
-    <CTABlock />
-    <MainFooter />
-  </main>
-);
+const Home: NextPage = () => <LosingGameBlock />;
 
 export default Home;

@@ -42,7 +42,7 @@ const WebsiteCounter: React.FC = () => {
   }, 343);
 
   return (
-    <div className="flex justify-center flex-col pt-12 mt-8 md:mt-20 relative z-10">
+    <div className="flex justify-center flex-col pt-12 mt-8 md:mt-20 relative z-10 px-16">
       <div className="flex flex-col items-start space-y-2 sm:space-y-3 lg:space-y-4">
         <h2 className="font-inter text-4xl xs:text-5xl sm:text-6xl lg:text-8xl text-white w-[716px]">
           {totalWebsites.toLocaleString()}
@@ -110,7 +110,7 @@ const WebsiteCounter: React.FC = () => {
           </Statistic>
         </div>
       </div>
-      <div className="mt-8 flex flex-col antialiased justify-center items-center -space-y-1.5">
+      <div className="mt-16 flex gap-8 *flex-col antialiased justify-center items-center -space-y-1.5">
         <a
           className="transition-opacity opacity-20 hover:opacity-30 text-white text-sm"
           href="https://firstsiteguide.com/how-many-websites/"
