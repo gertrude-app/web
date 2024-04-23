@@ -4,15 +4,17 @@ import type { NextPage } from 'next';
 import * as WebsiteCounter from './WebsiteCounter';
 import * as Banner from './Banner';
 import * as Exodus from './BestPornFilter';
+import * as Testimonial from './Testimonial';
 
 const Slideshow: NextPage = () => {
-  const [play] = useState(true);
-  const [index, setIndex] = useState(0);
+  const [play] = useState(false);
+  const [index, setIndex] = useState(2);
   const [transition, setTransition] = useState(true);
 
   const slides = [
     { time: Banner.timeShown, Slide: Banner.Slide },
     { time: WebsiteCounter.timeShown, Slide: WebsiteCounter.Slide },
+    { time: Testimonial.timeShown, Slide: Testimonial.Slide },
     { time: Exodus.timeShown, Slide: Exodus.Slide },
     { time: Banner.timeShown, Slide: Banner.Slide },
     // { time: 1500, Slide: () => <Slide className="text-6xl bg-red-500">Slide 1</Slide> },
