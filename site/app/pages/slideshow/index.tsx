@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import cx from 'classnames';
-import { useInterval } from 'lib/hooks';
 import type { NextPage } from 'next';
+import * as WebsiteCounter from './WebsiteCounter';
+import * as Banner from './Banner';
+import * as Exodus from './BestPornFilter';
 
 const Slideshow: NextPage = () => {
   const [play] = useState(true);
@@ -9,10 +11,13 @@ const Slideshow: NextPage = () => {
   const [transition, setTransition] = useState(true);
 
   const slides = [
-    { time: 1500, Slide: () => <Slide className="text-6xl bg-red-500">Slide 1</Slide> },
-    { time: 1500, Slide: () => <Slide className="text-6xl bg-green-500">Slide 2</Slide> },
-    { time: 1500, Slide: () => <Slide className="text-6xl bg-blue-500">Slide 3</Slide> },
-    { time: 1500, Slide: () => <Slide className="text-6xl bg-red-500">Slide *</Slide> },
+    { time: Banner.timeShown, Slide: Banner.Slide },
+    { time: WebsiteCounter.timeShown, Slide: WebsiteCounter.Slide },
+    { time: Exodus.timeShown, Slide: Exodus.Slide },
+    { time: Banner.timeShown, Slide: Banner.Slide },
+    // { time: 1500, Slide: () => <Slide className="text-6xl bg-red-500">Slide 1</Slide> },
+    // { time: 1500, Slide: () => <Slide className="text-6xl bg-blue-500">Slide 3</Slide> },
+    // { time: 1500, Slide: () => <Slide className="text-6xl bg-red-500">Slide *</Slide> },
   ];
 
   const time = slides[index]?.time ?? 0;
@@ -35,20 +40,6 @@ const Slideshow: NextPage = () => {
     return () => clearTimeout(timeout);
   }, [index, play, slides.length, time, transition]);
 
-  // useInterval(() => {
-  //   if (!play) return;
-  //   if (index === slides.length - 1) {
-  //     setTransition(false);
-  //     setIndex(0);
-  //     setTimeout(() => {
-  //       setTransition(true);
-  //       setIndex(1);
-  //     }, 0);
-  //   } else {
-  //     setIndex((prevIndex) => (prevIndex + 1) % slides.length);
-  //   }
-  // }, 1500);
-
   return (
     <div className="">
       <div className="overflow-hidden relative" style={{ width: WIDTH, height: HEIGHT }}>
@@ -68,7 +59,7 @@ const Slideshow: NextPage = () => {
   );
 };
 
-const TRANSITION_MS = 500;
+const TRANSITION_MS = 850;
 
 const Slide: React.FC<{
   children?: React.ReactNode;

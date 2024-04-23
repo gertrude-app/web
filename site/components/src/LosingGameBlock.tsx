@@ -4,19 +4,22 @@ import GlowEffect from './GlowEffect';
 import WebsiteCounter from './WebsiteCounter';
 
 const LosingGameBlock: React.FC = () => (
-  <div className="h-screen overflow-hidden">
-    <section className="bg-slate-900 relative p-8 sm:p-12 pt-16 md:pt-20 md:p-20 pb-8 *lg:pb-12 lg:pt-24 lg:px-[32rem] z-20">
+  <div
+    className="*h-screen *w-screen overflow-hidden"
+    style={{ width: 3440, height: 1440 }}
+  >
+    <section className="bg-slate-900 h-screen relative p-8 sm:p-12 pt-16 md:pt-20 md:p-20 pb-8 *lg:pb-12 lg:pt-36 lg:px-[32rem] z-20">
       <GlowEffect className="lg:-right-20 -right-72 -top-32 lg:-top-12" />
       <GlowEffect className="-left-40 -bottom-24" />
       <GlowEffect className="left-56 -bottom-80" />
       <div className="flex flex-col-reverse lg:flex-row">
         <div className="md:mr-20">
-          <h2 className="text-6xl font-extrabold font-inter text-white">
+          <h2 className="text-8xl font-extrabold font-inter text-white">
             <span className="bg-gradient-to-br from-indigo-500 to-fuchsia-500 bg-clip-text text-transparent">
               A losing game
             </span>
           </h2>
-          <p className="text-xl text-slate-500 mt-8 leading-8 max-w-3xl">
+          <p className="text-3xl text-slate-500 mt-8 leading-8 max-w-4xl">
             Most internet safety tools try to block{` `}
             <span className="text-slate-300 font-bold antialiased">categories</span> of
             the internet. With{` `}

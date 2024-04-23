@@ -44,7 +44,7 @@ const WebsiteCounter: React.FC = () => {
   return (
     <div className="flex justify-center flex-col pt-12 mt-8 md:mt-20 relative z-10 px-16">
       <div className="flex flex-col items-start space-y-2 sm:space-y-3 lg:space-y-4">
-        <h2 className="font-inter text-4xl xs:text-5xl sm:text-6xl lg:text-8xl text-white w-[716px]">
+        <h2 className="font-inter text-4xl xs:text-5xl sm:text-6xl lg:text-[8.5rem] text-white w-[716px]">
           {totalWebsites.toLocaleString()}
           <br />
         </h2>
@@ -55,7 +55,7 @@ const WebsiteCounter: React.FC = () => {
       <div className="flex justify-center items-center">
         {/* intersection observer: */}
         <div ref={ref} />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-16 mx-16">
           <Statistic
             visible={intersected}
             delay={0}
@@ -189,7 +189,7 @@ interface ImportantNumberProps {
 }
 
 const ImportantNumber: React.FC<ImportantNumberProps> = ({ children }) => (
-  <h3 className="text-5xl text-white font-inter relative">{children}</h3>
+  <h3 className="text-7xl text-white font-inter relative">{children}</h3>
 );
 
 interface EmProps {
@@ -208,7 +208,7 @@ interface InfoTextProps {
 }
 
 const InfoText: React.FC<InfoTextProps> = ({ children }) => (
-  <p className="mt-4 text-white text-opacity-60 font-medium text-lg relative z-10">
+  <p className="mt-4 text-white text-opacity-60 font-medium text-2xl relative z-10">
     {children}
   </p>
 );
