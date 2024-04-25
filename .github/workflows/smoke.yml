@@ -1,6 +1,9 @@
 name: smoke
 
 on:
+  push:
+    branches:
+      - test-smoke
   schedule:
     # mon-fri @ 10:45am, 1:45pm, 4:45pm, 7:45pm EST
     - cron: '45 15,18,21,0 * * 1-5'
