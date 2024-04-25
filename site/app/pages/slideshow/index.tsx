@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import cx from 'classnames';
+// import cx from 'classnames';
 import type { NextPage } from 'next';
 import * as WebsiteCounter from './WebsiteCounter';
 import * as Banner from './Banner';
 import * as Exodus from './BestPornFilter';
 import * as Testimonial from './Testimonial';
+import * as Dashboard from './Dashboard';
+import * as BoyComputer from './BoyComputer';
 
 const Slideshow: NextPage = () => {
-  const [play] = useState(false);
-  const [index, setIndex] = useState(2);
+  const [play] = useState(true);
+  const [index, setIndex] = useState(0);
   const [transition, setTransition] = useState(true);
 
   const slides = [
     { time: Banner.timeShown, Slide: Banner.Slide },
     { time: WebsiteCounter.timeShown, Slide: WebsiteCounter.Slide },
+    { time: BoyComputer.timeShown, Slide: BoyComputer.Slide },
     { time: Testimonial.timeShown, Slide: Testimonial.Slide },
+    { time: Dashboard.timeShown, Slide: Dashboard.Slide },
     { time: Exodus.timeShown, Slide: Exodus.Slide },
     { time: Banner.timeShown, Slide: Banner.Slide },
     // { time: 1500, Slide: () => <Slide className="text-6xl bg-red-500">Slide 1</Slide> },
@@ -63,24 +67,24 @@ const Slideshow: NextPage = () => {
 
 const TRANSITION_MS = 850;
 
-const Slide: React.FC<{
-  children?: React.ReactNode;
-  className?: string;
-}> = ({ children, className }) => (
-  <div
-    className={cx(``, className)}
-    style={{
-      minWidth: WIDTH,
-      minHeight: HEIGHT,
-      width: WIDTH,
-      height: HEIGHT,
-      maxWidth: WIDTH,
-      maxHeight: HEIGHT,
-    }}
-  >
-    {children}
-  </div>
-);
+// const Slide: React.FC<{
+//   children?: React.ReactNode;
+//   className?: string;
+// }> = ({ children, className }) => (
+//   <div
+//     className={cx(``, className)}
+//     style={{
+//       minWidth: WIDTH,
+//       minHeight: HEIGHT,
+//       width: WIDTH,
+//       height: HEIGHT,
+//       maxWidth: WIDTH,
+//       maxHeight: HEIGHT,
+//     }}
+//   >
+//     {children}
+//   </div>
+// );
 
 const WIDTH = 3440;
 const HEIGHT = 1440;

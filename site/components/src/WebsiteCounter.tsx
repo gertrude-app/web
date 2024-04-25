@@ -42,9 +42,9 @@ const WebsiteCounter: React.FC = () => {
   }, 343);
 
   return (
-    <div className="flex justify-center flex-col pt-12 mt-8 md:mt-20 relative z-10 px-16">
+    <div className="flex justify-center flex-col pt-12 mt-8 md:mt-10 relative z-10 px-16">
       <div className="flex flex-col items-start space-y-2 sm:space-y-3 lg:space-y-4">
-        <h2 className="font-inter text-4xl xs:text-5xl sm:text-6xl lg:text-[8.5rem] text-white w-[716px]">
+        <h2 className="font-inter text-4xl xs:text-5xl sm:text-6xl lg:text-[9.5rem] text-white w-[716px]">
           {totalWebsites.toLocaleString()}
           <br />
         </h2>
