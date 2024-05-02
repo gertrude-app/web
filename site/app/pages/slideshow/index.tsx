@@ -7,14 +7,16 @@ import * as Exodus from './BestPornFilter';
 import * as Testimonial from './Testimonial';
 import * as Dashboard from './Dashboard';
 import * as BoyComputer from './BoyComputer';
+import * as BookConsult from './BookConsult';
 
 const Slideshow: NextPage = () => {
-  const [play] = useState(true);
-  const [index, setIndex] = useState(0);
+  const [play] = useState(false);
+  const [index, setIndex] = useState(1);
   const [transition, setTransition] = useState(true);
 
   const slides = [
     { time: Banner.timeShown, Slide: Banner.Slide },
+    { time: BookConsult.timeShown, Slide: BookConsult.Slide },
     { time: WebsiteCounter.timeShown, Slide: WebsiteCounter.Slide },
     { time: BoyComputer.timeShown, Slide: BoyComputer.Slide },
     { time: Testimonial.timeShown, Slide: Testimonial.Slide },

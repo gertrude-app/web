@@ -1,7 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
 import { Logo } from '@shared/components';
-import Bg from '../../public/slideshow/purple-gradient.png';
 
 export const Slide: React.FC = () => (
   <div className="w-screen h-screen relative bg-slate-900">
