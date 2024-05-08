@@ -16,28 +16,27 @@ import * as PeaceOfMind from './PeaceOfMind';
 import * as SafetyPossible from './SafetyPossible';
 
 const Slideshow: NextPage = () => {
-  const [play] = useState(false);
-  const [index, setIndex] = useState(1);
+  const [play] = useState(true);
+  const [index, setIndex] = useState(0);
   const [transition, setTransition] = useState(true);
 
   const slides = [
     { time: Banner.timeShown, Slide: Banner.Slide },
     { time: SafetyPossible.timeShown, Slide: SafetyPossible.Slide },
-    { time: TestimonialMadison.timeShown, Slide: TestimonialMadison.Slide },
-    { time: TestimonialFrank.timeShown, Slide: TestimonialFrank.Slide },
     { time: TestimonialJason.timeShown, Slide: TestimonialJason.Slide },
     { time: PeaceOfMind.timeShown, Slide: PeaceOfMind.Slide },
     { time: ScaryStats.timeShown, Slide: ScaryStats.Slide },
     { time: Workshop.timeShown, Slide: () => <Workshop.Slide idx={0} /> },
     { time: DefenseInDepth.timeShown, Slide: DefenseInDepth.Slide },
     { time: BookConsult.timeShown, Slide: BookConsult.Slide },
+    { time: TestimonialFrank.timeShown, Slide: TestimonialFrank.Slide },
     { time: WebsiteCounter.timeShown, Slide: WebsiteCounter.Slide },
     { time: BoyComputer.timeShown, Slide: BoyComputer.Slide },
     { time: Workshop.timeShown, Slide: () => <Workshop.Slide idx={1} /> },
     { time: Dashboard.timeShown, Slide: Dashboard.Slide },
+    { time: TestimonialMadison.timeShown, Slide: TestimonialMadison.Slide },
     { time: Exodus.timeShown, Slide: Exodus.Slide },
     { time: Banner.timeShown, Slide: Banner.Slide },
-    // { time: Workshop.timeShown, Slide: () => <Workshop.Slide idx={2} /> }, // case-study
   ];
 
   const time = slides[index]?.time ?? 0;
@@ -81,29 +80,7 @@ const Slideshow: NextPage = () => {
 
 const TRANSITION_MS = 850;
 
-// const Slide: React.FC<{
-//   children?: React.ReactNode;
-//   className?: string;
-// }> = ({ children, className }) => (
-//   <div
-//     className={cx(``, className)}
-//     style={{
-//       minWidth: WIDTH,
-//       minHeight: HEIGHT,
-//       width: WIDTH,
-//       height: HEIGHT,
-//       maxWidth: WIDTH,
-//       maxHeight: HEIGHT,
-//     }}
-//   >
-//     {children}
-//   </div>
-// );
-
 const WIDTH = 3440;
 const HEIGHT = 1440;
-
-// const WIDTH = 400;
-// const HEIGHT = 200;
 
 export default Slideshow;

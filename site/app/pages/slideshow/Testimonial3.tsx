@@ -32,7 +32,7 @@ export const Slide: React.FC = () => (
   </div>
 );
 
-export const timeShown = 10000;
+export const timeShown = 12000;
 
 const GlowEffect: React.FC<{ className: string }> = ({ className }) => (
   <div
