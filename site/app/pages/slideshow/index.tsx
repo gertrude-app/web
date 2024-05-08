@@ -3,7 +3,9 @@ import type { NextPage } from 'next';
 import * as WebsiteCounter from './WebsiteCounter';
 import * as Banner from './Banner';
 import * as Exodus from './BestPornFilter';
-import * as Testimonial from './Testimonial';
+import * as TestimonialMadison from './Testimonial';
+import * as TestimonialJason from './Testimonial2';
+import * as TestimonialFrank from './Testimonial3';
 import * as Dashboard from './Dashboard';
 import * as BoyComputer from './BoyComputer';
 import * as BookConsult from './BookConsult';
@@ -11,6 +13,7 @@ import * as DefenseInDepth from './DefenseInDepth';
 import * as Workshop from './Workshop-101';
 import * as ScaryStats from './ScaryStats';
 import * as PeaceOfMind from './PeaceOfMind';
+import * as SafetyPossible from './SafetyPossible';
 
 const Slideshow: NextPage = () => {
   const [play] = useState(false);
@@ -19,6 +22,10 @@ const Slideshow: NextPage = () => {
 
   const slides = [
     { time: Banner.timeShown, Slide: Banner.Slide },
+    { time: SafetyPossible.timeShown, Slide: SafetyPossible.Slide },
+    { time: TestimonialMadison.timeShown, Slide: TestimonialMadison.Slide },
+    { time: TestimonialFrank.timeShown, Slide: TestimonialFrank.Slide },
+    { time: TestimonialJason.timeShown, Slide: TestimonialJason.Slide },
     { time: PeaceOfMind.timeShown, Slide: PeaceOfMind.Slide },
     { time: ScaryStats.timeShown, Slide: ScaryStats.Slide },
     { time: Workshop.timeShown, Slide: () => <Workshop.Slide idx={0} /> },
@@ -26,7 +33,6 @@ const Slideshow: NextPage = () => {
     { time: BookConsult.timeShown, Slide: BookConsult.Slide },
     { time: WebsiteCounter.timeShown, Slide: WebsiteCounter.Slide },
     { time: BoyComputer.timeShown, Slide: BoyComputer.Slide },
-    { time: Testimonial.timeShown, Slide: Testimonial.Slide },
     { time: Workshop.timeShown, Slide: () => <Workshop.Slide idx={1} /> },
     { time: Dashboard.timeShown, Slide: Dashboard.Slide },
     { time: Exodus.timeShown, Slide: Exodus.Slide },
