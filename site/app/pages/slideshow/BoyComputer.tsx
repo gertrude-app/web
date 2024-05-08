@@ -1,6 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
-import Boycomputer from '../../public/slideshow/boy-computer.png';
+import Boycomputer from '../../public/slideshow/tt-darker.png';
 
 // 117,49,176
 export const Slide: React.FC = () => (
@@ -9,19 +9,31 @@ export const Slide: React.FC = () => (
     style={{ width: 3440, height: 1440 }}
   >
     <div
-      className="h-screen w-[21rem] bg-red-500 relative z-20 ml-[-14rem]"
+      className="h-screen w-[90rem] bg-red-500 absolute z-20 left-[0rem]"
       style={{
-        background: `linear-gradient(to left, rgb(117,49,176) 0%, transparent 100%)`,
+        background: `linear-gradient(to right, rgba(0,0,0,80%) 0%, transparent 100%)`,
       }}
     />
-    <img src={Boycomputer.src} alt="" className="absolute top-[-0rem] left-[-11rem]" />
+    <img
+      src={Boycomputer.src}
+      alt=""
+      className="absolute w-[4100px] top-[0rem] right-[-8rem] max-w-[150%]"
+    />
     <p
       className={cx(
-        `text-white z-30 text-[9rem] max-w-[88rem] font-bold absolute right-[26rem] top-[19rem]`,
+        `text-white z-30 text-[9rem] max-w-[84rem] font-bold absolute left-[14rem] top-[19rem]`,
         `leading-[1.2em]`,
       )}
     >
-      You pick which websites are allowed.{` `}
+      You pick which websites are{` `}
+      <span
+        className={cx(
+          `italic text-shadow bg-gradient-to-br font-bold from-indigo-400 to-fuchsia-400 bg-clip-text text-transparent`,
+          `pr-1`,
+        )}
+      >
+        allowed.
+      </span>
       <span
         className={cx(
           `italic bg-gradient-to-br font-bold from-indigo-400 to-fuchsia-400 bg-clip-text text-transparent`,
@@ -33,7 +45,7 @@ export const Slide: React.FC = () => (
     </p>
     <p
       className={cx(
-        `text-white z-30 text-[9rem] max-w-[88rem] font-bold absolute right-[69rem] top-[50rem]`,
+        `text-white z-30 text-[9rem] max-w-[88rem] font-bold absolute left-[14rem] top-[62rem]`,
         `leading-[1.2em]`,
       )}
     >

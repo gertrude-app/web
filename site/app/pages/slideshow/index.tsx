@@ -11,7 +11,7 @@ import * as BookConsult from './BookConsult';
 
 const Slideshow: NextPage = () => {
   const [play] = useState(false);
-  const [index, setIndex] = useState(6);
+  const [index, setIndex] = useState(3);
   const [transition, setTransition] = useState(true);
 
   const slides = [
