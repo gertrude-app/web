@@ -8,14 +8,16 @@ import * as Testimonial from './Testimonial';
 import * as Dashboard from './Dashboard';
 import * as BoyComputer from './BoyComputer';
 import * as BookConsult from './BookConsult';
+import * as DefenseInDepth from './DefenseInDepth';
 
 const Slideshow: NextPage = () => {
   const [play] = useState(false);
-  const [index, setIndex] = useState(3);
+  const [index, setIndex] = useState(1);
   const [transition, setTransition] = useState(true);
 
   const slides = [
     { time: Banner.timeShown, Slide: Banner.Slide },
+    { time: DefenseInDepth.timeShown, Slide: DefenseInDepth.Slide },
     { time: BookConsult.timeShown, Slide: BookConsult.Slide },
     { time: WebsiteCounter.timeShown, Slide: WebsiteCounter.Slide },
     { time: BoyComputer.timeShown, Slide: BoyComputer.Slide },
