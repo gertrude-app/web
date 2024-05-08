@@ -9,6 +9,7 @@ import * as BoyComputer from './BoyComputer';
 import * as BookConsult from './BookConsult';
 import * as DefenseInDepth from './DefenseInDepth';
 import * as Workshop from './Workshop-101';
+import * as ScaryStats from './ScaryStats';
 
 const Slideshow: NextPage = () => {
   const [play] = useState(false);
@@ -17,6 +18,7 @@ const Slideshow: NextPage = () => {
 
   const slides = [
     { time: Banner.timeShown, Slide: Banner.Slide },
+    { time: ScaryStats.timeShown, Slide: ScaryStats.Slide },
     { time: Workshop.timeShown, Slide: () => <Workshop.Slide idx={0} /> },
     { time: DefenseInDepth.timeShown, Slide: DefenseInDepth.Slide },
     { time: BookConsult.timeShown, Slide: BookConsult.Slide },
