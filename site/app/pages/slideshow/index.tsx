@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import cx from 'classnames';
 import type { NextPage } from 'next';
 import * as WebsiteCounter from './WebsiteCounter';
 import * as Banner from './Banner';
@@ -9,6 +8,7 @@ import * as Dashboard from './Dashboard';
 import * as BoyComputer from './BoyComputer';
 import * as BookConsult from './BookConsult';
 import * as DefenseInDepth from './DefenseInDepth';
+import * as Workshop from './Workshop-101';
 
 const Slideshow: NextPage = () => {
   const [play] = useState(false);
@@ -17,17 +17,17 @@ const Slideshow: NextPage = () => {
 
   const slides = [
     { time: Banner.timeShown, Slide: Banner.Slide },
+    { time: Workshop.timeShown, Slide: () => <Workshop.Slide idx={0} /> },
     { time: DefenseInDepth.timeShown, Slide: DefenseInDepth.Slide },
     { time: BookConsult.timeShown, Slide: BookConsult.Slide },
     { time: WebsiteCounter.timeShown, Slide: WebsiteCounter.Slide },
     { time: BoyComputer.timeShown, Slide: BoyComputer.Slide },
     { time: Testimonial.timeShown, Slide: Testimonial.Slide },
+    { time: Workshop.timeShown, Slide: () => <Workshop.Slide idx={1} /> },
     { time: Dashboard.timeShown, Slide: Dashboard.Slide },
     { time: Exodus.timeShown, Slide: Exodus.Slide },
     { time: Banner.timeShown, Slide: Banner.Slide },
-    // { time: 1500, Slide: () => <Slide className="text-6xl bg-red-500">Slide 1</Slide> },
-    // { time: 1500, Slide: () => <Slide className="text-6xl bg-blue-500">Slide 3</Slide> },
-    // { time: 1500, Slide: () => <Slide className="text-6xl bg-red-500">Slide *</Slide> },
+    // { time: Workshop.timeShown, Slide: () => <Workshop.Slide idx={2} /> }, // case-study
   ];
 
   const time = slides[index]?.time ?? 0;
