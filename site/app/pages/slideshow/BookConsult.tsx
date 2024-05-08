@@ -1,6 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import { Logo } from '@shared/components';
+import QrCode from '../../public/slideshow/qrcode.png';
 
 export const Slide: React.FC = () => (
   <div className="w-screen h-screen relative bg-fuchsia-50">
@@ -31,13 +32,12 @@ export const Slide: React.FC = () => (
         </p>
       </div>
       <div
-        className={cx(`absolute p-12 bg-white rounded-[4rem] left-[25rem]`, `shadow-2xl`)}
+        className={cx(
+          `absolute p-12 bg-white rounded-[4rem] left-[25rem] top-[15rem]`,
+          `shadow-2xl`,
+        )}
       >
-        <img
-          src="https://gertrude-web-assets.nyc3.cdn.digitaloceanspaces.com/onboarding/qr-codes/gertrude.app__start.png"
-          alt=""
-          className="w-[44rem] h-[44rem]"
-        />
+        <img src={QrCode.src} alt="" className="w-[44rem] h-[44rem]" />
         <p className="text-center -mt-[5rem] font-mono antialiased text-slate-500 text-[2.0rem]">
           www.gertrude.app/inch
         </p>
@@ -45,10 +45,13 @@ export const Slide: React.FC = () => (
     </div>
     <Logo
       size={120}
-      // type="inverted"
       textSize="text-[6rem]"
       className="antialiased opacity-[90%] absolute bottom-[2rem] right-[5rem]"
     />
+    <p className="absolute w-[48rem] bottom-[13rem] italic right-[141rem] text-center text-[2.3rem] text-slate-400 opacity-75 leading-[125%] antialiased">
+      <i className="fas fa-mobile-alt mr-3" />
+      Point your phone's camera right here &uarr;
+    </p>
   </div>
 );
 
