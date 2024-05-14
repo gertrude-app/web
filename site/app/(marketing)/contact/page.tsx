@@ -2,12 +2,11 @@ import React from 'react';
 import { Logo } from '@shared/components';
 import type { NextPage } from 'next';
 import ContactForm from '@/components/ContactForm';
-import { createMetadata } from '@/lib/seo';
+import * as seo from '@/lib/seo';
 
-export const metadata = createMetadata(
+export const metadata = seo.createMetadata(
   `Contact | Gertrude Internet Filter and Parental Controls`,
-  `TODO: Add description`,
-  `/og-images/main.jpg`,
+  seo.description(`Contact us`),
 );
 
 const ContactPage: NextPage = () => (
@@ -19,8 +18,8 @@ const ContactPage: NextPage = () => (
         Contact us
       </h1>
       <p className="text-xl mt-3 text-slate-500 max-w-2xl self-center lg:self-start text-center lg:text-left relative">
-        Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint
-        consectetur cupidatat.
+        Have a question or need help? Fill out the form below and we’ll get back to you in
+        a jiffy.
       </p>
       <ContactForm />
     </div>
