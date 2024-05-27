@@ -70,10 +70,10 @@ const DepressingStatisticsBlock: React.FC = () => {
             className="lg:col-span-2"
           />
           <Statistic
-            statistic={`37%`}
+            statistic={`10%`}
             label={
               <span>
-                Of all websites on the internet <Bold>are porn</Bold>
+                Of all material on the internet <Bold>is porn</Bold>
               </span>
             }
             className="lg:row-span-2"
