@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import cx from 'classnames';
 import Link from 'next/link';
 import { useInterval } from '../lib/hooks';
@@ -158,10 +158,15 @@ const TotalWebsitesCounter: React.FC = () => {
     const newWebsitesSinceRefDate = secondsSinceRefDate * 3;
     return 1_980_000_000 + newWebsitesSinceRefDate;
   });
+  const [clientLoaded, setClientLoaded] = useState(false);
 
   useInterval(() => {
     setTotalWebsites(totalWebsites + 1);
   }, 333);
+
+  useEffect(() => {
+    setClientLoaded(true);
+  }, []);
 
   return (
     <div className="text-white text-5xl xs:text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-mono font-bold flex overflow-hidden">
@@ -170,7 +175,7 @@ const TotalWebsitesCounter: React.FC = () => {
         .split(``)
         .map((digit, index) => {
           const isComma = digit === `,`;
-          return (
+          return clientLoaded ? (
             <div
               key={index}
               className={cx(
@@ -202,6 +207,16 @@ const TotalWebsitesCounter: React.FC = () => {
                     </div>
                   ))}
             </div>
+          ) : (
+            <div
+              key={index}
+              className={cx(
+                `relative h-32 bg-slate-800 animate-pulse`,
+                isComma
+                  ? `!-left-1 xs:!-left-3 md:!-left-3 lg:!-left-2 w-4 xs:w-5 md:w-10 lg:w-14`
+                  : `w-[28px] xs:w-[40px] sm:w-[48px] md:w-[60px] lg:w-[72px]`,
+              )}
+            ></div>
           );
         })}
     </div>
