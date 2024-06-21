@@ -3,9 +3,22 @@ export function isCypress(): boolean {
 }
 
 export function isScreenshotTest(): boolean {
-  if (isCypress()) {
+  // @ts-ignore
+  if (import.meta.env?.STORYBOOK_SCREENSHOT_TESTING !== undefined) {
+    return true;
+    // @ts-ignore
+  } else if (import.meta.env?.CI !== undefined) {
+    return true;
+  }
+  if (typeof globalThis === `undefined` || `process` in globalThis === false) {
     return false;
   }
   // @ts-ignore
-  return process?.env?.STORYBOOK_SCREENSHOT_TESTING !== undefined;
+  if (process?.env?.STORYBOOK_SCREENSHOT_TESTING !== undefined) {
+    return true;
+    // @ts-ignore
+  } else if (process?.env?.CI !== undefined) {
+    return true;
+  }
+  return false;
 }
