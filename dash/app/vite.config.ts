@@ -15,5 +15,10 @@ export default defineConfig({
   preview: {
     port: 8081,
   },
+  define: {
+    'import.meta.env.STORYBOOK_SCREENSHOT_TESTING': JSON.stringify(
+      process.env.STORYBOOK_SCREENSHOT_TESTING,
+    ),
+  },
   plugins: [react()],
 });
