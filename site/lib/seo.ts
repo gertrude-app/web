@@ -6,6 +6,7 @@ export function createMetadata(
   image?: string,
 ): Metadata {
   return {
+    metadataBase: base(),
     title,
     description,
     openGraph: {
@@ -16,6 +17,10 @@ export function createMetadata(
         : [{ url: `/og-images/main.jpg`, width: 1200, height: 630, alt: title }],
     },
   };
+}
+
+function base(): URL {
+  return new URL(`https://gertrude.app`);
 }
 
 export function description(description: string): string {
