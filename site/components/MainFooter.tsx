@@ -7,9 +7,9 @@ const MainFooter: React.FC = () => (
   <footer className="px-8 sm:px-12 lg:px-20 pt-20 pb-8 gap-20 relative border-t border-violet-400 flex flex-col bg-violet-500">
     <div className="flex flex-col sm:flex-row justify-between">
       <div className="self-center sm:self-start">
-        <Link href="/">
+        <a href="/">
           <Logo type="inverted" />
-        </Link>
+        </a>
       </div>
       <div className="flex gap-12 mt-12 sm:mt-0 self-center sm:self-start">
         <ul className="flex flex-col items-center sm:items-start gap-1">
@@ -70,7 +70,7 @@ interface FooterLinkProps {
 }
 
 const FooterLink: React.FC<FooterLinkProps> = ({ children, href }) => {
-  const Element = [`/contact`, `/download`].includes(href) ? `a` : Link;
+  const Element = [`/contact`, `/download`, `/`].includes(href) ? `a` : Link;
   return (
     <li>
       <Element
