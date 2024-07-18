@@ -69,13 +69,16 @@ interface FooterLinkProps {
   children: React.ReactNode;
 }
 
-const FooterLink: React.FC<FooterLinkProps> = ({ children, href }) => (
-  <li>
-    <Link
-      href={href}
-      className="text-lg text-white/60 hover:text-white/80 block w-fit transition-colors duration-200"
-    >
-      {children}
-    </Link>
-  </li>
-);
+const FooterLink: React.FC<FooterLinkProps> = ({ children, href }) => {
+  const Element = [`/contact`, `/download`].includes(href) ? `a` : Link;
+  return (
+    <li>
+      <Element
+        href={href}
+        className="text-lg text-white/60 hover:text-white/80 block w-fit transition-colors duration-200"
+      >
+        {children}
+      </Element>
+    </li>
+  );
+};

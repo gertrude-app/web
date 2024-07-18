@@ -43,9 +43,9 @@ const Sidebar: React.FC<Props> = ({ open, setOpen }) => (
       </div>
       <div className="flex flex-col">
         <div className="flex justify-center gap-2 items-center">
-          <Link href="/contact" className="text-lg text-violet-500 font-medium">
+          <a href="/contact" className="text-lg text-violet-500 font-medium">
             Contact
-          </Link>
+          </a>
           <span className="text-violet-400 text-xl">•</span>
           <Link href="/blog" className="text-lg text-violet-500 font-medium">
             Blog
