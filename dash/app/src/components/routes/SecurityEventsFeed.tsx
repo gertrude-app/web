@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import { PageHeading } from '@dash/components';
+import { EmptyState, PageHeading } from '@dash/components';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -25,6 +25,17 @@ const SecurityEventsFeed: React.FC = () => (
 
   <div>
     <PageHeading icon={`shield`}>Security Events</PageHeading>
+    {feed.length === 0 && (
+      <EmptyState
+        className="mt-8"
+        heading={`No security events to show`}
+        secondaryText={`No potentially dangerous activity has occured within the last 14 days.`}
+        icon={`shield`}
+        buttonText={`Monitor activity`}
+        buttonIcon="binoculars"
+        action={``}
+      />
+    )}
     <ul className="mt-12 flex flex-col">
       {feed.map((event) => (
         <SecurityEvent event={event} />
