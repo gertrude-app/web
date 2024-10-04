@@ -90,5 +90,7 @@ export const MenuBarSized: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className }) => (
-  <div className={cx(`w-[400px] h-[300px]`, className)}>{children}</div>
+  <div className={cx(`w-[400px] h-[300px] overflow-hidden relative`, className)}>
+    {children}
+  </div>
 );

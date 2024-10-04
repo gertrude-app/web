@@ -17,12 +17,12 @@ type MenuBarWrapperProps = {
 } & React.ComponentProps<typeof MenuBar>;
 
 const LightTemplate: StoryFn<typeof MenuBar> = () => (
-  <ThreeModesThreeColors theme="light" />
+  <DifferentModesAcrossColrs theme="light" />
 );
 export const LightMode = LightTemplate.bind({});
 
 const DarkTemplate: StoryFn<typeof MenuBar> = () => (
-  <ThreeModesThreeColors theme="dark" />
+  <DifferentModesAcrossColrs theme="dark" />
 );
 export const DarkMode = DarkTemplate.bind({});
 
@@ -96,7 +96,7 @@ export const ConnectFailed = ConnectFailedTemplate.bind({});
 
 // helpers
 const MenuBarWrapper: React.FC<MenuBarWrapperProps> = (props) => (
-  <div className={cx(props.colors, `rounded-2xl shrink-0`, props.theme)}>
+  <div className={cx(props.colors, `rounded-2xl shrink-0 overflow-hidden`, props.theme)}>
     <MenuBar {...props} />
   </div>
 );
@@ -116,7 +116,7 @@ const BothThemes: React.FC<React.ComponentProps<typeof MenuBar>> = (props) => (
   </div>
 );
 
-const ThreeModesThreeColors: React.FC<{ theme: 'light' | 'dark' }> = ({ theme }) => {
+const DifferentModesAcrossColrs: React.FC<{ theme: 'light' | 'dark' }> = ({ theme }) => {
   const propOptions: Record<
     'first' | 'second' | 'third',
     React.ComponentProps<typeof MenuBarWrapper>
