@@ -19,7 +19,185 @@ export const ListPublic: Story = props({
   onRemove: () => {},
   removeText: `Delete`,
   editUrl: `/`,
+  schedulable: false,
 });
+
+const NotDuringSchoolHours: Story = props({
+  ...ListPublic.args,
+  editUrl: undefined,
+  removeText: `Remove`,
+  name: `After-school games`,
+  description: `For afternoons and weekends, not to be played during school hours`,
+  schedule: {
+    specifyingWhen: `inactive`,
+    days: {
+      sunday: false,
+      monday: true,
+      tuesday: true,
+      wednesday: true,
+      thursday: true,
+      friday: true,
+      saturday: false,
+    },
+    time: {
+      start: {
+        hour: 6,
+        minute: 0,
+      },
+      end: {
+        hour: 17,
+        minute: 30,
+      },
+    },
+  },
+  schedulable: true,
+});
+const OnlyDuringSchoolHours: Story = props({
+  ...NotDuringSchoolHours.args,
+  name: `History class`,
+  description: `Videos for history class, only needed during school hours`,
+  schedule: {
+    specifyingWhen: `active`,
+    days: {
+      sunday: false,
+      monday: true,
+      tuesday: true,
+      wednesday: true,
+      thursday: true,
+      friday: true,
+      saturday: false,
+    },
+    time: {
+      start: {
+        hour: 6,
+        minute: 0,
+      },
+      end: {
+        hour: 17,
+        minute: 30,
+      },
+    },
+  },
+});
+const NotAtNight: Story = props({
+  ...NotDuringSchoolHours.args,
+  name: `Only daytime`,
+  description: `For daytime use only, not to be used at night`,
+  schedule: {
+    specifyingWhen: `active`,
+    days: {
+      sunday: true,
+      monday: true,
+      tuesday: true,
+      wednesday: true,
+      thursday: true,
+      friday: true,
+      saturday: true,
+    },
+    time: {
+      start: {
+        hour: 6,
+        minute: 0,
+      },
+      end: {
+        hour: 17,
+        minute: 30,
+      },
+    },
+  },
+});
+const OnlyOnWeekends: Story = props({
+  ...NotDuringSchoolHours.args,
+  name: `Weekend fun`,
+  description: `For weekends only, not to be used during the week`,
+  schedule: {
+    specifyingWhen: `active`,
+    days: {
+      sunday: true,
+      monday: false,
+      tuesday: false,
+      wednesday: false,
+      thursday: false,
+      friday: false,
+      saturday: true,
+    },
+    time: {
+      start: {
+        hour: 0,
+        minute: 0,
+      },
+      end: {
+        hour: 23,
+        minute: 59,
+      },
+    },
+  },
+});
+const Random: Story = props({
+  ...NotDuringSchoolHours.args,
+  name: `Seemingly random`,
+  description: `Weird schedule, not sure who would use this`,
+  schedule: {
+    specifyingWhen: `inactive`,
+    days: {
+      sunday: false,
+      monday: true,
+      tuesday: true,
+      wednesday: false,
+      thursday: true,
+      friday: false,
+      saturday: false,
+    },
+    time: {
+      start: {
+        hour: 3,
+        minute: 45,
+      },
+      end: {
+        hour: 4,
+        minute: 4,
+      },
+    },
+  },
+});
+const Always: Story = props({
+  ...NotDuringSchoolHours.args,
+  name: `Always active`,
+  description: `Not sure why you'd have this one scheduled...`,
+  schedule: {
+    specifyingWhen: `active`,
+    days: {
+      sunday: true,
+      monday: true,
+      tuesday: true,
+      wednesday: true,
+      thursday: true,
+      friday: true,
+      saturday: true,
+    },
+    time: {
+      start: {
+        hour: 0,
+        minute: 0,
+      },
+      end: {
+        hour: 23,
+        minute: 59,
+      },
+    },
+  },
+});
+
+export const Scheduled = () => (
+  <div className="flex flex-col gap-8">
+    <KeychainCard {...(NotDuringSchoolHours.args as any)} />
+    <KeychainCard {...(OnlyDuringSchoolHours.args as any)} />
+    <KeychainCard {...(NotAtNight.args as any)} />
+    <KeychainCard {...(OnlyOnWeekends.args as any)} />
+    <KeychainCard {...(Random.args as any)} />
+    <KeychainCard {...(Always.args as any)} />
+  </div>
+);
 
 export const ListPrivateNoEdit: Story = props({
   ...ListPublic.args,
@@ -27,12 +205,14 @@ export const ListPrivateNoEdit: Story = props({
   isPublic: false,
   editUrl: undefined,
   removeText: `Remove`,
+  schedulable: true,
 });
 
 export const ListPublicNoEdit: Story = props({
   ...ListPublic.args,
   editUrl: undefined,
   removeText: `Remove`,
+  schedulable: true,
 });
 
 export const ListPrivate: Story = props({
@@ -84,6 +264,12 @@ export const Collection = () => (
       <KeychainCard {...(ListPrivate.args as any)} />
       <KeychainCard {...(ListPrivateNoEdit.args as any)} />
       <KeychainCard {...(ListPrivateNoDescription.args as any)} />
+      <KeychainCard {...(NotDuringSchoolHours.args as any)} />
+      <KeychainCard {...(OnlyDuringSchoolHours.args as any)} />
+      <KeychainCard {...(NotAtNight.args as any)} />
+      <KeychainCard {...(OnlyOnWeekends.args as any)} />
+      <KeychainCard {...(Random.args as any)} />
+      <KeychainCard {...(Always.args as any)} />
     </div>
     <Label className="mt-3">
       Mode: <code>select</code>

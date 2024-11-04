@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import cx from 'classnames';
 import { inflect } from '@shared/string';
-import { TextInput, Button, Toggle, Label } from '@shared/components';
+import { TextInput, Button, Toggle, Label, TimeInput } from '@shared/components';
+import type { TimeSpan } from '@shared/datetime';
 import type { Subcomponents, ConfirmableEntityAction, RequestState } from '@dash/types';
 import type { KeychainSummary as Keychain } from '@dash/types';
 import KeychainCard from '../Keychains/KeychainCard';
 import { ConfirmDeleteEntity } from '../Modal';
 import PageHeading from '../PageHeading';
-import AddKeychainModal from './AddKeychainModal';
+import AddKeychainDrawer from './AddKeychainDrawer';
 import ConnectDeviceModal from './ConnectDeviceModal';
 import UserDevice from './UserDevice';
 import AddDeviceInstructions from './AddDeviceInstructions';
@@ -77,6 +78,12 @@ const EditUser: React.FC<Props> = ({
   selectingKeychain,
   onConfirmAddKeychain,
 }) => {
+  const [downtimeEnabled, setDownTimeEnabled] = useState(false);
+  const [downtimeTimeSpan, setDowntimeTimeSpan] = useState<TimeSpan>({
+    start: { hour: 21, minute: 0 },
+    end: { hour: 7, minute: 0 },
+  });
+
   if (isNew) {
     return (
       <div className="-my-6 md:-my-7 py-6 md:py-7 min-h-[calc(100vh-64px)] md:min-h-screen flex flex-col">
@@ -121,7 +128,7 @@ const EditUser: React.FC<Props> = ({
         request={addDeviceRequest}
         dismissAddDevice={dismissAddDevice}
       />
-      <AddKeychainModal
+      <AddKeychainDrawer
         request={fetchSelectableKeychainsRequest}
         onSelect={onSelectKeychainToAdd}
         onDismiss={onDismissAddKeychain}
@@ -129,11 +136,10 @@ const EditUser: React.FC<Props> = ({
         selected={selectingKeychain ?? undefined}
         existingKeychains={keychains}
         userName={name}
-        userId={id}
       />
       <ConfirmDeleteEntity type="device" action={deleteDevice} />
       <ConfirmDeleteEntity type="user" action={deleteUser} />
-      {devices.length > 0 && <PageHeading icon={`pen`}>Edit child</PageHeading>}
+      {devices.length > 0 && <PageHeading icon={`cog`}>Child settings</PageHeading>}
       <div className="mt-8">
         {devices.length === 0 && (
           <div className="-mt-6 bg-white rounded-3xl p-6 sm:p-8 shadow border-[0.5px] border-slate-200">
@@ -184,9 +190,11 @@ const EditUser: React.FC<Props> = ({
                 Add a computer
               </button>
             </div>
+
+            {/* monitoring */}
             <div className="mt-4 max-w-3xl">
               <h2 className="text-lg font-bold text-slate-700">Monitoring</h2>
-              <div className="flex justify-between items-center bg-slate-100 my-3 p-4 sm:p-6 rounded-xl">
+              <div className="flex justify-between items-center bg-slate-100 mt-3 p-4 sm:p-6 rounded-xl">
                 <div className="mr-3">
                   <h3 className="font-medium text-slate-700 leading-tight">
                     Enable keylogging
@@ -198,7 +206,7 @@ const EditUser: React.FC<Props> = ({
                 <Toggle enabled={keyloggingEnabled} setEnabled={setKeyloggingEnabled} />
               </div>
               <div
-                className={`bg-slate-100 my-3 p-4 sm:p-6 rounded-xl overflow-hidden relative`}
+                className={`bg-slate-100 mt-3 p-4 sm:p-6 rounded-xl overflow-hidden relative`}
               >
                 <div className="flex justify-between items-center">
                   <div className="mr-3">
@@ -217,7 +225,7 @@ const EditUser: React.FC<Props> = ({
                 <div
                   className={cx(
                     `flex flex-col space-y-3 md:flex-row md:space-x-3 md:space-y-0 mt-5`,
-                    screenshotsEnabled ? `opacity-100` : `opacity-0 hidden`,
+                    screenshotsEnabled || `hidden`,
                   )}
                 >
                   <TextInput
@@ -238,7 +246,7 @@ const EditUser: React.FC<Props> = ({
               </div>
               <div
                 className={cx(
-                  `flex justify-between items-center mt-4 p-6 bg-slate-100 rounded-xl transition-opacity duration-300`,
+                  `flex justify-between items-center mt-3 p-6 bg-slate-100 rounded-xl transition-opacity duration-300`,
                   !(screenshotsEnabled || keyloggingEnabled) && `!hidden`,
                 )}
               >
@@ -257,11 +265,54 @@ const EditUser: React.FC<Props> = ({
               </div>
             </div>
 
+            {/* downtime */}
+            <div className="mt-12 max-w-3xl">
+              <h2 className="text-lg font-bold text-slate-700">Downtime</h2>
+              <div
+                className={`bg-slate-100 mt-3 p-4 sm:p-6 rounded-xl overflow-hidden relative`}
+              >
+                <div className="flex justify-between items-center">
+                  <div className="mr-3">
+                    <h3 className="font-medium text-slate-700 leading-tight">
+                      Enable downtime
+                    </h3>
+                    <p className="text-slate-500 text-sm mt-1">
+                      Completely restrict all internet access during specified hours
+                    </p>
+                  </div>
+                  <Toggle enabled={downtimeEnabled} setEnabled={setDownTimeEnabled} />
+                </div>
+                <div
+                  className={cx(
+                    `flex justify-center items-center mt-4 bg-white rounded-xl p-4 gap-4 flex-col sm:flex-row md:flex-col md+:flex-row border-[0.5px] border-slate-200 shadow shadow-slate-300/50`,
+                    downtimeEnabled || `hidden`,
+                  )}
+                >
+                  <span className="text-slate-500 font-medium">From</span>
+                  <TimeInput
+                    time={downtimeTimeSpan.start}
+                    setTime={(time) =>
+                      setDowntimeTimeSpan((prev) => ({ ...prev, start: time }))
+                    }
+                  />
+                  <span className="text-slate-500 font-medium">to</span>
+                  <TimeInput
+                    time={downtimeTimeSpan.end}
+                    setTime={(time) =>
+                      setDowntimeTimeSpan((prev) => ({ ...prev, end: time }))
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* keychains */}
             <div className="mt-12 max-w-3xl">
               <h2 className="text-lg font-bold text-slate-700 mb-2">Keychains</h2>
               <div className="py-3 flex flex-col space-y-4">
                 {keychains.map((keychain) => (
                   <KeychainCard
+                    schedulable={true} // TODO
                     mode="list"
                     key={keychain.id}
                     name={keychain.name}
