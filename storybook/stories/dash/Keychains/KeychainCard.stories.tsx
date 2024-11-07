@@ -11,7 +11,8 @@ const meta = {
 type Story = StoryObj<typeof meta>;
 
 export const ListPublic: Story = props({
-  mode: `list`,
+  id: `1`,
+  mode: `keychains_screen`,
   name: `HTC`,
   numKeys: 43,
   isPublic: true,
@@ -29,7 +30,7 @@ const NotDuringSchoolHours: Story = props({
   name: `After-school games`,
   description: `For afternoons and weekends, not to be played during school hours`,
   schedule: {
-    specifyingWhen: `inactive`,
+    mode: `inactive`,
     days: {
       sunday: false,
       monday: true,
@@ -39,15 +40,9 @@ const NotDuringSchoolHours: Story = props({
       friday: true,
       saturday: false,
     },
-    time: {
-      start: {
-        hour: 6,
-        minute: 0,
-      },
-      end: {
-        hour: 17,
-        minute: 30,
-      },
+    window: {
+      start: { hour: 6, minute: 0 },
+      end: { hour: 17, minute: 30 },
     },
   },
   schedulable: true,
@@ -57,7 +52,7 @@ const OnlyDuringSchoolHours: Story = props({
   name: `History class`,
   description: `Videos for history class, only needed during school hours`,
   schedule: {
-    specifyingWhen: `active`,
+    mode: `active`,
     days: {
       sunday: false,
       monday: true,
@@ -67,15 +62,9 @@ const OnlyDuringSchoolHours: Story = props({
       friday: true,
       saturday: false,
     },
-    time: {
-      start: {
-        hour: 6,
-        minute: 0,
-      },
-      end: {
-        hour: 17,
-        minute: 30,
-      },
+    window: {
+      start: { hour: 6, minute: 0 },
+      end: { hour: 17, minute: 30 },
     },
   },
 });
@@ -84,7 +73,7 @@ const NotAtNight: Story = props({
   name: `Only daytime`,
   description: `For daytime use only, not to be used at night`,
   schedule: {
-    specifyingWhen: `active`,
+    mode: `active`,
     days: {
       sunday: true,
       monday: true,
@@ -94,7 +83,7 @@ const NotAtNight: Story = props({
       friday: true,
       saturday: true,
     },
-    time: {
+    window: {
       start: {
         hour: 6,
         minute: 0,
@@ -111,7 +100,7 @@ const OnlyOnWeekends: Story = props({
   name: `Weekend fun`,
   description: `For weekends only, not to be used during the week`,
   schedule: {
-    specifyingWhen: `active`,
+    mode: `active`,
     days: {
       sunday: true,
       monday: false,
@@ -121,7 +110,7 @@ const OnlyOnWeekends: Story = props({
       friday: false,
       saturday: true,
     },
-    time: {
+    window: {
       start: {
         hour: 0,
         minute: 0,
@@ -138,7 +127,7 @@ const Random: Story = props({
   name: `Seemingly random`,
   description: `Weird schedule, not sure who would use this`,
   schedule: {
-    specifyingWhen: `inactive`,
+    mode: `inactive`,
     days: {
       sunday: false,
       monday: true,
@@ -148,15 +137,9 @@ const Random: Story = props({
       friday: false,
       saturday: false,
     },
-    time: {
-      start: {
-        hour: 3,
-        minute: 45,
-      },
-      end: {
-        hour: 4,
-        minute: 4,
-      },
+    window: {
+      start: { hour: 3, minute: 45 },
+      end: { hour: 4, minute: 4 },
     },
   },
 });
@@ -165,7 +148,7 @@ const Always: Story = props({
   name: `Always active`,
   description: `Not sure why you'd have this one scheduled...`,
   schedule: {
-    specifyingWhen: `active`,
+    mode: `active`,
     days: {
       sunday: true,
       monday: true,
@@ -175,15 +158,9 @@ const Always: Story = props({
       friday: true,
       saturday: true,
     },
-    time: {
-      start: {
-        hour: 0,
-        minute: 0,
-      },
-      end: {
-        hour: 23,
-        minute: 59,
-      },
+    window: {
+      start: { hour: 0, minute: 0 },
+      end: { hour: 23, minute: 59 },
     },
   },
 });

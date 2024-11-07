@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import cx from 'classnames';
 import { inflect } from '@shared/string';
-import { TextInput, Button, Toggle, Label, TimeInput } from '@shared/components';
-import type { TimeSpan } from '@shared/datetime';
+import { TextInput, Button, Toggle, Label } from '@shared/components';
+import type { KeychainSchedule, PlainTimeWindow } from '@dash/types';
 import type { Subcomponents, ConfirmableEntityAction, RequestState } from '@dash/types';
-import type { KeychainSummary as Keychain } from '@dash/types';
+import type { UserKeychainSummary as Keychain } from '@dash/types';
 import KeychainCard from '../Keychains/KeychainCard';
 import { ConfirmDeleteEntity } from '../Modal';
 import PageHeading from '../PageHeading';
+import TimeInput from '../Forms/TimeInput';
 import AddKeychainDrawer from './AddKeychainDrawer';
 import ConnectDeviceModal from './ConnectDeviceModal';
 import UserDevice from './UserDevice';
 import AddDeviceInstructions from './AddDeviceInstructions';
 
 interface Props {
+  id: string;
   isNew: boolean;
   name: string;
   setName(name: string): unknown;
@@ -27,6 +29,10 @@ interface Props {
   setScreenshotsFrequency(frequency: number): unknown;
   showSuspensionActivity: boolean;
   setShowSuspensionActivity(show: boolean): unknown;
+  setDowntimeEnabled(enabled: boolean): unknown;
+  downtimeEnabled: boolean;
+  setDowntime(window: PlainTimeWindow): unknown;
+  downtime: PlainTimeWindow;
   removeKeychain(id: UUID): unknown;
   keychains: Keychain[];
   devices: Subcomponents<typeof UserDevice>;
@@ -41,9 +47,11 @@ interface Props {
   onSelectKeychainToAdd(keychain: Keychain): unknown;
   onConfirmAddKeychain(): unknown;
   onDismissAddKeychain(): unknown;
-  selectingKeychain?: Keychain | null;
+  addingKeychain?: Keychain | null;
   fetchSelectableKeychainsRequest?: RequestState<{ own: Keychain[]; public: Keychain[] }>;
-  id: string;
+  keychainSchedule?: KeychainSchedule;
+  setAddingKeychainSchedule(schedule?: KeychainSchedule): unknown;
+  setAssignedKeychainSchedule(id: UUID, schedule?: KeychainSchedule): unknown;
 }
 
 const EditUser: React.FC<Props> = ({
@@ -75,15 +83,16 @@ const EditUser: React.FC<Props> = ({
   onSelectKeychainToAdd,
   onDismissAddKeychain,
   fetchSelectableKeychainsRequest,
-  selectingKeychain,
+  addingKeychain,
   onConfirmAddKeychain,
+  downtimeEnabled,
+  setDowntimeEnabled,
+  downtime,
+  setDowntime,
+  keychainSchedule,
+  setAddingKeychainSchedule,
+  setAssignedKeychainSchedule,
 }) => {
-  const [downtimeEnabled, setDownTimeEnabled] = useState(false);
-  const [downtimeTimeSpan, setDowntimeTimeSpan] = useState<TimeSpan>({
-    start: { hour: 21, minute: 0 },
-    end: { hour: 7, minute: 0 },
-  });
-
   if (isNew) {
     return (
       <div className="-my-6 md:-my-7 py-6 md:py-7 min-h-[calc(100vh-64px)] md:min-h-screen flex flex-col">
@@ -133,9 +142,11 @@ const EditUser: React.FC<Props> = ({
         onSelect={onSelectKeychainToAdd}
         onDismiss={onDismissAddKeychain}
         onConfirm={onConfirmAddKeychain}
-        selected={selectingKeychain ?? undefined}
+        selected={addingKeychain ?? undefined}
         existingKeychains={keychains}
         userName={name}
+        schedule={keychainSchedule}
+        setSchedule={setAddingKeychainSchedule}
       />
       <ConfirmDeleteEntity type="device" action={deleteDevice} />
       <ConfirmDeleteEntity type="user" action={deleteUser} />
@@ -280,7 +291,7 @@ const EditUser: React.FC<Props> = ({
                       Completely restrict all internet access during specified hours
                     </p>
                   </div>
-                  <Toggle enabled={downtimeEnabled} setEnabled={setDownTimeEnabled} />
+                  <Toggle enabled={downtimeEnabled} setEnabled={setDowntimeEnabled} />
                 </div>
                 <div
                   className={cx(
@@ -290,17 +301,13 @@ const EditUser: React.FC<Props> = ({
                 >
                   <span className="text-slate-500 font-medium">From</span>
                   <TimeInput
-                    time={downtimeTimeSpan.start}
-                    setTime={(time) =>
-                      setDowntimeTimeSpan((prev) => ({ ...prev, start: time }))
-                    }
+                    time={downtime.start}
+                    setTime={(start) => setDowntime({ ...downtime, start })}
                   />
                   <span className="text-slate-500 font-medium">to</span>
                   <TimeInput
-                    time={downtimeTimeSpan.end}
-                    setTime={(time) =>
-                      setDowntimeTimeSpan((prev) => ({ ...prev, end: time }))
-                    }
+                    time={downtime.end}
+                    setTime={(end) => setDowntime({ ...downtime, end })}
                   />
                 </div>
               </div>
@@ -312,15 +319,17 @@ const EditUser: React.FC<Props> = ({
               <div className="py-3 flex flex-col space-y-4">
                 {keychains.map((keychain) => (
                   <KeychainCard
-                    schedulable={true} // TODO
-                    mode="list"
+                    mode="assign_to_child"
+                    schedule={keychain.schedule}
                     key={keychain.id}
                     name={keychain.name}
                     description={keychain.description}
                     numKeys={keychain.numKeys}
                     isPublic={keychain.isPublic}
                     onRemove={() => removeKeychain(keychain.id)}
-                    removeText="Remove"
+                    setSchedule={(schedule) =>
+                      setAssignedKeychainSchedule(keychain.id, schedule)
+                    }
                   />
                 ))}
                 <button
