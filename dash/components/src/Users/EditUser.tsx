@@ -2,7 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 import { inflect } from '@shared/string';
 import { TextInput, Button, Toggle, Label } from '@shared/components';
-import type { KeychainSchedule, PlainTimeWindow } from '@dash/types';
+import type { RuleSchedule, PlainTimeWindow } from '@dash/types';
 import type { Subcomponents, ConfirmableEntityAction, RequestState } from '@dash/types';
 import type { UserKeychainSummary as Keychain } from '@dash/types';
 import KeychainCard from '../Keychains/KeychainCard';
@@ -49,9 +49,9 @@ interface Props {
   onDismissAddKeychain(): unknown;
   addingKeychain?: Keychain | null;
   fetchSelectableKeychainsRequest?: RequestState<{ own: Keychain[]; public: Keychain[] }>;
-  keychainSchedule?: KeychainSchedule;
-  setAddingKeychainSchedule(schedule?: KeychainSchedule): unknown;
-  setAssignedKeychainSchedule(id: UUID, schedule?: KeychainSchedule): unknown;
+  keychainSchedule?: RuleSchedule;
+  setAddingKeychainSchedule(schedule?: RuleSchedule): unknown;
+  setAssignedKeychainSchedule(id: UUID, schedule?: RuleSchedule): unknown;
 }
 
 const EditUser: React.FC<Props> = ({

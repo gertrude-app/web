@@ -4,7 +4,7 @@ import type {
   UserKeychainSummary,
   PlainTimeWindow,
   User,
-  KeychainSchedule,
+  RuleSchedule,
 } from '@dash/types';
 import { commit, editable } from '../lib/helpers';
 
@@ -25,9 +25,9 @@ export type Action =
   | { type: 'setDowntime'; downtime: PlainTimeWindow }
   | { type: 'setShowSuspensionActivity'; show: boolean }
   | { type: 'removeKeychain'; id: UUID }
-  | { type: 'setKeychainSchedule'; id: UUID; schedule?: KeychainSchedule }
+  | { type: 'setKeychainSchedule'; id: UUID; schedule?: RuleSchedule }
   | { type: 'addKeychain'; keychain: UserKeychainSummary }
-  | { type: 'setAddingKeychainSchedule'; schedule?: KeychainSchedule }
+  | { type: 'setAddingKeychainSchedule'; schedule?: RuleSchedule }
   | { type: 'setAddingKeychain'; keychain?: UserKeychainSummary | null };
 
 function reducer(state: State, action: Action): State | undefined {
