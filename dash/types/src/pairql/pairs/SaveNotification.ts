@@ -1,5 +1,5 @@
 // auto-generated, do not edit
-import type { AdminNotificationTrigger, SuccessOutput } from '../shared';
+import type { SuccessOutput, AdminNotificationTrigger } from '../shared';
 
 export namespace SaveNotification {
   export interface Input {
