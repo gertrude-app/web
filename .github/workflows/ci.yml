@@ -103,6 +103,37 @@ jobs:
           name: cypress-videos
           path: dash/app/cypress/videos
 
+  files-changed:
+    runs-on: namespace-profile-default
+    if: ${{ github.event_name == 'pull_request' }}
+    outputs:
+      appviews: ${{ steps.changes.outputs.appviews }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            appviews:
+              - appviews/**
+
+  appviews-comment:
+    needs: files-changed
+    if: needs.files-changed.outputs.appviews == 'true'
+    runs-on: namespace-profile-default
+    steps:
+      - name: pr comment
+        uses: mshick/add-pr-comment@v2
+        with:
+          message-id: appview-reminder
+          message: |
+            ### ⚠️ **Warning: `appviews/` dir modified** ⚠️
+            This Pull Request includes changes to the **`appviews`** directory. We need to be very careful about introducing regressions for older WebKit
+            renderers with legacy versions of macOS, particularly:
+            1. **Focusable elements**: All focusable elements (form elements, buttons, links, etc.) must have `tabIndex="-1"` to prevent layout shift issues.
+            2. **`gap-*` utilities** are not supported in Catalina
+
   site:
     name: site
     runs-on: namespace-profile-default
