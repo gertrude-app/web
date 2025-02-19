@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@source "../../sentinel";
+
+@theme {
+  --font-nunito: "Nunito Sans Variable", sans;
+}
+
+* {
+  interpolate-size: allow-keywords;
+}

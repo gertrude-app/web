@@ -9,6 +9,12 @@ dash:
 site:
 	@pnpm --filter site start
 
+analytics:
+	@pnpm --filter @gertrude/analytics dev
+
+sentinel:
+	@pnpm --filter @gertrude/sentinel dev
+
 hmr-docs:
   @watchexec --watch site/markdoc --exts .md "just hmr-comment"
 
