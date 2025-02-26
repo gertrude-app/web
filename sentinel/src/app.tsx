@@ -2,17 +2,18 @@ import { Router } from '@solidjs/router';
 import { FileRoutes } from '@solidjs/start/router';
 import { Suspense } from 'solid-js';
 import { clientOnly } from '@solidjs/start';
-import './app.css';
+
 import '@fontsource-variable/nunito-sans';
-import SidebarLayout from './ui/layouts/SidebarLayout';
-import SidebarSection from './ui/components/SidebarSection';
-import SidebarLink from './ui/components/SidebarLink';
-import SidebarDropdown from './ui/components/SidebarDropdown';
+import './app.css';
+
+import SidebarLayout from '~/ui-lib/layouts/SidebarLayout';
+import SidebarSection from '~/ui-lib/components/SidebarSection';
+import SidebarLink from '~/ui-lib/components/SidebarLink';
+import SidebarDropdown from '~/ui-lib/components/SidebarDropdown';
 
 const HomeIcon = clientOnly(() => import(`lucide-solid/icons/home`));
 const ExternalLinkIcon = clientOnly(() => import(`lucide-solid/icons/external-link`));
 const QuestionMarkIcon = clientOnly(() => import(`lucide-solid/icons/circle-help`));
-const SquareIcon = clientOnly(() => import(`lucide-solid/icons/square`));
 const SidebarIcon = clientOnly(() => import(`lucide-solid/icons/sidebar`));
 const LayoutIcon = clientOnly(() => import(`lucide-solid/icons/layout-panel-left`));
 const ComponentsIcon = clientOnly(() => import(`lucide-solid/icons/layout-grid`));
@@ -34,31 +35,17 @@ export default function App() {
             </SidebarSection>
             <SidebarSection heading="UI Components">
               <SidebarDropdown text="Components" icon={ComponentsIcon}>
-                <SidebarLink
-                  href="/components/glass-panel"
-                  text="GlassPanel"
-                  icon={SquareIcon}
-                />
-                <SidebarLink
-                  href="/components/sidebar-dropdown"
-                  text="SidebarDropdown"
-                  icon={SquareIcon}
-                />
-                <SidebarLink
-                  href="/components/sidebar-link"
-                  text="SidebarLink"
-                  icon={SquareIcon}
-                />
-                <SidebarLink
-                  href="/components/sidebar-section"
-                  text="SidebarSection"
-                  icon={SquareIcon}
-                />
-                <SidebarLink
-                  href="/components/tinted-bg"
-                  text="TintedBg"
-                  icon={SquareIcon}
-                />
+                <SidebarLink href="/components/card" text="Card" />
+                <SidebarDropdown text="Sidebar">
+                  <SidebarLink
+                    href="/components/sidebar-dropdown"
+                    text="SidebarDropdown"
+                  />
+                  <SidebarLink href="/components/sidebar-link" text="SidebarLink" />
+                  <SidebarLink href="/components/sidebar-section" text="SidebarSection" />
+                </SidebarDropdown>
+                <SidebarLink href="/components/select" text="Select" />
+                <SidebarLink href="/components/tinted-bg" text="TintedBg" />
               </SidebarDropdown>
               <SidebarDropdown text="Layouts" icon={LayoutIcon}>
                 <SidebarLink

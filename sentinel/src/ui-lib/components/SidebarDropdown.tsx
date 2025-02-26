@@ -2,7 +2,6 @@ import { children, Component, createSignal, JSX } from 'solid-js';
 import { clientOnly } from '@solidjs/start';
 import cx from 'clsx';
 import { LucideIcon } from 'lucide-solid';
-import { effect } from 'solid-js/web';
 
 const ChevronRight = clientOnly(() => import(`lucide-solid/icons/chevron-right`));
 
@@ -48,7 +47,7 @@ const SidebarDropdown: Component<Props> = (props) => {
                 'transition-[opacity,filter,translate] duration-300',
                 !open() && `opacity-0 blur -translate-x-2`,
               )}
-              style={{ 'transition-delay': `${i * 30}ms` }}
+              style={{ 'transition-delay': `${i * 20}ms` }}
             >
               {child}
             </div>
