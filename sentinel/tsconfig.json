@@ -13,6 +13,7 @@
     "strict": true,
     "types": ["vinxi/types/client"],
     "isolatedModules": true,
+    "baseUrl": "./",
     "paths": {
       "~/*": ["./src/*"]
     }
