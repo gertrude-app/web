@@ -15,6 +15,9 @@ analytics:
 sentinel:
 	@pnpm --filter @gertrude/sentinel dev
 
+new-sentinel:
+	@pnpm --filter @gertrude/new-sentinel dev
+
 hmr-docs:
   @watchexec --watch site/markdoc --exts .md "just hmr-comment"
 

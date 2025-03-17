@@ -1,7 +1,12 @@
 import { Component } from 'solid-js';
-import ComponentDemo from '~/site-components/ComponentDemo';
-import PageHeading from '~/ui-lib/components/PageHeading';
-import Card from '~/ui-lib/components/Card';
+import { createFileRoute } from '@tanstack/solid-router';
+import ComponentDemo from '../../site-components/ComponentDemo';
+import PageHeading from '../../ui/components/PageHeading';
+import Card from '../../ui/components/Card';
+
+export const Route = createFileRoute('/components/card')({
+  component: () => <CardPage />,
+});
 
 const CardPage: Component = () => {
   return (

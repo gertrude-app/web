@@ -1,7 +1,12 @@
+import { createFileRoute } from '@tanstack/solid-router';
 import { Component, createSignal } from 'solid-js';
-import ComponentDemo from '~/site-components/ComponentDemo';
-import PageHeading from '~/ui-lib/components/PageHeading';
-import Select from '~/ui-lib/components/Select';
+import ComponentDemo from '../../site-components/ComponentDemo';
+import PageHeading from '../../ui/components/PageHeading';
+import Select from '../../ui/components/Select';
+
+export const Route = createFileRoute('/components/select')({
+  component: () => <SelectPage />,
+});
 
 type Size = 'Extra small' | 'Small' | 'Medium' | 'Large' | 'Extra large';
 

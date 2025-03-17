@@ -1,9 +1,6 @@
 import { children, Component, createSignal, JSX } from 'solid-js';
-import { clientOnly } from '@solidjs/start';
 import cx from 'clsx';
-import { LucideIcon } from 'lucide-solid';
-
-const ChevronRight = clientOnly(() => import(`lucide-solid/icons/chevron-right`));
+import { LucideIcon, ChevronRightIcon } from 'lucide-solid';
 
 interface Props {
   text: string;
@@ -26,7 +23,7 @@ const SidebarDropdown: Component<Props> = (props) => {
           {props.icon && <props.icon class={cx('w-5 h-5 text-violet-900/50')} />}
           <span class="font-medium text-violet-950/70">{props.text}</span>
         </div>
-        <ChevronRight
+        <ChevronRightIcon
           class={cx(
             'w-5 h-5 text-violet-900/50 transition-transform duration-150',
             open() && 'rotate-90',

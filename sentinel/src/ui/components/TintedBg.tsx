@@ -1,6 +1,5 @@
 import { Component, JSX } from 'solid-js';
 import cx from 'clsx';
-import BgImage from '../../assets/bg.png';
 
 interface Props {
   children: JSX.Element;
@@ -10,7 +9,7 @@ interface Props {
 const TintedBg: Component<Props> = (props) => (
   <div
     style={{
-      'background-image': `url(${BgImage})`,
+      'background-image': `url("/tinted-bg.png")`, //todo
       'background-size': 'cover',
       'background-position': 'center',
       'background-repeat': 'no-repeat',

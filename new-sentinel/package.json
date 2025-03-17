@@ -1,25 +1,25 @@
 {
-  "name": "@gertrude/analytics",
+  "name": "@gertrude/new-sentinel",
   "version": "0.0.0",
   "description": "",
   "type": "module",
   "scripts": {
     "start": "vite",
-    "dev": "vite --port 2000",
+    "dev": "vite --port 2400",
     "build": "vite build",
     "serve": "vite preview"
   },
   "license": "MIT",
   "devDependencies": {
-    "@gertrude/sentinel": "workspace:*",
-    "@tanstack/router-plugin": "1.112.17",
     "typescript": "^5.7.2",
     "vite": "^6.0.0",
     "vite-plugin-solid": "^2.11.6"
   },
   "dependencies": {
     "@tailwindcss/vite": "4.0.11",
+    "@tanstack/router-plugin": "1.112.17",
     "@tanstack/solid-router": "1.112.17",
+    "clsx": "2.1.1",
     "lucide-solid": "0.475.0",
     "solid-js": "^1.9.5",
     "tailwindcss": "4.0.11"

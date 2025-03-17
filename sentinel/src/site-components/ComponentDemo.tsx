@@ -1,6 +1,6 @@
 import { Component, createSignal, JSX } from 'solid-js';
 import cx from 'clsx';
-import Select from '~/ui-lib/components/Select';
+import Select from '../ui/components/Select';
 
 interface Props {
   stories: Array<{

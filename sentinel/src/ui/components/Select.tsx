@@ -1,10 +1,8 @@
 import { Component, createSignal } from 'solid-js';
-import { clientOnly } from '@solidjs/start';
 import cx from 'clsx';
-import Card from './Card';
 import { effect } from 'solid-js/web';
-
-const ChevronIcon = clientOnly(() => import(`lucide-solid/icons/chevron-down`));
+import { ChevronDownIcon } from 'lucide-solid';
+import Card from './Card';
 
 interface Props<T> {
   selected: T;
@@ -45,7 +43,7 @@ export default function Select<T extends string = string>(
         <div class="text-violet-950/60 group-hover:text-violet-950/80 font-medium transition-colors duration-100 whitespace-nowrap overflow-hidden overflow-ellipsis">
           {props.selected}
         </div>
-        <ChevronIcon
+        <ChevronDownIcon
           class={cx(
             'w-5 h-5 text-violet-950/40 group-hover:text-violet-950/60 transition-colors duration-100 shrink-0',
           )}
