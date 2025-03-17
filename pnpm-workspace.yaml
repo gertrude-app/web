@@ -6,4 +6,6 @@ packages:
   - 'storybook'
   - 'smoke'
   - 'sentinel'
+  - 'new-sentinel'
+  - 'test'
   - 'analytics'

@@ -1,12 +1,14 @@
+import { createFileRoute } from '@tanstack/solid-router';
+import { LayoutGridIcon, SquareIcon } from 'lucide-solid';
 import { Component } from 'solid-js';
-import { clientOnly } from '@solidjs/start';
-import ComponentDemo from '~/site-components/ComponentDemo';
-import PageHeading from '~/ui-lib/components/PageHeading';
-import SidebarDropdown from '~/ui-lib/components/SidebarDropdown';
-import SidebarLink from '~/ui-lib/components/SidebarLink';
+import ComponentDemo from '../../site-components/ComponentDemo';
+import PageHeading from '../../ui/components/PageHeading';
+import SidebarDropdown from '../../ui/components/SidebarDropdown';
+import SidebarLink from '../../ui/components/SidebarLink';
 
-const SquaresIcon = clientOnly(() => import(`lucide-solid/icons/layout-grid`));
-const SquareIcon = clientOnly(() => import(`lucide-solid/icons/square`));
+export const Route = createFileRoute('/components/sidebar-dropdown')({
+  component: () => <SidebarDropdownPage />,
+});
 
 const SidebarDropdownPage: Component = () => {
   return (
@@ -19,11 +21,19 @@ const SidebarDropdownPage: Component = () => {
           {
             title: 'With icons',
             component: (
-              <SidebarDropdown text="Collection" icon={SquaresIcon}>
-                <SidebarLink text="Here's something" href="#" icon={SquareIcon} />
-                <SidebarLink text="Here's something else" href="#" icon={SquareIcon} />
-                <SidebarLink text="Here's another thing" href="#" icon={SquareIcon} />
-                <SidebarLink text="Here's yet another thing" href="#" icon={SquareIcon} />
+              <SidebarDropdown text="Collection" icon={LayoutGridIcon}>
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's something
+                </SidebarLink>
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's something else
+                </SidebarLink>
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's another thing
+                </SidebarLink>
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's yet another thing
+                </SidebarLink>
               </SidebarDropdown>
             ),
           },
@@ -31,31 +41,43 @@ const SidebarDropdownPage: Component = () => {
             title: 'Without icons',
             component: (
               <SidebarDropdown text="Collection">
-                <SidebarLink text="Here's something" href="#" />
-                <SidebarLink text="Here's something else" href="#" />
-                <SidebarLink text="Here's another thing" href="#" />
-                <SidebarLink text="Here's yet another thing" href="#" />
+                <SidebarLink href="#">Here's something</SidebarLink>
+                <SidebarLink href="#">Here's something else</SidebarLink>
+                <SidebarLink href="#">Here's another thing</SidebarLink>
+                <SidebarLink href="#">Here's yet another thing</SidebarLink>
               </SidebarDropdown>
             ),
           },
           {
             title: 'With sub-dropdowns',
             component: (
-              <SidebarDropdown text="Collection" icon={SquaresIcon}>
-                <SidebarLink text="Here's something" href="#" icon={SquareIcon} />
-                <SidebarLink text="Here's something else" href="#" icon={SquareIcon} />
-                <SidebarLink text="Here's another thing" href="#" icon={SquareIcon} />
-                <SidebarDropdown text="Inner collection" icon={SquaresIcon}>
-                  <SidebarLink text="Here's something" href="#" icon={SquareIcon} />
-                  <SidebarLink text="Here's something else" href="#" icon={SquareIcon} />
-                  <SidebarLink text="Here's another thing" href="#" icon={SquareIcon} />
-                  <SidebarLink
-                    text="Here's yet another thing"
-                    href="#"
-                    icon={SquareIcon}
-                  />
+              <SidebarDropdown text="Collection" icon={LayoutGridIcon}>
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's something
+                </SidebarLink>
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's something else
+                </SidebarLink>
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's another thing
+                </SidebarLink>
+                <SidebarDropdown text="Inner collection" icon={LayoutGridIcon}>
+                  <SidebarLink href="#" icon={SquareIcon}>
+                    Here's something
+                  </SidebarLink>
+                  <SidebarLink href="#" icon={SquareIcon}>
+                    Here's something else
+                  </SidebarLink>
+                  <SidebarLink href="#" icon={SquareIcon}>
+                    Here's another thing
+                  </SidebarLink>
+                  <SidebarLink href="#" icon={SquareIcon}>
+                    Here's yet another thing
+                  </SidebarLink>
                 </SidebarDropdown>
-                <SidebarLink text="Here's yet another thing" href="#" icon={SquareIcon} />
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's yet another thing
+                </SidebarLink>
               </SidebarDropdown>
             ),
           },
@@ -63,21 +85,21 @@ const SidebarDropdownPage: Component = () => {
             title: 'With many children',
             component: (
               <SidebarDropdown text="Collection">
-                <SidebarLink text="Link the first" href="#" />
-                <SidebarLink text="Link the second" href="#" />
-                <SidebarLink text="Link the third" href="#" />
-                <SidebarLink text="Link the fourth" href="#" />
-                <SidebarLink text="Link the fifth" href="#" />
-                <SidebarLink text="Link the sixth" href="#" />
-                <SidebarLink text="Link the seventh" href="#" />
-                <SidebarLink text="Link the eighth" href="#" />
-                <SidebarLink text="Link the ninth" href="#" />
-                <SidebarLink text="Link the tenth" href="#" />
-                <SidebarLink text="Link the eleventh" href="#" />
-                <SidebarLink text="Link the twelfth" href="#" />
-                <SidebarLink text="Link the thirteenth" href="#" />
-                <SidebarLink text="Link the fourteenth" href="#" />
-                <SidebarLink text="Link the fifteenth" href="#" />
+                <SidebarLink href="#">Link the first</SidebarLink>
+                <SidebarLink href="#">Link the second</SidebarLink>
+                <SidebarLink href="#">Link the third</SidebarLink>
+                <SidebarLink href="#">Link the fourth</SidebarLink>
+                <SidebarLink href="#">Link the fifth</SidebarLink>
+                <SidebarLink href="#">Link the sixth</SidebarLink>
+                <SidebarLink href="#">Link the seventh</SidebarLink>
+                <SidebarLink href="#">Link the eighth</SidebarLink>
+                <SidebarLink href="#">Link the ninth</SidebarLink>
+                <SidebarLink href="#">Link the tenth</SidebarLink>
+                <SidebarLink href="#">Link the eleventh</SidebarLink>
+                <SidebarLink href="#">Link the twelfth</SidebarLink>
+                <SidebarLink href="#">Link the thirteenth</SidebarLink>
+                <SidebarLink href="#">Link the fourteenth</SidebarLink>
+                <SidebarLink href="#">Link the fifteenth</SidebarLink>
               </SidebarDropdown>
             ),
           },

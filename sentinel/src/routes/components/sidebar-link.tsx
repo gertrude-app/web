@@ -1,10 +1,13 @@
+import { CircleHelpIcon } from 'lucide-solid';
 import { Component } from 'solid-js';
-import { clientOnly } from '@solidjs/start';
-import ComponentDemo from '~/site-components/ComponentDemo';
-import PageHeading from '~/ui-lib/components/PageHeading';
-import SidebarLink from '~/ui-lib/components/SidebarLink';
+import { createFileRoute } from '@tanstack/solid-router';
+import ComponentDemo from '../../site-components/ComponentDemo';
+import PageHeading from '../../ui/components/PageHeading';
+import SidebarLink from '../../ui/components/SidebarLink';
 
-const QuestionMarkIcon = clientOnly(() => import(`lucide-solid/icons/circle-help`));
+export const Route = createFileRoute('/components/sidebar-link')({
+  component: () => <SidebarLinkPage />,
+});
 
 const SidebarLinkPage: Component = () => {
   return (
@@ -16,11 +19,15 @@ const SidebarLinkPage: Component = () => {
         stories={[
           {
             title: 'With icon',
-            component: <SidebarLink text="About us" href="#" icon={QuestionMarkIcon} />,
+            component: (
+              <SidebarLink href="#" icon={CircleHelpIcon}>
+                About us
+              </SidebarLink>
+            ),
           },
           {
             title: 'Without icon',
-            component: <SidebarLink text="About us" href="#" />,
+            component: <SidebarLink href="#">About us</SidebarLink>,
           },
         ]}
         class="mt-8"

@@ -1,13 +1,15 @@
+import { LayoutGridIcon, SquareIcon } from 'lucide-solid';
 import { Component } from 'solid-js';
-import { clientOnly } from '@solidjs/start';
-import ComponentDemo from '~/site-components/ComponentDemo';
-import PageHeading from '~/ui-lib/components/PageHeading';
-import SidebarDropdown from '~/ui-lib/components/SidebarDropdown';
-import SidebarLink from '~/ui-lib/components/SidebarLink';
-import SidebarSection from '~/ui-lib/components/SidebarSection';
+import { createFileRoute } from '@tanstack/solid-router';
+import ComponentDemo from '../../site-components/ComponentDemo';
+import PageHeading from '../../ui/components/PageHeading';
+import SidebarDropdown from '../../ui/components/SidebarDropdown';
+import SidebarLink from '../../ui/components/SidebarLink';
+import SidebarSection from '../../ui/components/SidebarSection';
 
-const SquaresIcon = clientOnly(() => import(`lucide-solid/icons/layout-grid`));
-const SquareIcon = clientOnly(() => import(`lucide-solid/icons/square`));
+export const Route = createFileRoute('/components/sidebar-section')({
+  component: () => <SidebarSectionPage />,
+});
 
 const SidebarSectionPage: Component = () => {
   return (
@@ -21,21 +23,35 @@ const SidebarSectionPage: Component = () => {
             title: 'With title',
             component: (
               <SidebarSection heading="Sidebar section">
-                <SidebarLink text="Here's something" href="#" icon={SquareIcon} />
-                <SidebarLink text="Here's something else" href="#" icon={SquareIcon} />
-                <SidebarDropdown text="Collection" icon={SquaresIcon}>
-                  <SidebarLink text="Here's something" href="#" icon={SquareIcon} />
-                  <SidebarLink text="Here's something else" href="#" icon={SquareIcon} />
-                  <SidebarLink text="Here's another thing" href="#" icon={SquareIcon} />
-                  <SidebarLink
-                    text="Here's yet another thing"
-                    href="#"
-                    icon={SquareIcon}
-                  />
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's something
+                </SidebarLink>
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's something else
+                </SidebarLink>
+                <SidebarDropdown text="Collection" icon={LayoutGridIcon}>
+                  <SidebarLink href="#" icon={SquareIcon}>
+                    Here's something
+                  </SidebarLink>
+                  <SidebarLink href="#" icon={SquareIcon}>
+                    Here's something else
+                  </SidebarLink>
+                  <SidebarLink href="#" icon={SquareIcon}>
+                    Here's another thing
+                  </SidebarLink>
+                  <SidebarLink href="#" icon={SquareIcon}>
+                    Here's yet another thing
+                  </SidebarLink>
                 </SidebarDropdown>
-                <SidebarLink text="Here's something" href="#" icon={SquareIcon} />
-                <SidebarLink text="Here's something else" href="#" icon={SquareIcon} />
-                <SidebarLink text="Here's another thing" href="#" icon={SquareIcon} />
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's something
+                </SidebarLink>
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's something else
+                </SidebarLink>
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's another thing
+                </SidebarLink>
               </SidebarSection>
             ),
           },
@@ -43,21 +59,35 @@ const SidebarSectionPage: Component = () => {
             title: 'Without title',
             component: (
               <SidebarSection>
-                <SidebarLink text="Here's something" href="#" icon={SquareIcon} />
-                <SidebarLink text="Here's something else" href="#" icon={SquareIcon} />
-                <SidebarDropdown text="Collection" icon={SquaresIcon}>
-                  <SidebarLink text="Here's something" href="#" icon={SquareIcon} />
-                  <SidebarLink text="Here's something else" href="#" icon={SquareIcon} />
-                  <SidebarLink text="Here's another thing" href="#" icon={SquareIcon} />
-                  <SidebarLink
-                    text="Here's yet another thing"
-                    href="#"
-                    icon={SquareIcon}
-                  />
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's something
+                </SidebarLink>
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's something else
+                </SidebarLink>
+                <SidebarDropdown text="Collection" icon={LayoutGridIcon}>
+                  <SidebarLink href="#" icon={SquareIcon}>
+                    Here's something
+                  </SidebarLink>
+                  <SidebarLink href="#" icon={SquareIcon}>
+                    Here's something else
+                  </SidebarLink>
+                  <SidebarLink href="#" icon={SquareIcon}>
+                    Here's another thing
+                  </SidebarLink>
+                  <SidebarLink href="#" icon={SquareIcon}>
+                    Here's yet another thing
+                  </SidebarLink>
                 </SidebarDropdown>
-                <SidebarLink text="Here's something" href="#" icon={SquareIcon} />
-                <SidebarLink text="Here's something else" href="#" icon={SquareIcon} />
-                <SidebarLink text="Here's another thing" href="#" icon={SquareIcon} />
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's something
+                </SidebarLink>
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's something else
+                </SidebarLink>
+                <SidebarLink href="#" icon={SquareIcon}>
+                  Here's another thing
+                </SidebarLink>
               </SidebarSection>
             ),
           },
