@@ -18,6 +18,9 @@ sentinel:
 new-sentinel:
 	@pnpm --filter @gertrude/new-sentinel dev
 
+sentinel-astro:
+	@pnpm --filter @gertrude/sentinel-astro dev
+
 hmr-docs:
   @watchexec --watch site/markdoc --exts .md "just hmr-comment"
 
