@@ -1,0 +1,82 @@
+---
+import SidebarNavLayout from '../layouts/SidebarNavLayout.astro';
+---
+
+<SidebarNavLayout
+	logo="../../public/sentinel-logo.svg"
+	items={[
+		{
+			type: 'section',
+			title: 'Layouts',
+			contents: [
+				{
+					type: 'link',
+					href: '/layouts/sidebar-nav-layout',
+					text: 'SidebarNavLayout',
+					icon: 'panel-left',
+				},
+			],
+		},
+		{
+			type: 'section',
+			title: 'Components',
+			contents: [
+				{
+					type: 'link',
+					text: 'SomethingElse',
+					icon: '',
+					href: '#',
+				},
+				{
+					type: 'dropdown',
+					text: 'Sidebar',
+					icon: 'panel-left',
+					items: [
+						{
+							type: 'link',
+							text: 'SidebarSection',
+							icon: '',
+							href: '/components/sidebar-section',
+						},
+						{
+							type: 'link',
+							text: 'SidebarDropdown',
+							icon: '',
+							href: '/components/sidebar-dropdown',
+						},
+						{
+							type: 'link',
+							text: 'SidebarLink',
+							icon: '',
+							href: '/components/sidebar-link',
+						},
+					],
+				},
+				{
+					type: 'link',
+					text: 'SomethingElse',
+					icon: '',
+					href: '#',
+				},
+			],
+		},
+		{ type: 'spacer' },
+		{
+			type: 'section',
+			contents: [
+				{
+					type: 'link',
+					href: 'https://gertrude.app',
+					text: 'Gertrude',
+					icon: 'external-link',
+				},
+				{
+					type: 'link',
+					href: 'https://replist.innocencelabs.com',
+					text: 'RepList',
+					icon: 'external-link',
+				},
+			],
+		},
+	]}>index</SidebarNavLayout
+>

@@ -1,0 +1,37 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import BaseHead from '../components/BaseHead.astro';
+import Sidebar from '../components/Sidebar.tsx';
+import ImportIcons from '../lib/ImportIcons.tsx';
+import '../styles/global.css';
+import type { SidebarItem } from '../lib/types';
+
+interface Props {
+	logo: string;
+	items: Array<
+		| {
+				type: 'section';
+				title?: string;
+				contents: SidebarItem[];
+		  }
+		| { type: 'spacer' }
+	>;
+}
+
+const { logo, items } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title="Sentinel - A design system and component library by Gertrude" />
+		<ClientRouter />
+		<ImportIcons client:only />
+	</head>
+	<body class="min-h-screen flex bg-gray-100 p-3 gap-3">
+		<Sidebar logo={logo} items={items} client:load />
+		<main class="flex-grow bg-white shadow-md rounded-lg p-8 shadow-gray-300/40">
+			<slot />
+		</main>
+	</body>
+</html>

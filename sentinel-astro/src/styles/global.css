@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+* {
+  interpolate-size: allow-keywords;
+}
