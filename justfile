@@ -9,17 +9,11 @@ dash:
 site:
 	@pnpm --filter site start
 
-analytics:
-	@pnpm --filter @gertrude/analytics dev
+admin:
+	@pnpm --filter @gertrude/admin dev
 
 sentinel:
 	@pnpm --filter @gertrude/sentinel dev
-
-new-sentinel:
-	@pnpm --filter @gertrude/new-sentinel dev
-
-sentinel-astro:
-	@pnpm --filter @gertrude/sentinel-astro dev
 
 hmr-docs:
   @watchexec --watch site/markdoc --exts .md "just hmr-comment"
@@ -123,4 +117,3 @@ check: lint format-check typecheck test
 [private]
 hmr-comment:
   @bash -c "echo // $(date) >> './site/app/docs/[slug]/page.tsx'"
-

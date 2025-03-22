@@ -11,48 +11,20 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
-import { Route as ComponentsSidebarSectionImport } from './routes/components/sidebar-section'
-import { Route as ComponentsSidebarLinkImport } from './routes/components/sidebar-link'
-import { Route as ComponentsSidebarDropdownImport } from './routes/components/sidebar-dropdown'
-import { Route as ComponentsSelectImport } from './routes/components/select'
-import { Route as ComponentsCardImport } from './routes/components/card'
 
 // Create/Update Routes
+
+const AboutRoute = AboutImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ComponentsSidebarSectionRoute = ComponentsSidebarSectionImport.update({
-  id: '/components/sidebar-section',
-  path: '/components/sidebar-section',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ComponentsSidebarLinkRoute = ComponentsSidebarLinkImport.update({
-  id: '/components/sidebar-link',
-  path: '/components/sidebar-link',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ComponentsSidebarDropdownRoute = ComponentsSidebarDropdownImport.update({
-  id: '/components/sidebar-dropdown',
-  path: '/components/sidebar-dropdown',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ComponentsSelectRoute = ComponentsSelectImport.update({
-  id: '/components/select',
-  path: '/components/select',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ComponentsCardRoute = ComponentsCardImport.update({
-  id: '/components/card',
-  path: '/components/card',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -67,39 +39,11 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/components/card': {
-      id: '/components/card'
-      path: '/components/card'
-      fullPath: '/components/card'
-      preLoaderRoute: typeof ComponentsCardImport
-      parentRoute: typeof rootRoute
-    }
-    '/components/select': {
-      id: '/components/select'
-      path: '/components/select'
-      fullPath: '/components/select'
-      preLoaderRoute: typeof ComponentsSelectImport
-      parentRoute: typeof rootRoute
-    }
-    '/components/sidebar-dropdown': {
-      id: '/components/sidebar-dropdown'
-      path: '/components/sidebar-dropdown'
-      fullPath: '/components/sidebar-dropdown'
-      preLoaderRoute: typeof ComponentsSidebarDropdownImport
-      parentRoute: typeof rootRoute
-    }
-    '/components/sidebar-link': {
-      id: '/components/sidebar-link'
-      path: '/components/sidebar-link'
-      fullPath: '/components/sidebar-link'
-      preLoaderRoute: typeof ComponentsSidebarLinkImport
-      parentRoute: typeof rootRoute
-    }
-    '/components/sidebar-section': {
-      id: '/components/sidebar-section'
-      path: '/components/sidebar-section'
-      fullPath: '/components/sidebar-section'
-      preLoaderRoute: typeof ComponentsSidebarSectionImport
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
   }
@@ -109,76 +53,37 @@ declare module '@tanstack/solid-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/components/card': typeof ComponentsCardRoute
-  '/components/select': typeof ComponentsSelectRoute
-  '/components/sidebar-dropdown': typeof ComponentsSidebarDropdownRoute
-  '/components/sidebar-link': typeof ComponentsSidebarLinkRoute
-  '/components/sidebar-section': typeof ComponentsSidebarSectionRoute
+  '/about': typeof AboutRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/components/card': typeof ComponentsCardRoute
-  '/components/select': typeof ComponentsSelectRoute
-  '/components/sidebar-dropdown': typeof ComponentsSidebarDropdownRoute
-  '/components/sidebar-link': typeof ComponentsSidebarLinkRoute
-  '/components/sidebar-section': typeof ComponentsSidebarSectionRoute
+  '/about': typeof AboutRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/components/card': typeof ComponentsCardRoute
-  '/components/select': typeof ComponentsSelectRoute
-  '/components/sidebar-dropdown': typeof ComponentsSidebarDropdownRoute
-  '/components/sidebar-link': typeof ComponentsSidebarLinkRoute
-  '/components/sidebar-section': typeof ComponentsSidebarSectionRoute
+  '/about': typeof AboutRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/components/card'
-    | '/components/select'
-    | '/components/sidebar-dropdown'
-    | '/components/sidebar-link'
-    | '/components/sidebar-section'
+  fullPaths: '/' | '/about'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/components/card'
-    | '/components/select'
-    | '/components/sidebar-dropdown'
-    | '/components/sidebar-link'
-    | '/components/sidebar-section'
-  id:
-    | '__root__'
-    | '/'
-    | '/components/card'
-    | '/components/select'
-    | '/components/sidebar-dropdown'
-    | '/components/sidebar-link'
-    | '/components/sidebar-section'
+  to: '/' | '/about'
+  id: '__root__' | '/' | '/about'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ComponentsCardRoute: typeof ComponentsCardRoute
-  ComponentsSelectRoute: typeof ComponentsSelectRoute
-  ComponentsSidebarDropdownRoute: typeof ComponentsSidebarDropdownRoute
-  ComponentsSidebarLinkRoute: typeof ComponentsSidebarLinkRoute
-  ComponentsSidebarSectionRoute: typeof ComponentsSidebarSectionRoute
+  AboutRoute: typeof AboutRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ComponentsCardRoute: ComponentsCardRoute,
-  ComponentsSelectRoute: ComponentsSelectRoute,
-  ComponentsSidebarDropdownRoute: ComponentsSidebarDropdownRoute,
-  ComponentsSidebarLinkRoute: ComponentsSidebarLinkRoute,
-  ComponentsSidebarSectionRoute: ComponentsSidebarSectionRoute,
+  AboutRoute: AboutRoute,
 }
 
 export const routeTree = rootRoute
@@ -192,30 +97,14 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/components/card",
-        "/components/select",
-        "/components/sidebar-dropdown",
-        "/components/sidebar-link",
-        "/components/sidebar-section"
+        "/about"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/components/card": {
-      "filePath": "components/card.tsx"
-    },
-    "/components/select": {
-      "filePath": "components/select.tsx"
-    },
-    "/components/sidebar-dropdown": {
-      "filePath": "components/sidebar-dropdown.tsx"
-    },
-    "/components/sidebar-link": {
-      "filePath": "components/sidebar-link.tsx"
-    },
-    "/components/sidebar-section": {
-      "filePath": "components/sidebar-section.tsx"
+    "/about": {
+      "filePath": "about.tsx"
     }
   }
 }
