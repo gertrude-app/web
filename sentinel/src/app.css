@@ -1,8 +1,4 @@
-@import "tailwindcss";
-
-@theme {
-  --font-nunito: "Nunito Sans Variable", sans;
-}
+@import 'tailwindcss';
 
 * {
   interpolate-size: allow-keywords;

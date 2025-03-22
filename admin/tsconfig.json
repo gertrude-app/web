@@ -14,7 +14,8 @@
     "types": ["vinxi/types/client"],
     "isolatedModules": true,
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "@gertrude/sentinel": ["../sentinel/src"]
     }
   }
 }

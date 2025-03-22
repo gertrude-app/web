@@ -4,6 +4,6 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   vite: {
-    plugins: [TanStackRouterVite({ target: 'solid' }), tailwindcss()],
+    plugins: [TanStackRouterVite({ target: `solid` }), tailwindcss()],
   },
 });
