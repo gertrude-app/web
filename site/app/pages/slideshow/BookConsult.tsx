@@ -39,7 +39,7 @@ export const Slide: React.FC = () => (
       >
         <img src={QrCode.src} alt="" className="w-[44rem] h-[44rem]" />
         <p className="text-center -mt-[5rem] font-mono antialiased text-slate-500 text-[2.0rem]">
-          www.gertrude.app/inch
+          www.gertrude.app/ghc
         </p>
       </div>
     </div>

@@ -14,14 +14,25 @@ import * as Workshop from './Workshop-101';
 import * as ScaryStats from './ScaryStats';
 import * as PeaceOfMind from './PeaceOfMind';
 import * as SafetyPossible from './SafetyPossible';
+import * as ThreePhones from './iOS';
 
 const Slideshow: NextPage = () => {
-  const [play] = useState(true);
-  const [index, setIndex] = useState(0);
+  const [play] = useState(false);
+  const [index, setIndex] = useState(1);
   const [transition, setTransition] = useState(true);
+
+  // replace /inch QR code
+
+  // ideas: slide about iOS app? multiple?
+  // `/lockdown-ios` shortcut?
+  // more testimonials? swap some out?
 
   const slides = [
     { time: Banner.timeShown, Slide: Banner.Slide },
+
+    // moveme
+    { time: ThreePhones.timeShown, Slide: ThreePhones.Slide },
+
     { time: SafetyPossible.timeShown, Slide: SafetyPossible.Slide },
     { time: TestimonialJason.timeShown, Slide: TestimonialJason.Slide },
     { time: PeaceOfMind.timeShown, Slide: PeaceOfMind.Slide },
@@ -32,7 +43,7 @@ const Slideshow: NextPage = () => {
     { time: TestimonialFrank.timeShown, Slide: TestimonialFrank.Slide },
     { time: WebsiteCounter.timeShown, Slide: WebsiteCounter.Slide },
     { time: BoyComputer.timeShown, Slide: BoyComputer.Slide },
-    { time: Workshop.timeShown, Slide: () => <Workshop.Slide idx={1} /> },
+    { time: Workshop.timeShown, Slide: () => <Workshop.Slide idx={0} /> },
     { time: Dashboard.timeShown, Slide: Dashboard.Slide },
     { time: TestimonialMadison.timeShown, Slide: TestimonialMadison.Slide },
     { time: Exodus.timeShown, Slide: Exodus.Slide },

@@ -13,13 +13,13 @@ const LosingGameBlock: React.FC = () => (
       <GlowEffect className="-left-40 -bottom-24" />
       <GlowEffect className="left-56 -bottom-80" />
       <div className="flex flex-col-reverse lg:flex-row">
-        <div className="md:mr-20 w-[1200rem]">
+        <div className="md:mr-20 w-[1392rem]">
           <h2 className="text-8xl font-extrabold font-inter text-white">
             <span className="bg-gradient-to-br from-indigo-500 to-fuchsia-500 bg-clip-text text-transparent">
               Can you block them all?
             </span>
           </h2>
-          <p className="text-4xl text-slate-500 mt-8 leading-[1.35em] *max-w-[140rem]">
+          <p className="text-4xl text-slate-500 mt-8 leading-[1.35em] *max-w-[141rem]">
             Most internet safety tools try to block{` `}
             <span className="text-slate-300 font-bold antialiased">categories</span> of
             the internet. With{` `}

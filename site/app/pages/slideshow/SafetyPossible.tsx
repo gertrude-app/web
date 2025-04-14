@@ -15,11 +15,11 @@ export const Slide: React.FC = () => (
       is possible
     </h1>
     <h2 className="text-white text-opacity-70 text-[4rem] font-bold mt-[4rem] text-center">
-      $5/month{` `}
+      $15/month{` `}
       <span className="text-white text-opacity-90 font-extrabold underline">
         for the whole family
       </span>
-      , with a 60 day free trial.
+      , with a 21 day free trial.
     </h2>
     <h2 className="text-white text-[9rem] font-bold mt-[7rem] text-center">
       www.gertrude.app
