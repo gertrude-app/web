@@ -1,5 +1,5 @@
 {
-  "name": "@gertrude/sentinel",
+  "name": "@gertrude/old-sentinel",
   "type": "module",
   "main": "src/index.ts",
   "scripts": {
