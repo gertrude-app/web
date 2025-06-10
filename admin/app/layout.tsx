@@ -7,12 +7,20 @@ import './globals.css';
 
 const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const accessToken = cookies().get(`access-token`);
-  if (!accessToken) return <AccessDenied />;
+  if (!accessToken) {
+    console.log(`No access token found, redirecting to access denied page`);
+    return <AccessDenied />;
+  }
   const hashedToken = crypto
     .createHash(`sha256`)
     .update(accessToken.value, `utf8`)
     .digest(`hex`);
-  if (hashedToken !== process.env.HASHED_ACCESS_TOKEN) return <AccessDenied />;
+  if (hashedToken !== process.env.HASHED_ACCESS_TOKEN) {
+    console.log(
+      `Access token does not match, redirecting to access denied page, ${hashedToken}, env: ${process.env.HASHED_ACCESS_TOKEN}`,
+    );
+    return <AccessDenied />;
+  }
 
   return (
     <GlobalStateProvider>
