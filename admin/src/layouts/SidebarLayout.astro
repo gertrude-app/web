@@ -1,0 +1,36 @@
+---
+import '../styles/global.css';
+import '@fontsource/inria-sans';
+import Sidebar from '../components/Sidebar.tsx';
+import SidebarSection from '../components/SidebarSection.tsx';
+import SidebarLink from '../components/SidebarLink.tsx';
+import SidebarSpacer from '../components/SidebarSpacer.tsx';
+import { ChartLineIcon, UsersIcon, ExternalLinkIcon } from 'lucide-solid';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Admin</title>
+  </head>
+  <body class="flex min-h-screen bg-gray-100 p-2">
+    <Sidebar logo="/logo.svg">
+      <SidebarSection>
+        <SidebarLink href="/" icon={ChartLineIcon}>Overview</SidebarLink>
+        <SidebarLink href="/parents" icon={UsersIcon}>Parents</SidebarLink>
+      </SidebarSection>
+      <SidebarSpacer />
+      <SidebarSection>
+        <SidebarLink href="https://gertrude.app" icon={ExternalLinkIcon}>
+          Gertrude
+        </SidebarLink>
+      </SidebarSection>
+    </Sidebar>
+    <main class="flex-grow bg-white shadow-md rounded-lg p-8 shadow-gray-400/25 ml-71">
+      <slot />
+    </main>
+  </body>
+</html>

@@ -5,5 +5,4 @@ packages:
   - 'shared/*'
   - 'storybook'
   - 'smoke'
-  - 'sentinel'
   - 'admin'

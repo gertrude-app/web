@@ -1,0 +1,12 @@
+---
+import SidebarLayout from '../layouts/SidebarLayout.astro';
+import ParentsList from '../components/ParentsList';
+import { liveClient } from '../lib/client';
+
+const parents = await liveClient.parentOverviews();
+---
+
+<SidebarLayout>
+  <h1 class="text-4xl font-inria font-bold">All parents</h1>
+  {parents.case == 'error' ? <div>{parents.error}</div> : <ParentsList client:load />}
+</SidebarLayout>

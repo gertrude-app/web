@@ -1,22 +1,22 @@
 {
   "name": "@gertrude/admin",
   "type": "module",
+  "version": "0.0.1",
   "scripts": {
-    "dev": "vinxi dev --port 2400",
-    "build": "vinxi build",
-    "start": "vinxi start",
-    "version": "vinxi version"
+    "dev": "astro dev --port 2200",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
   "dependencies": {
-    "@tanstack/solid-router": "^1.114.1",
-    "@tanstack/solid-router-devtools": "^1.114.1",
-    "@tanstack/router-plugin": "^1.112.0",
-    "@solidjs/start": "^1.1.2",
+    "@astrojs/solid-js": "^5.0.8",
+    "@fontsource/inria-sans": "5.2.5",
+    "@tailwindcss/vite": "^4.1.4",
+    "astro": "^5.7.4",
+    "clsx": "2.1.1",
+    "dotenv": "16.5.0",
+    "lucide-solid": "0.503.0",
     "solid-js": "^1.9.5",
-    "vinxi": "^0.5.3",
-    "@gertrude/sentinel": "workspace:*"
-  },
-  "engines": {
-    "node": ">=22"
+    "tailwindcss": "^4.1.4"
   }
 }

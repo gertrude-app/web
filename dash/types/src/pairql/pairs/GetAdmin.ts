@@ -1,8 +1,8 @@
 // auto-generated, do not edit
 import type {
+  VerifiedNotificationMethod,
   AdminNotification,
   AdminSubscriptionStatus,
-  VerifiedNotificationMethod,
 } from '../shared';
 
 export namespace GetAdmin {

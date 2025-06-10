@@ -12,8 +12,6 @@ site:
 admin:
 	@pnpm --filter @gertrude/admin dev
 
-sentinel:
-	@pnpm --filter @gertrude/sentinel dev
 
 hmr-docs:
   @watchexec --watch site/markdoc --exts .md "just hmr-comment"
@@ -42,6 +40,9 @@ clean:
 
 codegen:
 	@cd dash/app && node ./scripts/codegen.js
+
+codegen-admin:
+	@cd admin/src/scripts && node ./codegen.ts
 
 nuke-node-modules:
   @pnpm store prune

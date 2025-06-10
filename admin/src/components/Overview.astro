@@ -1,0 +1,19 @@
+---
+import Stat from './Stat.astro';
+---
+
+<div class="pt-4 pl-8 flex justify-between">
+	<div class="flex flex-col gap-4">
+		<Stat num={3000} label="annual revenue" showDollarSign big />
+		<div class="flex gap-8">
+			<Stat num={50} label="paying parents" />
+			<Stat num={74} label="active parents" />
+			<Stat num={139} label="active children" />
+		</div>
+		<div class="flex gap-8">
+			<Stat num={369} label="total signups" />
+			<Stat num={377} label="total children" />
+			<Stat num={230} label="app installs" />
+		</div>
+	</div>
+</div>

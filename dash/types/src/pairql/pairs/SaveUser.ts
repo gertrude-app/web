@@ -1,5 +1,5 @@
 // auto-generated, do not edit
-import type { RuleSchedule, BlockedApp, SuccessOutput, PlainTimeWindow } from '../shared';
+import type { RuleSchedule, BlockedApp, PlainTimeWindow, SuccessOutput } from '../shared';
 
 export namespace SaveUser {
   export interface Input {

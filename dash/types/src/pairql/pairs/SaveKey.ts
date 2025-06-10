@@ -1,5 +1,5 @@
 // auto-generated, do not edit
-import type { SharedKey, SuccessOutput } from '../shared';
+import type { SuccessOutput, SharedKey } from '../shared';
 
 export namespace SaveKey {
   export interface Input {

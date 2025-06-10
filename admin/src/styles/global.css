@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+
+@theme {
+    --font-inria: "Inria Sans", sans-serif;
+}
+

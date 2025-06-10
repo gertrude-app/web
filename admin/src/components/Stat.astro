@@ -1,0 +1,22 @@
+---
+import cx from 'clsx';
+
+interface Props {
+	num: number;
+	label: string;
+	big?: boolean;
+	showDollarSign?: boolean;
+}
+
+const props = Astro.props;
+---
+
+<div class="flex flex-col">
+	<h1 class="flex">
+		{props.showDollarSign && <span class="text-3xl text-gray-500 mt-0.5">$</span>}
+		<span class={cx('font-mono font-semibold', props.big ? 'text-5xl' : 'text-4xl')}>
+			{props.num}
+		</span>
+	</h1>
+	<span class="text-gray-500">{props.label}</span>
+</div>

@@ -1,0 +1,25 @@
+---
+import SidebarLayout from '../layouts/SidebarLayout.astro';
+import LineChart from '../components/LineChart';
+import Overview from '../components/Overview.astro';
+---
+
+<SidebarLayout>
+	<div class="flex flex-col gap-12">
+		<Overview />
+		<div class="h-80">
+			<LineChart
+				data={[
+					{ value: 100, label: 'first' },
+					{ value: 170, label: 'first' },
+					{ value: 230, label: 'first' },
+					{ value: 170, label: 'first' },
+					{ value: 120, label: 'first' },
+					{ value: 70, label: 'first' },
+					{ value: 150, label: 'second' },
+				]}
+				client:load
+			/>
+		</div>
+	</div>
+</SidebarLayout>
