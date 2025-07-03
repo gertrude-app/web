@@ -1,10 +1,11 @@
 import { ApiErrorMessage, Loading, PageHeading } from '@dash/components';
 import { RadioGroup, SelectableListItem } from '@dash/components';
-import { produce } from 'immer';
 import React, { useReducer } from 'react';
 import { useParams } from 'react-router-dom';
+import type { WebPolicy } from '../../reducers/ios-device-reducer';
 import Current from '../../environment';
 import { Key, useQuery } from '../../hooks';
+import reducer from '../../reducers/ios-device-reducer';
 
 const WEB_POLICY_OPTIONS: { value: WebPolicy; display: string }[] = [
   { value: `blockAllExcept`, display: `Only Approved Websites` },
@@ -14,108 +15,17 @@ const WEB_POLICY_OPTIONS: { value: WebPolicy; display: string }[] = [
   { value: `allowAll`, display: `Unrestricted` },
 ];
 
-type WebPolicy =
-  | `allowAll`
-  | `blockAdult`
-  | `blockAdultAnd`
-  | `blockAllExcept`
-  | `blockAll`;
-
-interface Output {
-  childName: string;
-  deviceType: string;
-  osVersion: string;
-  allBlockGroups: Array<{
-    id: UUID;
-    name: string;
-  }>;
-  enabledBlockGroups: UUID[];
-  webPolicy: string;
-  webPolicyDomains: string[];
-}
-
-type State = {
-  enabledBlockGroups: UUID[];
-  webPolicy: WebPolicy;
-  webPolicyDomains: string[];
-  newDomain: string;
-};
-
-type Action =
-  | { type: `toggleBlockGroup`; id: UUID }
-  | { type: `setWebPolicy`; policy: WebPolicy }
-  | { type: `setNewDomain`; value: string }
-  | { type: `addDomain` }
-  | { type: `removeDomain`; domain: string }
-  | { type: `setAll`; data: Output };
-
-function baseReducer(state: State, action: Action): void {
-  switch (action.type) {
-    case `toggleBlockGroup`: {
-      const idx = state.enabledBlockGroups.indexOf(action.id);
-      if (idx === -1) {
-        state.enabledBlockGroups.push(action.id);
-      } else {
-        state.enabledBlockGroups.splice(idx, 1);
-      }
-      return;
-    }
-    case `setWebPolicy`:
-      state.webPolicy = action.policy;
-      return;
-    case `setNewDomain`:
-      state.newDomain = action.value;
-      return;
-    case `addDomain`: {
-      const domain = state.newDomain.trim();
-      if (domain && !state.webPolicyDomains.includes(domain)) {
-        state.webPolicyDomains.push(domain);
-        state.newDomain = ``;
-      }
-      return;
-    }
-    case `removeDomain`:
-      state.webPolicyDomains = state.webPolicyDomains.filter((d) => d !== action.domain);
-      return;
-    case `setAll`:
-      state.enabledBlockGroups = [...action.data.enabledBlockGroups];
-      state.webPolicy = action.data.webPolicy as WebPolicy;
-      state.webPolicyDomains = [...action.data.webPolicyDomains];
-      state.newDomain = ``;
-      return;
-  }
-}
-
-const reducer = produce(baseReducer);
-
 const IOSDevice: React.FC = () => {
   const { deviceId: id = `` } = useParams<{ deviceId: string }>();
-  const deviceQuery = useQuery(Key.iOSDevice(id), () => Current.api.getIOSDevice(id));
-
-  const data: Output = {
-    childName: `Harriet`,
-    deviceType: `iPhone`,
-    osVersion: `17.0.1`,
-    allBlockGroups: [
-      { id: `1`, name: `GIFs` },
-      { id: `2`, name: `Apple Maps images` },
-      { id: `3`, name: `AI features` },
-      { id: `4`, name: `App store images` },
-      { id: `5`, name: `Spotlight` },
-      { id: `6`, name: `Ads` },
-      { id: `7`, name: `WhatsApp` },
-      { id: `8`, name: `apple.com` },
-    ],
-    enabledBlockGroups: [`1`, `2`, `3`, `4`, `5`, `6`, `8`],
-    webPolicy: `blockAllExcept`,
-    webPolicyDomains: [`apple.com`, `google.com`],
-  };
-
   const [state, dispatch] = useReducer(reducer, {
-    enabledBlockGroups: data.enabledBlockGroups,
-    webPolicy: data.webPolicy as WebPolicy,
-    webPolicyDomains: [...data.webPolicyDomains],
+    enabledBlockGroups: [],
+    webPolicyDomains: [],
+    webPolicy: `blockAll`,
     newDomain: ``,
+  });
+
+  const deviceQuery = useQuery(Key.iOSDevice(id), () => Current.api.getIOSDevice(id), {
+    onReceive: (data) => dispatch({ type: `receiveData`, data }),
   });
 
   if (deviceQuery.isPending) {
@@ -126,15 +36,17 @@ const IOSDevice: React.FC = () => {
     return <ApiErrorMessage error={deviceQuery.error} />;
   }
 
+  console.log(state);
+
   return (
     <div>
       <PageHeading icon="phone" className="mb-4">
-        {data.childName}’s {data.deviceType}
+        {deviceQuery.data.childName}’s {deviceQuery.data.deviceType}
       </PageHeading>
       <div className="bg-white rounded-2xl shadow p-6 max-w-xl mx-auto mb-8">
         <h2 className="font-bold text-lg mb-4">Block Groups</h2>
         <div className="space-y-2">
-          {data.allBlockGroups.map(({ id, name }) => (
+          {deviceQuery.data.allBlockGroups.map(({ id, name }) => (
             <SelectableListItem
               key={id}
               title={name}

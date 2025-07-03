@@ -8,6 +8,7 @@ import type {
   GetAdminKeychains,
   GetDevice,
   GetDevices,
+  GetIOSDevice,
   GetIdentifiedApps,
   GetSelectableKeychains,
   GetSuspendFilterRequest,
