@@ -1,6 +1,7 @@
 import { ApiErrorMessage, Loading, PageHeading } from '@dash/components';
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { SelectableListItem } from '@dash/components';
 // import Current from '../../environment';
 import { Key, useQuery } from '../../hooks';
 
@@ -24,10 +25,38 @@ const IOSDevice: React.FC = () => {
     webPolicy: `blockAllExcept`,
     webPolicyDomains: [`apple.com`, `google.com`],
   };
+
+  // Local state for toggling block groups
+  const [disabledBlockGroups, setDisabledBlockGroups] = useState<string[]>([...data.disabledBlockGroups]);
+
+  const handleToggle = (groupId: string) => {
+    setDisabledBlockGroups((prev) =>
+      prev.includes(groupId)
+        ? prev.filter((id) => id !== groupId)
+        : [...prev, groupId]
+    );
+  };
+
   return (
-    <PageHeading icon="phone" className="mb-4">
-      {data.childName}’s {data.deviceType}
-    </PageHeading>
+    <div>
+      <PageHeading icon="phone" className="mb-4">
+        {data.childName}’s {data.deviceType}
+      </PageHeading>
+      <div className="bg-white rounded-2xl shadow p-6 max-w-xl mx-auto">
+        <h2 className="font-bold text-lg mb-4">Block Groups</h2>
+        <div className="space-y-2">
+          {Object.entries(data.blockGroups).map(([id, name]) => (
+            <SelectableListItem
+              key={id}
+              title={name}
+              description={''}
+              selected={!disabledBlockGroups.includes(id)}
+              onClick={() => handleToggle(id)}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 
