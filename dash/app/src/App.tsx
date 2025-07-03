@@ -13,6 +13,7 @@ import ConferenceEmailForm from './components/routes/ConferenceEmail';
 import Dashboard from './components/routes/Dashboard';
 import FamilyActivityFeedRoute from './components/routes/FamilyActivityFeed';
 import FamilyActivitySummaries from './components/routes/FamilyActivitySummaries';
+import IOSDevice from './components/routes/IOSDevice';
 import IOSDevices from './components/routes/IOSDevices';
 import Keychain from './components/routes/Keychain';
 import Keychains from './components/routes/Keychains';
@@ -73,6 +74,7 @@ const App: React.FC = () => {
 
         <Route path="ios-devices">
           <Route index element={<IOSDevices />} />
+          <Route path=":deviceId" element={<IOSDevice />} />
         </Route>
 
         <Route path="keychains">
