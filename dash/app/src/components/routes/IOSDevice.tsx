@@ -51,14 +51,14 @@ const IOSDevice: React.FC = () => {
       { id: `7`, name: `WhatsApp` },
       { id: `8`, name: `apple.com` },
     ],
-    enabledBlockGroups: [`7`],
+    enabledBlockGroups: [`1`, `2`, `3`, `4`, `5`, `6`, `8`],
     webPolicy: `blockAllExcept`,
     webPolicyDomains: [`apple.com`, `google.com`],
   };
 
   // Local state for toggling block groups
-  const [disabledBlockGroups, setDisabledBlockGroups] = useState<string[]>([
-    ...data.disabledBlockGroups,
+  const [enabledBlockGroups, setEnabledBlockGroups] = useState<UUID[]>([
+    ...data.enabledBlockGroups,
   ]);
   // Local state for web policy
   const [webPolicy, setWebPolicy] = useState<WebPolicy>(data.webPolicy as WebPolicy);
@@ -68,7 +68,7 @@ const IOSDevice: React.FC = () => {
   const [newDomain, setNewDomain] = useState(``);
 
   const handleToggle = (groupId: string): void => {
-    setDisabledBlockGroups((prev) =>
+    setEnabledBlockGroups((prev) =>
       prev.includes(groupId) ? prev.filter((id) => id !== groupId) : [...prev, groupId],
     );
   };
@@ -101,12 +101,12 @@ const IOSDevice: React.FC = () => {
       <div className="bg-white rounded-2xl shadow p-6 max-w-xl mx-auto mb-8">
         <h2 className="font-bold text-lg mb-4">Block Groups</h2>
         <div className="space-y-2">
-          {Object.entries(data.blockGroups).map(([id, name]) => (
+          {data.allBlockGroups.map(({ id, name }) => (
             <SelectableListItem
               key={id}
               title={name}
               description={``}
-              selected={!disabledBlockGroups.includes(id)}
+              selected={enabledBlockGroups.includes(id)}
               onClick={() => handleToggle(id)}
             />
           ))}
