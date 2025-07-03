@@ -1,17 +1,10 @@
 import { produce } from 'immer';
-import type { GetIOSDevice } from '@dash/types';
-
-export type WebPolicy =
-  | `allowAll`
-  | `blockAdult`
-  | `blockAdultAnd`
-  | `blockAllExcept`
-  | `blockAll`;
+import type { GetIOSDevice, WebPolicy } from '@dash/types';
 
 export type State = {
   enabledBlockGroups: UUID[];
   webPolicyDomains: string[];
-  webPolicy: string; // need type safety here
+  webPolicy: WebPolicy;
   newDomain: string;
 };
 

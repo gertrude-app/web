@@ -242,3 +242,10 @@ export interface VerifiedNotificationMethod {
     | { case: `email`; email: string }
     | { case: `text`; phoneNumber: string };
 }
+
+export type WebPolicy =
+  | `allowAll`
+  | `blockAdult`
+  | `blockAdultAnd`
+  | `blockAllExcept`
+  | `blockAll`;

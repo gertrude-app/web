@@ -2,7 +2,7 @@ import { ApiErrorMessage, Loading, PageHeading } from '@dash/components';
 import { RadioGroup, SelectableListItem } from '@dash/components';
 import React, { useReducer } from 'react';
 import { useParams } from 'react-router-dom';
-import type { WebPolicy } from '../../reducers/ios-device-reducer';
+import type { WebPolicy } from '@dash/types';
 import Current from '../../environment';
 import { Key, useQuery } from '../../hooks';
 import reducer from '../../reducers/ios-device-reducer';
@@ -35,8 +35,6 @@ const IOSDevice: React.FC = () => {
   if (deviceQuery.isError) {
     return <ApiErrorMessage error={deviceQuery.error} />;
   }
-
-  console.log(state);
 
   return (
     <div>

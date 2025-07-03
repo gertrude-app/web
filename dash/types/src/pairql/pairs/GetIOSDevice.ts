@@ -1,4 +1,5 @@
 // auto-generated, do not edit
+import type { WebPolicy } from '../shared';
 
 export namespace GetIOSDevice {
   export type Input = UUID;
@@ -12,7 +13,7 @@ export namespace GetIOSDevice {
       name: string;
     }>;
     enabledBlockGroups: UUID[];
-    webPolicy: string;
+    webPolicy: WebPolicy;
     webPolicyDomains: string[];
   }
 }
