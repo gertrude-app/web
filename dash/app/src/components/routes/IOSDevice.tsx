@@ -5,9 +5,9 @@ import { useParams } from 'react-router-dom';
 // import Current from '../../environment';
 import { Key, useQuery } from '../../hooks';
 
-const WEB_POLICY_OPTIONS: { value: string; display: string }[] = [
+const WEB_POLICY_OPTIONS: { value: WebPolicy; display: string }[] = [
   { value: `blockAllExcept`, display: `Only Approved Websites` },
-  { value: `blockAdultAnd`, display: `Limit Adult Websites Plus Blocklist` },
+  { value: `blockAdultAnd`, display: `Blocklist Plus Limit Adult Websites` },
   { value: `blockAdult`, display: `Limit Adult Websites` },
   { value: `blockAll`, display: `Block everything` },
   { value: `allowAll`, display: `Unrestricted` },
@@ -47,11 +47,27 @@ const IOSDevice: React.FC = () => {
   ]);
   // Local state for web policy
   const [webPolicy, setWebPolicy] = useState<WebPolicy>(data.webPolicy as WebPolicy);
+  const [webPolicyDomains, setWebPolicyDomains] = useState<string[]>([
+    ...data.webPolicyDomains,
+  ]);
+  const [newDomain, setNewDomain] = useState(``);
 
   const handleToggle = (groupId: string): void => {
     setDisabledBlockGroups((prev) =>
       prev.includes(groupId) ? prev.filter((id) => id !== groupId) : [...prev, groupId],
     );
+  };
+
+  const handleAddDomain = (): void => {
+    const domain = newDomain.trim();
+    if (domain && !webPolicyDomains.includes(domain)) {
+      setWebPolicyDomains([...webPolicyDomains, domain]);
+      setNewDomain(``);
+    }
+  };
+
+  const handleRemoveDomain = (domain: string): void => {
+    setWebPolicyDomains(webPolicyDomains.filter((d) => d !== domain));
   };
 
   return (
@@ -80,6 +96,48 @@ const IOSDevice: React.FC = () => {
           selectedOption={webPolicy}
           setSelectedOption={(val: string) => setWebPolicy(val as WebPolicy)}
         />
+      </div>
+      <div className="bg-white rounded-2xl shadow p-6 max-w-xl mx-auto mt-8">
+        <h2 className="font-bold text-lg mb-4">Allowed Domains</h2>
+        <div className="flex flex-col gap-2 mb-4">
+          {webPolicyDomains.map((domain) => (
+            <div
+              key={domain}
+              className="flex items-center justify-between bg-slate-100 rounded-lg px-3 py-2"
+            >
+              <span className="font-mono text-slate-700">{domain}</span>
+              <button
+                className="text-red-500 hover:text-red-700 font-bold px-2"
+                onClick={() => handleRemoveDomain(domain)}
+                aria-label={`Remove ${domain}`}
+              >
+                &times;
+              </button>
+            </div>
+          ))}
+        </div>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            className="flex-1 border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-300"
+            placeholder="Add domain (e.g. example.com)"
+            value={newDomain}
+            onChange={(e) => setNewDomain(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === `Enter`) {
+                e.preventDefault();
+                handleAddDomain();
+              }
+            }}
+          />
+          <button
+            className="bg-violet-600 text-white rounded-lg px-4 py-2 font-semibold hover:bg-violet-700 transition"
+            onClick={handleAddDomain}
+            disabled={!newDomain.trim() || webPolicyDomains.includes(newDomain.trim())}
+          >
+            Add
+          </button>
+        </div>
       </div>
     </div>
   );
