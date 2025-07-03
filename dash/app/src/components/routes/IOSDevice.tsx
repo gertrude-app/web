@@ -2,7 +2,7 @@ import { ApiErrorMessage, Loading, PageHeading } from '@dash/components';
 import { RadioGroup, SelectableListItem } from '@dash/components';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-// import Current from '../../environment';
+import Current from '../../environment';
 import { Key, useQuery } from '../../hooks';
 
 const WEB_POLICY_OPTIONS: { value: WebPolicy; display: string }[] = [
@@ -20,23 +20,38 @@ type WebPolicy =
   | `blockAllExcept`
   | `blockAll`;
 
+interface Output {
+  childName: string;
+  deviceType: string;
+  osVersion: string;
+  allBlockGroups: Array<{
+    id: UUID;
+    name: string;
+  }>;
+  enabledBlockGroups: UUID[];
+  webPolicy: string;
+  webPolicyDomains: string[];
+}
+
 const IOSDevice: React.FC = () => {
   const { deviceId: id = `` } = useParams<{ deviceId: string }>();
-  const data = {
+  const deviceQuery = useQuery(Key.iOSDevice(id), () => Current.api.getIOSDevice(id));
+
+  const data: Output = {
     childName: `Harriet`,
     deviceType: `iPhone`,
     osVersion: `17.0.1`,
-    blockGroups: {
-      '1': `GIFs`,
-      '2': `Apple Maps images`,
-      '3': `AI features`,
-      '4': `App store images`,
-      '5': `Spotlight`,
-      '6': `Ads`,
-      '7': `WhatsApp`,
-      '8': `apple.com`,
-    },
-    disabledBlockGroups: [`7`],
+    allBlockGroups: [
+      { id: `1`, name: `GIFs` },
+      { id: `2`, name: `Apple Maps images` },
+      { id: `3`, name: `AI features` },
+      { id: `4`, name: `App store images` },
+      { id: `5`, name: `Spotlight` },
+      { id: `6`, name: `Ads` },
+      { id: `7`, name: `WhatsApp` },
+      { id: `8`, name: `apple.com` },
+    ],
+    enabledBlockGroups: [`7`],
     webPolicy: `blockAllExcept`,
     webPolicyDomains: [`apple.com`, `google.com`],
   };
@@ -69,6 +84,14 @@ const IOSDevice: React.FC = () => {
   const handleRemoveDomain = (domain: string): void => {
     setWebPolicyDomains(webPolicyDomains.filter((d) => d !== domain));
   };
+
+  if (deviceQuery.isPending) {
+    return <Loading />;
+  }
+
+  if (deviceQuery.isError) {
+    return <ApiErrorMessage error={deviceQuery.error} />;
+  }
 
   return (
     <div>

@@ -152,6 +152,14 @@ export const liveClient = {
     );
   },
 
+  getIOSDevice(input: T.GetIOSDevice.Input): Promise<T.Result<T.GetIOSDevice.Output>> {
+    return query<T.GetIOSDevice.Input, T.GetIOSDevice.Output>(
+      input,
+      `parent`,
+      `GetIOSDevice`,
+    );
+  },
+
   getSelectableKeychains(
     input: T.GetSelectableKeychains.Input,
   ): Promise<T.Result<T.GetSelectableKeychains.Output>> {
@@ -452,6 +460,9 @@ export const throwingClient: ApiClient = {
   },
   getIdentifiedApps: () => {
     throw new Error(`ApiClient.getIdentifiedApps() not implemented`);
+  },
+  getIOSDevice: () => {
+    throw new Error(`ApiClient.getIOSDevice() not implemented`);
   },
   getSelectableKeychains: () => {
     throw new Error(`ApiClient.getSelectableKeychains() not implemented`);

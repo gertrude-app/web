@@ -132,6 +132,17 @@ const noopClient: ApiClient = {
   iOSDevices: async () => {
     return Result.success([]);
   },
+  getIOSDevice: async () => {
+    return Result.success({
+      childName: `Little Jimmy`,
+      deviceType: `iPhone`,
+      osVersion: `18.1.0`,
+      allBlockGroups: [],
+      enabledBlockGroups: [],
+      webPolicy: `blockAllExcept`,
+      webPolicyDomains: [],
+    });
+  },
   userActivityFeed: async () => {
     return Result.success({
       numDeleted: 0,

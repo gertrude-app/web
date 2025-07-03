@@ -60,6 +60,7 @@ export function interceptPql(
   slug: `GetIdentifiedApps`,
   output: T.GetIdentifiedApps.Output,
 ): void;
+export function interceptPql(slug: `GetIOSDevice`, output: T.GetIOSDevice.Output): void;
 export function interceptPql(
   slug: `GetSelectableKeychains`,
   output: T.GetSelectableKeychains.Output,
@@ -174,6 +175,7 @@ export function forcePqlErr(
     | `GetDevice`
     | `GetDevices`
     | `GetIdentifiedApps`
+    | `GetIOSDevice`
     | `GetSelectableKeychains`
     | `GetSuspendFilterRequest`
     | `GetUnlockRequest`

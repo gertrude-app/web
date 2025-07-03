@@ -18,6 +18,7 @@ export * from './pairs/GetAdminKeychains';
 export * from './pairs/GetDevice';
 export * from './pairs/GetDevices';
 export * from './pairs/GetIdentifiedApps';
+export * from './pairs/GetIOSDevice';
 export * from './pairs/GetSelectableKeychains';
 export * from './pairs/GetSuspendFilterRequest';
 export * from './pairs/GetUnlockRequest';

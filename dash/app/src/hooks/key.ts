@@ -66,6 +66,10 @@ export class Key extends QueryKey<never> {
     return new QueryKey(`ios-devices`, [`ios-devices`]);
   }
 
+  static iOSDevice(id: UUID): QueryKey<GetIOSDevice.Output> {
+    return new QueryKey(`ios-devices/:id`, [`ios-devices`, id], id);
+  }
+
   static childActivitySummaries(id: UUID): QueryKey<ChildActivitySummaries.Output> {
     return new QueryKey(`users/:id/activity`, [`users`, id, `activity`], id);
   }
