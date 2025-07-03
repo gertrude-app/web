@@ -129,6 +129,9 @@ const noopClient: ApiClient = {
   handleCheckoutSuccess: async () => {
     return Result.success({ success: true });
   },
+  iOSDevices: async () => {
+    return Result.success([]);
+  },
   userActivityFeed: async () => {
     return Result.success({
       numDeleted: 0,

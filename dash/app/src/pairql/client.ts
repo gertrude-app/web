@@ -230,6 +230,10 @@ export const liveClient = {
     );
   },
 
+  iOSDevices(input: T.IOSDevices.Input): Promise<T.Result<T.IOSDevices.Output>> {
+    return query<T.IOSDevices.Input, T.IOSDevices.Output>(input, `parent`, `IOSDevices`);
+  },
+
   latestAppVersions(
     input: T.LatestAppVersions.Input,
   ): Promise<T.Result<T.LatestAppVersions.Output>> {
@@ -475,6 +479,9 @@ export const throwingClient: ApiClient = {
   },
   handleCheckoutSuccess: () => {
     throw new Error(`ApiClient.handleCheckoutSuccess() not implemented`);
+  },
+  iOSDevices: () => {
+    throw new Error(`ApiClient.iOSDevices() not implemented`);
   },
   latestAppVersions: () => {
     throw new Error(`ApiClient.latestAppVersions() not implemented`);
