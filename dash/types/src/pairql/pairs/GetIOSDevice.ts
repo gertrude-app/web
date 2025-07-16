@@ -1,5 +1,5 @@
 // auto-generated, do not edit
-import type { WebPolicy } from '../shared';
+import type { BlockRule, WebPolicy } from '../shared';
 
 export namespace GetIOSDevice {
   export type Input = UUID;
@@ -15,5 +15,9 @@ export namespace GetIOSDevice {
     enabledBlockGroups: UUID[];
     webPolicy: WebPolicy;
     webPolicyDomains: string[];
+    customBlockRules: Array<{
+      id: UUID;
+      rule: BlockRule;
+    }>;
   }
 }
