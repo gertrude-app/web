@@ -28,6 +28,7 @@ export { default as ReviewUnlockRequest } from './Users/ReviewUnlockRequest';
 export { default as ListChildren } from './Users/ListChildren';
 export { default as ChildCard } from './Users/ChildCard';
 export { default as Computer } from './Users/Computer';
+export { default as BlockRuleEditor } from './iOS/BlockRuleEditor';
 export { default as Combobox } from './Forms/Combobox';
 export { default as RadioGroup } from './Forms/RadioGroup';
 export { default as SelectableListItem } from './Forms/SelectableListItem';
