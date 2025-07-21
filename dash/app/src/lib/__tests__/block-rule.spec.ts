@@ -1,9 +1,9 @@
 import { describe, expect, test } from 'vitest';
 import type { BlockRuleEditorProps } from '@dash/components';
 import type { BlockRule, RemoveFns } from '@dash/types';
-import { blockRuleToProps } from '../block-rule';
+import { blockRuleToProps, propsToBlockRule } from '../block-rule';
 
-describe(`blockRuleProps`, () => {
+describe(`blockRuleToProps`, () => {
   const cases: Array<[BlockRule, RemoveFns<BlockRuleEditorProps> | null]> = [
     [
       { case: `bundleIdContains`, value: `com.example.app` },
@@ -116,5 +116,108 @@ describe(`blockRuleProps`, () => {
 
   test.each(cases)(`blockRuleProps %#`, (input, expected) => {
     expect(blockRuleToProps(input)).toEqual(expected);
+  });
+});
+
+describe(`propsToBlockRule`, () => {
+  const cases: Array<[RemoveFns<BlockRuleEditorProps>, BlockRule]> = [
+    [
+      {
+        type: `app`,
+        primaryValue: `com.example.app`,
+        secondaryValue: ``,
+        condition: `always`,
+      },
+      { case: `bundleIdContains`, value: `com.example.app` },
+    ],
+    [
+      {
+        type: `address`,
+        primaryValue: `example.com`,
+        secondaryValue: ``,
+        condition: `always`,
+      },
+      { case: `targetContains`, value: `example.com` },
+    ],
+    [
+      { type: `address`, primaryValue: `foo`, secondaryValue: ``, condition: `always` },
+      { case: `targetContains`, value: `foo` },
+    ],
+    [
+      {
+        type: `address`,
+        primaryValue: `bar.com`,
+        secondaryValue: ``,
+        condition: `always`,
+      },
+      { case: `targetContains`, value: `bar.com` },
+    ],
+    [
+      { type: `address`, primaryValue: `.org`, secondaryValue: ``, condition: `always` },
+      { case: `targetContains`, value: `.org` },
+    ],
+    [
+      { type: `address`, primaryValue: `baz`, secondaryValue: ``, condition: `always` },
+      { case: `targetContains`, value: `baz` },
+    ],
+    [
+      {
+        type: `app`,
+        primaryValue: `com.foo`,
+        secondaryValue: `foo.com`,
+        condition: `whenAddressContains`,
+      },
+      {
+        case: `both`,
+        a: { case: `bundleIdContains`, value: `com.foo` },
+        b: { case: `targetContains`, value: `foo.com` },
+      },
+    ],
+    [
+      {
+        type: `app`,
+        primaryValue: `com.foo`,
+        secondaryValue: ``,
+        condition: `whenIsBrowser`,
+      },
+      {
+        case: `both`,
+        a: { case: `bundleIdContains`, value: `com.foo` },
+        b: { case: `flowTypeIs`, value: `browser` },
+      },
+    ],
+    [
+      {
+        type: `address`,
+        primaryValue: `foo.com`,
+        secondaryValue: ``,
+        condition: `whenIsBrowser`,
+      },
+      {
+        case: `both`,
+        a: { case: `targetContains`, value: `foo.com` },
+        b: { case: `flowTypeIs`, value: `browser` },
+      },
+    ],
+    [
+      {
+        type: `app`,
+        primaryValue: `com.foo`,
+        secondaryValue: `foo.com\nbar.com`,
+        condition: `unlessAddressContains`,
+      },
+      {
+        case: `unless`,
+        rule: { case: `bundleIdContains`, value: `com.foo` },
+        negatedBy: [
+          { case: `targetContains`, value: `foo.com` },
+          { case: `targetContains`, value: `bar.com` },
+        ],
+      },
+    ],
+  ];
+
+  test.each(cases)(`propsToBlockRule %#`, (props, expectedRule) => {
+    expect(propsToBlockRule(props)).toEqual(expectedRule);
   });
 });

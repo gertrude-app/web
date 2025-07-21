@@ -38,15 +38,12 @@ function handleBothRule(rule: {
   b: BlockRule;
 }): RemoveFns<BlockRuleEditorProps> | null {
   const { a, b } = rule;
-
   if (a.case === `bundleIdContains`) {
     return handleBundleIdWithSecondRule(a, b);
   }
-
   if (isAddressRule(a)) {
     return handleAddressWithFlowType(a, b);
   }
-
   return null;
 }
 
@@ -62,7 +59,6 @@ function handleBundleIdWithSecondRule(
       condition: `whenAddressContains`,
     };
   }
-
   if (secondRule.case === `flowTypeIs` && secondRule.value === `browser`) {
     return {
       type: `app`,
@@ -71,7 +67,6 @@ function handleBundleIdWithSecondRule(
       condition: `whenIsBrowser`,
     };
   }
-
   return null;
 }
 
@@ -97,9 +92,7 @@ function handleUnlessRule(rule: {
   if (rule.rule.case !== `bundleIdContains`) {
     return null;
   }
-
   const addressValues: string[] = [];
-
   for (const negatedRule of rule.negatedBy) {
     if (!isAddressRule(negatedRule)) {
       return null;
@@ -132,4 +125,47 @@ function isAddressRule(rule: BlockRule): rule is AddressRule {
     `hostnameEndsWith`,
     `urlContains`,
   ].includes(rule.case);
+}
+
+export function propsToBlockRule(props: RemoveFns<BlockRuleEditorProps>): BlockRule {
+  const { type, primaryValue, secondaryValue, condition } = props;
+  switch (condition) {
+    case `always`:
+      if (type === `app`) {
+        return { case: `bundleIdContains`, value: primaryValue };
+      } else {
+        return { case: `targetContains`, value: primaryValue };
+      }
+    case `whenAddressContains`:
+      return {
+        case: `both`,
+        a: { case: `bundleIdContains`, value: primaryValue },
+        b: { case: `targetContains`, value: secondaryValue },
+      };
+    case `whenIsBrowser`:
+      if (type === `app`) {
+        return {
+          case: `both`,
+          a: { case: `bundleIdContains`, value: primaryValue },
+          b: { case: `flowTypeIs`, value: `browser` },
+        };
+      } else {
+        return {
+          case: `both`,
+          a: { case: `targetContains`, value: primaryValue },
+          b: { case: `flowTypeIs`, value: `browser` },
+        };
+      }
+    case `unlessAddressContains`: {
+      const negatedRules: BlockRule[] = secondaryValue
+        .split(`\n`)
+        .filter((value) => value.trim())
+        .map((value) => ({ case: `targetContains` as const, value: value.trim() }));
+      return {
+        case: `unless`,
+        rule: { case: `bundleIdContains`, value: primaryValue },
+        negatedBy: negatedRules,
+      };
+    }
+  }
 }
