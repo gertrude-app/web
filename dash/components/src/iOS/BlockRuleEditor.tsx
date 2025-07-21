@@ -1,6 +1,6 @@
 import { TextInput } from '@shared/components';
 import React from 'react';
-import { Combobox, RadioGroup } from '../Forms';
+import { RadioGroup } from '../Forms';
 
 export type Props = {
   type: `app` | `address`;
@@ -29,15 +29,8 @@ const BlockRuleEditor: React.FC<Props> = ({
   condition,
   emit,
 }) => (
-  <div className="p-4">
-    <TextInput
-      label={type === `app` ? `App bundle ID:` : `Address fragment`}
-      type="text"
-      placeholder="com.acme.app"
-      value={primaryValue}
-      setValue={(value) => emit({ type: `setPrimaryValue`, value })}
-    />
-    <div className="flex gap-4">
+  <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 *max-w-xl mx-auto flex flex-col gap-6">
+    <div className="flex flex-col gap-2">
       <RadioGroup
         options={[
           { value: `app`, display: `Block app` },
@@ -46,32 +39,41 @@ const BlockRuleEditor: React.FC<Props> = ({
         selectedOption={type}
         setSelectedOption={(value) => emit({ type: `setType`, value })}
       />
-      <Combobox
-        options={getConditionOpts(type)}
-        selected={
-          getConditionOpts(type).find((opt) => opt.value === condition) ?? {
-            value: `always`,
-            display: `Always`,
-          }
-        }
-        setSelected={(value) => emit({ type: `setCondition`, value })}
-      />
     </div>
-    {condition === `unlessAddressContains` && (
-      <TextInput
-        type="textarea"
-        value={secondaryValue}
-        setValue={(value) => emit({ type: `setSecondaryValue`, value })}
-        placeholder="foo.com\nbar.com"
-      />
-    )}
-    {condition === `whenAddressContains` && (
+
+    <div className="flex flex-col gap-2">
       <TextInput
         type="text"
-        value={secondaryValue}
-        setValue={(value) => emit({ type: `setSecondaryValue`, value })}
-        placeholder="bad-site.com"
+        placeholder={type === `app` ? `e.g. com.acme.app` : `e.g. example.com`}
+        value={primaryValue}
+        setValue={(value) => emit({ type: `setPrimaryValue`, value })}
+        className="w-full"
       />
+    </div>
+
+    <div className="flex flex-col gap-2">
+      <RadioGroup
+        options={getConditionOpts(type)}
+        selectedOption={condition}
+        setSelectedOption={(value) => emit({ type: `setCondition`, value })}
+      />
+    </div>
+
+    {(condition === `unlessAddressContains` || condition === `whenAddressContains`) && (
+      <div className="flex flex-col gap-2 bg-violet-50 border border-violet-100 rounded-xl p-4">
+        <TextInput
+          type={condition === `unlessAddressContains` ? `textarea` : `text`}
+          value={secondaryValue}
+          setValue={(value) => emit({ type: `setSecondaryValue`, value })}
+          placeholder={
+            condition === `unlessAddressContains` ? `foo.com\nbar.com` : `bad-site.com`
+          }
+          className="w-full"
+        />
+        {condition === `unlessAddressContains` && (
+          <span className="text-xs text-slate-500 mt-1">Enter one address per line.</span>
+        )}
+      </div>
     )}
   </div>
 );
@@ -83,24 +85,14 @@ function getConditionOpts(
 ): Array<{ value: Condition; display: string }> {
   if (type === `app`) {
     return [
-      { value: `always`, display: `Always` },
-      { value: `whenAddressContains`, display: `When address contains...` },
-      { value: `whenIsBrowser`, display: `When is browser` },
-      { value: `unlessAddressContains`, display: `Unless address contains...` },
+      { value: `always`, display: `Block always` },
+      { value: `whenAddressContains`, display: `Block when address contains...` },
+      { value: `whenIsBrowser`, display: `Block when is browser` },
+      { value: `unlessAddressContains`, display: `Block unless address contains...` },
     ];
   }
   return [
-    { value: `always`, display: `Always` },
-    { value: `whenIsBrowser`, display: `When is browser` },
+    { value: `always`, display: `Block always` },
+    { value: `whenIsBrowser`, display: `Block when is browser` },
   ];
 }
-
-/*
-block app - always
-block app - only when (hostname contains X)
-block app - only when (flowType = browser)
-block app - unless (hostname contains any of Xs) (maybe obseleted by managed settings? maybe not, used for podtrude)
-
-block address - always
-block address - only when (flowtype = browser) (???)
-*/
