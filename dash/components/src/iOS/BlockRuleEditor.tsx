@@ -35,7 +35,7 @@ const BlockRuleEditor: React.FC<Props> = ({
       type="text"
       placeholder="com.acme.app"
       value={primaryValue}
-      setValue={() => {}}
+      setValue={(value) => emit({ type: `setPrimaryValue`, value })}
     />
     <div className="flex gap-4">
       <RadioGroup
@@ -44,27 +44,24 @@ const BlockRuleEditor: React.FC<Props> = ({
           { value: `address`, display: `Block address` },
         ]}
         selectedOption={type}
-        setSelectedOption={(selected) => {}}
+        setSelectedOption={(value) => emit({ type: `setType`, value })}
       />
       <Combobox
-        options={[
-          { value: `always`, display: `Always` },
-          { value: `whenAddressContains`, display: `When address contains...` },
-          { value: `whenIsBrowser`, display: `When is browser` },
-          { value: `unlessAddressContains`, display: `Unless address contains...` },
-        ]}
-        selected={{
-          value: `always`,
-          display: `Always`,
-        }}
-        setSelected={(selected) => {}}
+        options={getConditionOpts(type)}
+        selected={
+          getConditionOpts(type).find((opt) => opt.value === condition) ?? {
+            value: `always`,
+            display: `Always`,
+          }
+        }
+        setSelected={(value) => emit({ type: `setCondition`, value })}
       />
     </div>
     {condition === `unlessAddressContains` && (
       <TextInput
         type="textarea"
         value={secondaryValue}
-        setValue={(value) => {}}
+        setValue={(value) => emit({ type: `setSecondaryValue`, value })}
         placeholder="foo.com\nbar.com"
       />
     )}
@@ -72,7 +69,7 @@ const BlockRuleEditor: React.FC<Props> = ({
       <TextInput
         type="text"
         value={secondaryValue}
-        setValue={(value) => {}}
+        setValue={(value) => emit({ type: `setSecondaryValue`, value })}
         placeholder="bad-site.com"
       />
     )}
@@ -80,6 +77,23 @@ const BlockRuleEditor: React.FC<Props> = ({
 );
 
 export default BlockRuleEditor;
+
+function getConditionOpts(
+  type: `app` | `address`,
+): Array<{ value: Condition; display: string }> {
+  if (type === `app`) {
+    return [
+      { value: `always`, display: `Always` },
+      { value: `whenAddressContains`, display: `When address contains...` },
+      { value: `whenIsBrowser`, display: `When is browser` },
+      { value: `unlessAddressContains`, display: `Unless address contains...` },
+    ];
+  }
+  return [
+    { value: `always`, display: `Always` },
+    { value: `whenIsBrowser`, display: `When is browser` },
+  ];
+}
 
 /*
 block app - always

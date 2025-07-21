@@ -10,11 +10,51 @@ const meta = {
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = props({
+export const AppAlways: Story = props({
   type: `app`,
   primaryValue: `com.apple.Safari`,
   secondaryValue: ``,
   condition: `always`,
+  emit: () => {},
+});
+
+export const AppWhenAddressContains: Story = props({
+  type: `app`,
+  primaryValue: `com.apple.Safari`,
+  secondaryValue: `bad-site.com`,
+  condition: `whenAddressContains`,
+  emit: () => {},
+});
+
+export const AppWhenIsBrowser: Story = props({
+  type: `app`,
+  primaryValue: `com.apple.Safari`,
+  secondaryValue: ``,
+  condition: `whenIsBrowser`,
+  emit: () => {},
+});
+
+export const AppUnlessAddressContains: Story = props({
+  type: `app`,
+  primaryValue: `com.apple.Safari`,
+  secondaryValue: `foo.com\nbar.com`,
+  condition: `unlessAddressContains`,
+  emit: () => {},
+});
+
+export const AddressAlways: Story = props({
+  type: `address`,
+  primaryValue: `example.com`,
+  secondaryValue: ``,
+  condition: `always`,
+  emit: () => {},
+});
+
+export const AddressWhenIsBrowser: Story = props({
+  type: `address`,
+  primaryValue: `example.com`,
+  secondaryValue: ``,
+  condition: `whenIsBrowser`,
   emit: () => {},
 });
 
