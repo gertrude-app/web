@@ -61,6 +61,6 @@ export type { NotificationUpdate } from './Settings/Settings';
 export type { ActivityFeedItem } from './Users/Activity/ChildActivityFeed';
 export { default as BlockRuleEditor } from './iOS/BlockRuleEditor';
 export {
-  Event as BlockRuleEditorEvent,
+  type Event as BlockRuleEditorEvent,
   type Props as BlockRuleEditorProps,
 } from './iOS/BlockRuleEditor';

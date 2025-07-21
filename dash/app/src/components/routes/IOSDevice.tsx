@@ -1,4 +1,4 @@
-import { ApiErrorMessage, Loading, PageHeading } from '@dash/components';
+import { ApiErrorMessage, Combobox, Loading, PageHeading } from '@dash/components';
 import { RadioGroup, SelectableListItem } from '@dash/components';
 import React, { useReducer } from 'react';
 import { useParams } from 'react-router-dom';
@@ -13,7 +13,7 @@ const WEB_POLICY_OPTIONS: { value: WebPolicy; display: string }[] = [
   { value: `blockAdult`, display: `Limit Adult Websites` },
   { value: `blockAll`, display: `Block everything` },
   { value: `allowAll`, display: `Unrestricted` },
-];
+] as const;
 
 const IOSDevice: React.FC = () => {
   const { deviceId: id = `` } = useParams<{ deviceId: string }>();
@@ -41,7 +41,7 @@ const IOSDevice: React.FC = () => {
       <PageHeading icon="phone" className="mb-4">
         {deviceQuery.data.childName}’s {deviceQuery.data.deviceType}
       </PageHeading>
-      <div className="bg-white rounded-2xl shadow p-6 max-w-xl mx-auto mb-8">
+      <div className="bg-white rounded-2xl shadow p-6 mx-auto mb-8">
         <h2 className="font-bold text-lg mb-4">Block Groups</h2>
         <div className="space-y-2">
           {deviceQuery.data.allBlockGroups.map(({ id, name }) => (
@@ -55,17 +55,20 @@ const IOSDevice: React.FC = () => {
           ))}
         </div>
       </div>
-      <div className="bg-white rounded-2xl shadow p-6 max-w-xl mx-auto">
+      <div className="bg-white rounded-2xl shadow p-6 mx-auto">
         <h2 className="font-bold text-lg mb-4">Web Content Filter Policy</h2>
-        <RadioGroup
+        <Combobox
           options={WEB_POLICY_OPTIONS}
-          selectedOption={state.webPolicy}
-          setSelectedOption={(val: string) =>
-            dispatch({ type: `setWebPolicy`, policy: val as WebPolicy })
-          }
+          selected={{
+            value: state.webPolicy,
+            display:
+              WEB_POLICY_OPTIONS.find((opt) => opt.value === state.webPolicy)?.display ||
+              ``,
+          }}
+          setSelected={(policy) => dispatch({ type: `setWebPolicy`, policy })}
         />
       </div>
-      <div className="bg-white rounded-2xl shadow p-6 max-w-xl mx-auto mt-8">
+      <div className="bg-white rounded-2xl shadow p-6 mx-auto mt-8">
         <h2 className="font-bold text-lg mb-4">Allowed Domains</h2>
         <div className="flex flex-col gap-2 mb-4">
           {state.webPolicyDomains.map((domain: string) => (

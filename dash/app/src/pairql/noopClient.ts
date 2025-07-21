@@ -141,6 +141,7 @@ const noopClient: ApiClient = {
       enabledBlockGroups: [],
       webPolicy: `blockAllExcept`,
       webPolicyDomains: [],
+      customBlockRules: [],
     });
   },
   userActivityFeed: async () => {
