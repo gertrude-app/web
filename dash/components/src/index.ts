@@ -28,7 +28,6 @@ export { default as ReviewUnlockRequest } from './Users/ReviewUnlockRequest';
 export { default as ListChildren } from './Users/ListChildren';
 export { default as ChildCard } from './Users/ChildCard';
 export { default as Computer } from './Users/Computer';
-export { default as BlockRuleEditor } from './iOS/BlockRuleEditor';
 export { default as Combobox } from './Forms/Combobox';
 export { default as RadioGroup } from './Forms/RadioGroup';
 export { default as SelectableListItem } from './Forms/SelectableListItem';
@@ -60,3 +59,8 @@ export { default as EditComputer } from './Computers/EditComputer';
 export { DURATION_OPTS } from './Users/SuspendFilterRequestForm';
 export type { NotificationUpdate } from './Settings/Settings';
 export type { ActivityFeedItem } from './Users/Activity/ChildActivityFeed';
+export { default as BlockRuleEditor } from './iOS/BlockRuleEditor';
+export {
+  Event as BlockRuleEditorEvent,
+  type Props as BlockRuleEditorProps,
+} from './iOS/BlockRuleEditor';
