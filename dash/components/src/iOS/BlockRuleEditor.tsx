@@ -1,6 +1,7 @@
-import { TextInput } from '@shared/components';
+import { SelectMenu, TextInput } from '@shared/components';
 import React from 'react';
 import { RadioGroup } from '../Forms';
+import KeyTypeOption from '../KeyCreator/KeyTypeOption';
 
 export type Props = {
   type: `app` | `address`;
@@ -29,40 +30,51 @@ const BlockRuleEditor: React.FC<Props> = ({
   condition,
   emit,
 }) => (
-  <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 *max-w-xl mx-auto flex flex-col gap-6">
-    <div className="flex flex-col gap-2">
-      <RadioGroup
-        options={[
-          { value: `app`, display: `Block app` },
-          { value: `address`, display: `Block address` },
-        ]}
-        selectedOption={type}
-        setSelectedOption={(value) => emit({ type: `setType`, value })}
+  <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 mx-auto flex flex-col gap-6">
+    <div className="flex flex-col gap-4 sm:flex-row">
+      <KeyTypeOption
+        icon="phone"
+        selected={type === `app`}
+        onClick={() => {}}
+        title="Block app"
+        description="Block a specific iOS app"
+        className="sm:w-1/2 sm:ml-2"
+      />
+      <KeyTypeOption
+        icon="globe"
+        selected={type === `address`}
+        onClick={() => {}}
+        title="Block address"
+        description="Block an internet address"
+        className="sm:w-1/2 sm:mr-2 mb-3 sm:mb-0"
       />
     </div>
-
     <div className="flex flex-col gap-2">
       <TextInput
         type="text"
+        label={type === `app` ? `App Bundle ID:` : `When address contains:`}
         placeholder={type === `app` ? `e.g. com.acme.app` : `e.g. example.com`}
         value={primaryValue}
         setValue={(value) => emit({ type: `setPrimaryValue`, value })}
         className="w-full"
       />
     </div>
-
-    <div className="flex flex-col gap-2">
-      <RadioGroup
+    <div className="flex gap-2 items-center justify-end">
+      <label className="text-slate-700 dark:text-slate-300">
+        {type === `app` ? `Block internet access:` : `Block address`}
+      </label>
+      <SelectMenu
+        size="small"
         options={getConditionOpts(type)}
         selectedOption={condition}
-        setSelectedOption={(value) => emit({ type: `setCondition`, value })}
+        setSelected={(value) => emit({ type: `setCondition`, value })}
       />
     </div>
-
     {(condition === `unlessAddressContains` || condition === `whenAddressContains`) && (
       <div className="flex flex-col gap-2 bg-violet-50 border border-violet-100 rounded-xl p-4">
         <TextInput
           type={condition === `unlessAddressContains` ? `textarea` : `text`}
+          rows={3}
           value={secondaryValue}
           setValue={(value) => emit({ type: `setSecondaryValue`, value })}
           placeholder={
@@ -85,14 +97,14 @@ function getConditionOpts(
 ): Array<{ value: Condition; display: string }> {
   if (type === `app`) {
     return [
-      { value: `always`, display: `Block always` },
-      { value: `whenAddressContains`, display: `Block when address contains...` },
-      { value: `whenIsBrowser`, display: `Block when is browser` },
-      { value: `unlessAddressContains`, display: `Block unless address contains...` },
+      { value: `always`, display: `completely` },
+      { value: `whenAddressContains`, display: `when address contains...` },
+      { value: `unlessAddressContains`, display: `unless address contains...` },
+      { value: `whenIsBrowser`, display: `when is browser` },
     ];
   }
   return [
-    { value: `always`, display: `Block always` },
-    { value: `whenIsBrowser`, display: `Block when is browser` },
+    { value: `always`, display: `always` },
+    { value: `whenIsBrowser`, display: `when is browser` },
   ];
 }

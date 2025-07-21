@@ -1,5 +1,6 @@
 import { ApiErrorMessage, Combobox, Loading, PageHeading } from '@dash/components';
 import { RadioGroup, SelectableListItem } from '@dash/components';
+import { SelectMenu } from '@shared/components';
 import React, { useReducer } from 'react';
 import { useParams } from 'react-router-dom';
 import type { WebPolicy } from '@dash/types';
@@ -57,14 +58,15 @@ const IOSDevice: React.FC = () => {
       </div>
       <div className="bg-white rounded-2xl shadow p-6 mx-auto">
         <h2 className="font-bold text-lg mb-4">Web Content Filter Policy</h2>
-        <Combobox
+        <SelectMenu
           options={WEB_POLICY_OPTIONS}
-          selected={{
-            value: state.webPolicy,
-            display:
-              WEB_POLICY_OPTIONS.find((opt) => opt.value === state.webPolicy)?.display ||
-              ``,
-          }}
+          selectedOption={state.webPolicy}
+          // selected={{
+          //   value: state.webPolicy,
+          //   display:
+          //     WEB_POLICY_OPTIONS.find((opt) => opt.value === state.webPolicy)?.display ||
+          //     ``,
+          // }}
           setSelected={(policy) => dispatch({ type: `setWebPolicy`, policy })}
         />
       </div>
