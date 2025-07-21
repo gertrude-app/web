@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import type { BlockRuleEditorProps } from '@dash/components';
 import type { BlockRule, RemoveFns } from '@dash/types';
-import { blockRuleToProps } from '../block-rule-reducer';
+import { blockRuleToProps } from '../block-rule';
 
 describe(`blockRuleProps`, () => {
   const cases: Array<[BlockRule, RemoveFns<BlockRuleEditorProps> | null]> = [
