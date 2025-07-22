@@ -122,6 +122,7 @@ type ToastId =
   | `save:keychain`
   | `save:key`
   | `save:computer`
+  | `save:block-rule`
   | `save:notification`;
 
 function getToast(toastId?: ToastId): { verb: string; entity: string } | undefined {
@@ -140,6 +141,7 @@ function getToast(toastId?: ToastId): { verb: string; entity: string } | undefin
     case `save:keychain`:
     case `save:key`:
     case `save:computer`:
+    case `save:block-rule`:
     case `save:notification`:
       return { verb, entity };
 

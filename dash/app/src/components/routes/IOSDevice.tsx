@@ -1,18 +1,15 @@
 import { convert, validate } from '@dash/block-rules';
 import { BlockRuleEditor, EditBlockRules, Loading, PageHeading } from '@dash/components';
-import {
-  ApiErrorMessage,
-  ConfirmDeleteEntity,
-  Modal,
-  SelectableListItem,
-} from '@dash/components';
+import { ApiErrorMessage, ConfirmDeleteEntity } from '@dash/components';
+import { Modal, SelectableListItem } from '@dash/components';
+import { Result } from '@dash/types';
 import { SelectMenu } from '@shared/components';
 import { notNullish } from '@shared/ts-utils';
 import React, { useReducer } from 'react';
 import { useParams } from 'react-router-dom';
 import type { WebPolicy } from '@dash/types';
 import Current from '../../environment';
-import { Key, useConfirmableDelete, useQuery } from '../../hooks';
+import { Key, useConfirmableDelete, useMutation, useQuery } from '../../hooks';
 import reducer from '../../reducers/ios-device-reducer';
 
 const IOSDevice: React.FC = () => {
@@ -22,18 +19,27 @@ const IOSDevice: React.FC = () => {
     webPolicyDomains: [],
     webPolicy: `blockAll`,
     newDomain: ``,
-    // temp...
-    // editingBlockRule: {
-    //   type: `app`,
-    //   primaryValue: `bad-site.com`,
-    //   secondaryValue: ``,
-    //   condition: `always`,
-    // },
   });
 
   const deleteBlockRule = useConfirmableDelete(`blockRule`, {
     invalidating: [Key.iOSDevice(id)],
   });
+
+  const saveBlockRule = useMutation(
+    () => {
+      const editingBlockRule = state.editingBlockRule;
+      if (!editingBlockRule) return Result.resolveUnexpected(`fb05188d`);
+      return Current.api.upsertBlockRule({
+        id: editingBlockRule.id,
+        rule: convert.propsToBlockRule(editingBlockRule),
+      });
+    },
+    {
+      toast: `save:block-rule`,
+      invalidating: [Key.iOSDevice(id)],
+      onSuccess: () => dispatch({ type: `dismissBlockRule` }),
+    },
+  );
 
   const deviceQuery = useQuery(Key.iOSDevice(id), () => Current.api.getIOSDevice(id), {
     onReceive: (data) => dispatch({ type: `receiveData`, data }),
@@ -57,9 +63,13 @@ const IOSDevice: React.FC = () => {
         isOpen={!!state.editingBlockRule}
         primaryButton={{
           label: state.editingBlockRule?.id ? `Save` : `Create`,
-          action: () => {},
+          action: () => {
+            saveBlockRule.mutate(undefined);
+          },
           disabled:
-            !state.editingBlockRule || !validate.blockRuleProps(state.editingBlockRule),
+            !state.editingBlockRule ||
+            !validate.blockRuleProps(state.editingBlockRule) ||
+            saveBlockRule.isPending,
         }}
         secondaryButton={{ action: () => dispatch({ type: `dismissBlockRule` }) }}
       >
