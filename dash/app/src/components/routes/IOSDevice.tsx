@@ -78,116 +78,132 @@ const IOSDevice: React.FC = () => {
     isEqual(state.webPolicyDomains, deviceQuery.data.webPolicyDomains);
 
   return (
-    <div className="flex flex-col gap-8 [&>*]:w-full">
-      <PageHeading icon="phone" className="mb-4">
-        {deviceQuery.data.childName}’s {deviceQuery.data.deviceType}
+    <div className="relative max-w-3xl">
+      <PageHeading icon="phone">
+        {deviceQuery.data.childName}'s {deviceQuery.data.deviceType}
       </PageHeading>
-      <div className="bg-white rounded-2xl shadow p-6 mx-auto">
-        <h2 className="font-bold text-lg mb-4">Block Groups</h2>
-        <div className="space-y-2">
-          {deviceQuery.data.allBlockGroups.map(({ id, name }) => (
-            <SelectableListItem
-              key={id}
-              title={name}
-              description={``}
-              selected={state.enabledBlockGroups.includes(id)}
-              onClick={() => dispatch({ type: `toggleBlockGroup`, id })}
-            />
-          ))}
+      <div className="mt-8">
+        {/* Block Groups */}
+        <div className="mt-12 max-w-3xl">
+          <h2 className="text-lg font-bold text-slate-700 mb-4">Block Groups</h2>
+          <div className="space-y-2">
+            {deviceQuery.data.allBlockGroups.map(({ id, name }) => (
+              <SelectableListItem
+                key={id}
+                title={name}
+                description={``}
+                selected={state.enabledBlockGroups.includes(id)}
+                onClick={() => dispatch({ type: `toggleBlockGroup`, id })}
+              />
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="bg-white rounded-2xl shadow p-6 mx-auto">
-        <h2 className="font-bold text-lg mb-4">Web Content Filter Policy</h2>
-        <SelectMenu
-          options={WEB_POLICY_OPTIONS}
-          selectedOption={state.webPolicy}
-          setSelected={(policy) => dispatch({ type: `setWebPolicy`, policy })}
-        />
+        {/* Web Content Filter Policy */}
+        <div className="mt-12 max-w-3xl">
+          <h2 className="text-lg font-bold text-slate-700">Web Content Filter Policy</h2>
+          <div className="bg-slate-100 mt-3 p-4 sm:p-6 rounded-xl overflow-hidden relative">
+            <SelectMenu
+              options={WEB_POLICY_OPTIONS}
+              selectedOption={state.webPolicy}
+              setSelected={(policy) => dispatch({ type: `setWebPolicy`, policy })}
+            />
 
-        {(state.webPolicy === `blockAllExcept` ||
-          state.webPolicy === `blockAdultAnd`) && (
-          <div className="ml-12 mt-6">
-            <h3 className="font-semibold text-base mb-1">
-              {state.webPolicy === `blockAllExcept` ? `Approved` : `Blocked`} websites:
-            </h3>
-            {state.webPolicyDomains.length > 0 && (
-              <div className="flex flex-col gap-2 mb-3">
-                {state.webPolicyDomains.map((domain: string) => (
-                  <div
-                    key={domain}
-                    className="flex items-center justify-between bg-slate-100 rounded-lg px-3 py-2"
-                  >
-                    <span className="font-mono text-violet-700">{domain}</span>
-                    <TrashBtn
-                      onClick={() => dispatch({ type: `removeDomain`, domain })}
-                    />
+            {(state.webPolicy === `blockAllExcept` ||
+              state.webPolicy === `blockAdultAnd`) && (
+              <div className="mt-5">
+                <div className="flex justify-center items-center bg-white rounded-xl p-4 border-[0.5px] border-slate-200 shadow shadow-slate-300/50">
+                  <div className="w-full">
+                    <h3 className="font-medium text-slate-700 leading-tight mb-3">
+                      {state.webPolicy === `blockAllExcept` ? `Approved` : `Blocked`}
+                      {` `}
+                      websites:
+                    </h3>
+                    {state.webPolicyDomains.length > 0 && (
+                      <div className="flex flex-col gap-2 mb-4">
+                        {state.webPolicyDomains.map((domain: string) => (
+                          <div
+                            key={domain}
+                            className="flex items-center justify-between bg-slate-100 rounded-lg pl-4 pr-3 py-2"
+                          >
+                            <span className="font-mono text-violet-700">{domain}</span>
+                            <TrashBtn
+                              onClick={() => dispatch({ type: `removeDomain`, domain })}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        className="flex-1 border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-300"
+                        placeholder="Add domain (e.g. example.com)"
+                        value={state.newDomain}
+                        onChange={(e) =>
+                          dispatch({ type: `setNewDomain`, value: e.target.value })
+                        }
+                        onKeyDown={(e) => {
+                          if (e.key === `Enter`) {
+                            e.preventDefault();
+                            dispatch({ type: `addDomain` });
+                          }
+                        }}
+                      />
+                      <button
+                        className="bg-violet-600 text-white rounded-lg px-4 py-2 font-semibold hover:bg-violet-700 transition"
+                        onClick={() => dispatch({ type: `addDomain` })}
+                        disabled={
+                          !state.newDomain.trim() ||
+                          state.webPolicyDomains.includes(state.newDomain.trim())
+                        }
+                      >
+                        Add
+                      </button>
+                    </div>
                   </div>
-                ))}
+                </div>
               </div>
             )}
-            <div className="flex gap-2 mt-4">
-              <input
-                type="text"
-                className="flex-1 border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-300"
-                placeholder="Add domain (e.g. example.com)"
-                value={state.newDomain}
-                onChange={(e) =>
-                  dispatch({ type: `setNewDomain`, value: e.target.value })
-                }
-                onKeyDown={(e) => {
-                  if (e.key === `Enter`) {
-                    e.preventDefault();
-                    dispatch({ type: `addDomain` });
-                  }
-                }}
-              />
-              <button
-                className="bg-violet-600 text-white rounded-lg px-4 py-2 font-semibold hover:bg-violet-700 transition"
-                onClick={() => dispatch({ type: `addDomain` })}
-                disabled={
-                  !state.newDomain.trim() ||
-                  state.webPolicyDomains.includes(state.newDomain.trim())
-                }
-              >
-                Add
-              </button>
-            </div>
           </div>
-        )}
-      </div>
-      <div className="bg-white rounded-2xl shadow p-6 mx-auto">
-        <h2 className="font-bold text-lg mb-4">Block Rules</h2>
-        <EditBlockRules
-          rules={deviceQuery.data.customBlockRules
-            .map((rule) => {
-              const props = convert.blockRuleToProps(rule.rule);
-              if (!props) return null;
-              return [rule.id, props] satisfies [UUID, typeof props];
-            })
-            .filter(notNullish)}
-          onDelete={deleteBlockRule.start}
-          onEdit={(id) => {
-            const rule = deviceQuery.data.customBlockRules.find((r) => r.id === id);
-            if (rule) {
-              const props = convert.blockRuleToProps(rule.rule);
-              if (props) {
-                dispatch({ type: `setEditingBlockRule`, id, rule: props });
-              }
-            }
-          }}
-          onAdd={() => dispatch({ type: `addBlockRule` })}
-        />
-      </div>
-      <div className="flex justify-end border-slate-200">
-        <Button
-          className="ScrollTop"
-          type="button"
-          disabled={isDirty || saveDevice.isPending}
-          onClick={() => saveDevice.mutate(undefined)}
-          color="primary"
-        >
-          Save settings
-        </Button>
+        </div>
+        {/* Block Rules */}
+        <div className="mt-12 max-w-3xl mb-12">
+          <h2 className="text-lg font-bold text-slate-700 mb-2">Block Rules</h2>
+          <div className="bg-slate-100 mt-3 p-4 sm:p-6 rounded-xl">
+            <EditBlockRules
+              rules={deviceQuery.data.customBlockRules
+                .map((rule) => {
+                  const props = convert.blockRuleToProps(rule.rule);
+                  if (!props) return null;
+                  return [rule.id, props] satisfies [UUID, typeof props];
+                })
+                .filter(notNullish)}
+              onDelete={deleteBlockRule.start}
+              onEdit={(id) => {
+                const rule = deviceQuery.data.customBlockRules.find((r) => r.id === id);
+                if (rule) {
+                  const props = convert.blockRuleToProps(rule.rule);
+                  if (props) {
+                    dispatch({ type: `setEditingBlockRule`, id, rule: props });
+                  }
+                }
+              }}
+              onAdd={() => dispatch({ type: `addBlockRule` })}
+            />
+          </div>
+        </div>
+
+        <div className="flex mt-8 justify-end border-slate-200 pt-8 border-t-2">
+          <Button
+            className="ScrollTop"
+            type="button"
+            disabled={isDirty || saveDevice.isPending}
+            onClick={() => saveDevice.mutate(undefined)}
+            color="primary"
+          >
+            Save settings
+          </Button>
+        </div>
       </div>
       <Modal
         icon="location"
