@@ -14,7 +14,7 @@ const BlockRuleEditor: React.FC<Props> = ({
   condition,
   emit,
 }) => (
-  <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-6 mx-auto flex flex-col gap-6">
+  <div className="flex flex-col gap-6">
     <div className="flex flex-col gap-4 sm:flex-row">
       <KeyTypeOption
         icon="phone"
@@ -48,7 +48,7 @@ const BlockRuleEditor: React.FC<Props> = ({
         {type === `app` ? `Block internet access:` : `Block address`}
       </label>
       <SelectMenu
-        size="small"
+        size="medium"
         options={getConditionOpts(type)}
         selectedOption={condition}
         setSelected={(value) => emit({ type: `setCondition`, value })}

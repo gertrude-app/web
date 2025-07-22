@@ -1,6 +1,6 @@
-import { convert } from '@dash/block-rules';
-import { ApiErrorMessage, EditBlockRules, Loading, PageHeading } from '@dash/components';
-import { Modal, SelectableListItem } from '@dash/components';
+import { convert, validate } from '@dash/block-rules';
+import { BlockRuleEditor, EditBlockRules, Loading, PageHeading } from '@dash/components';
+import { ApiErrorMessage, Modal, SelectableListItem } from '@dash/components';
 import { SelectMenu } from '@shared/components';
 import { notNullish } from '@shared/ts-utils';
 import React, { useReducer } from 'react';
@@ -17,6 +17,13 @@ const IOSDevice: React.FC = () => {
     webPolicyDomains: [],
     webPolicy: `blockAll`,
     newDomain: ``,
+    // temp...
+    // editingBlockRule: {
+    //   type: `app`,
+    //   primaryValue: `bad-site.com`,
+    //   secondaryValue: ``,
+    //   condition: `always`,
+    // },
   });
 
   const deviceQuery = useQuery(Key.iOSDevice(id), () => Current.api.getIOSDevice(id), {
@@ -34,19 +41,25 @@ const IOSDevice: React.FC = () => {
   return (
     <div className="flex flex-col gap-8 [&>*]:w-full">
       <Modal
-        icon="key"
+        icon="location"
         type="container"
         maximizeWidthForSmallScreens
-        title="Create a block rule"
-        isOpen={true}
+        title={state.editingBlockRule?.id ? `Edit Block Rule` : `Create Block Rule`}
+        isOpen={!!state.editingBlockRule}
         primaryButton={{
-          label: `foo bar`,
+          label: state.editingBlockRule?.id ? `Save` : `Create`,
           action: () => {},
-          disabled: false,
+          disabled:
+            !state.editingBlockRule || !validate.blockRuleProps(state.editingBlockRule),
         }}
-        secondaryButton={{ action: () => {} }}
+        secondaryButton={{ action: () => dispatch({ type: `dismissBlockRule` }) }}
       >
-        <h1>hey ho!</h1>
+        {state.editingBlockRule && (
+          <BlockRuleEditor
+            {...state.editingBlockRule}
+            emit={(event) => dispatch({ type: `editBlockRule`, event })}
+          />
+        )}
       </Modal>
       <PageHeading icon="phone" className="mb-4">
         {deviceQuery.data.childName}’s {deviceQuery.data.deviceType}
@@ -62,8 +75,16 @@ const IOSDevice: React.FC = () => {
             })
             .filter(notNullish)}
           onDelete={() => {}}
-          onEdit={() => {}}
-          onAdd={() => {}}
+          onEdit={(id) => {
+            const rule = deviceQuery.data.customBlockRules.find((r) => r.id === id);
+            if (rule) {
+              const props = convert.blockRuleToProps(rule.rule);
+              if (props) {
+                dispatch({ type: `setEditingBlockRule`, id, rule: props });
+              }
+            }
+          }}
+          onAdd={() => dispatch({ type: `addBlockRule` })}
         />
       </div>
       <div className="bg-white rounded-2xl shadow p-6 mx-auto">
