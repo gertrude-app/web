@@ -231,6 +231,9 @@ const noopClient: ApiClient = {
   updateUnlockRequest: async () => {
     return Result.success({ success: true });
   },
+  upsertBlockRule: async () => {
+    return Result.success(``);
+  },
   verifySignupEmail: async () => {
     return Result.success({ token: ``, adminId: `` });
   },

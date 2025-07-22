@@ -386,6 +386,16 @@ export const liveClient = {
     );
   },
 
+  upsertBlockRule(
+    input: T.UpsertBlockRule.Input,
+  ): Promise<T.Result<T.UpsertBlockRule.Output>> {
+    return query<T.UpsertBlockRule.Input, T.UpsertBlockRule.Output>(
+      input,
+      `parent`,
+      `UpsertBlockRule`,
+    );
+  },
+
   userActivityFeed(
     input: T.UserActivityFeed.Input,
   ): Promise<T.Result<T.UserActivityFeed.Output>> {
@@ -550,6 +560,9 @@ export const throwingClient: ApiClient = {
   },
   updateUnlockRequest: () => {
     throw new Error(`ApiClient.updateUnlockRequest() not implemented`);
+  },
+  upsertBlockRule: () => {
+    throw new Error(`ApiClient.upsertBlockRule() not implemented`);
   },
   userActivityFeed: () => {
     throw new Error(`ApiClient.userActivityFeed() not implemented`);

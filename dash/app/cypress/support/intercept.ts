@@ -142,6 +142,10 @@ export function interceptPql(
   output: T.UpdateUnlockRequest.Output,
 ): void;
 export function interceptPql(
+  slug: `UpsertBlockRule`,
+  output: T.UpsertBlockRule.Output,
+): void;
+export function interceptPql(
   slug: `UserActivityFeed`,
   output: T.UserActivityFeed.Output,
 ): void;
@@ -205,6 +209,7 @@ export function forcePqlErr(
     | `StripeUrl`
     | `ToggleChildKeychain`
     | `UpdateUnlockRequest`
+    | `UpsertBlockRule`
     | `UserActivityFeed`
     | `VerifySignupEmail`,
   details: Record<string, any> = {},
