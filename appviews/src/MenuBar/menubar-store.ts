@@ -3,9 +3,42 @@ import type { ActionOf } from '../lib/store';
 import { Store } from '../lib/store';
 
 // begin codegen
-export type AppState = { case: 'notConnected'; filterInstalled: boolean; } | { case: 'connectionFailed'; error: string; } | { case: 'connectionSucceded'; userName: string; } | { case: 'connected'; filterState: FilterState; recordingScreen: boolean; recordingKeystrokes: boolean; adminAttentionRequired: boolean; updateStatus?: 'available' | 'nag' | 'require'; } | { case: 'enteringConnectionCode'; } | { case: 'connecting'; }
+export type AppState =
+  | { case: `notConnected`; filterInstalled: boolean }
+  | { case: `connectionFailed`; error: string }
+  | { case: `connectionSucceded`; userName: string }
+  | {
+      case: `connected`;
+      filterState: FilterState;
+      recordingScreen: boolean;
+      recordingKeystrokes: boolean;
+      adminAttentionRequired: boolean;
+      updateStatus?: `available` | `nag` | `require`;
+    }
+  | { case: `enteringConnectionCode` }
+  | { case: `connecting` };
 
-export type AppEvent = { case: 'connectSubmit'; code: number; } | { case: 'pauseDowntimeClicked'; duration: 'tenMinutes' | 'oneHour' | 'oneDay'; } | { case: 'menuBarIconClicked'; } | { case: 'resumeFilterClicked'; } | { case: 'suspendFilterClicked'; } | { case: 'refreshRulesClicked'; } | { case: 'administrateClicked'; } | { case: 'viewNetworkTrafficClicked'; } | { case: 'connectClicked'; } | { case: 'retryConnectClicked'; } | { case: 'removeFilterClicked'; } | { case: 'connectFailedHelpClicked'; } | { case: 'welcomeAdminClicked'; } | { case: 'turnOnFilterClicked'; } | { case: 'updateNagDismissClicked'; } | { case: 'updateNagUpdateClicked'; } | { case: 'updateRequiredUpdateClicked'; } | { case: 'quitForNowClicked'; } | { case: 'quitForUninstallClicked'; } | { case: 'resumeDowntimeClicked'; }
+export type AppEvent =
+  | { case: `connectSubmit`; code: number }
+  | { case: `pauseDowntimeClicked`; duration: `tenMinutes` | `oneHour` | `oneDay` }
+  | { case: `menuBarIconClicked` }
+  | { case: `resumeFilterClicked` }
+  | { case: `suspendFilterClicked` }
+  | { case: `refreshRulesClicked` }
+  | { case: `administrateClicked` }
+  | { case: `viewNetworkTrafficClicked` }
+  | { case: `connectClicked` }
+  | { case: `retryConnectClicked` }
+  | { case: `removeFilterClicked` }
+  | { case: `connectFailedHelpClicked` }
+  | { case: `welcomeAdminClicked` }
+  | { case: `turnOnFilterClicked` }
+  | { case: `updateNagDismissClicked` }
+  | { case: `updateNagUpdateClicked` }
+  | { case: `updateRequiredUpdateClicked` }
+  | { case: `quitForNowClicked` }
+  | { case: `quitForUninstallClicked` }
+  | { case: `resumeDowntimeClicked` };
 // end codegen
 
 export type ViewState = {

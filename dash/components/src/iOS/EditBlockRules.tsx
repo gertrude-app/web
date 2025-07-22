@@ -1,20 +1,26 @@
 import { PlusIcon } from '@heroicons/react/24/solid';
 import { Button } from '@shared/components';
 import React from 'react';
-import type { Props as BlockRuleSummaryProps } from './BlockRuleSummary';
+import type { EditBlockRuleProps } from '@dash/block-rules';
 import EmptyState from '../EmptyState';
 import { TrashBtn } from '../Forms';
 import BlockRuleSummary from './BlockRuleSummary';
 
-export type EditBlockRulesProps = {
-  rules: Array<[UUID, BlockRuleSummaryProps]>;
+export type Props = {
+  rules: Array<[UUID, EditBlockRuleProps]>;
   onDelete(id: UUID): unknown;
   onEdit(id: UUID): unknown;
   onAdd(): unknown;
   className?: string;
 };
 
-const EditBlockRules: React.FC<EditBlockRulesProps> = ({ rules, onAdd, className }) => (
+const EditBlockRules: React.FC<Props> = ({
+  rules,
+  className,
+  onAdd,
+  onEdit,
+  onDelete,
+}) => (
   <div className={`flex flex-col gap-4 ${className ?? ``}`}>
     {rules.length === 0 ? (
       <EmptyState
@@ -26,14 +32,15 @@ const EditBlockRules: React.FC<EditBlockRulesProps> = ({ rules, onAdd, className
       />
     ) : (
       <>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 cursor-pointer">
           {rules.map(([id, rule], idx) => (
             <div
               key={idx}
-              className="flex items-center justify-between gap-2 px-2 py-1 rounded-lg group transition"
+              className="flex items-center justify-between gap-2 px-2 py-1 rounded-lg group transition hover:bg-slate-50"
+              onClick={() => onEdit(id)}
             >
               <BlockRuleSummary {...rule} />
-              <TrashBtn onClick={() => {}} />
+              <TrashBtn onClick={() => onDelete(id)} />
             </div>
           ))}
         </div>

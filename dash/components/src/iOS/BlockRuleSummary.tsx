@@ -1,10 +1,13 @@
+import cx from 'classnames';
 import React from 'react';
-import type { Props as BlockRuleEditorProps } from './BlockRuleEditor';
+import type { EditBlockRuleProps } from '@dash/block-rules';
 import GradientIcon from '../GradientIcon';
 
-export type Props = Omit<BlockRuleEditorProps, `emit`>;
-
-const BlockRuleSummary: React.FC<Props> = ({ type, primaryValue, condition }) => {
+const BlockRuleSummary: React.FC<EditBlockRuleProps> = ({
+  type,
+  primaryValue,
+  condition,
+}) => {
   const hasMore = condition !== `always`;
   const icon = type === `app` ? `phone` : `globe`;
   const typeLabel = type === `app` ? `App` : `URL`;
@@ -19,11 +22,13 @@ const BlockRuleSummary: React.FC<Props> = ({ type, primaryValue, condition }) =>
       <span className="text-sm uppercase tracking-wide font-semibold text-slate-500 mr-1">
         {typeLabel}
       </span>
-      <span className="truncate max-w-[10em] font-mono text-base text-slate-800">
+      <span
+        className={cx(`truncate font-mono text-base text-slate-800`, !hasMore && `pr-1`)}
+      >
         {primaryValue}
       </span>
       {hasMore && (
-        <span className="ml-1 w-2 h-2 rounded-full bg-violet-400 inline-block" />
+        <span className="ml-1 w-2 h-2 rounded-full bg-violet-400 inline-block pr-0.5" />
       )}
     </span>
   );

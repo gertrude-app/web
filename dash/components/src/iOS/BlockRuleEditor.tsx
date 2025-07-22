@@ -1,27 +1,11 @@
 import { SelectMenu, TextInput } from '@shared/components';
 import React from 'react';
-import { RadioGroup } from '../Forms';
+import type { BlockCondition, EditBlockRuleProps, EditEvent } from '@dash/block-rules';
 import KeyTypeOption from '../KeyCreator/KeyTypeOption';
 
-export type Props = {
-  type: `app` | `address`;
-  primaryValue: string;
-  secondaryValue: string;
-  condition: Condition;
-  emit: (event: Event) => unknown;
+type Props = EditBlockRuleProps & {
+  emit: (event: EditEvent) => unknown;
 };
-
-export type Condition =
-  | `always`
-  | `whenAddressContains`
-  | `whenIsBrowser`
-  | `unlessAddressContains`;
-
-export type Event =
-  | { type: `setPrimaryValue`; value: string }
-  | { type: `setSecondaryValue`; value: string }
-  | { type: `setType`; value: `app` | `address` }
-  | { type: `setCondition`; value: Condition };
 
 const BlockRuleEditor: React.FC<Props> = ({
   type,
@@ -94,7 +78,7 @@ export default BlockRuleEditor;
 
 function getConditionOpts(
   type: `app` | `address`,
-): Array<{ value: Condition; display: string }> {
+): Array<{ value: BlockCondition; display: string }> {
   if (type === `app`) {
     return [
       { value: `always`, display: `completely` },

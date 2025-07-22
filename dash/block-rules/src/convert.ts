@@ -1,9 +1,7 @@
-import { type BlockRuleEditorProps } from '@dash/components';
-import type { BlockRule, RemoveFns } from '@dash/types';
+import type { EditBlockRuleProps } from './types';
+import type { BlockRule } from '@dash/types';
 
-export function blockRuleToProps(
-  rule: BlockRule,
-): RemoveFns<BlockRuleEditorProps> | null {
+export function blockRuleToProps(rule: BlockRule): EditBlockRuleProps | null {
   switch (rule.case) {
     case `bundleIdContains`:
     case `targetContains`:
@@ -21,10 +19,7 @@ export function blockRuleToProps(
   }
 }
 
-function createSimpleRule(rule: {
-  case: string;
-  value: string;
-}): RemoveFns<BlockRuleEditorProps> {
+function createSimpleRule(rule: { case: string; value: string }): EditBlockRuleProps {
   return {
     type: rule.case === `bundleIdContains` ? `app` : `address`,
     primaryValue: rule.value,
@@ -33,10 +28,7 @@ function createSimpleRule(rule: {
   };
 }
 
-function handleBothRule(rule: {
-  a: BlockRule;
-  b: BlockRule;
-}): RemoveFns<BlockRuleEditorProps> | null {
+function handleBothRule(rule: { a: BlockRule; b: BlockRule }): EditBlockRuleProps | null {
   const { a, b } = rule;
   if (a.case === `bundleIdContains`) {
     return handleBundleIdWithSecondRule(a, b);
@@ -50,7 +42,7 @@ function handleBothRule(rule: {
 function handleBundleIdWithSecondRule(
   bundleRule: { value: string },
   secondRule: BlockRule,
-): RemoveFns<BlockRuleEditorProps> | null {
+): EditBlockRuleProps | null {
   if (isAddressRule(secondRule)) {
     return {
       type: `app`,
@@ -73,7 +65,7 @@ function handleBundleIdWithSecondRule(
 function handleAddressWithFlowType(
   addressRule: AddressRule,
   flowRule: BlockRule,
-): RemoveFns<BlockRuleEditorProps> | null {
+): EditBlockRuleProps | null {
   if (flowRule.case === `flowTypeIs` && flowRule.value === `browser`) {
     return {
       type: `address`,
@@ -88,7 +80,7 @@ function handleAddressWithFlowType(
 function handleUnlessRule(rule: {
   rule: BlockRule;
   negatedBy: BlockRule[];
-}): RemoveFns<BlockRuleEditorProps> | null {
+}): EditBlockRuleProps | null {
   if (rule.rule.case !== `bundleIdContains`) {
     return null;
   }
@@ -127,7 +119,7 @@ function isAddressRule(rule: BlockRule): rule is AddressRule {
   ].includes(rule.case);
 }
 
-export function propsToBlockRule(props: RemoveFns<BlockRuleEditorProps>): BlockRule {
+export function propsToBlockRule(props: EditBlockRuleProps): BlockRule {
   const { type, primaryValue, secondaryValue, condition } = props;
   switch (condition) {
     case `always`:

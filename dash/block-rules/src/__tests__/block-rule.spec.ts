@@ -1,10 +1,10 @@
 import { describe, expect, test } from 'vitest';
-import type { BlockRuleEditorProps } from '@dash/components';
-import type { BlockRule, RemoveFns } from '@dash/types';
-import { blockRuleToProps, propsToBlockRule } from '../block-rule';
+import type { EditBlockRuleProps } from '../types';
+import type { BlockRule } from '@dash/types';
+import { blockRuleToProps, propsToBlockRule } from '../convert';
 
 describe(`blockRuleToProps`, () => {
-  const cases: Array<[BlockRule, RemoveFns<BlockRuleEditorProps> | null]> = [
+  const cases: Array<[BlockRule, EditBlockRuleProps | null]> = [
     [
       { case: `bundleIdContains`, value: `com.example.app` },
       {
@@ -25,7 +25,12 @@ describe(`blockRuleToProps`, () => {
     ],
     [
       { case: `hostnameContains`, value: `foo` },
-      { type: `address`, primaryValue: `foo`, secondaryValue: ``, condition: `always` },
+      {
+        type: `address`,
+        primaryValue: `foo`,
+        secondaryValue: ``,
+        condition: `always`,
+      },
     ],
     [
       { case: `hostnameEquals`, value: `bar.com` },
@@ -38,14 +43,22 @@ describe(`blockRuleToProps`, () => {
     ],
     [
       { case: `hostnameEndsWith`, value: `.org` },
-      { type: `address`, primaryValue: `.org`, secondaryValue: ``, condition: `always` },
+      {
+        type: `address`,
+        primaryValue: `.org`,
+        secondaryValue: ``,
+        condition: `always`,
+      },
     ],
     [
       { case: `targetContains`, value: `baz` },
-      { type: `address`, primaryValue: `baz`, secondaryValue: ``, condition: `always` },
+      {
+        type: `address`,
+        primaryValue: `baz`,
+        secondaryValue: ``,
+        condition: `always`,
+      },
     ],
-    [{ case: `flowTypeIs`, value: `browser` }, null],
-    [{ case: `flowTypeIs`, value: `socket` }, null],
     [
       {
         case: `both`,
@@ -112,6 +125,8 @@ describe(`blockRuleToProps`, () => {
       },
       null,
     ],
+    [{ case: `flowTypeIs`, value: `browser` }, null],
+    [{ case: `flowTypeIs`, value: `socket` }, null],
   ];
 
   test.each(cases)(`blockRuleProps %#`, (input, expected) => {
@@ -120,7 +135,7 @@ describe(`blockRuleToProps`, () => {
 });
 
 describe(`propsToBlockRule`, () => {
-  const cases: Array<[RemoveFns<BlockRuleEditorProps>, BlockRule]> = [
+  const cases: Array<[EditBlockRuleProps, BlockRule]> = [
     [
       {
         type: `app`,
@@ -140,7 +155,12 @@ describe(`propsToBlockRule`, () => {
       { case: `targetContains`, value: `example.com` },
     ],
     [
-      { type: `address`, primaryValue: `foo`, secondaryValue: ``, condition: `always` },
+      {
+        type: `address`,
+        primaryValue: `foo`,
+        secondaryValue: ``,
+        condition: `always`,
+      },
       { case: `targetContains`, value: `foo` },
     ],
     [
@@ -153,11 +173,21 @@ describe(`propsToBlockRule`, () => {
       { case: `targetContains`, value: `bar.com` },
     ],
     [
-      { type: `address`, primaryValue: `.org`, secondaryValue: ``, condition: `always` },
+      {
+        type: `address`,
+        primaryValue: `.org`,
+        secondaryValue: ``,
+        condition: `always`,
+      },
       { case: `targetContains`, value: `.org` },
     ],
     [
-      { type: `address`, primaryValue: `baz`, secondaryValue: ``, condition: `always` },
+      {
+        type: `address`,
+        primaryValue: `baz`,
+        secondaryValue: ``,
+        condition: `always`,
+      },
       { case: `targetContains`, value: `baz` },
     ],
     [

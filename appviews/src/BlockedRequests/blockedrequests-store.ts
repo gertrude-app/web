@@ -3,11 +3,41 @@ import type { ActionOf } from '../lib/store';
 import { Store } from '../lib/store';
 
 // begin codegen
-export interface Request { id: UUID; time: ISODateString; target: string; protocol: 'tcp' | 'udp' | 'other'; searchableText: string; app: string; }
+export interface Request {
+  id: UUID;
+  time: ISODateString;
+  target: string;
+  protocol: `tcp` | `udp` | `other`;
+  searchableText: string;
+  app: string;
+}
 
-export interface AppState { windowOpen: boolean; selectedRequestIds: UUID[]; requests: Request[]; filterText: string; tcpOnly: boolean; createUnlockRequests: { case: 'failed'; error: string; } | { case: 'idle'; } | { case: 'ongoing'; } | { case: 'succeeded'; }; adminAccountStatus: AdminAccountStatus; filterCommunicationConfirmed?: boolean; }
+export interface AppState {
+  windowOpen: boolean;
+  selectedRequestIds: UUID[];
+  requests: Request[];
+  filterText: string;
+  tcpOnly: boolean;
+  createUnlockRequests:
+    | { case: `failed`; error: string }
+    | { case: `idle` }
+    | { case: `ongoing` }
+    | { case: `succeeded` };
+  adminAccountStatus: AdminAccountStatus;
+  filterCommunicationConfirmed?: boolean;
+}
 
-export type AppEvent = { case: 'filterTextUpdated'; text: string; } | { case: 'unlockRequestSubmitted'; comment?: string; } | { case: 'toggleRequestSelected'; id: UUID; } | { case: 'requestFailedTryAgainClicked'; } | { case: 'tcpOnlyToggled'; } | { case: 'clearRequestsClicked'; } | { case: 'closeWindow'; } | { case: 'inactiveAccountRecheckClicked'; } | { case: 'inactiveAccountDisconnectAppClicked'; } | { case: 'noFilterCommunicationAdministrateClicked'; }
+export type AppEvent =
+  | { case: `filterTextUpdated`; text: string }
+  | { case: `unlockRequestSubmitted`; comment?: string }
+  | { case: `toggleRequestSelected`; id: UUID }
+  | { case: `requestFailedTryAgainClicked` }
+  | { case: `tcpOnlyToggled` }
+  | { case: `clearRequestsClicked` }
+  | { case: `closeWindow` }
+  | { case: `inactiveAccountRecheckClicked` }
+  | { case: `inactiveAccountDisconnectAppClicked` }
+  | { case: `noFilterCommunicationAdministrateClicked` };
 // end codegen
 
 export type ViewState = {

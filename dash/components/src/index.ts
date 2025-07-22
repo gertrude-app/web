@@ -62,7 +62,3 @@ export { DURATION_OPTS } from './Users/SuspendFilterRequestForm';
 export type { NotificationUpdate } from './Settings/Settings';
 export type { ActivityFeedItem } from './Users/Activity/ChildActivityFeed';
 export { default as BlockRuleEditor } from './iOS/BlockRuleEditor';
-export {
-  type Event as BlockRuleEditorEvent,
-  type Props as BlockRuleEditorProps,
-} from './iOS/BlockRuleEditor';

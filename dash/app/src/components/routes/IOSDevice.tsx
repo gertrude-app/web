@@ -1,5 +1,6 @@
+import { convert } from '@dash/block-rules';
 import { ApiErrorMessage, EditBlockRules, Loading, PageHeading } from '@dash/components';
-import { RadioGroup, SelectableListItem } from '@dash/components';
+import { Modal, SelectableListItem } from '@dash/components';
 import { SelectMenu } from '@shared/components';
 import { notNullish } from '@shared/ts-utils';
 import React, { useReducer } from 'react';
@@ -7,7 +8,6 @@ import { useParams } from 'react-router-dom';
 import type { WebPolicy } from '@dash/types';
 import Current from '../../environment';
 import { Key, useQuery } from '../../hooks';
-import { blockRuleToProps } from '../../lib/block-rule';
 import reducer from '../../reducers/ios-device-reducer';
 
 const IOSDevice: React.FC = () => {
@@ -33,14 +33,21 @@ const IOSDevice: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-8 [&>*]:w-full">
-      <pre>{JSON.stringify(deviceQuery.data.customBlockRules, null, 2)}</pre>
-      <pre>
-        {JSON.stringify(
-          deviceQuery.data.customBlockRules.map((thing) => blockRuleToProps(thing.rule)),
-          null,
-          2,
-        )}
-      </pre>
+      <Modal
+        icon="key"
+        type="container"
+        maximizeWidthForSmallScreens
+        title="Create a block rule"
+        isOpen={true}
+        primaryButton={{
+          label: `foo bar`,
+          action: () => {},
+          disabled: false,
+        }}
+        secondaryButton={{ action: () => {} }}
+      >
+        <h1>hey ho!</h1>
+      </Modal>
       <PageHeading icon="phone" className="mb-4">
         {deviceQuery.data.childName}’s {deviceQuery.data.deviceType}
       </PageHeading>
@@ -49,7 +56,7 @@ const IOSDevice: React.FC = () => {
         <EditBlockRules
           rules={deviceQuery.data.customBlockRules
             .map((rule) => {
-              const props = blockRuleToProps(rule.rule);
+              const props = convert.blockRuleToProps(rule.rule);
               if (!props) return null;
               return [rule.id, props] satisfies [UUID, typeof props];
             })
@@ -78,12 +85,6 @@ const IOSDevice: React.FC = () => {
         <SelectMenu
           options={WEB_POLICY_OPTIONS}
           selectedOption={state.webPolicy}
-          // selected={{
-          //   value: state.webPolicy,
-          //   display:
-          //     WEB_POLICY_OPTIONS.find((opt) => opt.value === state.webPolicy)?.display ||
-          //     ``,
-          // }}
           setSelected={(policy) => dispatch({ type: `setWebPolicy`, policy })}
         />
       </div>
