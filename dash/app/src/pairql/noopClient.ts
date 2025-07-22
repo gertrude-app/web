@@ -240,6 +240,9 @@ const noopClient: ApiClient = {
   requestPublicKeychain: async () => {
     return Result.success({ success: true });
   },
+  updateIOSDevice: async () => {
+    return Result.success({ success: true });
+  },
 };
 
 export default noopClient;

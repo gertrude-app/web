@@ -47,6 +47,7 @@ export * from './pairs/SendPasswordResetEmail';
 export * from './pairs/Signup';
 export * from './pairs/StripeUrl';
 export * from './pairs/ToggleChildKeychain';
+export * from './pairs/UpdateIOSDevice';
 export * from './pairs/UpdateUnlockRequest';
 export * from './pairs/UpsertBlockRule';
 export * from './pairs/UserActivityFeed';

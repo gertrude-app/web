@@ -376,6 +376,16 @@ export const liveClient = {
     );
   },
 
+  updateIOSDevice(
+    input: T.UpdateIOSDevice.Input,
+  ): Promise<T.Result<T.UpdateIOSDevice.Output>> {
+    return query<T.UpdateIOSDevice.Input, T.UpdateIOSDevice.Output>(
+      input,
+      `parent`,
+      `UpdateIOSDevice`,
+    );
+  },
+
   updateUnlockRequest(
     input: T.UpdateUnlockRequest.Input,
   ): Promise<T.Result<T.UpdateUnlockRequest.Output>> {
@@ -557,6 +567,9 @@ export const throwingClient: ApiClient = {
   },
   toggleChildKeychain: () => {
     throw new Error(`ApiClient.toggleChildKeychain() not implemented`);
+  },
+  updateIOSDevice: () => {
+    throw new Error(`ApiClient.updateIOSDevice() not implemented`);
   },
   updateUnlockRequest: () => {
     throw new Error(`ApiClient.updateUnlockRequest() not implemented`);

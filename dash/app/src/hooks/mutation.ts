@@ -124,12 +124,12 @@ type ToastId =
   | `save:key`
   | `save:computer`
   | `save:block-rule`
+  | `save:ios-device`
   | `save:notification`;
 
 function getToast(toastId?: ToastId): { verb: string; entity: string } | undefined {
-  if (!toastId) {
-    return undefined;
-  }
+  if (!toastId) return undefined;
+
   const [verb = ``, entitySlug = ``] = toastId.split(`:`);
   const entity = entitySlug.replace(/-/g, ` `);
   switch (toastId) {
@@ -146,6 +146,9 @@ function getToast(toastId?: ToastId): { verb: string; entity: string } | undefin
     case `save:block-rule`:
     case `save:notification`:
       return { verb, entity };
+
+    case `save:ios-device`:
+      return { verb: `update`, entity: `iOS device` };
 
     case `flag:activity-item`:
       return { verb: `update`, entity: `item` };

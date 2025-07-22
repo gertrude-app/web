@@ -138,6 +138,10 @@ export function interceptPql(
   output: T.ToggleChildKeychain.Output,
 ): void;
 export function interceptPql(
+  slug: `UpdateIOSDevice`,
+  output: T.UpdateIOSDevice.Output,
+): void;
+export function interceptPql(
   slug: `UpdateUnlockRequest`,
   output: T.UpdateUnlockRequest.Output,
 ): void;
@@ -208,6 +212,7 @@ export function forcePqlErr(
     | `Signup`
     | `StripeUrl`
     | `ToggleChildKeychain`
+    | `UpdateIOSDevice`
     | `UpdateUnlockRequest`
     | `UpsertBlockRule`
     | `UserActivityFeed`

@@ -43,6 +43,17 @@ const IOSDevice: React.FC = () => {
     },
   );
 
+  const saveDevice = useMutation(
+    () =>
+      Current.api.updateIOSDevice({
+        deviceId: id,
+        enabledBlockGroups: state.enabledBlockGroups,
+        webPolicy: state.webPolicy,
+        webPolicyDomains: state.webPolicyDomains,
+      }),
+    { toast: `save:ios-device`, invalidating: [Key.iOSDevice(id)] },
+  );
+
   const deviceQuery = useQuery(Key.iOSDevice(id), () => Current.api.getIOSDevice(id), {
     onReceive: (data) => dispatch({ type: `receiveData`, data }),
   });
@@ -54,9 +65,6 @@ const IOSDevice: React.FC = () => {
   if (deviceQuery.isError) {
     return <ApiErrorMessage error={deviceQuery.error} />;
   }
-
-  // todo, move domains into/under web content filter policy
-  const isPending = false; // TODO 👍
 
   const isDirty =
     isEqual(state.enabledBlockGroups, deviceQuery.data.enabledBlockGroups) &&
@@ -162,8 +170,8 @@ const IOSDevice: React.FC = () => {
         <Button
           className="ScrollTop"
           type="button"
-          disabled={isDirty || isPending}
-          onClick={() => {}}
+          disabled={isDirty || saveDevice.isPending}
+          onClick={() => saveDevice.mutate(undefined)}
           color="primary"
         >
           Save settings
