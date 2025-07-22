@@ -1,13 +1,18 @@
 import { convert, validate } from '@dash/block-rules';
 import { BlockRuleEditor, EditBlockRules, Loading, PageHeading } from '@dash/components';
-import { ApiErrorMessage, Modal, SelectableListItem } from '@dash/components';
+import {
+  ApiErrorMessage,
+  ConfirmDeleteEntity,
+  Modal,
+  SelectableListItem,
+} from '@dash/components';
 import { SelectMenu } from '@shared/components';
 import { notNullish } from '@shared/ts-utils';
 import React, { useReducer } from 'react';
 import { useParams } from 'react-router-dom';
 import type { WebPolicy } from '@dash/types';
 import Current from '../../environment';
-import { Key, useQuery } from '../../hooks';
+import { Key, useConfirmableDelete, useQuery } from '../../hooks';
 import reducer from '../../reducers/ios-device-reducer';
 
 const IOSDevice: React.FC = () => {
@@ -24,6 +29,10 @@ const IOSDevice: React.FC = () => {
     //   secondaryValue: ``,
     //   condition: `always`,
     // },
+  });
+
+  const deleteBlockRule = useConfirmableDelete(`blockRule`, {
+    invalidating: [Key.iOSDevice(id)],
   });
 
   const deviceQuery = useQuery(Key.iOSDevice(id), () => Current.api.getIOSDevice(id), {
@@ -61,6 +70,7 @@ const IOSDevice: React.FC = () => {
           />
         )}
       </Modal>
+      <ConfirmDeleteEntity type="block rule" action={deleteBlockRule} />
       <PageHeading icon="phone" className="mb-4">
         {deviceQuery.data.childName}’s {deviceQuery.data.deviceType}
       </PageHeading>
@@ -74,7 +84,7 @@ const IOSDevice: React.FC = () => {
               return [rule.id, props] satisfies [UUID, typeof props];
             })
             .filter(notNullish)}
-          onDelete={() => {}}
+          onDelete={deleteBlockRule.start}
           onEdit={(id) => {
             const rule = deviceQuery.data.customBlockRules.find((r) => r.id === id);
             if (rule) {
