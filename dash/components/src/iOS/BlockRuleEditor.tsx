@@ -19,7 +19,7 @@ const BlockRuleEditor: React.FC<Props> = ({
       <KeyTypeOption
         icon="phone"
         selected={type === `app`}
-        onClick={() => {}}
+        onClick={() => emit({ type: `setType`, value: `app` })}
         title="Block app"
         description="Block a specific iOS app"
         className="sm:w-1/2 sm:ml-2"
@@ -27,7 +27,7 @@ const BlockRuleEditor: React.FC<Props> = ({
       <KeyTypeOption
         icon="globe"
         selected={type === `address`}
-        onClick={() => {}}
+        onClick={() => emit({ type: `setType`, value: `address` })}
         title="Block address"
         description="Block an internet address"
         className="sm:w-1/2 sm:mr-2 mb-3 sm:mb-0"

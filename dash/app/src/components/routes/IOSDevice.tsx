@@ -31,6 +31,7 @@ const IOSDevice: React.FC = () => {
       if (!editingBlockRule) return Result.resolveUnexpected(`fb05188d`);
       return Current.api.upsertBlockRule({
         id: editingBlockRule.id,
+        deviceId: id,
         rule: convert.propsToBlockRule(editingBlockRule),
       });
     },
