@@ -1,7 +1,7 @@
 import { SelectMenu, TextInput } from '@shared/components';
 import React from 'react';
 import type { BlockCondition, EditBlockRuleProps, EditEvent } from '@dash/block-rules';
-import KeyTypeOption from '../KeyCreator/KeyTypeOption';
+import { BlockOption } from '../Forms';
 
 type Props = EditBlockRuleProps & {
   emit: (event: EditEvent) => unknown;
@@ -16,7 +16,7 @@ const BlockRuleEditor: React.FC<Props> = ({
 }) => (
   <div className="flex flex-col gap-6">
     <div className="flex flex-col gap-4 sm:flex-row">
-      <KeyTypeOption
+      <BlockOption
         icon="phone"
         selected={type === `app`}
         onClick={() => emit({ type: `setType`, value: `app` })}
@@ -24,7 +24,7 @@ const BlockRuleEditor: React.FC<Props> = ({
         description="Block a specific iOS app"
         className="sm:w-1/2 sm:ml-2"
       />
-      <KeyTypeOption
+      <BlockOption
         icon="globe"
         selected={type === `address`}
         onClick={() => emit({ type: `setType`, value: `address` })}

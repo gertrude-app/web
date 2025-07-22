@@ -109,6 +109,7 @@ type ToastId =
   | `delete:admin`
   | `delete:user`
   | `delete:computer`
+  | `delete:block-rule`
   | `delete:notification`
   | `delete:notification-method`
   | `delete:keychain`
@@ -137,6 +138,7 @@ function getToast(toastId?: ToastId): { verb: string; entity: string } | undefin
     case `delete:keychain`:
     case `delete:notification-method`:
     case `delete:key`:
+    case `delete:block-rule`:
     case `update:suspend-filter-request`:
     case `save:keychain`:
     case `save:key`:
@@ -182,6 +184,8 @@ function toastIdFromDeleteEntityType(
       return `delete:keychain`;
     case `child`:
       return `delete:user`;
+    case `blockRule`:
+      return `delete:block-rule`;
     case `announcement`:
       return undefined;
   }
