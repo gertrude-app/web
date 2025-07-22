@@ -1,9 +1,9 @@
 import { BlockRuleEditor } from '@dash/components';
 import type { Meta, StoryObj } from '@storybook/react';
-import { props } from '../story-helpers';
+import { props } from '../../story-helpers';
 
 const meta = {
-  title: 'Dashboard/Core/BlockRuleEditor', // eslint-disable-line
+  title: 'Dashboard/iOS/BlockRuleEditor', // eslint-disable-line
   component: BlockRuleEditor,
   parameters: { layout: `fullscreen` },
 } satisfies Meta<typeof BlockRuleEditor>;

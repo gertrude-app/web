@@ -1,20 +1,14 @@
-import { ApiErrorMessage, Combobox, Loading, PageHeading } from '@dash/components';
+import { ApiErrorMessage, EditBlockRules, Loading, PageHeading } from '@dash/components';
 import { RadioGroup, SelectableListItem } from '@dash/components';
 import { SelectMenu } from '@shared/components';
+import { notNullish } from '@shared/ts-utils';
 import React, { useReducer } from 'react';
 import { useParams } from 'react-router-dom';
 import type { WebPolicy } from '@dash/types';
 import Current from '../../environment';
 import { Key, useQuery } from '../../hooks';
+import { blockRuleToProps } from '../../lib/block-rule';
 import reducer from '../../reducers/ios-device-reducer';
-
-const WEB_POLICY_OPTIONS: { value: WebPolicy; display: string }[] = [
-  { value: `blockAllExcept`, display: `Only Approved Websites` },
-  { value: `blockAdultAnd`, display: `Blocklist Plus Limit Adult Websites` },
-  { value: `blockAdult`, display: `Limit Adult Websites` },
-  { value: `blockAll`, display: `Block everything` },
-  { value: `allowAll`, display: `Unrestricted` },
-] as const;
 
 const IOSDevice: React.FC = () => {
   const { deviceId: id = `` } = useParams<{ deviceId: string }>();
@@ -38,11 +32,34 @@ const IOSDevice: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-8 [&>*]:w-full">
+      <pre>{JSON.stringify(deviceQuery.data.customBlockRules, null, 2)}</pre>
+      <pre>
+        {JSON.stringify(
+          deviceQuery.data.customBlockRules.map((thing) => blockRuleToProps(thing.rule)),
+          null,
+          2,
+        )}
+      </pre>
       <PageHeading icon="phone" className="mb-4">
         {deviceQuery.data.childName}’s {deviceQuery.data.deviceType}
       </PageHeading>
-      <div className="bg-white rounded-2xl shadow p-6 mx-auto mb-8">
+      <div className="bg-white rounded-2xl shadow p-6 mx-auto">
+        <h2 className="font-bold text-lg mb-4">Block Rules</h2>
+        <EditBlockRules
+          rules={deviceQuery.data.customBlockRules
+            .map((rule) => {
+              const props = blockRuleToProps(rule.rule);
+              if (!props) return null;
+              return [rule.id, props] satisfies [UUID, typeof props];
+            })
+            .filter(notNullish)}
+          onDelete={() => {}}
+          onEdit={() => {}}
+          onAdd={() => {}}
+        />
+      </div>
+      <div className="bg-white rounded-2xl shadow p-6 mx-auto">
         <h2 className="font-bold text-lg mb-4">Block Groups</h2>
         <div className="space-y-2">
           {deviceQuery.data.allBlockGroups.map(({ id, name }) => (
@@ -70,7 +87,7 @@ const IOSDevice: React.FC = () => {
           setSelected={(policy) => dispatch({ type: `setWebPolicy`, policy })}
         />
       </div>
-      <div className="bg-white rounded-2xl shadow p-6 mx-auto mt-8">
+      <div className="bg-white rounded-2xl shadow p-6 mx-auto">
         <h2 className="font-bold text-lg mb-4">Allowed Domains</h2>
         <div className="flex flex-col gap-2 mb-4">
           {state.webPolicyDomains.map((domain: string) => (
@@ -120,3 +137,11 @@ const IOSDevice: React.FC = () => {
 };
 
 export default IOSDevice;
+
+const WEB_POLICY_OPTIONS: { value: WebPolicy; display: string }[] = [
+  { value: `blockAllExcept`, display: `Only Approved Websites` },
+  { value: `blockAdultAnd`, display: `Blocklist Plus Limit Adult Websites` },
+  { value: `blockAdult`, display: `Limit Adult Websites` },
+  { value: `blockAll`, display: `Block everything` },
+  { value: `allowAll`, display: `Unrestricted` },
+] as const;

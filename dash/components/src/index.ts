@@ -31,6 +31,8 @@ export { default as Computer } from './Users/Computer';
 export { default as Combobox } from './Forms/Combobox';
 export { default as RadioGroup } from './Forms/RadioGroup';
 export { default as SelectableListItem } from './Forms/SelectableListItem';
+export { default as TrashBtn } from './Forms/TrashBtn';
+export { default as EditBlockRules } from './iOS/EditBlockRules';
 export { default as EditChild } from './Users/EditChild';
 export { default as UnlockRequestCard } from './UnlockRequestCard';
 export { default as Dashboard } from './Dashboard/Dashboard';
