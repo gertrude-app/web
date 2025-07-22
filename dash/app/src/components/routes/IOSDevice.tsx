@@ -1,5 +1,11 @@
 import { convert, validate } from '@dash/block-rules';
-import { BlockRuleEditor, EditBlockRules, Loading, PageHeading } from '@dash/components';
+import {
+  BlockRuleEditor,
+  EditBlockRules,
+  Loading,
+  PageHeading,
+  TrashBtn,
+} from '@dash/components';
 import { ApiErrorMessage, ConfirmDeleteEntity } from '@dash/components';
 import { Modal, SelectableListItem } from '@dash/components';
 import { Result } from '@dash/types';
@@ -97,51 +103,57 @@ const IOSDevice: React.FC = () => {
           selectedOption={state.webPolicy}
           setSelected={(policy) => dispatch({ type: `setWebPolicy`, policy })}
         />
-      </div>
-      <div className="bg-white rounded-2xl shadow p-6 mx-auto">
-        <h2 className="font-bold text-lg mb-4">Allowed Domains</h2>
-        <div className="flex flex-col gap-2 mb-4">
-          {state.webPolicyDomains.map((domain: string) => (
-            <div
-              key={domain}
-              className="flex items-center justify-between bg-slate-100 rounded-lg px-3 py-2"
-            >
-              <span className="font-mono text-slate-700">{domain}</span>
+
+        {(state.webPolicy === `blockAllExcept` ||
+          state.webPolicy === `blockAdultAnd`) && (
+          <div className="ml-12 mt-6">
+            <h3 className="font-semibold text-base mb-1">
+              {state.webPolicy === `blockAllExcept` ? `Approved` : `Blocked`} websites:
+            </h3>
+            {state.webPolicyDomains.length > 0 && (
+              <div className="flex flex-col gap-2 mb-3">
+                {state.webPolicyDomains.map((domain: string) => (
+                  <div
+                    key={domain}
+                    className="flex items-center justify-between bg-slate-100 rounded-lg px-3 py-2"
+                  >
+                    <span className="font-mono text-violet-700">{domain}</span>
+                    <TrashBtn
+                      onClick={() => dispatch({ type: `removeDomain`, domain })}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="flex gap-2 mt-4">
+              <input
+                type="text"
+                className="flex-1 border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-300"
+                placeholder="Add domain (e.g. example.com)"
+                value={state.newDomain}
+                onChange={(e) =>
+                  dispatch({ type: `setNewDomain`, value: e.target.value })
+                }
+                onKeyDown={(e) => {
+                  if (e.key === `Enter`) {
+                    e.preventDefault();
+                    dispatch({ type: `addDomain` });
+                  }
+                }}
+              />
               <button
-                className="text-red-500 hover:text-red-700 font-bold px-2"
-                onClick={() => dispatch({ type: `removeDomain`, domain })}
-                aria-label={`Remove ${domain}`}
+                className="bg-violet-600 text-white rounded-lg px-4 py-2 font-semibold hover:bg-violet-700 transition"
+                onClick={() => dispatch({ type: `addDomain` })}
+                disabled={
+                  !state.newDomain.trim() ||
+                  state.webPolicyDomains.includes(state.newDomain.trim())
+                }
               >
-                &times;
+                Add
               </button>
             </div>
-          ))}
-        </div>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            className="flex-1 border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-300"
-            placeholder="Add domain (e.g. example.com)"
-            value={state.newDomain}
-            onChange={(e) => dispatch({ type: `setNewDomain`, value: e.target.value })}
-            onKeyDown={(e) => {
-              if (e.key === `Enter`) {
-                e.preventDefault();
-                dispatch({ type: `addDomain` });
-              }
-            }}
-          />
-          <button
-            className="bg-violet-600 text-white rounded-lg px-4 py-2 font-semibold hover:bg-violet-700 transition"
-            onClick={() => dispatch({ type: `addDomain` })}
-            disabled={
-              !state.newDomain.trim() ||
-              state.webPolicyDomains.includes(state.newDomain.trim())
-            }
-          >
-            Add
-          </button>
-        </div>
+          </div>
+        )}
       </div>
       <div className="bg-white rounded-2xl shadow p-6 mx-auto">
         <h2 className="font-bold text-lg mb-4">Block Rules</h2>
@@ -210,9 +222,9 @@ const IOSDevice: React.FC = () => {
 export default IOSDevice;
 
 const WEB_POLICY_OPTIONS: { value: WebPolicy; display: string }[] = [
-  { value: `blockAllExcept`, display: `Only Approved Websites` },
-  { value: `blockAdultAnd`, display: `Blocklist Plus Limit Adult Websites` },
-  { value: `blockAdult`, display: `Limit Adult Websites` },
+  { value: `blockAllExcept`, display: `Only approved websites` },
+  { value: `blockAdultAnd`, display: `Blocklist plus limit adult websites` },
+  { value: `blockAdult`, display: `Limit adult websites` },
   { value: `blockAll`, display: `Block everything` },
   { value: `allowAll`, display: `Unrestricted` },
 ] as const;

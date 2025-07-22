@@ -129,7 +129,6 @@ type ToastId =
 
 function getToast(toastId?: ToastId): { verb: string; entity: string } | undefined {
   if (!toastId) return undefined;
-
   const [verb = ``, entitySlug = ``] = toastId.split(`:`);
   const entity = entitySlug.replace(/-/g, ` `);
   switch (toastId) {
