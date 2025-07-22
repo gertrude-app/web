@@ -3,8 +3,9 @@ import { BlockRuleEditor, EditBlockRules, Loading, PageHeading } from '@dash/com
 import { ApiErrorMessage, ConfirmDeleteEntity } from '@dash/components';
 import { Modal, SelectableListItem } from '@dash/components';
 import { Result } from '@dash/types';
-import { SelectMenu } from '@shared/components';
+import { Button, SelectMenu } from '@shared/components';
 import { notNullish } from '@shared/ts-utils';
+import isEqual from 'lodash.isequal';
 import React, { useReducer } from 'react';
 import { useParams } from 'react-router-dom';
 import type { WebPolicy } from '@dash/types';
@@ -54,60 +55,19 @@ const IOSDevice: React.FC = () => {
     return <ApiErrorMessage error={deviceQuery.error} />;
   }
 
+  // todo, move domains into/under web content filter policy
+  const isPending = false; // TODO 👍
+
+  const isDirty =
+    isEqual(state.enabledBlockGroups, deviceQuery.data.enabledBlockGroups) &&
+    state.webPolicy === deviceQuery.data.webPolicy &&
+    isEqual(state.webPolicyDomains, deviceQuery.data.webPolicyDomains);
+
   return (
     <div className="flex flex-col gap-8 [&>*]:w-full">
-      <Modal
-        icon="location"
-        type="container"
-        maximizeWidthForSmallScreens
-        title={state.editingBlockRule?.id ? `Edit Block Rule` : `Create Block Rule`}
-        isOpen={!!state.editingBlockRule}
-        primaryButton={{
-          label: state.editingBlockRule?.id ? `Save` : `Create`,
-          action: () => {
-            saveBlockRule.mutate(undefined);
-          },
-          disabled:
-            !state.editingBlockRule ||
-            !validate.blockRuleProps(state.editingBlockRule) ||
-            saveBlockRule.isPending,
-        }}
-        secondaryButton={{ action: () => dispatch({ type: `dismissBlockRule` }) }}
-      >
-        {state.editingBlockRule && (
-          <BlockRuleEditor
-            {...state.editingBlockRule}
-            emit={(event) => dispatch({ type: `editBlockRule`, event })}
-          />
-        )}
-      </Modal>
-      <ConfirmDeleteEntity type="block rule" action={deleteBlockRule} />
       <PageHeading icon="phone" className="mb-4">
         {deviceQuery.data.childName}’s {deviceQuery.data.deviceType}
       </PageHeading>
-      <div className="bg-white rounded-2xl shadow p-6 mx-auto">
-        <h2 className="font-bold text-lg mb-4">Block Rules</h2>
-        <EditBlockRules
-          rules={deviceQuery.data.customBlockRules
-            .map((rule) => {
-              const props = convert.blockRuleToProps(rule.rule);
-              if (!props) return null;
-              return [rule.id, props] satisfies [UUID, typeof props];
-            })
-            .filter(notNullish)}
-          onDelete={deleteBlockRule.start}
-          onEdit={(id) => {
-            const rule = deviceQuery.data.customBlockRules.find((r) => r.id === id);
-            if (rule) {
-              const props = convert.blockRuleToProps(rule.rule);
-              if (props) {
-                dispatch({ type: `setEditingBlockRule`, id, rule: props });
-              }
-            }
-          }}
-          onAdd={() => dispatch({ type: `addBlockRule` })}
-        />
-      </div>
       <div className="bg-white rounded-2xl shadow p-6 mx-auto">
         <h2 className="font-bold text-lg mb-4">Block Groups</h2>
         <div className="space-y-2">
@@ -175,6 +135,66 @@ const IOSDevice: React.FC = () => {
           </button>
         </div>
       </div>
+      <div className="bg-white rounded-2xl shadow p-6 mx-auto">
+        <h2 className="font-bold text-lg mb-4">Block Rules</h2>
+        <EditBlockRules
+          rules={deviceQuery.data.customBlockRules
+            .map((rule) => {
+              const props = convert.blockRuleToProps(rule.rule);
+              if (!props) return null;
+              return [rule.id, props] satisfies [UUID, typeof props];
+            })
+            .filter(notNullish)}
+          onDelete={deleteBlockRule.start}
+          onEdit={(id) => {
+            const rule = deviceQuery.data.customBlockRules.find((r) => r.id === id);
+            if (rule) {
+              const props = convert.blockRuleToProps(rule.rule);
+              if (props) {
+                dispatch({ type: `setEditingBlockRule`, id, rule: props });
+              }
+            }
+          }}
+          onAdd={() => dispatch({ type: `addBlockRule` })}
+        />
+      </div>
+      <div className="flex justify-end border-slate-200">
+        <Button
+          className="ScrollTop"
+          type="button"
+          disabled={isDirty || isPending}
+          onClick={() => {}}
+          color="primary"
+        >
+          Save settings
+        </Button>
+      </div>
+      <Modal
+        icon="location"
+        type="container"
+        maximizeWidthForSmallScreens
+        title={state.editingBlockRule?.id ? `Edit Block Rule` : `Create Block Rule`}
+        isOpen={!!state.editingBlockRule}
+        primaryButton={{
+          label: state.editingBlockRule?.id ? `Save` : `Create`,
+          action: () => {
+            saveBlockRule.mutate(undefined);
+          },
+          disabled:
+            !state.editingBlockRule ||
+            !validate.blockRuleProps(state.editingBlockRule) ||
+            saveBlockRule.isPending,
+        }}
+        secondaryButton={{ action: () => dispatch({ type: `dismissBlockRule` }) }}
+      >
+        {state.editingBlockRule && (
+          <BlockRuleEditor
+            {...state.editingBlockRule}
+            emit={(event) => dispatch({ type: `editBlockRule`, event })}
+          />
+        )}
+      </Modal>
+      <ConfirmDeleteEntity type="block rule" action={deleteBlockRule} />
     </div>
   );
 };
