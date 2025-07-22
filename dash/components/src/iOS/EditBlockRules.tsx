@@ -44,15 +44,17 @@ const EditBlockRules: React.FC<Props> = ({
             </div>
           ))}
         </div>
-        <Button
-          type="button"
-          onClick={onAdd}
-          color="secondary"
-          className="flex justify-center"
-        >
-          <PlusIcon className="w-5 h-5 mr-2" />
-          Add Block Rule
-        </Button>
+        <div className="flex items-center justify-end mt-2">
+          <Button
+            type="button"
+            onClick={onAdd}
+            color="secondary"
+            className="flex justify-center"
+          >
+            <PlusIcon className="w-5 h-5 mr-2" />
+            Add rule
+          </Button>
+        </div>
       </>
     )}
   </div>

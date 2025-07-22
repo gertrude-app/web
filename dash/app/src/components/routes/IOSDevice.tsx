@@ -9,6 +9,7 @@ import {
 import { ApiErrorMessage, ConfirmDeleteEntity } from '@dash/components';
 import { Modal, SelectableListItem } from '@dash/components';
 import { Result } from '@dash/types';
+import { PlusIcon } from '@heroicons/react/24/solid';
 import { Button, SelectMenu } from '@shared/components';
 import { notNullish } from '@shared/ts-utils';
 import isEqual from 'lodash.isequal';
@@ -83,25 +84,25 @@ const IOSDevice: React.FC = () => {
         {deviceQuery.data.childName}'s {deviceQuery.data.deviceType}
       </PageHeading>
       <div className="mt-8">
-        {/* Block Groups */}
-        <div className="mt-12 max-w-3xl">
-          <h2 className="text-lg font-bold text-slate-700 mb-4">Block Groups</h2>
-          <div className="space-y-2">
-            {deviceQuery.data.allBlockGroups.map(({ id, name }) => (
-              <SelectableListItem
-                key={id}
-                title={name}
-                description={``}
-                selected={state.enabledBlockGroups.includes(id)}
-                onClick={() => dispatch({ type: `toggleBlockGroup`, id })}
-              />
-            ))}
+        <div className="max-w-3xl">
+          <div className="bg-white rounded-xl p-5 border-[0.5px] border-slate-200 shadow shadow-slate-300/50">
+            <h2 className="text-lg font-bold text-slate-700 mb-4">Block Groups</h2>
+            <div className="space-y-2">
+              {deviceQuery.data.allBlockGroups.map(({ id, name }) => (
+                <SelectableListItem
+                  key={id}
+                  title={name}
+                  description={``}
+                  selected={state.enabledBlockGroups.includes(id)}
+                  onClick={() => dispatch({ type: `toggleBlockGroup`, id })}
+                />
+              ))}
+            </div>
           </div>
         </div>
-        {/* Web Content Filter Policy */}
         <div className="mt-12 max-w-3xl">
           <h2 className="text-lg font-bold text-slate-700">Web Content Filter Policy</h2>
-          <div className="bg-slate-100 mt-3 p-4 sm:p-6 rounded-xl overflow-hidden relative">
+          <div className="bg-slate-100 mt-3 p-4 sm:p-6 rounded-xl relative">
             <SelectMenu
               options={WEB_POLICY_OPTIONS}
               selectedOption={state.webPolicy}
@@ -114,16 +115,16 @@ const IOSDevice: React.FC = () => {
                 <div className="flex justify-center items-center bg-white rounded-xl p-4 border-[0.5px] border-slate-200 shadow shadow-slate-300/50">
                   <div className="w-full">
                     <h3 className="font-medium text-slate-700 leading-tight mb-3">
-                      {state.webPolicy === `blockAllExcept` ? `Approved` : `Blocked`}
-                      {` `}
-                      websites:
+                      {state.webPolicy === `blockAllExcept`
+                        ? `Approved websites:`
+                        : `Blocked websites:`}
                     </h3>
                     {state.webPolicyDomains.length > 0 && (
                       <div className="flex flex-col gap-2 mb-4">
                         {state.webPolicyDomains.map((domain: string) => (
                           <div
                             key={domain}
-                            className="flex items-center justify-between bg-slate-100 rounded-lg pl-4 pr-3 py-2"
+                            className="flex items-center justify-between bg-slate-100/80 rounded-lg pl-4 pr-3 py-2"
                           >
                             <span className="font-mono text-violet-700">{domain}</span>
                             <TrashBtn
@@ -149,16 +150,19 @@ const IOSDevice: React.FC = () => {
                           }
                         }}
                       />
-                      <button
-                        className="bg-violet-600 text-white rounded-lg px-4 py-2 font-semibold hover:bg-violet-700 transition"
+                      <Button
+                        type="button"
+                        color="secondary"
+                        className="flex items-center justify-center"
                         onClick={() => dispatch({ type: `addDomain` })}
                         disabled={
                           !state.newDomain.trim() ||
                           state.webPolicyDomains.includes(state.newDomain.trim())
                         }
                       >
-                        Add
-                      </button>
+                        <PlusIcon className="w-5 h-5 mr-2" />
+                        Add domain
+                      </Button>
                     </div>
                   </div>
                 </div>
