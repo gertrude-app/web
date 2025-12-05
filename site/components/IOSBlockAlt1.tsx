@@ -30,7 +30,7 @@ const IOSBlockAlt1: React.FC = () => {
       ref={sectionRef}
       className="bg-gradient-to-br from-violet-50 via-white to-fuchsia-50 px-4 xs:px-8 sm:px-12 md:px-20 flex flex-col items-center overflow-hidden"
     >
-      <div className="max-w-6xl w-full pb-12 xs:pb-16 md:pb-24 md:pt-24 -mt-8 relative">
+      <div className="max-w-6xl w-full py-8 xs:py-10 md:py-16 relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           <div className="lg:order-1 lg:col-span-9 relative z-10">
             <div className="relative inline-block mb-6">
@@ -80,14 +80,14 @@ const IOSBlockAlt1: React.FC = () => {
               <Feature text="Plus several more loopholes" />
             </div>
 
-            <div className="flex flex-col xs:flex-row items-start gap-4">
+            <div className="flex flex-col md+:flex-row items-start gap-4">
               <FancyLink
                 type="link"
                 href="https://apps.apple.com/us/app/gertrude/id1672416108"
                 size="lg"
                 color="primary"
               >
-                Download &rarr;
+                Download&nbsp;&rarr;
               </FancyLink>
               <FancyLink type="link" href="/ios" size="lg" color="secondary">
                 Learn&nbsp;More&nbsp;&hellip;
@@ -97,7 +97,7 @@ const IOSBlockAlt1: React.FC = () => {
 
           <div className="hidden lg:block lg:order-2 lg:col-span-3 relative flex items-center justify-center h-[500px]">
             <div
-              className={`relative w-64 h-[550px] bg-gradient-to-br from-slate-800 to-slate-900 rounded-[3rem] p-4 shadow-2xl ${isVisible ? `translate-y-0 opacity-100` : `translate-y-12 opacity-0`}`}
+              className={`relative w-72 h-[550px] bg-gradient-to-br from-slate-800 to-slate-900 rounded-[3rem] p-4 shadow-2xl -ml-8 ${isVisible ? `translate-y-0 opacity-100` : `translate-y-12 opacity-0`}`}
               style={{
                 transition: `all 0.6s cubic-bezier(0.2, 1.4, 0.5, 1)`,
                 transitionDelay: isVisible ? `600ms` : `0ms`,
@@ -115,9 +115,9 @@ const IOSBlockAlt1: React.FC = () => {
           </div>
         </div>
 
-        <div className="lg:hidden absolute bottom-4 right-12 pointer-events-none z-20">
+        <div className="lg:hidden absolute bottom-0 md:bottom-4 right-4 pointer-events-none z-20">
           <div
-            className={`relative w-72 h-[560px] bg-gradient-to-br from-slate-800 to-slate-900 rounded-[3rem] p-4 shadow-2xl translate-x-20 translate-y-40 ${isVisible ? `opacity-100` : `opacity-0`}`}
+            className={`relative w-56 md:w-72 h-[480px] md:h-[560px] bg-gradient-to-br from-slate-800 to-slate-900 rounded-[3rem] p-4 shadow-2xl translate-x-14 md:translate-x-20 translate-y-44 md:translate-y-40 ${isVisible ? `opacity-100` : `opacity-0`}`}
             style={{
               transition: `all 0.6s cubic-bezier(0.2, 1.4, 0.5, 1)`,
               transitionDelay: isVisible ? `600ms` : `0ms`,
