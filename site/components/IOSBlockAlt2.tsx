@@ -74,9 +74,9 @@ const IOSBlockAlt2: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center justify-center gap-12 md:gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-7 gap-12 md:gap-16 items-center">
           <div
-            className={`relative w-72 h-[600px] ${isVisible ? `translate-x-0 opacity-100` : `-translate-x-12 opacity-0`}`}
+            className={`relative w-72 h-[600px] md:col-span-3 ${isVisible ? `translate-x-0 opacity-100` : `-translate-x-12 opacity-0`}`}
             style={{
               transition: `all 0.8s cubic-bezier(0.2, 1.4, 0.5, 1)`,
               transitionDelay: isVisible ? `400ms` : `0ms`,
@@ -96,7 +96,7 @@ const IOSBlockAlt2: React.FC = () => {
           </div>
 
           <div
-            className={`max-w-md ${isVisible ? `translate-x-0 opacity-100` : `translate-x-12 opacity-0`}`}
+            className={`max-w-md md:col-span-4 ${isVisible ? `translate-x-0 opacity-100` : `translate-x-12 opacity-0`}`}
             style={{
               transition: `all 0.8s cubic-bezier(0.2, 1.4, 0.5, 1)`,
               transitionDelay: isVisible ? `600ms` : `0ms`,

@@ -17,11 +17,9 @@ export const metadata = createMetadata(
 
 const HomePage: NextPage = () => (
   <main>
-    <FamilyOfProductsBlock />
-    <IOSBlock />
+    {/* <FamilyOfProductsBlock /> */}
     <IOSBlockAlt1 />
-    <IOSBlockAlt2 />
-    <IOSBlockAlt3 />
+    <IOSBlock />
     <MacOSBlock />
     <PodcastsBlock />
     <AboutBlock />
