@@ -161,7 +161,7 @@ const Variation2: React.FC = () => {
       ref={sectionRef}
       className="bg-gradient-to-b from-white to-slate-50"
     >
-      <div className="bg-slate-900 px-6 sm:px-12 md:px-20 pt-24 md:pt-32 lg:pt-40 pb-16 md:pb-20 lg:pb-24 relative overflow-hidden">
+      <div className="bg-slate-900 px-6 sm:px-12 md:px-20 pt-20 md:pt-28 lg:pt-32 pb-16 md:pb-20 lg:pb-24 relative overflow-hidden">
         <div className="[background:radial-gradient(#a78bfa44,transparent_70%)] w-176 h-176 absolute -right-80 -top-80" />
         <div className="[background:radial-gradient(#e879f944,transparent_70%)] w-176 h-176 absolute -left-80 top-20" />
         <div className="[background:radial-gradient(#a78bfa44,transparent_70%)] w-176 h-176 absolute left-20 -bottom-96" />
@@ -173,8 +173,33 @@ const Variation2: React.FC = () => {
                 FLAGSHIP PRODUCT
               </span>
             </div>
-            <h2 className="text-5xl xs:text-6xl md:text-7xl lg:text-8xl font-bold bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent mb-6">
-              Gertrude for Mac
+            <h2 className="text-5xl xs:text-6xl md:text-7xl lg:text-8xl font-bold mb-6">
+              <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                Gertrude for{' '}
+              </span>
+              <span className="relative inline-block bg-gradient-to-r from-white to-violet-300 bg-clip-text text-transparent">
+                Mac
+                <svg
+                  className="absolute bottom-0 left-0 w-full translate-y-2"
+                  height="8"
+                  viewBox="0 0 200 8"
+                  preserveAspectRatio="none"
+                >
+                  <defs>
+                    <linearGradient id="mac-underline-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" style={{ stopColor: `#a78bfa`, stopOpacity: 1 }} />
+                      <stop offset="100%" style={{ stopColor: `#e879f9`, stopOpacity: 1 }} />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M 0 4 Q 50 2, 100 4 T 200 4"
+                    stroke="url(#mac-underline-gradient)"
+                    strokeWidth="4"
+                    fill="none"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </span>
             </h2>
             <p className="text-xl md:text-2xl text-violet-300 max-w-3xl mx-auto leading-relaxed">
               Comprehensive web filtering and activity monitoring. The most powerful parental controls ever built for macOS.
