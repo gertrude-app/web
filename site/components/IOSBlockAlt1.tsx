@@ -72,7 +72,7 @@ const IOSBlockAlt1: React.FC = () => {
               The missing features Screen Time should have included.
             </p>
 
-            <div className="space-y-3 mb-8 bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-violet-100">
+            <div className="space-y-3 mb-8 bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-violet-100 lg:mr-4">
               <Feature text="Block GIF searches in #images" />
               <Feature text="Block spotlight internet & image search" />
               <Feature text="Block album artwork in Spotify" />
@@ -115,7 +115,7 @@ const IOSBlockAlt1: React.FC = () => {
           </div>
         </div>
 
-        <div className="lg:hidden absolute bottom-0 md:bottom-4 right-4 pointer-events-none z-20">
+        <div className="hidden sm:block lg:hidden absolute bottom-0 md:bottom-4 right-4 pointer-events-none z-20">
           <div
             className={`relative w-56 md:w-72 h-[480px] md:h-[560px] bg-gradient-to-br from-slate-800 to-slate-900 rounded-[3rem] p-4 shadow-2xl translate-x-14 md:translate-x-20 translate-y-44 md:translate-y-40 ${isVisible ? `opacity-100` : `opacity-0`}`}
             style={{
