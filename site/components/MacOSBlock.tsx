@@ -5,36 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import FancyLink from './FancyLink';
 
 const MacOSBlock: React.FC = () => {
-  const [variation, setVariation] = useState<1 | 2 | 3>(1);
-
-  return (
-    <>
-      <div className="fixed top-4 right-4 z-50 flex gap-2">
-        <button
-          onClick={() => setVariation(1)}
-          className={`px-4 py-2 rounded ${variation === 1 ? 'bg-slate-900 text-white' : 'bg-white text-slate-900'}`}
-        >
-          V1a
-        </button>
-        <button
-          onClick={() => setVariation(2)}
-          className={`px-4 py-2 rounded ${variation === 2 ? 'bg-slate-900 text-white' : 'bg-white text-slate-900'}`}
-        >
-          V1b
-        </button>
-        <button
-          onClick={() => setVariation(3)}
-          className={`px-4 py-2 rounded ${variation === 3 ? 'bg-slate-900 text-white' : 'bg-white text-slate-900'}`}
-        >
-          V1c
-        </button>
-      </div>
-
-      {variation === 1 && <Variation1 />}
-      {variation === 2 && <Variation2 />}
-      {variation === 3 && <Variation3 />}
-    </>
-  );
+  return <Variation2 />;
 };
 
 const Variation1: React.FC = () => {
@@ -146,7 +117,7 @@ const Variation2: React.FC = () => {
           setIsVisible(true);
         }
       },
-      { threshold: 0.3 },
+      { threshold: 0.75 },
     );
 
     if (sectionRef.current) {
@@ -168,7 +139,15 @@ const Variation2: React.FC = () => {
 
         <div className="max-w-6xl mx-auto relative">
           <div className="text-center mb-20">
-            <div className="inline-block px-6 py-3 bg-white/10 backdrop-blur-sm rounded-full mb-6 border border-white/20">
+            <div
+              className={`inline-block px-6 py-3 bg-white/10 backdrop-blur-sm rounded-full mb-6 border border-white/20 ${
+                isVisible ? 'translate-x-0 opacity-100' : 'translate-x-[500px] opacity-0'
+              }`}
+              style={{
+                transition: 'transform 0.25s cubic-bezier(0.2, 1.4, 0.5, 1), opacity 0.25s ease-out',
+                transitionDelay: isVisible ? '500ms' : '0ms',
+              }}
+            >
               <span className="text-sm font-bold bg-gradient-to-r from-violet-300 to-fuchsia-300 bg-clip-text text-transparent tracking-wider">
                 FLAGSHIP PRODUCT
               </span>
@@ -196,7 +175,14 @@ const Variation2: React.FC = () => {
                     stroke="url(#mac-underline-gradient)"
                     strokeWidth="4"
                     fill="none"
-                    strokeLinecap="round"
+                    strokeLinecap="butt"
+                    pathLength="1"
+                    strokeDasharray="1"
+                    strokeDashoffset={isVisible ? 0 : 1}
+                    style={{
+                      transition: 'stroke-dashoffset 0.2s ease-out',
+                      transitionDelay: isVisible ? '1000ms' : '0ms',
+                    }}
                   />
                 </svg>
               </span>
