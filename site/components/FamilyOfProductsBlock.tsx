@@ -85,7 +85,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ icon: Icon, label, description }) => (
   <div className="flex flex-col items-center text-center group">
-    <div className="relative bg-white/5 backdrop-blur-sm rounded-3xl p-8 mb-6 transition-all duration-300 group-hover:scale-105 group-hover:bg-white/10 border border-white/10 group-hover:border-fuchsia-400/40 shadow-xl shadow-purple-950/50 group-hover:shadow-fuchsia-500/20">
+    <div className="relative bg-black/5 backdrop-blur-sm rounded-3xl p-8 mb-6 transition-all duration-300 group-hover:scale-105 group-hover:bg-white/10 border border-white/20 group-hover:border-fuchsia-400/40 [box-shadow:8px_8px_24px_rgba(217,70,239,0.2)] group-hover:[box-shadow:8px_8px_24px_rgba(59,7,100,0.5)]">
       <Icon
         size={64}
         className="text-white transition-transform duration-300 group-hover:scale-110"
