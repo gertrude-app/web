@@ -32,7 +32,7 @@ const IOSBlockAlt1: React.FC = () => {
     >
       <div className="max-w-6xl w-full pb-12 xs:pb-16 md:pb-24 md:pt-24 -mt-8 relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          <div className="lg:order-1 lg:col-span-8 relative z-10">
+          <div className="lg:order-1 lg:col-span-9 relative z-10">
             <div className="relative inline-block mb-6">
               <div
                 className={`inline-flex items-center gap-2 bg-white border-2 border-violet-200 px-4 py-2 rounded-full ${isVisible ? `scale-100 opacity-100` : `scale-75 opacity-0`}`}
@@ -95,7 +95,7 @@ const IOSBlockAlt1: React.FC = () => {
             </div>
           </div>
 
-          <div className="hidden lg:block lg:order-2 lg:col-span-4 relative flex items-center justify-center h-[500px]">
+          <div className="hidden lg:block lg:order-2 lg:col-span-3 relative flex items-center justify-center h-[500px]">
             <div
               className={`relative w-64 h-[550px] bg-gradient-to-br from-slate-800 to-slate-900 rounded-[3rem] p-4 shadow-2xl ${isVisible ? `translate-y-0 opacity-100` : `translate-y-12 opacity-0`}`}
               style={{
@@ -112,7 +112,6 @@ const IOSBlockAlt1: React.FC = () => {
               </div>
               <div className="absolute top-6 left-1/2 -translate-x-1/2 w-20 h-1.5 bg-slate-700 rounded-full" />
             </div>
-            <div className="absolute inset-0 bg-gradient-to-br from-violet-400/30 to-fuchsia-400/30 blur-3xl -z-10" />
           </div>
         </div>
 
