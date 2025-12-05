@@ -12,13 +12,14 @@ const MarketingLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
   const theme = path.includes(`blog`) ? `white` : `violet`;
   const lang = path.includes(`bloquear`) ? `es` : `en`;
   const showAuthButtons = path !== `/`;
+  const isHomePage = path === `/`;
   return (
     <html lang={lang}>
       <GoogleTagManager gtmId="GTM-KRRP8HFW" />
       <body
         className={cx(
           `min-h-screen flex flex-col`,
-          theme === `violet` ? `bg-violet-500` : `bg-white`,
+          isHomePage ? `bg-black` : theme === `violet` ? `bg-violet-500` : `bg-white`,
         )}
       >
         <MainHeader theme={theme} showAuthButtons={showAuthButtons} />

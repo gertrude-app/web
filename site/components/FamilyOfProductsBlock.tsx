@@ -1,36 +1,76 @@
+'use client';
+
 import { LaptopIcon, MicIcon, SmartphoneIcon } from 'lucide-react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-const FamilyOfProductsBlock: React.FC = () => (
-  <section className="bg-gradient-to-b from-violet-500 to-fuchsia-500 px-6 sm:px-8 md:px-20 py-20 sm:py-28 md:py-40 flex flex-col items-center">
-    <div className="text-center max-w-5xl">
-      <h1 className="text-5xl xs:text-6xl sm:text-7xl font-bold text-white !leading-[1.1em]">
-        Tools for protecting kids
-      </h1>
-      <p className="mt-6 text-lg sm:text-xl text-white/70 leading-relaxed">
-        Made by a parent, for parents
-      </p>
-    </div>
+const rotatingPhrases = ['protecting kids.', 'internet safety.', 'peace of mind.', 'normal parents.'];
 
-    <div className="mt-16 md:mt-20 grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12 w-full max-w-4xl">
-      <ProductCard
-        icon={LaptopIcon}
-        label="Mac"
-        description="Block the entire internet, unlock only what's safe"
-      />
-      <ProductCard
-        icon={SmartphoneIcon}
-        label="iPhone & iPad"
-        description="Simple, powerful screen time controls"
-      />
-      <ProductCard
-        icon={MicIcon}
-        label="Podcasts"
-        description="Safe, curated podcasts for kids"
-      />
-    </div>
-  </section>
-);
+const FamilyOfProductsBlock: React.FC = () => {
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [displayedText, setDisplayedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentPhrase = rotatingPhrases[phraseIndex];
+    const typingSpeed = isDeleting ? 15 : 60;
+    const pauseAfterTyping = 2000;
+    const pauseAfterDeleting = 500;
+
+    if (!isDeleting && displayedText === currentPhrase) {
+      const timeout = setTimeout(() => setIsDeleting(true), pauseAfterTyping);
+      return () => clearTimeout(timeout);
+    }
+
+    if (isDeleting && displayedText === '') {
+      setIsDeleting(false);
+      setPhraseIndex((current) => (current + 1) % rotatingPhrases.length);
+      const timeout = setTimeout(() => {}, pauseAfterDeleting);
+      return () => clearTimeout(timeout);
+    }
+
+    const timeout = setTimeout(() => {
+      setDisplayedText(
+        isDeleting
+          ? currentPhrase.slice(0, displayedText.length - 1)
+          : currentPhrase.slice(0, displayedText.length + 1)
+      );
+    }, typingSpeed);
+
+    return () => clearTimeout(timeout);
+  }, [displayedText, isDeleting, phraseIndex]);
+
+  return (
+    <section className="bg-gradient-to-b from-black to-purple-950 px-6 sm:px-8 md:px-20 pt-16 sm:pt-20 md:pt-24 pb-20 sm:pb-28 md:pb-40 flex flex-col items-center">
+      <div className="text-center max-w-5xl">
+        <h1 className="text-5xl xs:text-6xl sm:text-7xl font-bold text-white !leading-[1.1em]">
+          Tools for{' '}
+          <span className="inline-block bg-gradient-to-r from-fuchsia-400 to-pink-500 bg-clip-text text-transparent">
+            {displayedText}
+            <span className="animate-blink">|</span>
+          </span>
+        </h1>
+      </div>
+
+      <div className="mt-16 md:mt-20 grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12 w-full max-w-4xl">
+        <ProductCard
+          icon={LaptopIcon}
+          label="Mac"
+          description="Block the entire internet, unlock only what's safe"
+        />
+        <ProductCard
+          icon={SmartphoneIcon}
+          label="iPhone & iPad"
+          description="Simple, powerful screen time controls"
+        />
+        <ProductCard
+          icon={MicIcon}
+          label="Podcasts"
+          description="Safe, curated podcasts for kids"
+        />
+      </div>
+    </section>
+  );
+};
 
 interface ProductCardProps {
   icon: React.ComponentType<{ size?: number; className?: string }>;
