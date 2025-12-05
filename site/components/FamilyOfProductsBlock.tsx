@@ -1,6 +1,6 @@
 'use client';
 
-import { LaptopIcon, MicIcon, SmartphoneIcon } from 'lucide-react';
+import { LaptopIcon, PodcastIcon, SmartphoneIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 const rotatingPhrases = [
@@ -48,6 +48,14 @@ const FamilyOfProductsBlock: React.FC = () => {
 
   return (
     <section className="bg-gradient-to-b from-black to-purple-975 px-6 sm:px-8 md:px-20 pt-16 sm:pt-20 md:pt-24 pb-16 sm:pb-20 md:pb-24 flex flex-col items-center">
+      <svg width="0" height="0" style={{ position: 'absolute' }}>
+        <defs>
+          <linearGradient id="icon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style={{ stopColor: '#c89cfd', stopOpacity: 1 }} />
+            <stop offset="100%" style={{ stopColor: '#ec92fa', stopOpacity: 1 }} />
+          </linearGradient>
+        </defs>
+      </svg>
       <div className="text-center max-w-5xl">
         <h1 className="text-5xl xs:text-6xl sm:text-7xl font-bold text-white !leading-[1.15em]">
           <span className="block lg:inline">Tools for{` `}</span>
@@ -72,7 +80,7 @@ const FamilyOfProductsBlock: React.FC = () => {
           delay={700}
         />
         <ProductCard
-          icon={MicIcon}
+          icon={PodcastIcon}
           label="Podcasts"
           description="Parent-managed podcasts protected by PIN code"
           delay={900}
@@ -102,7 +110,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     <div className="relative bg-black/5 backdrop-blur-sm rounded-3xl p-8 mb-6 transition-all duration-300 group-hover:scale-105 group-hover:bg-white/10 border border-white/20 group-hover:border-fuchsia-400/40 [box-shadow:8px_8px_24px_rgba(217,70,239,0.2)] group-hover:[box-shadow:8px_8px_24px_rgba(59,7,100,0.5)]">
       <Icon
         size={64}
-        className="text-white transition-transform duration-300 group-hover:scale-110"
+        className="[&_path]:stroke-[url(#icon-gradient)] [&_rect]:stroke-[url(#icon-gradient)] [&_line]:stroke-[url(#icon-gradient)] transition-transform duration-300 group-hover:scale-110"
       />
     </div>
     <h3 className="text-2xl sm:text-3xl font-semibold text-white mb-2 transition-colors duration-300 group-hover:text-fuchsia-300">
