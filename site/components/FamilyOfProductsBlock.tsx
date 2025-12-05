@@ -45,10 +45,10 @@ const FamilyOfProductsBlock: React.FC = () => {
   }, [displayedText, isDeleting, phraseIndex]);
 
   return (
-    <section className="bg-gradient-to-b from-black to-purple-950 px-6 sm:px-8 md:px-20 pt-16 sm:pt-20 md:pt-24 pb-16 sm:pb-20 md:pb-24 flex flex-col items-center">
+    <section className="bg-gradient-to-b from-black to-purple-975 px-6 sm:px-8 md:px-20 pt-16 sm:pt-20 md:pt-24 pb-16 sm:pb-20 md:pb-24 flex flex-col items-center">
       <div className="text-center max-w-5xl">
-        <h1 className="text-5xl xs:text-6xl sm:text-7xl font-bold text-white !leading-[1.1em]">
-          Tools for{` `}
+        <h1 className="text-5xl xs:text-6xl sm:text-7xl font-bold text-white !leading-[1.15em]">
+          <span className="block lg:inline">Tools for{` `}</span>
           <span className="inline-block bg-gradient-to-r from-fuchsia-400 to-pink-500 bg-clip-text text-transparent">
             {displayedText}
             <span className="animate-blink">|</span>
@@ -94,7 +94,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ icon: Icon, label, descriptio
     <h3 className="text-2xl sm:text-3xl font-semibold text-white mb-2 transition-colors duration-300 group-hover:text-fuchsia-300">
       {label}
     </h3>
-    <p className="text-white/60 text-sm sm:text-base leading-snug">{description}</p>
+    <p className="text-white/60 text-sm sm:text-base leading-snug max-w-[200px] sm:max-w-none">
+      {description}
+    </p>
   </div>
 );
 

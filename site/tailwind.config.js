@@ -22,6 +22,11 @@ module.exports = {
       maxWidth: {
         '8xl': `88rem`,
       },
+      colors: {
+        purple: {
+          975: '#281445',
+        },
+      },
       keyframes: {
         blink: {
           '0%, 100%': { opacity: '1' },
