@@ -30,7 +30,7 @@ const IOSBlockAlt1: React.FC = () => {
       ref={sectionRef}
       className="bg-gradient-to-br from-violet-50 via-white to-fuchsia-50 flex flex-col items-center overflow-hidden lg:pr-16 xl:pr-24"
     >
-      <div className="max-w-6xl w-full py-8 xs:py-10 md:py-12 lg:py-10 relative">
+      <div className="max-w-6xl w-full pt-12 xs:pt-14 md:pt-16 lg:pt-10 pb-16 xs:pb-18 md:pb-20 relative">
         <div className="lg:hidden relative h-[300px] overflow-hidden flex items-start justify-center -mt-4 mb-8">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-fuchsia-100/40 to-violet-200/60" />
           <div
@@ -55,10 +55,10 @@ const IOSBlockAlt1: React.FC = () => {
           <div className="lg:order-1 lg:col-span-9 relative z-10 flex flex-col items-center xs:items-start">
             <div className="relative inline-block mb-6">
               <div
-                className={`inline-flex items-center gap-2 bg-white border-2 border-violet-200 px-4 py-2 rounded-full ${isVisible ? `scale-100 opacity-100` : `scale-75 opacity-0`}`}
+                className={`inline-flex items-center gap-2 bg-white border-2 border-violet-200 px-4 py-2 rounded-full ${isVisible ? `translate-x-0` : `-translate-x-[250px]`}`}
                 style={{
-                  transition: `all 0.4s cubic-bezier(0.2, 1.4, 0.5, 1)`,
-                  transitionDelay: isVisible ? `300ms` : `0ms`,
+                  transition: `transform 0.25s cubic-bezier(0.2, 1.4, 0.5, 1)`,
+                  transitionDelay: isVisible ? `1000ms` : `0ms`,
                 }}
               >
                 <span className="text-sm font-bold bg-gradient-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
@@ -92,12 +92,12 @@ const IOSBlockAlt1: React.FC = () => {
               The missing features Screen Time should have included.
             </p>
 
-            <div className="space-y-3 mb-8 bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-violet-100 lg:mr-4">
+            <div className="w-full space-y-3 mb-8 bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-violet-100 lg:mr-4">
               <Feature text="Block GIF searches in #images" />
               <Feature text="Block spotlight internet & image search" />
               <Feature text="Block album artwork in Spotify" />
               <Feature text="Remove images from Apple Maps" />
-              <Feature text="Plus several more loopholes" />
+              <Feature text="Plus several more loopholes..." />
             </div>
 
             <div className="flex flex-col xs:flex-row items-center xs:items-start gap-4">
@@ -110,14 +110,14 @@ const IOSBlockAlt1: React.FC = () => {
                 Download&nbsp;&rarr;
               </FancyLink>
               <FancyLink type="link" href="/ios" size="lg" color="secondary">
-                Learn&nbsp;More&nbsp;&hellip;
+                Learn&nbsp;More&nbsp;
               </FancyLink>
             </div>
           </div>
 
           <div className="hidden lg:block lg:order-2 lg:col-span-3 relative flex items-center justify-center h-[500px]">
             <div
-              className={`relative w-72 h-[550px] bg-gradient-to-br from-slate-800 to-slate-900 rounded-[3rem] p-4 shadow-2xl -ml-8 ${isVisible ? `translate-y-0 opacity-100` : `translate-y-12 opacity-0`}`}
+              className={`relative w-[17rem] h-[550px] bg-gradient-to-br from-slate-800 to-slate-900 rounded-[3rem] p-4 shadow-2xl -ml-8 ${isVisible ? `translate-y-0 opacity-100` : `translate-y-12 opacity-0`}`}
               style={{
                 transition: `all 0.6s cubic-bezier(0.2, 1.4, 0.5, 1)`,
                 transitionDelay: isVisible ? `600ms` : `0ms`,
@@ -134,7 +134,6 @@ const IOSBlockAlt1: React.FC = () => {
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );

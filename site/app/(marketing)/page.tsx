@@ -19,7 +19,7 @@ const HomePage: NextPage = () => (
   <main>
     <FamilyOfProductsBlock />
     <IOSBlockAlt1 />
-    <IOSBlock />
+    {/* <IOSBlock /> */}
     <MacOSBlock />
     <PodcastsBlock />
     <AboutBlock />
