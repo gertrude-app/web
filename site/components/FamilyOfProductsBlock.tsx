@@ -7,7 +7,9 @@ const rotatingPhrases = [
   `internet safety.`,
   `protecting kids.`,
   `peace of mind.`,
+  `blocking porn.`,
   `normal parents.`,
+  `innocence.`,
 ];
 
 const FamilyOfProductsBlock: React.FC = () => {
@@ -61,16 +63,19 @@ const FamilyOfProductsBlock: React.FC = () => {
           icon={SmartphoneIcon}
           label="iPhone & iPad"
           description="Plug holes in Screen Time, including #images GIF search"
+          delay={500}
         />
         <ProductCard
           icon={LaptopIcon}
           label="Mac"
           description="Comprehensive web filtering and screenshot monitoring"
+          delay={700}
         />
         <ProductCard
           icon={MicIcon}
           label="Podcasts"
           description="Parent-managed podcasts protected by PIN code"
+          delay={900}
         />
       </div>
     </section>
@@ -81,10 +86,19 @@ interface ProductCardProps {
   icon: React.ComponentType<{ size?: number; className?: string }>;
   label: string;
   description: string;
+  delay: number;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ icon: Icon, label, description }) => (
-  <div className="flex flex-col items-center text-center group">
+const ProductCard: React.FC<ProductCardProps> = ({
+  icon: Icon,
+  label,
+  description,
+  delay,
+}) => (
+  <div
+    className="flex flex-col items-center text-center group animate-fadeIn opacity-0"
+    style={{ animationDelay: `${delay}ms`, animationFillMode: `forwards` }}
+  >
     <div className="relative bg-black/5 backdrop-blur-sm rounded-3xl p-8 mb-6 transition-all duration-300 group-hover:scale-105 group-hover:bg-white/10 border border-white/20 group-hover:border-fuchsia-400/40 [box-shadow:8px_8px_24px_rgba(217,70,239,0.2)] group-hover:[box-shadow:8px_8px_24px_rgba(59,7,100,0.5)]">
       <Icon
         size={64}
