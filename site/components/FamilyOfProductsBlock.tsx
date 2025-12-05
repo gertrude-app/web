@@ -9,6 +9,7 @@ const rotatingPhrases = [
   `peace of mind.`,
   `blocking porn.`,
   `normal parents.`,
+  `clean content.`,
   `innocence.`,
 ];
 
@@ -47,7 +48,7 @@ const FamilyOfProductsBlock: React.FC = () => {
   }, [displayedText, isDeleting, phraseIndex]);
 
   return (
-    <section className="bg-gradient-to-b from-black to-purple-975 px-6 sm:px-8 md:px-20 pt-16 sm:pt-20 md:pt-24 pb-16 sm:pb-20 md:pb-24 flex flex-col items-center">
+    <section className="min-h-screen bg-gradient-to-b from-black to-purple-975 px-6 sm:px-8 md:px-20 pt-16 sm:pt-20 md:pt-24 pb-16 sm:pb-20 md:pb-24 flex flex-col items-center justify-center">
       <svg width="0" height="0" style={{ position: `absolute` }}>
         <defs>
           <linearGradient id="icon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
