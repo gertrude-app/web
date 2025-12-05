@@ -11,6 +11,7 @@ const MarketingLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
   const path = usePathname();
   const theme = path.includes(`blog`) ? `white` : `violet`;
   const lang = path.includes(`bloquear`) ? `es` : `en`;
+  const showAuthButtons = path !== `/`;
   return (
     <html lang={lang}>
       <GoogleTagManager gtmId="GTM-KRRP8HFW" />
@@ -20,7 +21,7 @@ const MarketingLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
           theme === `violet` ? `bg-violet-500` : `bg-white`,
         )}
       >
-        <MainHeader theme={theme} />
+        <MainHeader theme={theme} showAuthButtons={showAuthButtons} />
         <div className="flex-grow">{children}</div>
         <MainFooter />
       </body>

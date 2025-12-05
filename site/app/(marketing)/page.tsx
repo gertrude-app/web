@@ -1,30 +1,24 @@
 import React from 'react';
 import type { NextPage } from 'next';
-import CTABlock from '@/components/CTABlock';
-import DefenseInDepthBlock from '@/components/DefenseInDepthBlock';
-import DepressingStatisticsBlock from '@/components/DepressingStatisticsBlock';
-import FeaturesBlock from '@/components/FeaturesBlock';
-import HeroBlock from '@/components/HeroBlock';
-import PeaceOfMindForParentsBlock from '@/components/PeaceOfMindForParentsBlock';
-import SuperScrollerBlock from '@/components/SuperScrollerBlock';
-import TestimonialsBlock from '@/components/TestimonialsBlock';
+import AboutBlock from '@/components/AboutBlock';
+import FamilyOfProductsBlock from '@/components/FamilyOfProductsBlock';
+import IOSBlock from '@/components/IOSBlock';
+import MacOSBlock from '@/components/MacOSBlock';
+import PodcastsBlock from '@/components/PodcastsBlock';
 import { createMetadata } from '@/lib/seo';
 
 export const metadata = createMetadata(
-  `Gertrude | Mac Internet Filter, Parental Controls and Activity Monitoring`,
-  `Protect your kids online with easy-to-use Mac internet filtering, internet blocking, and mac keylogging`,
+  `Gertrude | Parental Controls for Mac, iOS, and Podcasts`,
+  `Protect your kids online with easy-to-use parental controls`,
 );
 
 const HomePage: NextPage = () => (
   <main>
-    <HeroBlock />
-    <PeaceOfMindForParentsBlock />
-    <DepressingStatisticsBlock />
-    <SuperScrollerBlock />
-    <FeaturesBlock />
-    <DefenseInDepthBlock />
-    <TestimonialsBlock />
-    <CTABlock />
+    <FamilyOfProductsBlock />
+    <IOSBlock />
+    <MacOSBlock />
+    <PodcastsBlock />
+    <AboutBlock />
   </main>
 );
 
