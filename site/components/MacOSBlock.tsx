@@ -155,14 +155,19 @@ const Variation2: React.FC = () => {
               }`}
               style={{
                 transition: 'transform 0.25s cubic-bezier(0.2, 1.4, 0.5, 1), opacity 0.25s ease-out',
-                transitionDelay: isVisible ? '500ms' : '0ms',
+                transitionDelay: isVisible ? '200ms' : '0ms',
               }}
             >
               <span className="text-sm font-bold bg-gradient-to-r from-violet-300 to-fuchsia-300 bg-clip-text text-transparent tracking-wider">
                 FLAGSHIP PRODUCT
               </span>
             </div>
-            <h2 className="text-5xl xs:text-6xl md:text-7xl lg:text-8xl font-bold mb-6">
+            <h2
+              className={`text-5xl xs:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 transition-all duration-500 ${
+                isVisible ? 'translate-x-0 opacity-100' : '-translate-x-24 opacity-0'
+              }`}
+              style={{ transitionDelay: isVisible ? '600ms' : '0ms' }}
+            >
               <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
                 Gertrude for{' '}
               </span>
@@ -197,12 +202,22 @@ const Variation2: React.FC = () => {
                 </svg>
               </span>
             </h2>
-            <p className="text-xl md:text-2xl text-violet-300 max-w-3xl mx-auto leading-relaxed">
+            <p
+              className={`text-xl md:text-2xl text-violet-300 max-w-3xl mx-auto leading-relaxed transition-all duration-500 ${
+                isVisible ? 'translate-x-0 opacity-100' : 'translate-x-24 opacity-0'
+              }`}
+              style={{ transitionDelay: isVisible ? '1000ms' : '0ms' }}
+            >
               Comprehensive web filtering and activity monitoring. The most powerful parental controls ever built for macOS.
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div
+            className={`grid sm:grid-cols-2 lg:grid-cols-4 gap-6 transition-all duration-500 ${
+              isVisible ? 'translate-x-0 opacity-100' : '-translate-x-24 opacity-0'
+            }`}
+            style={{ transitionDelay: isVisible ? '1400ms' : '0ms' }}
+          >
             <FeatureCardAlt
               icon={LockIcon}
               title="Inverted Filtering"
@@ -229,7 +244,12 @@ const Variation2: React.FC = () => {
             />
           </div>
 
-          <div className="flex flex-col items-center mt-16 gap-6">
+          <div
+            className={`flex flex-col items-center mt-16 gap-6 transition-opacity duration-500 ${
+              isVisible ? 'opacity-100' : 'opacity-0'
+            }`}
+            style={{ transitionDelay: isVisible ? '1800ms' : '0ms' }}
+          >
             <a
               href="https://parents.gertrude.app/signup"
               className="group relative px-10 py-5 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-2xl text-white text-xl font-bold transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(168,85,247,0.4)] active:scale-100"
