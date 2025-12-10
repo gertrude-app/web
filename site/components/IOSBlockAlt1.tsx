@@ -42,7 +42,7 @@ const IOSBlockAlt1: React.FC = () => {
             }}
           >
             <Phone className="shadow-2xl scale-[0.85]" labelStatus="hidden">
-              <BlockedGifSearchScreen />
+              <BlockedGifSearchScreen isVisible={isVisible} />
             </Phone>
           </div>
         </div>
@@ -151,7 +151,7 @@ const IOSBlockAlt1: React.FC = () => {
               }}
             >
               <Phone className="shadow-2xl scale-75" labelStatus="hidden">
-                <BlockedGifSearchScreen />
+                <BlockedGifSearchScreen isVisible={isVisible} />
               </Phone>
             </div>
           </div>
@@ -161,32 +161,76 @@ const IOSBlockAlt1: React.FC = () => {
   );
 };
 
-const BlockedGifSearchScreen: React.FC = () => (
-  <div className="w-full h-full flex flex-col">
-    <div className="bg-slate-900 h-16 shrink-0" />
-    <div className="flex-1 bg-white flex flex-col">
-      <div className="bg-gray-100 px-3 py-2 flex items-center gap-2">
-        <div className="flex-1 bg-white rounded-lg px-3 py-2 flex items-center gap-2">
-          <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          <span className="text-gray-800 text-sm font-medium">Bikini</span>
-        </div>
-        <span className="text-blue-500 text-sm font-medium">Cancel</span>
+interface BlockedGifSearchScreenProps {
+  isVisible: boolean;
+}
+
+const BlockedGifSearchScreen: React.FC<BlockedGifSearchScreenProps> = ({ isVisible }) => {
+  const searchText = 'Bikini';
+  const baseDelay = 2500;
+  const slideUpDelay = baseDelay;
+  const typingStartDelay = baseDelay + 400;
+  const typingSpeed = 120;
+  const squaresStartDelay = typingStartDelay + searchText.length * typingSpeed + 300;
+  const squareStagger = 50;
+
+  return (
+    <div className="w-full h-full flex flex-col overflow-hidden relative bg-slate-900">
+      <div className="absolute top-[25%] left-1/2 -translate-x-1/2">
+        <img
+          src="/gertrude-icon.png"
+          alt="Gertrude app icon"
+          className="w-20 h-20 rounded-2xl shadow-lg"
+        />
       </div>
-      <div className="flex-1 p-1.5 overflow-hidden">
-        <div className="grid grid-cols-3 gap-1.5">
-          {[...Array(18)].map((_, i) => (
-            <div
-              key={i}
-              className="aspect-square bg-gradient-to-br from-gray-200 to-gray-300 rounded"
-            />
-          ))}
+      <div className="h-16 shrink-0" />
+      <div
+        className={`flex-1 bg-white flex flex-col ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}
+        style={{
+          transition: 'transform 0.5s cubic-bezier(0.22, 1.1, 0.36, 1)',
+          transitionDelay: isVisible ? `${slideUpDelay}ms` : '0ms',
+        }}
+      >
+        <div className="bg-gray-100 px-3 py-2 flex items-center gap-2">
+          <div className="flex-1 bg-white rounded-lg px-3 py-2 flex items-center gap-2">
+            <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <span className="text-gray-800 text-sm font-medium">
+              {searchText.split('').map((char, i) => (
+                <span
+                  key={i}
+                  className={`inline-block ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+                  style={{
+                    transition: 'opacity 0.1s ease-out',
+                    transitionDelay: isVisible ? `${typingStartDelay + i * typingSpeed}ms` : '0ms',
+                  }}
+                >
+                  {char}
+                </span>
+              ))}
+            </span>
+          </div>
+          <span className="text-blue-500 text-sm font-medium">Cancel</span>
+        </div>
+        <div className="flex-1 p-1.5 overflow-hidden">
+          <div className="grid grid-cols-3 gap-1.5">
+            {[...Array(18)].map((_, i) => (
+              <div
+                key={i}
+                className={`aspect-square bg-gradient-to-br from-gray-200 to-gray-300 rounded ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}
+                style={{
+                  transition: 'opacity 0.2s ease-out, transform 0.2s ease-out',
+                  transitionDelay: isVisible ? `${squaresStartDelay + i * squareStagger}ms` : '0ms',
+                }}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 interface FeatureProps {
   text: string;
