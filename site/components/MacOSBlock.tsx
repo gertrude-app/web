@@ -3,6 +3,7 @@
 import { LockIcon, MonitorIcon, RocketIcon, ShieldCheckIcon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import FancyLink from './FancyLink';
+import Computer from './super-scroller-illustration/Computer';
 
 const MacOSBlock: React.FC = () => {
   return <Variation2 />;
@@ -130,12 +131,21 @@ const Variation2: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className="bg-gradient-to-b from-white to-slate-50"
+      className="min-h-screen bg-gradient-to-b from-white to-slate-50"
     >
-      <div className="bg-slate-900 px-6 sm:px-12 md:px-20 pt-20 md:pt-28 lg:pt-32 pb-16 md:pb-20 lg:pb-24 relative overflow-hidden">
+      <div className="min-h-screen bg-slate-900 px-6 sm:px-12 md:px-20 pt-[15vh] pb-16 relative overflow-hidden">
         <div className="[background:radial-gradient(#a78bfa44,transparent_70%)] w-176 h-176 absolute -right-80 -top-80" />
         <div className="[background:radial-gradient(#e879f944,transparent_70%)] w-176 h-176 absolute -left-80 top-20" />
-        <div className="[background:radial-gradient(#a78bfa44,transparent_70%)] w-176 h-176 absolute left-20 -bottom-96" />
+        <div className="[background:radial-gradient(#a78bfa30,transparent_70%)] w-176 h-176 absolute -right-40 -bottom-96" />
+        <div
+          className={`absolute inset-0 flex items-end justify-center pb-[20rem] pointer-events-none transition-opacity duration-500 ${
+            isVisible ? 'opacity-20 delay-[1500ms]' : 'opacity-0'
+          }`}
+        >
+          <Computer className="scale-90 lg:scale-110" labelStatus="hidden">
+            <div className="w-full h-full bg-slate-950" />
+          </Computer>
+        </div>
 
         <div className="max-w-6xl mx-auto relative">
           <div className="text-center mb-20">
