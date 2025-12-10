@@ -2,6 +2,7 @@
 
 import { LaptopIcon, PodcastIcon, TabletSmartphoneIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { useScrollY } from '../lib/hooks';
 
 const rotatingPhrases = [
   `internet safety.`,
@@ -11,12 +12,14 @@ const rotatingPhrases = [
   `normal parents.`,
   `clean content.`,
   `innocence.`,
+  `Apple families.`,
 ];
 
 const FamilyOfProductsBlockAlt: React.FC = () => {
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState(``);
   const [isDeleting, setIsDeleting] = useState(false);
+  const scrollY = useScrollY();
 
   useEffect(() => {
     const currentPhrase = rotatingPhrases[phraseIndex] ?? ``;
@@ -47,8 +50,14 @@ const FamilyOfProductsBlockAlt: React.FC = () => {
     return () => clearTimeout(timeout);
   }, [displayedText, isDeleting, phraseIndex]);
 
+  const scrollProgress = Math.min(scrollY / 600, 1);
+
   return (
-    <section className="min-h-screen bg-gradient-to-br from-white via-white via-55% to-fuchsia-200 px-6 sm:px-8 md:px-20 pt-16 sm:pt-20 md:pt-24 pb-16 sm:pb-20 md:pb-24 flex flex-col items-center justify-center">
+    <section className="min-h-screen bg-gradient-to-br from-white via-white via-55% to-fuchsia-200 px-6 sm:px-8 md:px-20 pt-16 sm:pt-20 md:pt-24 pb-16 sm:pb-20 md:pb-24 flex flex-col items-center justify-center relative overflow-hidden">
+      <div
+        className="absolute inset-0 bg-gradient-to-b from-white bg-fuchsia-600 pointer-events-none"
+        style={{ opacity: scrollProgress * 0.7 }}
+      />
       <svg width="0" height="0" style={{ position: `absolute` }}>
         <defs>
           <linearGradient id="icon-gradient-alt" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -57,35 +66,44 @@ const FamilyOfProductsBlockAlt: React.FC = () => {
           </linearGradient>
         </defs>
       </svg>
-      <div className="text-center max-w-5xl">
-        <h1 className="text-5xl xs:text-6xl sm:text-7xl font-bold text-slate-800 !leading-[1.15em]">
-          <span className="block lg:inline">Tools for{` `}</span>
-          <span className="inline-block bg-gradient-to-r from-purple-600 to-fuchsia-500 bg-clip-text text-transparent">
-            {displayedText}
-            <span className="animate-blink text-fuchsia-400">|</span>
-          </span>
-        </h1>
-      </div>
+      <div
+        className="flex flex-col items-center"
+        style={{
+          transform: `scale(${1 + scrollProgress * 0.15})`,
+          filter: `blur(${scrollProgress * 8}px)`,
+          opacity: 1 - scrollProgress * 0.8,
+        }}
+      >
+        <div className="text-center max-w-5xl">
+          <h1 className="text-5xl xs:text-6xl sm:text-7xl font-bold text-slate-800 !leading-[1.15em]">
+            <span className="block lg:inline">Tools for{` `}</span>
+            <span className="inline-block bg-gradient-to-r from-purple-600 to-fuchsia-500 bg-clip-text text-transparent">
+              {displayedText}
+              <span className="animate-blink text-fuchsia-400">|</span>
+            </span>
+          </h1>
+        </div>
 
-      <div className="mt-16 md:mt-20 grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12 w-full max-w-4xl">
-        <ProductCard
-          icon={TabletSmartphoneIcon}
-          label="iPhone & iPad"
-          description="Plug holes in Screen Time, including #images GIF search"
-          delay={500}
-        />
-        <ProductCard
-          icon={LaptopIcon}
-          label="Mac"
-          description="Comprehensive web filtering and screenshot monitoring"
-          delay={700}
-        />
-        <ProductCard
-          icon={PodcastIcon}
-          label="Podcasts"
-          description="Parent-managed podcasts protected by PIN code"
-          delay={900}
-        />
+        <div className="mt-16 md:mt-20 grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12 w-full max-w-4xl">
+          <ProductCard
+            icon={TabletSmartphoneIcon}
+            label="iPhone & iPad"
+            description="Plug holes in Screen Time, including #images GIF search"
+            delay={500}
+          />
+          <ProductCard
+            icon={LaptopIcon}
+            label="Mac"
+            description="Comprehensive web filtering and screenshot monitoring"
+            delay={700}
+          />
+          <ProductCard
+            icon={PodcastIcon}
+            label="Podcasts"
+            description="Parent-managed podcasts protected by PIN code"
+            delay={900}
+          />
+        </div>
       </div>
     </section>
   );
@@ -111,7 +129,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-8 mb-6 transition-all duration-300 group-hover:scale-105 border border-fuchsia-200 group-hover:border-fuchsia-400 shadow-lg shadow-fuchsia-100 group-hover:shadow-xl group-hover:shadow-fuchsia-200">
       <Icon
         size={64}
-        className="[&_path]:stroke-[url(#icon-gradient-alt)] [&_rect]:stroke-[url(#icon-gradient-alt)] [&_line]:stroke-[url(#icon-gradient-alt)] transition-transform duration-300 group-hover:scale-110"
+        className="[&_path]:stroke-[url(#icon-gradient-alt)] [&_rect]:stroke-[url(#icon-gradient-alt)] [&_line]:stroke-[url(#icon-gradient-alt)] [&_circle]:stroke-[url(#icon-gradient-alt)] [&_circle]:fill-[url(#icon-gradient-alt)] transition-transform duration-300 group-hover:scale-110"
       />
     </div>
     <h3 className="text-2xl sm:text-3xl font-semibold text-slate-800 mb-2 transition-colors duration-300 group-hover:text-fuchsia-600">
