@@ -3,6 +3,7 @@
 import { StarIcon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import FancyLink from './FancyLink';
+import Phone from './super-scroller-illustration/Phone';
 
 const IOSBlockAlt1: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -34,20 +35,21 @@ const IOSBlockAlt1: React.FC = () => {
         <div className="lg:hidden relative h-[300px] overflow-hidden flex items-start justify-center -mt-4 mb-8">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-fuchsia-100/40 to-violet-200/60" />
           <div
-            className={`relative w-64 h-[550px] bg-gradient-to-br from-slate-800 to-slate-900 rounded-[3rem] p-4 shadow-2xl ${isVisible ? `translate-y-0 opacity-100` : `translate-y-12 opacity-0`}`}
+            className={`${isVisible ? `translate-y-0 opacity-100` : `translate-y-12 opacity-0`}`}
             style={{
               transition: `all 0.6s cubic-bezier(0.2, 1.4, 0.5, 1)`,
               transitionDelay: isVisible ? `600ms` : `0ms`,
             }}
           >
-            <div className="absolute top-32 left-1/2 -translate-x-1/2 w-24 h-24 rounded-2xl shadow-lg overflow-hidden">
-              <img
-                src="/gertrude-icon.png"
-                alt="Gertrude app icon"
-                className="w-full h-full"
-              />
-            </div>
-            <div className="absolute top-6 left-1/2 -translate-x-1/2 w-20 h-1.5 bg-slate-700 rounded-full" />
+            <Phone className="shadow-2xl scale-50" labelStatus="hidden">
+              <div className="w-full h-full bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
+                <img
+                  src="/gertrude-icon.png"
+                  alt="Gertrude app icon"
+                  className="w-24 h-24 rounded-2xl shadow-lg"
+                />
+              </div>
+            </Phone>
           </div>
         </div>
 
@@ -148,20 +150,21 @@ const IOSBlockAlt1: React.FC = () => {
 
           <div className="hidden lg:block lg:order-2 lg:col-span-3 relative flex items-center justify-center h-[500px]">
             <div
-              className={`relative w-[17rem] h-[550px] bg-gradient-to-br from-slate-800 to-slate-900 rounded-[3rem] p-4 shadow-2xl -ml-8 ${isVisible ? `translate-y-0 opacity-100` : `translate-y-12 opacity-0`}`}
+              className={`-ml-8 ${isVisible ? `translate-y-0 opacity-100` : `translate-y-12 opacity-0`}`}
               style={{
                 transition: `all 0.6s cubic-bezier(0.2, 1.4, 0.5, 1)`,
                 transitionDelay: isVisible ? `600ms` : `0ms`,
               }}
             >
-              <div className="absolute top-32 left-1/2 -translate-x-1/2 w-24 h-24 rounded-2xl shadow-lg overflow-hidden">
-                <img
-                  src="/gertrude-icon.png"
-                  alt="Gertrude app icon"
-                  className="w-full h-full"
-                />
-              </div>
-              <div className="absolute top-6 left-1/2 -translate-x-1/2 w-20 h-1.5 bg-slate-700 rounded-full" />
+              <Phone className="shadow-2xl scale-75" labelStatus="hidden">
+                <div className="w-full h-full bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
+                  <img
+                    src="/gertrude-icon.png"
+                    alt="Gertrude app icon"
+                    className="w-24 h-24 rounded-2xl shadow-lg"
+                  />
+                </div>
+              </Phone>
             </div>
           </div>
         </div>
