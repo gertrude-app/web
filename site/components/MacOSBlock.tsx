@@ -109,7 +109,9 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon: Icon, title, descriptio
 
 const Variation2: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const [exitProgress, setExitProgress] = useState(0);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -118,29 +120,56 @@ const Variation2: React.FC = () => {
           setIsVisible(true);
         }
       },
-      { threshold: 0.75 },
+      { threshold: 0.5 },
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    if (stickyRef.current) {
+      observer.observe(stickyRef.current);
     }
 
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!wrapperRef.current) return;
+      const rect = wrapperRef.current.getBoundingClientRect();
+      const wrapperHeight = wrapperRef.current.offsetHeight;
+      const viewportHeight = window.innerHeight;
+      const scrollableDistance = wrapperHeight - viewportHeight;
+      const scrolled = -rect.top;
+      const progress = Math.max(0, Math.min(1, scrolled / scrollableDistance));
+      setExitProgress(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <section
-      ref={sectionRef}
-      className="min-h-screen bg-gradient-to-b from-white to-slate-50"
-    >
-      <div className="min-h-screen bg-slate-900 px-6 sm:px-12 md:px-20 pt-[15vh] pb-16 relative overflow-hidden">
+    <div ref={wrapperRef} className="h-[200vh] relative">
+      <section
+        ref={stickyRef}
+        className="sticky top-0 min-h-screen bg-gradient-to-b from-white to-slate-50 overflow-hidden"
+      >
+        <div
+          className="absolute inset-0 bg-gradient-to-b from-violet-950 to-black pointer-events-none z-10"
+          style={{ opacity: Math.max(0, (exitProgress - 0.25) / 0.75) * 0.9 }}
+        />
+        <div
+          className="min-h-screen bg-slate-900 px-6 sm:px-12 md:px-20 pt-[15vh] pb-16 relative overflow-hidden"
+          style={{
+            filter: `blur(${Math.max(0, (exitProgress - 0.25) / 0.75) * 8}px)`,
+          }}
+        >
         <div className="[background:radial-gradient(#a78bfa44,transparent_70%)] w-176 h-176 absolute -right-80 -top-80" />
         <div className="[background:radial-gradient(#e879f944,transparent_70%)] w-176 h-176 absolute -left-80 top-20" />
         <div className="[background:radial-gradient(#a78bfa30,transparent_70%)] w-176 h-176 absolute -right-40 -bottom-96" />
         <div
           className={`absolute inset-0 flex items-end justify-center pb-[20rem] pointer-events-none transition-opacity duration-500 ${
-            isVisible ? 'opacity-20 delay-[1500ms]' : 'opacity-0'
+            !isVisible ? 'opacity-0' : exitProgress === 0 ? 'opacity-20 delay-[1500ms]' : 'opacity-20'
           }`}
+          style={exitProgress > 0.15 ? { opacity: 0.2 * (1 - (exitProgress - 0.15) / 0.85) } : undefined}
         >
           <Computer className="scale-90 lg:scale-110" labelStatus="hidden">
             <div className="w-full h-full bg-slate-950" />
@@ -151,11 +180,15 @@ const Variation2: React.FC = () => {
           <div className="text-center mb-20">
             <div
               className={`inline-block px-6 py-3 bg-white/10 backdrop-blur-sm rounded-full mb-6 border border-white/20 ${
-                isVisible ? 'translate-x-0 opacity-100' : 'translate-x-[500px] opacity-0'
+                isVisible && exitProgress === 0 ? 'translate-x-0 opacity-100' : !isVisible ? 'translate-x-[500px] opacity-0' : ''
               }`}
               style={{
                 transition: 'transform 0.25s cubic-bezier(0.2, 1.4, 0.5, 1), opacity 0.25s ease-out',
-                transitionDelay: isVisible ? '200ms' : '0ms',
+                transitionDelay: isVisible && exitProgress === 0 ? '200ms' : '0ms',
+                ...(exitProgress > 0.15 && {
+                  transform: `translateX(${(exitProgress - 0.15) / 0.85 * 500}px)`,
+                  opacity: 1 - (exitProgress - 0.15) / 0.85,
+                }),
               }}
             >
               <span className="text-sm font-bold bg-gradient-to-r from-violet-300 to-fuchsia-300 bg-clip-text text-transparent tracking-wider">
@@ -164,9 +197,15 @@ const Variation2: React.FC = () => {
             </div>
             <h2
               className={`text-5xl xs:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 transition-all duration-500 ${
-                isVisible ? 'translate-x-0 opacity-100' : '-translate-x-24 opacity-0'
+                isVisible && exitProgress === 0 ? 'translate-x-0 opacity-100' : !isVisible ? '-translate-x-24 opacity-0' : ''
               }`}
-              style={{ transitionDelay: isVisible ? '600ms' : '0ms' }}
+              style={{
+                transitionDelay: isVisible && exitProgress === 0 ? '600ms' : '0ms',
+                ...(exitProgress > 0.15 && {
+                  transform: `translateX(${-(exitProgress - 0.15) / 0.85 * 100}px)`,
+                  opacity: 1 - (exitProgress - 0.15) / 0.85,
+                }),
+              }}
             >
               <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
                 Gertrude for{' '}
@@ -204,9 +243,15 @@ const Variation2: React.FC = () => {
             </h2>
             <p
               className={`text-xl md:text-2xl text-violet-300 max-w-3xl mx-auto leading-relaxed transition-all duration-500 ${
-                isVisible ? 'translate-x-0 opacity-100' : 'translate-x-24 opacity-0'
+                isVisible && exitProgress === 0 ? 'translate-x-0 opacity-100' : !isVisible ? 'translate-x-24 opacity-0' : ''
               }`}
-              style={{ transitionDelay: isVisible ? '1000ms' : '0ms' }}
+              style={{
+                transitionDelay: isVisible && exitProgress === 0 ? '1000ms' : '0ms',
+                ...(exitProgress > 0.15 && {
+                  transform: `translateX(${(exitProgress - 0.15) / 0.85 * 100}px)`,
+                  opacity: 1 - (exitProgress - 0.15) / 0.85,
+                }),
+              }}
             >
               Comprehensive web filtering and activity monitoring. The most powerful parental controls ever built for macOS.
             </p>
@@ -214,9 +259,15 @@ const Variation2: React.FC = () => {
 
           <div
             className={`grid sm:grid-cols-2 lg:grid-cols-4 gap-6 transition-all duration-500 ${
-              isVisible ? 'translate-x-0 opacity-100' : '-translate-x-24 opacity-0'
+              isVisible && exitProgress === 0 ? 'translate-x-0 opacity-100' : !isVisible ? '-translate-x-24 opacity-0' : ''
             }`}
-            style={{ transitionDelay: isVisible ? '1400ms' : '0ms' }}
+            style={{
+              transitionDelay: isVisible && exitProgress === 0 ? '1400ms' : '0ms',
+              ...(exitProgress > 0.15 && {
+                transform: `translateX(${-(exitProgress - 0.15) / 0.85 * 100}px)`,
+                opacity: 1 - (exitProgress - 0.15) / 0.85,
+              }),
+            }}
           >
             <FeatureCardAlt
               icon={LockIcon}
@@ -246,9 +297,14 @@ const Variation2: React.FC = () => {
 
           <div
             className={`flex flex-col items-center mt-16 gap-6 transition-opacity duration-500 ${
-              isVisible ? 'opacity-100' : 'opacity-0'
+              isVisible && exitProgress === 0 ? 'opacity-100' : !isVisible ? 'opacity-0' : ''
             }`}
-            style={{ transitionDelay: isVisible ? '1800ms' : '0ms' }}
+            style={{
+              transitionDelay: isVisible && exitProgress === 0 ? '1800ms' : '0ms',
+              ...(exitProgress > 0.15 && {
+                opacity: 1 - (exitProgress - 0.15) / 0.85,
+              }),
+            }}
           >
             <a
               href="https://parents.gertrude.app/signup"
@@ -265,8 +321,9 @@ const Variation2: React.FC = () => {
             </p>
           </div>
         </div>
-      </div>
-    </section>
+        </div>
+      </section>
+    </div>
   );
 };
 
