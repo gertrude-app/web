@@ -55,19 +55,19 @@ const IOSBlockAlt1: React.FC = () => {
           <div className="lg:order-1 lg:col-span-9 relative z-10 flex flex-col items-center xs:items-start">
             <div className="relative inline-block mb-6">
               <div
-                className={`inline-flex items-center gap-2 bg-white border-2 border-violet-200 px-4 py-2 rounded-full ${isVisible ? `translate-x-0` : `-translate-x-[250px]`}`}
+                className={`inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-500 px-4 py-2 rounded-full shadow-lg shadow-green-600/30 ${isVisible ? `translate-x-0` : `-translate-x-[250px]`}`}
                 style={{
                   transition: `transform 0.25s cubic-bezier(0.2, 1.4, 0.5, 1)`,
                   transitionDelay: isVisible ? `1000ms` : `0ms`,
                 }}
               >
-                <span className="text-sm font-bold bg-gradient-to-r from-violet-600 to-fuchsia-500 bg-clip-text text-transparent">
+                <span className="text-sm font-bold text-white tracking-wide">
                   100% FREE
                 </span>
               </div>
             </div>
 
-            <h2 className="text-4xl xs:text-5xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight text-center xs:text-left">
+            <h2 className="text-3xl xs:text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight text-center xs:text-left">
               Gertrude for iPhone & iPad
             </h2>
 
@@ -88,8 +88,39 @@ const IOSBlockAlt1: React.FC = () => {
               </div>
             </div>
 
-            <p className="text-xl text-slate-600 leading-relaxed mb-8">
-              The missing features Screen Time should have included.
+            <p className="text-2xl text-slate-600 leading-relaxed mb-8">
+              The{' '}
+              <span className="relative inline-block">
+                missing features
+                <svg
+                  className="absolute bottom-0 left-0 w-full translate-y-1"
+                  height="6"
+                  viewBox="0 0 200 6"
+                  preserveAspectRatio="none"
+                >
+                  <defs>
+                    <linearGradient id="ios-underline-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" style={{ stopColor: `#8b5cf6`, stopOpacity: 1 }} />
+                      <stop offset="100%" style={{ stopColor: `#d946ef`, stopOpacity: 1 }} />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M 0 3 Q 50 1, 100 3 T 200 3"
+                    stroke="url(#ios-underline-gradient)"
+                    strokeWidth="3"
+                    fill="none"
+                    strokeLinecap="butt"
+                    pathLength="1"
+                    strokeDasharray="1"
+                    strokeDashoffset={isVisible ? 0 : 1}
+                    style={{
+                      transition: 'stroke-dashoffset 0.3s ease-out',
+                      transitionDelay: isVisible ? '800ms' : '0ms',
+                    }}
+                  />
+                </svg>
+              </span>{' '}
+              Screen Time should have included.
             </p>
 
             <div className="w-full space-y-3 mb-8 bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-violet-100 lg:mr-4">
