@@ -7,10 +7,12 @@ import MobileLoginDropdown from './MobileLoginDropdown';
 const MainHeader: React.FC<{
   theme: `violet` | `white`;
   showAuthButtons?: boolean;
-}> = ({ theme, showAuthButtons = true }) => (
+  overlay?: boolean;
+}> = ({ theme, showAuthButtons = true, overlay = false }) => (
   <header
     className={cx(
-      `flex justify-between items-center px-6 xs:px-8 top-0 left-0 right-0 z-50 py-6 relative`,
+      `flex justify-between items-center px-6 xs:px-8 top-0 left-0 right-0 z-50 py-6`,
+      overlay ? `absolute` : `relative`,
     )}
   >
     <a href="/">

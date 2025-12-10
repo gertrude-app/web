@@ -2,6 +2,7 @@ import React from 'react';
 import type { NextPage } from 'next';
 import AboutBlock from '@/components/AboutBlock';
 import FamilyOfProductsBlock from '@/components/FamilyOfProductsBlock';
+import FamilyOfProductsBlockAlt from '@/components/FamilyOfProductsBlockAlt';
 import IOSBlock from '@/components/IOSBlock';
 import IOSBlockAlt1 from '@/components/IOSBlockAlt1';
 import IOSBlockAlt2 from '@/components/IOSBlockAlt2';
@@ -17,6 +18,7 @@ export const metadata = createMetadata(
 
 const HomePage: NextPage = () => (
   <main>
+    <FamilyOfProductsBlockAlt />
     <FamilyOfProductsBlock />
     <IOSBlockAlt1 />
     {/* <IOSBlock /> */}
