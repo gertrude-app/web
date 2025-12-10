@@ -31,7 +31,7 @@ const IOSBlockAlt1: React.FC = () => {
       ref={sectionRef}
       className="bg-gradient-to-br from-violet-50 via-white to-fuchsia-50 flex flex-col items-center overflow-hidden lg:pr-16 xl:pr-24"
     >
-      <div className="max-w-6xl w-full pt-12 xs:pt-14 md:pt-16 lg:pt-10 pb-16 xs:pb-18 md:pb-20 relative">
+      <div className="max-w-6xl w-full pt-12 xs:pt-14 md:pt-16 lg:pt-10 pb-24 relative">
         <div className="lg:hidden relative h-[300px] overflow-hidden flex items-start justify-center -mt-4 mb-8">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-fuchsia-100/40 to-violet-200/60" />
           <div
@@ -50,11 +50,23 @@ const IOSBlockAlt1: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 xl:gap-20 items-center px-6 xs:px-8 sm:px-12 md:px-20 pt-4 xs:pt-6">
           <div className="lg:order-1 lg:col-span-9 relative z-10 flex flex-col items-center xs:items-start">
             <div className="relative inline-block mb-6">
+              <style>
+                {`
+                  @keyframes waggle {
+                    0%, 100% { transform: rotate(0deg); }
+                    20% { transform: rotate(-8deg); }
+                    40% { transform: rotate(8deg); }
+                    60% { transform: rotate(-5deg); }
+                    80% { transform: rotate(5deg); }
+                  }
+                `}
+              </style>
               <div
                 className={`inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-500 px-4 py-2 rounded-full shadow-lg shadow-green-600/30 ${isVisible ? `translate-x-0` : `-translate-x-[250px]`}`}
                 style={{
                   transition: `transform 0.25s cubic-bezier(0.2, 1.4, 0.5, 1)`,
                   transitionDelay: isVisible ? `1000ms` : `0ms`,
+                  animation: isVisible ? `waggle 0.5s ease-in-out 1.35s` : 'none',
                 }}
               >
                 <span className="text-sm font-bold text-white tracking-wide">
@@ -111,7 +123,7 @@ const IOSBlockAlt1: React.FC = () => {
                     strokeDashoffset={isVisible ? 0 : 1}
                     style={{
                       transition: 'stroke-dashoffset 0.3s ease-out',
-                      transitionDelay: isVisible ? '800ms' : '0ms',
+                      transitionDelay: isVisible ? '1400ms' : '0ms',
                     }}
                   />
                 </svg>
@@ -143,14 +155,8 @@ const IOSBlockAlt1: React.FC = () => {
           </div>
 
           <div className="hidden lg:block lg:order-2 lg:col-span-3 relative flex items-center justify-center h-[500px]">
-            <div
-              className={`-ml-8 ${isVisible ? `translate-y-0 opacity-100` : `translate-y-12 opacity-0`}`}
-              style={{
-                transition: `all 0.6s cubic-bezier(0.2, 1.4, 0.5, 1)`,
-                transitionDelay: isVisible ? `600ms` : `0ms`,
-              }}
-            >
-              <Phone className="shadow-2xl scale-75" labelStatus="hidden">
+            <div className="-ml-12 -mt-8">
+              <Phone className="shadow-2xl scale-[0.85]" labelStatus="hidden">
                 <BlockedGifSearchScreen isVisible={isVisible} />
               </Phone>
             </div>
@@ -218,12 +224,23 @@ const BlockedGifSearchScreen: React.FC<BlockedGifSearchScreenProps> = ({ isVisib
             {[...Array(18)].map((_, i) => (
               <div
                 key={i}
-                className={`aspect-square bg-gradient-to-br from-gray-200 to-gray-300 rounded ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}
+                className={`aspect-square bg-gradient-to-br from-gray-200 to-gray-300 rounded relative flex items-center justify-center ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}
                 style={{
                   transition: 'opacity 0.2s ease-out, transform 0.2s ease-out',
                   transitionDelay: isVisible ? `${squaresStartDelay + i * squareStagger}ms` : '0ms',
                 }}
-              />
+              >
+                <svg
+                  className="w-8 h-8 text-red-400/40"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+                </svg>
+              </div>
             ))}
           </div>
         </div>
