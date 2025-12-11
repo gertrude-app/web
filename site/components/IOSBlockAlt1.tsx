@@ -103,6 +103,18 @@ const IOSBlockAlt1: React.FC = () => {
               transform: `translateY(${Math.max(0, 1 - (exitProgress - 0.22) / 0.1) * 60}px)`,
             }}
           >
+            <div className="text-center mb-12">
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-fuchsia-300/60 text-sm font-semibold tracking-wider uppercase hover:text-fuchsia-200 transition-colors duration-200"
+              >
+                More App Store Reviews
+                <ExternalLinkIcon size={14} />
+              </a>
+            </div>
+
             <div className="relative overflow-hidden w-screen left-1/2 -translate-x-1/2">
               <div
                 className="flex transition-transform duration-500 ease-out"
@@ -111,17 +123,6 @@ const IOSBlockAlt1: React.FC = () => {
                 {reviews.map((review, i) => (
                   <div key={i} className="w-screen flex-shrink-0 flex justify-center">
                     <div className="max-w-2xl text-center px-8">
-                      <div className="mb-12">
-                        <a
-                          href="#"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-fuchsia-300/60 text-sm font-semibold tracking-wider uppercase hover:text-fuchsia-200 transition-colors duration-200"
-                        >
-                          More App Store Reviews
-                          <ExternalLinkIcon size={14} />
-                        </a>
-                      </div>
                       <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 uppercase">
                         {review.title}
                       </h3>
