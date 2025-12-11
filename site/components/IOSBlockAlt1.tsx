@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronLeftIcon, ChevronRightIcon, ExternalLinkIcon, StarIcon } from 'lucide-react';
+import { ExternalLinkIcon, StarIcon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import FancyLink from './FancyLink';
 import Phone from './super-scroller-illustration/Phone';
@@ -32,21 +32,17 @@ const reviews = [
 const IOSBlockAlt1: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [exitProgress, setExitProgress] = useState(0);
-  const [currentReview, setCurrentReview] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
 
-  const safeCurrentReview = currentReview % reviews.length;
-  const nextReview = () => setCurrentReview((prev) => (prev + 1) % reviews.length);
-  const prevReview = () => setCurrentReview((prev) => (prev - 1 + reviews.length) % reviews.length);
-
-  useEffect(() => {
-    if (exitProgress < 0.4) return;
-    const interval = setInterval(() => {
-      setCurrentReview((prev) => (prev + 1) % reviews.length);
-    }, 4500);
-    return () => clearInterval(interval);
-  }, [exitProgress]);
+  const reviewStartProgress = 0.32;
+  const reviewEndProgress = 0.92;
+  const reviewRange = reviewEndProgress - reviewStartProgress;
+  const progressPerReview = reviewRange / reviews.length;
+  const currentReview = Math.min(
+    reviews.length - 1,
+    Math.max(0, Math.floor((exitProgress - reviewStartProgress) / progressPerReview))
+  );
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -75,6 +71,7 @@ const IOSBlockAlt1: React.FC = () => {
       const scrolled = -rect.top;
       const progress = Math.max(0, Math.min(1, scrolled / scrollableDistance));
       setExitProgress(progress);
+      console.log(`exitProgress: ${(progress * 100).toFixed(1)}%`);
     };
 
     window.addEventListener(`scroll`, handleScroll);
@@ -82,26 +79,26 @@ const IOSBlockAlt1: React.FC = () => {
   }, []);
 
   return (
-    <div ref={wrapperRef} className="h-[420vh] relative">
+    <div ref={wrapperRef} className="h-[650vh] relative">
       <section
         ref={stickyRef}
         className="sticky top-0 min-h-screen bg-gradient-to-tl from-white via-white via-55% to-fuchsia-200 overflow-hidden"
       >
         <div
           className="absolute inset-0 bg-gradient-to-b from-fuchsia-900 to-violet-950 pointer-events-none z-10"
-          style={{ opacity: Math.min(1, Math.max(0, (exitProgress - 0.35) / 0.2)) * 0.95 }}
+          style={{ opacity: Math.min(1, Math.max(0, (exitProgress - 0.18) / 0.1)) * 0.95 }}
         />
 
         <div
           className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
           style={{
-            opacity: Math.min(1, Math.max(0, (exitProgress - 0.5) / 0.15)),
+            opacity: Math.min(1, Math.max(0, (exitProgress - 0.22) / 0.08)),
           }}
         >
           <div
             className="max-w-2xl mx-4 pointer-events-auto"
             style={{
-              transform: `translateY(${Math.max(0, 1 - (exitProgress - 0.5) / 0.2) * 60}px)`,
+              transform: `translateY(${Math.max(0, 1 - (exitProgress - 0.22) / 0.1) * 60}px)`,
             }}
           >
             <div className="text-center mb-12">
@@ -117,7 +114,7 @@ const IOSBlockAlt1: React.FC = () => {
             </div>
 
             <div className="relative overflow-hidden -mx-4 w-screen left-1/2 -translate-x-1/2">
-              <div className="flex transition-transform duration-500 ease-out" style={{ transform: `translateX(-${safeCurrentReview * 100}%)` }}>
+              <div className="flex transition-transform duration-500 ease-out" style={{ transform: `translateX(-${currentReview * 100}%)` }}>
                 {reviews.map((review, i) => (
                   <div key={i} className="w-screen flex-shrink-0 flex justify-center">
                     <div className="max-w-2xl text-center px-8">
@@ -149,42 +146,27 @@ const IOSBlockAlt1: React.FC = () => {
           </div>
 
           <div
-            className="absolute bottom-8 left-0 right-0 flex items-center justify-center gap-6 pointer-events-auto"
+            className="absolute bottom-8 left-0 right-0 flex items-center justify-center gap-2 pointer-events-none"
             style={{
-              opacity: Math.min(1, Math.max(0, (exitProgress - 0.5) / 0.15)),
+              opacity: Math.min(1, Math.max(0, (exitProgress - 0.22) / 0.08)),
             }}
           >
-            <button
-              onClick={prevReview}
-              className="text-fuchsia-300/50 hover:text-fuchsia-200 transition-colors duration-200"
-            >
-              <ChevronLeftIcon size={20} />
-            </button>
-            <div className="flex items-center gap-2">
-              {reviews.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrentReview(i)}
-                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                    i === safeCurrentReview
-                      ? `bg-fuchsia-300`
-                      : `bg-fuchsia-300/30 hover:bg-fuchsia-300/50`
-                  }`}
-                />
-              ))}
-            </div>
-            <button
-              onClick={nextReview}
-              className="text-fuchsia-300/50 hover:text-fuchsia-200 transition-colors duration-200"
-            >
-              <ChevronRightIcon size={20} />
-            </button>
+            {reviews.map((_, i) => (
+              <div
+                key={i}
+                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                  i === currentReview
+                    ? `bg-fuchsia-300`
+                    : `bg-fuchsia-300/30`
+                }`}
+              />
+            ))}
           </div>
         </div>
         <div
           className="min-h-screen flex flex-col items-center justify-center lg:pr-16 xl:pr-24"
           style={{
-            filter: `blur(${Math.max(0, (exitProgress - 0.35) / 0.65) * 8}px)`,
+            filter: `blur(${Math.max(0, (exitProgress - 0.15) / 0.2) * 8}px)`,
           }}
         >
           <div className="max-w-6xl w-full py-12 xs:py-14 md:py-16 lg:py-10 relative">
@@ -195,9 +177,9 @@ const IOSBlockAlt1: React.FC = () => {
                 style={{
                   transition: `all 0.6s cubic-bezier(0.2, 1.4, 0.5, 1)`,
                   transitionDelay: isVisible && exitProgress === 0 ? `600ms` : `0ms`,
-                  ...(exitProgress > 0.25 && {
-                    transform: `translateY(${((exitProgress - 0.25) / 0.75) * 100}px)`,
-                    opacity: 1 - (exitProgress - 0.25) / 0.75,
+                  ...(exitProgress > 0.08 && {
+                    transform: `translateY(${((exitProgress - 0.08) / 0.25) * 100}px)`,
+                    opacity: 1 - (exitProgress - 0.08) / 0.25,
                   }),
                 }}
               >
@@ -227,9 +209,9 @@ const IOSBlockAlt1: React.FC = () => {
                       transition: `transform 0.25s cubic-bezier(0.2, 1.4, 0.5, 1)`,
                       transitionDelay: isVisible && exitProgress === 0 ? `1000ms` : `0ms`,
                       animation: isVisible ? `waggle 0.5s ease-in-out 1.35s` : 'none',
-                      ...(exitProgress > 0.25 && {
-                        transform: `translateX(${(-(exitProgress - 0.25) / 0.75) * 300}px)`,
-                        opacity: 1 - (exitProgress - 0.25) / 0.75,
+                      ...(exitProgress > 0.08 && {
+                        transform: `translateX(${(-(exitProgress - 0.08) / 0.25) * 300}px)`,
+                        opacity: 1 - (exitProgress - 0.08) / 0.25,
                       }),
                     }}
                   >
@@ -249,9 +231,9 @@ const IOSBlockAlt1: React.FC = () => {
                   }`}
                   style={{
                     transitionDelay: isVisible && exitProgress === 0 ? `400ms` : `0ms`,
-                    ...(exitProgress > 0.25 && {
-                      transform: `translateX(${(-(exitProgress - 0.25) / 0.75) * 100}px)`,
-                      opacity: 1 - (exitProgress - 0.25) / 0.75,
+                    ...(exitProgress > 0.08 && {
+                      transform: `translateX(${(-(exitProgress - 0.08) / 0.25) * 100}px)`,
+                      opacity: 1 - (exitProgress - 0.08) / 0.25,
                     }),
                   }}
                 >
@@ -268,9 +250,9 @@ const IOSBlockAlt1: React.FC = () => {
                   }`}
                   style={{
                     transitionDelay: isVisible && exitProgress === 0 ? `600ms` : `0ms`,
-                    ...(exitProgress > 0.25 && {
-                      transform: `translateX(${((exitProgress - 0.25) / 0.75) * 100}px)`,
-                      opacity: 1 - (exitProgress - 0.25) / 0.75,
+                    ...(exitProgress > 0.08 && {
+                      transform: `translateX(${((exitProgress - 0.08) / 0.25) * 100}px)`,
+                      opacity: 1 - (exitProgress - 0.08) / 0.25,
                     }),
                   }}
                 >
@@ -300,9 +282,9 @@ const IOSBlockAlt1: React.FC = () => {
                   }`}
                   style={{
                     transitionDelay: isVisible && exitProgress === 0 ? `800ms` : `0ms`,
-                    ...(exitProgress > 0.25 && {
-                      transform: `translateX(${(-(exitProgress - 0.25) / 0.75) * 100}px)`,
-                      opacity: 1 - (exitProgress - 0.25) / 0.75,
+                    ...(exitProgress > 0.08 && {
+                      transform: `translateX(${(-(exitProgress - 0.08) / 0.25) * 100}px)`,
+                      opacity: 1 - (exitProgress - 0.08) / 0.25,
                     }),
                   }}
                 >
@@ -350,9 +332,9 @@ const IOSBlockAlt1: React.FC = () => {
                   }`}
                   style={{
                     transitionDelay: isVisible && exitProgress === 0 ? `1000ms` : `0ms`,
-                    ...(exitProgress > 0.25 && {
-                      transform: `translateY(${((exitProgress - 0.25) / 0.75) * 50}px)`,
-                      opacity: 1 - (exitProgress - 0.25) / 0.75,
+                    ...(exitProgress > 0.08 && {
+                      transform: `translateY(${((exitProgress - 0.08) / 0.25) * 50}px)`,
+                      opacity: 1 - (exitProgress - 0.08) / 0.25,
                     }),
                   }}
                 >
@@ -373,9 +355,9 @@ const IOSBlockAlt1: React.FC = () => {
                   }`}
                   style={{
                     transitionDelay: isVisible && exitProgress === 0 ? `1200ms` : `0ms`,
-                    ...(exitProgress > 0.25 && {
-                      transform: `translateY(${((exitProgress - 0.25) / 0.75) * 50}px)`,
-                      opacity: 1 - (exitProgress - 0.25) / 0.75,
+                    ...(exitProgress > 0.08 && {
+                      transform: `translateY(${((exitProgress - 0.08) / 0.25) * 50}px)`,
+                      opacity: 1 - (exitProgress - 0.08) / 0.25,
                     }),
                   }}
                 >
@@ -403,9 +385,9 @@ const IOSBlockAlt1: React.FC = () => {
                 }`}
                 style={{
                   transitionDelay: isVisible && exitProgress === 0 ? `600ms` : `0ms`,
-                  ...(exitProgress > 0.25 && {
-                    transform: `translateX(${((exitProgress - 0.25) / 0.75) * 150}px)`,
-                    opacity: 1 - (exitProgress - 0.25) / 0.75,
+                  ...(exitProgress > 0.08 && {
+                    transform: `translateX(${((exitProgress - 0.08) / 0.25) * 150}px)`,
+                    opacity: 1 - (exitProgress - 0.08) / 0.25,
                   }),
                 }}
               >
