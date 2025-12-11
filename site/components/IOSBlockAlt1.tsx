@@ -116,27 +116,35 @@ const IOSBlockAlt1: React.FC = () => {
               </a>
             </div>
 
-            <div className="relative text-center">
-              <div className="flex items-center justify-center gap-1 mb-4">
-                {[...Array(reviews[safeCurrentReview]?.rating ?? 5)].map((_, i) => (
-                  <StarIcon
-                    key={i}
-                    size={22}
-                    className="fill-amber-400 text-amber-400"
-                    strokeWidth={0}
-                  />
+            <div className="relative overflow-hidden -mx-4 w-screen left-1/2 -translate-x-1/2">
+              <div className="flex transition-transform duration-500 ease-out" style={{ transform: `translateX(-${safeCurrentReview * 100}%)` }}>
+                {reviews.map((review, i) => (
+                  <div key={i} className="w-screen flex-shrink-0 flex justify-center">
+                    <div className="max-w-2xl text-center px-8">
+                      <div className="flex items-center justify-center gap-1 mb-4">
+                        {[...Array(review.rating)].map((_, j) => (
+                          <StarIcon
+                            key={j}
+                            size={22}
+                            className="fill-amber-400 text-amber-400"
+                            strokeWidth={0}
+                          />
+                        ))}
+                      </div>
+                      <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                        {review.title}
+                      </h3>
+                      <p className="text-fuchsia-100 text-2xl md:text-3xl leading-relaxed mb-16 font-serif">
+                        "{review.text}"
+                      </p>
+                      <p className="text-fuchsia-300 text-base">
+                        — {review.author}
+                        <span className="text-fuchsia-300/40">, {review.date}</span>
+                      </p>
+                    </div>
+                  </div>
                 ))}
               </div>
-              <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                {reviews[safeCurrentReview]?.title}
-              </h3>
-              <p className="text-fuchsia-100 text-2xl md:text-3xl leading-relaxed mb-16 font-serif">
-                "{reviews[safeCurrentReview]?.text}"
-              </p>
-              <p className="text-fuchsia-300 text-base">
-                — {reviews[safeCurrentReview]?.author}
-                <span className="text-fuchsia-300/40">, {reviews[safeCurrentReview]?.date}</span>
-              </p>
             </div>
           </div>
 
