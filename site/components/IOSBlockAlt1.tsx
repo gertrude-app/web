@@ -7,7 +7,9 @@ import Phone from './super-scroller-illustration/Phone';
 
 const IOSBlockAlt1: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const [exitProgress, setExitProgress] = useState(0);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -16,154 +18,281 @@ const IOSBlockAlt1: React.FC = () => {
           setIsVisible(true);
         }
       },
-      { threshold: 0.75 },
+      { threshold: 0.5 },
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    if (stickyRef.current) {
+      observer.observe(stickyRef.current);
     }
 
     return () => observer.disconnect();
   }, []);
 
-  return (
-    <section
-      ref={sectionRef}
-      className="bg-gradient-to-br from-violet-50 via-white to-fuchsia-50 flex flex-col items-center overflow-hidden lg:pr-16 xl:pr-24"
-    >
-      <div className="max-w-6xl w-full pt-12 xs:pt-14 md:pt-16 lg:pt-10 pb-24 relative">
-        <div className="lg:hidden relative h-[300px] overflow-hidden flex items-start justify-center -mt-4 mb-8">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-fuchsia-100/40 to-violet-200/60" />
-          <div
-            className={`${isVisible ? `translate-y-0 opacity-100` : `translate-y-12 opacity-0`}`}
-            style={{
-              transition: `all 0.6s cubic-bezier(0.2, 1.4, 0.5, 1)`,
-              transitionDelay: isVisible ? `600ms` : `0ms`,
-            }}
-          >
-            <Phone className="shadow-2xl scale-[0.85]" labelStatus="hidden">
-              <BlockedGifSearchScreen isVisible={isVisible} />
-            </Phone>
-          </div>
-        </div>
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!wrapperRef.current) return;
+      const rect = wrapperRef.current.getBoundingClientRect();
+      const wrapperHeight = wrapperRef.current.offsetHeight;
+      const viewportHeight = window.innerHeight;
+      const scrollableDistance = wrapperHeight - viewportHeight;
+      const scrolled = -rect.top;
+      const progress = Math.max(0, Math.min(1, scrolled / scrollableDistance));
+      setExitProgress(progress);
+    };
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 xl:gap-20 items-center px-6 xs:px-8 sm:px-12 md:px-20 pt-4 xs:pt-6">
-          <div className="lg:order-1 lg:col-span-9 relative z-10 flex flex-col items-center xs:items-start">
-            <div className="relative inline-block mb-6">
-              <style>
-                {`
-                  @keyframes waggle {
-                    0%, 100% { transform: rotate(0deg); }
-                    20% { transform: rotate(-8deg); }
-                    40% { transform: rotate(8deg); }
-                    60% { transform: rotate(-5deg); }
-                    80% { transform: rotate(5deg); }
-                  }
-                `}
-              </style>
+    window.addEventListener(`scroll`, handleScroll);
+    return () => window.removeEventListener(`scroll`, handleScroll);
+  }, []);
+
+  return (
+    <div ref={wrapperRef} className="h-[200vh] relative">
+      <section
+        ref={stickyRef}
+        className="sticky top-0 min-h-screen bg-gradient-to-tl from-white via-white via-55% to-fuchsia-200 overflow-hidden"
+      >
+        <div
+          className="absolute inset-0 bg-gradient-to-b from-fuchsia-900 to-violet-950 pointer-events-none z-10"
+          style={{ opacity: Math.max(0, (exitProgress - 0.25) / 0.75) * 0.9 }}
+        />
+        <div
+          className="min-h-screen flex flex-col items-center justify-center lg:pr-16 xl:pr-24"
+          style={{
+            filter: `blur(${Math.max(0, (exitProgress - 0.25) / 0.75) * 8}px)`,
+          }}
+        >
+          <div className="max-w-6xl w-full py-12 xs:py-14 md:py-16 lg:py-10 relative">
+            <div className="lg:hidden relative h-[300px] overflow-hidden flex items-start justify-center -mt-4 mb-8">
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-fuchsia-100/40 to-violet-200/60" />
               <div
-                className={`inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-500 px-4 py-2 rounded-full shadow-lg shadow-green-600/30 ${isVisible ? `translate-x-0` : `-translate-x-[250px]`}`}
+                className={`${isVisible && exitProgress === 0 ? `translate-y-0 opacity-100` : !isVisible ? `translate-y-12 opacity-0` : ``}`}
                 style={{
-                  transition: `transform 0.25s cubic-bezier(0.2, 1.4, 0.5, 1)`,
-                  transitionDelay: isVisible ? `1000ms` : `0ms`,
-                  animation: isVisible ? `waggle 0.5s ease-in-out 1.35s` : 'none',
+                  transition: `all 0.6s cubic-bezier(0.2, 1.4, 0.5, 1)`,
+                  transitionDelay: isVisible && exitProgress === 0 ? `600ms` : `0ms`,
+                  ...(exitProgress > 0.15 && {
+                    transform: `translateY(${((exitProgress - 0.15) / 0.85) * 100}px)`,
+                    opacity: 1 - (exitProgress - 0.15) / 0.85,
+                  }),
                 }}
               >
-                <span className="text-sm font-bold text-white tracking-wide">
-                  100% FREE
-                </span>
+                <Phone className="shadow-2xl scale-[0.85]" labelStatus="hidden">
+                  <BlockedGifSearchScreen isVisible={isVisible} />
+                </Phone>
               </div>
             </div>
 
-            <h2 className="text-3xl xs:text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight text-center xs:text-left">
-              Gertrude for iPhone & iPad
-            </h2>
-
-            <div className="flex items-center gap-3 mb-6 justify-center xs:justify-start w-full">
-              <div className="flex items-center gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <StarIcon
-                    key={i}
-                    size={20}
-                    className="fill-amber-400 text-amber-400"
-                    strokeWidth={0}
-                  />
-                ))}
-              </div>
-              <div className="flex items-center gap-2 text-slate-700">
-                <span className="text-xl font-bold">4.9</span>
-                <span className="text-sm">App Store</span>
-              </div>
-            </div>
-
-            <p className="text-2xl text-slate-600 leading-relaxed mb-8">
-              The{' '}
-              <span className="relative inline-block">
-                missing features
-                <svg
-                  className="absolute bottom-0 left-0 w-full translate-y-1"
-                  height="6"
-                  viewBox="0 0 200 6"
-                  preserveAspectRatio="none"
-                >
-                  <defs>
-                    <linearGradient id="ios-underline-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" style={{ stopColor: `#8b5cf6`, stopOpacity: 1 }} />
-                      <stop offset="100%" style={{ stopColor: `#d946ef`, stopOpacity: 1 }} />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M 0 3 Q 50 1, 100 3 T 200 3"
-                    stroke="url(#ios-underline-gradient)"
-                    strokeWidth="3"
-                    fill="none"
-                    strokeLinecap="butt"
-                    pathLength="1"
-                    strokeDasharray="1"
-                    strokeDashoffset={isVisible ? 0 : 1}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 xl:gap-20 items-center px-6 xs:px-8 sm:px-12 md:px-20 pt-4 xs:pt-6">
+              <div className="lg:order-1 lg:col-span-9 relative z-10 flex flex-col items-center xs:items-start">
+                <div className="relative inline-block mb-6">
+                  <style>
+                    {`
+                      @keyframes waggle {
+                        0%, 100% { transform: rotate(0deg); }
+                        20% { transform: rotate(-8deg); }
+                        40% { transform: rotate(8deg); }
+                        60% { transform: rotate(-5deg); }
+                        80% { transform: rotate(5deg); }
+                      }
+                    `}
+                  </style>
+                  <div
+                    className={`inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-500 px-4 py-2 rounded-full shadow-lg shadow-green-600/30 ${isVisible && exitProgress === 0 ? `translate-x-0` : !isVisible ? `-translate-x-[250px]` : ``}`}
                     style={{
-                      transition: 'stroke-dashoffset 0.3s ease-out',
-                      transitionDelay: isVisible ? '1400ms' : '0ms',
+                      transition: `transform 0.25s cubic-bezier(0.2, 1.4, 0.5, 1)`,
+                      transitionDelay: isVisible && exitProgress === 0 ? `1000ms` : `0ms`,
+                      animation: isVisible ? `waggle 0.5s ease-in-out 1.35s` : 'none',
+                      ...(exitProgress > 0.15 && {
+                        transform: `translateX(${(-(exitProgress - 0.15) / 0.85) * 300}px)`,
+                        opacity: 1 - (exitProgress - 0.15) / 0.85,
+                      }),
                     }}
-                  />
-                </svg>
-              </span>{' '}
-              Screen Time should have included.
-            </p>
+                  >
+                    <span className="text-sm font-bold text-white tracking-wide">
+                      100% FREE
+                    </span>
+                  </div>
+                </div>
 
-            <div className="w-full space-y-3 mb-8 bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-violet-100 lg:mr-4">
-              <Feature text="Block GIF searches in #images" />
-              <Feature text="Block spotlight internet & image search" />
-              <Feature text="Block album artwork in Spotify" />
-              <Feature text="Remove images from Apple Maps" />
-              <Feature text="Plus several more loopholes..." />
-            </div>
+                <h2
+                  className={`text-3xl xs:text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight text-center xs:text-left transition-all duration-500 ${
+                    isVisible && exitProgress === 0
+                      ? `translate-x-0 opacity-100`
+                      : !isVisible
+                        ? `-translate-x-24 opacity-0`
+                        : ``
+                  }`}
+                  style={{
+                    transitionDelay: isVisible && exitProgress === 0 ? `400ms` : `0ms`,
+                    ...(exitProgress > 0.15 && {
+                      transform: `translateX(${(-(exitProgress - 0.15) / 0.85) * 100}px)`,
+                      opacity: 1 - (exitProgress - 0.15) / 0.85,
+                    }),
+                  }}
+                >
+                  Gertrude for iPhone & iPad
+                </h2>
 
-            <div className="flex flex-col xs:flex-row items-center xs:items-start gap-4">
-              <FancyLink
-                type="link"
-                href="https://apps.apple.com/us/app/gertrude/id1672416108"
-                size="lg"
-                color="primary"
+                <div
+                  className={`flex items-center gap-3 mb-6 justify-center xs:justify-start w-full transition-all duration-500 ${
+                    isVisible && exitProgress === 0
+                      ? `translate-x-0 opacity-100`
+                      : !isVisible
+                        ? `translate-x-24 opacity-0`
+                        : ``
+                  }`}
+                  style={{
+                    transitionDelay: isVisible && exitProgress === 0 ? `600ms` : `0ms`,
+                    ...(exitProgress > 0.15 && {
+                      transform: `translateX(${((exitProgress - 0.15) / 0.85) * 100}px)`,
+                      opacity: 1 - (exitProgress - 0.15) / 0.85,
+                    }),
+                  }}
+                >
+                  <div className="flex items-center gap-0.5">
+                    {[...Array(5)].map((_, i) => (
+                      <StarIcon
+                        key={i}
+                        size={20}
+                        className="fill-amber-400 text-amber-400"
+                        strokeWidth={0}
+                      />
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-2 text-slate-700">
+                    <span className="text-xl font-bold">4.9</span>
+                    <span className="text-sm">App Store</span>
+                  </div>
+                </div>
+
+                <p
+                  className={`text-2xl text-slate-600 leading-relaxed mb-8 transition-all duration-500 ${
+                    isVisible && exitProgress === 0
+                      ? `translate-x-0 opacity-100`
+                      : !isVisible
+                        ? `-translate-x-24 opacity-0`
+                        : ``
+                  }`}
+                  style={{
+                    transitionDelay: isVisible && exitProgress === 0 ? `800ms` : `0ms`,
+                    ...(exitProgress > 0.15 && {
+                      transform: `translateX(${(-(exitProgress - 0.15) / 0.85) * 100}px)`,
+                      opacity: 1 - (exitProgress - 0.15) / 0.85,
+                    }),
+                  }}
+                >
+                  The{' '}
+                  <span className="relative inline-block">
+                    missing features
+                    <svg
+                      className="absolute bottom-0 left-0 w-full translate-y-1"
+                      height="6"
+                      viewBox="0 0 200 6"
+                      preserveAspectRatio="none"
+                    >
+                      <defs>
+                        <linearGradient id="ios-underline-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" style={{ stopColor: `#8b5cf6`, stopOpacity: 1 }} />
+                          <stop offset="100%" style={{ stopColor: `#d946ef`, stopOpacity: 1 }} />
+                        </linearGradient>
+                      </defs>
+                      <path
+                        d="M 0 3 Q 50 1, 100 3 T 200 3"
+                        stroke="url(#ios-underline-gradient)"
+                        strokeWidth="3"
+                        fill="none"
+                        strokeLinecap="butt"
+                        pathLength="1"
+                        strokeDasharray="1"
+                        strokeDashoffset={isVisible ? 0 : 1}
+                        style={{
+                          transition: 'stroke-dashoffset 0.3s ease-out',
+                          transitionDelay: isVisible ? '1400ms' : '0ms',
+                        }}
+                      />
+                    </svg>
+                  </span>{' '}
+                  Screen Time should have included.
+                </p>
+
+                <div
+                  className={`w-full space-y-3 mb-8 bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-violet-100 lg:mr-4 transition-all duration-500 ${
+                    isVisible && exitProgress === 0
+                      ? `translate-y-0 opacity-100`
+                      : !isVisible
+                        ? `translate-y-12 opacity-0`
+                        : ``
+                  }`}
+                  style={{
+                    transitionDelay: isVisible && exitProgress === 0 ? `1000ms` : `0ms`,
+                    ...(exitProgress > 0.15 && {
+                      transform: `translateY(${((exitProgress - 0.15) / 0.85) * 50}px)`,
+                      opacity: 1 - (exitProgress - 0.15) / 0.85,
+                    }),
+                  }}
+                >
+                  <Feature text="Block GIF searches in #images" />
+                  <Feature text="Block spotlight internet & image search" />
+                  <Feature text="Block album artwork in Spotify" />
+                  <Feature text="Remove images from Apple Maps" />
+                  <Feature text="Plus several more loopholes..." />
+                </div>
+
+                <div
+                  className={`flex flex-col xs:flex-row items-center xs:items-start gap-4 transition-all duration-500 ${
+                    isVisible && exitProgress === 0
+                      ? `translate-y-0 opacity-100`
+                      : !isVisible
+                        ? `translate-y-8 opacity-0`
+                        : ``
+                  }`}
+                  style={{
+                    transitionDelay: isVisible && exitProgress === 0 ? `1200ms` : `0ms`,
+                    ...(exitProgress > 0.15 && {
+                      transform: `translateY(${((exitProgress - 0.15) / 0.85) * 50}px)`,
+                      opacity: 1 - (exitProgress - 0.15) / 0.85,
+                    }),
+                  }}
+                >
+                  <FancyLink
+                    type="link"
+                    href="https://apps.apple.com/us/app/gertrude/id1672416108"
+                    size="lg"
+                    color="primary"
+                  >
+                    Download&nbsp;&rarr;
+                  </FancyLink>
+                  <FancyLink type="link" href="/ios" size="lg" color="secondary">
+                    Learn&nbsp;More&nbsp;
+                  </FancyLink>
+                </div>
+              </div>
+
+              <div
+                className={`hidden lg:block lg:order-2 lg:col-span-3 relative flex items-center justify-center h-[500px] transition-all duration-500 ${
+                  isVisible && exitProgress === 0
+                    ? `translate-x-0 opacity-100`
+                    : !isVisible
+                      ? `translate-x-24 opacity-0`
+                      : ``
+                }`}
+                style={{
+                  transitionDelay: isVisible && exitProgress === 0 ? `600ms` : `0ms`,
+                  ...(exitProgress > 0.15 && {
+                    transform: `translateX(${((exitProgress - 0.15) / 0.85) * 150}px)`,
+                    opacity: 1 - (exitProgress - 0.15) / 0.85,
+                  }),
+                }}
               >
-                Download&nbsp;&rarr;
-              </FancyLink>
-              <FancyLink type="link" href="/ios" size="lg" color="secondary">
-                Learn&nbsp;More&nbsp;
-              </FancyLink>
-            </div>
-          </div>
-
-          <div className="hidden lg:block lg:order-2 lg:col-span-3 relative flex items-center justify-center h-[500px]">
-            <div className="-ml-12 -mt-8">
-              <Phone className="shadow-2xl scale-[0.85]" labelStatus="hidden">
-                <BlockedGifSearchScreen isVisible={isVisible} />
-              </Phone>
+                <div className="-ml-12 -mt-8">
+                  <Phone className="shadow-2xl scale-[0.85]" labelStatus="hidden">
+                    <BlockedGifSearchScreen isVisible={isVisible} />
+                  </Phone>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 };
 
@@ -173,7 +302,7 @@ interface BlockedGifSearchScreenProps {
 
 const BlockedGifSearchScreen: React.FC<BlockedGifSearchScreenProps> = ({ isVisible }) => {
   const searchText = 'Bikini';
-  const baseDelay = 2500;
+  const baseDelay = 3700;
   const slideUpDelay = baseDelay;
   const typingStartDelay = baseDelay + 400;
   const typingSpeed = 120;
