@@ -12,6 +12,9 @@ site:
 admin:
 	@pnpm --filter admin start
 
+admin-new:
+	@pnpm --filter admin-new start
+
 hmr-docs:
   @watchexec --watch site/markdoc --exts .md "just hmr-comment"
 
@@ -34,6 +37,9 @@ clean:
 
 codegen: && lint-fix format
 	@cd dash/app && node ./scripts/codegen.js
+
+codegen-admin:
+	@cd shared/pairql && pnpm codegen
 
 nuke-node-modules:
   @pnpm store prune

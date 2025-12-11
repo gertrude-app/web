@@ -1,0 +1,17 @@
+{
+  "name": "@shared/pairql",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "codegen": "node --import tsx ./src/codegen.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "node-fetch": "3.3.0",
+    "tsx": "^4.7.0",
+    "typescript": "5.8.3",
+    "x-exec": "^1.2.0"
+  }
+}
