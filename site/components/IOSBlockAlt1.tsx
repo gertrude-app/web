@@ -98,7 +98,7 @@ const IOSBlockAlt1: React.FC = () => {
           }}
         >
           <div
-            className="max-w-2xl mx-4 pointer-events-auto"
+            className="max-w-2xl mx-4 pointer-events-auto relative"
             style={{
               transform: `translateY(${Math.max(0, 1 - (exitProgress - 0.22) / 0.1) * 60}px)`,
             }}
