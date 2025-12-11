@@ -1,8 +1,8 @@
 'use client';
 
-import { LockKeyholeIcon, PodcastIcon } from 'lucide-react';
+import { LockKeyholeIcon, PauseIcon, PodcastIcon, SkipBackIcon, SkipForwardIcon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
-import FancyLink from './FancyLink';
+import Phone from './super-scroller-illustration/Phone';
 
 const PodcastsBlock: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -15,7 +15,7 @@ const PodcastsBlock: React.FC = () => {
           setIsVisible(true);
         }
       },
-      { threshold: 0.5 },
+      { threshold: 0.3 },
     );
 
     if (sectionRef.current) {
@@ -52,20 +52,36 @@ const PodcastsBlock: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-2 items-center">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
           <div
-            className={`relative flex items-center justify-center ${isVisible ? `scale-100 opacity-100` : `scale-90 opacity-0`}`}
+            className={`relative flex items-center justify-center h-[500px] ${isVisible ? `opacity-100` : `opacity-0`}`}
             style={{
-              transition: `all 0.8s cubic-bezier(0.2, 1.4, 0.5, 1)`,
-              transitionDelay: isVisible ? `400ms` : `0ms`,
+              transition: `opacity 0.6s ease-out`,
+              transitionDelay: isVisible ? `200ms` : `0ms`,
             }}
           >
-            <div className="absolute inset-0 bg-white/20 rounded-full blur-3xl" />
-            <img
-              src="/docs/images/gertrude-am-radio.png"
-              alt="Gertrude AM Radio"
-              className="relative w-80 h-auto drop-shadow-2xl rounded-3xl"
-            />
+            <div
+              className={`absolute left-12 top-12 ${isVisible ? `translate-x-0 translate-y-0` : `-translate-x-12 translate-y-8`}`}
+              style={{
+                transition: `transform 0.8s cubic-bezier(0.2, 1.2, 0.4, 1)`,
+                transitionDelay: isVisible ? `400ms` : `0ms`,
+              }}
+            >
+              <Tablet>
+                <PodcastPlayerScreen />
+              </Tablet>
+            </div>
+            <div
+              className={`absolute -right-16 -bottom-44 z-10 ${isVisible ? `translate-x-0 translate-y-0` : `translate-x-12 translate-y-8`}`}
+              style={{
+                transition: `transform 0.8s cubic-bezier(0.2, 1.2, 0.4, 1)`,
+                transitionDelay: isVisible ? `600ms` : `0ms`,
+              }}
+            >
+              <Phone className="shadow-2xl scale-[0.47]" labelStatus="hidden">
+                <PincodeScreen isVisible={isVisible} />
+              </Phone>
+            </div>
           </div>
 
           <div className="space-y-6">
@@ -104,6 +120,93 @@ const PodcastsBlock: React.FC = () => {
         </div>
       </div>
     </section>
+  );
+};
+
+const Tablet: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className="w-[320px] h-[420px] rounded-[32px] bg-zinc-900 p-3 relative shadow-2xl">
+    <div className="w-2.5 h-2.5 rounded-full bg-zinc-800 absolute left-1/2 -translate-x-1/2 top-3.5 z-10" />
+    <div className="w-full h-full overflow-hidden rounded-[20px] bg-black">
+      {children}
+    </div>
+  </div>
+);
+
+const PodcastPlayerScreen: React.FC = () => (
+  <div className="w-full h-full bg-[rgb(237,233,254)] flex flex-col items-center justify-center p-6">
+    <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-violet-400 to-fuchsia-500 shadow-xl mb-4 flex items-center justify-center">
+      <span className="text-5xl">🎙️</span>
+    </div>
+    <h3 className="text-slate-800 font-bold text-lg mb-1">Story Pirates</h3>
+    <p className="text-slate-500 text-sm mb-4">The Super Weird Episode</p>
+    <div className="w-full max-w-[280px] mb-4">
+      <div className="h-1 bg-slate-300 rounded-full overflow-hidden">
+        <div className="h-full w-1/3 bg-violet-500 rounded-full" />
+      </div>
+      <div className="flex justify-between text-slate-400 text-xs mt-1">
+        <span>12:34</span>
+        <span>-24:18</span>
+      </div>
+    </div>
+    <div className="flex items-center gap-6">
+      <SkipBackIcon className="w-7 h-7 text-slate-400" />
+      <div className="w-14 h-14 rounded-full bg-violet-500 flex items-center justify-center">
+        <PauseIcon className="w-7 h-7 text-white fill-white" />
+      </div>
+      <SkipForwardIcon className="w-7 h-7 text-slate-400" />
+    </div>
+  </div>
+);
+
+interface PincodeScreenProps {
+  isVisible: boolean;
+}
+
+const PincodeScreen: React.FC<PincodeScreenProps> = ({ isVisible }) => {
+  const digits = [1, 2, 3, 4, 5, 6];
+  const filledCount = 4;
+
+  return (
+    <div className="w-full h-full bg-[rgb(237,233,254)] flex flex-col">
+      <div className="h-[17%] flex items-center justify-center">
+        <p className="text-slate-500 text-sm">Search Podcasts</p>
+      </div>
+      <div className="h-[83%] bg-gradient-to-b from-slate-800 to-slate-900 rounded-t-3xl flex flex-col items-center justify-center p-6">
+        <div className="w-12 h-1 bg-slate-600 rounded-full mb-6" />
+        <h3 className="text-white font-semibold text-2xl mb-8">Enter PIN</h3>
+        <div className="flex gap-3 mb-8">
+          {digits.map((_, i) => (
+            <div
+              key={i}
+              className={`w-4 h-4 rounded-full border-2 transition-all duration-300 ${
+                i < filledCount
+                  ? `bg-violet-500 border-violet-500`
+                  : `border-slate-500`
+              }`}
+              style={{
+                transitionDelay: isVisible ? `${1000 + i * 150}ms` : `0ms`,
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? `scale(1)` : `scale(0.5)`,
+              }}
+            />
+          ))}
+        </div>
+        <div className="grid grid-cols-3 gap-4">
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, null, 0, null].map((num, i) => (
+            <div
+              key={i}
+              className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-medium ${
+                num === null
+                  ? ``
+                  : `bg-violet-900 text-white active:bg-violet-800`
+              }`}
+            >
+              {num}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 
