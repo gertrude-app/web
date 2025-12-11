@@ -2,11 +2,13 @@
 
 import {
   CalendarClockIcon,
+  Clock4Icon,
   LockIcon,
-  MonitorIcon,
+  MonitorDot,
   RocketIcon,
   ShieldCheckIcon,
   SmartphoneIcon,
+  TimerResetIcon,
 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import FancyLink from './FancyLink';
@@ -60,7 +62,7 @@ const Variation1: React.FC = () => {
               delay={isVisible ? 0 : 0}
             />
             <FeatureCard
-              icon={MonitorIcon}
+              icon={MonitorDot}
               title="Full Monitoring"
               description="Screenshot capture and keystroke logging. See exactly what they're doing, on your schedule."
               delay={isVisible ? 200 : 0}
@@ -319,19 +321,19 @@ const Variation2: React.FC = () => {
               }}
             >
               <FeatureCardAlt
-                icon={LockIcon}
+                icon={ShieldCheckIcon}
                 title="Filter"
                 description="Everything is blocked. Unlock only what you approve."
                 delay={isVisible ? 0 : 0}
               />
               <FeatureCardAlt
-                icon={MonitorIcon}
+                icon={MonitorDot}
                 title="Record"
                 description="Capture screenshots and typing for full transparency."
                 delay={isVisible ? 150 : 0}
               />
               <FeatureCardAlt
-                icon={CalendarClockIcon}
+                icon={Clock4Icon}
                 title="Schedule"
                 description="Allow apps and websites on custom timeframes."
                 delay={isVisible ? 300 : 0}
@@ -449,7 +451,7 @@ const Variation3: React.FC = () => {
                   delay={isVisible ? 0 : 0}
                 />
                 <FeatureListItem
-                  icon={MonitorIcon}
+                  icon={MonitorDot}
                   title="Full Monitoring"
                   description="Screenshots and keystroke logs show exactly what they do"
                   delay={isVisible ? 150 : 0}
