@@ -22,7 +22,7 @@ const reviews = [
   },
   {
     title: `An absolute blessing`,
-    text: `An absolute masterpiece and likely the greatest blessing an app has had on our lives. Thank you again.`,
+    text: `Likely the greatest blessing an app has had on our lives.`,
     author: `Austin944`,
     date: `Sep 25, 2025`,
     rating: 5,
@@ -41,7 +41,7 @@ const IOSBlockAlt1: React.FC = () => {
   const progressPerReview = reviewRange / reviews.length;
   const currentReview = Math.min(
     reviews.length - 1,
-    Math.max(0, Math.floor((exitProgress - reviewStartProgress) / progressPerReview))
+    Math.max(0, Math.floor((exitProgress - reviewStartProgress) / progressPerReview)),
   );
 
   useEffect(() => {
@@ -86,7 +86,9 @@ const IOSBlockAlt1: React.FC = () => {
       >
         <div
           className="absolute inset-0 bg-gradient-to-b from-fuchsia-900 to-violet-950 pointer-events-none z-10"
-          style={{ opacity: Math.min(1, Math.max(0, (exitProgress - 0.18) / 0.1)) * 0.95 }}
+          style={{
+            opacity: Math.min(1, Math.max(0, (exitProgress - 0.18) / 0.1)) * 0.95,
+          }}
         />
 
         <div
@@ -101,24 +103,29 @@ const IOSBlockAlt1: React.FC = () => {
               transform: `translateY(${Math.max(0, 1 - (exitProgress - 0.22) / 0.1) * 60}px)`,
             }}
           >
-            <div className="text-center mb-12">
-              <a
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-fuchsia-300 text-sm font-semibold tracking-wider uppercase hover:text-fuchsia-200 transition-colors duration-200"
+            <div className="relative overflow-hidden w-screen left-1/2 -translate-x-1/2">
+              <div
+                className="flex transition-transform duration-500 ease-out"
+                style={{ transform: `translateX(-${currentReview * 100}%)` }}
               >
-                Real App Store Reviews
-                <ExternalLinkIcon size={14} />
-              </a>
-            </div>
-
-            <div className="relative overflow-hidden -mx-4 w-screen left-1/2 -translate-x-1/2">
-              <div className="flex transition-transform duration-500 ease-out" style={{ transform: `translateX(-${currentReview * 100}%)` }}>
                 {reviews.map((review, i) => (
                   <div key={i} className="w-screen flex-shrink-0 flex justify-center">
                     <div className="max-w-2xl text-center px-8">
-                      <div className="flex items-center justify-center gap-1 mb-4">
+                      <div className="mb-12">
+                        <a
+                          href="#"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-fuchsia-300/60 text-sm font-semibold tracking-wider uppercase hover:text-fuchsia-200 transition-colors duration-200"
+                        >
+                          More App Store Reviews
+                          <ExternalLinkIcon size={14} />
+                        </a>
+                      </div>
+                      <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 uppercase">
+                        {review.title}
+                      </h3>
+                      <div className="flex items-center justify-center gap-1 mb-8">
                         {[...Array(review.rating)].map((_, j) => (
                           <StarIcon
                             key={j}
@@ -128,15 +135,11 @@ const IOSBlockAlt1: React.FC = () => {
                           />
                         ))}
                       </div>
-                      <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                        {review.title}
-                      </h3>
-                      <p className="text-fuchsia-100 text-2xl md:text-3xl leading-relaxed mb-16 font-serif">
-                        "{review.text}"
+                      <p className="text-fuchsia-100 text-3xl md:text-4xl leading-relaxed mb-16 font-serif">
+                        &ldquo;{review.text}&rdquo;
                       </p>
-                      <p className="text-fuchsia-300 text-base">
-                        — {review.author}
-                        <span className="text-fuchsia-300/40">, {review.date}</span>
+                      <p className="text-fuchsia-300/60 text-base">
+                        {review.date} — {review.author}
                       </p>
                     </div>
                   </div>
@@ -155,9 +158,7 @@ const IOSBlockAlt1: React.FC = () => {
               <div
                 key={i}
                 className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                  i === currentReview
-                    ? `bg-fuchsia-300`
-                    : `bg-fuchsia-300/30`
+                  i === currentReview ? `bg-fuchsia-300` : `bg-fuchsia-300/30`
                 }`}
               />
             ))}
@@ -208,7 +209,7 @@ const IOSBlockAlt1: React.FC = () => {
                     style={{
                       transition: `transform 0.25s cubic-bezier(0.2, 1.4, 0.5, 1)`,
                       transitionDelay: isVisible && exitProgress === 0 ? `1000ms` : `0ms`,
-                      animation: isVisible ? `waggle 0.5s ease-in-out 1.35s` : 'none',
+                      animation: isVisible ? `waggle 0.5s ease-in-out 1.35s` : `none`,
                       ...(exitProgress > 0.08 && {
                         transform: `translateX(${(-(exitProgress - 0.08) / 0.25) * 300}px)`,
                         opacity: 1 - (exitProgress - 0.08) / 0.25,
@@ -288,7 +289,7 @@ const IOSBlockAlt1: React.FC = () => {
                     }),
                   }}
                 >
-                  The{' '}
+                  The{` `}
                   <span className="relative inline-block">
                     missing features
                     <svg
@@ -298,9 +299,21 @@ const IOSBlockAlt1: React.FC = () => {
                       preserveAspectRatio="none"
                     >
                       <defs>
-                        <linearGradient id="ios-underline-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                          <stop offset="0%" style={{ stopColor: `#8b5cf6`, stopOpacity: 1 }} />
-                          <stop offset="100%" style={{ stopColor: `#d946ef`, stopOpacity: 1 }} />
+                        <linearGradient
+                          id="ios-underline-gradient"
+                          x1="0%"
+                          y1="0%"
+                          x2="100%"
+                          y2="0%"
+                        >
+                          <stop
+                            offset="0%"
+                            style={{ stopColor: `#8b5cf6`, stopOpacity: 1 }}
+                          />
+                          <stop
+                            offset="100%"
+                            style={{ stopColor: `#d946ef`, stopOpacity: 1 }}
+                          />
                         </linearGradient>
                       </defs>
                       <path
@@ -313,12 +326,13 @@ const IOSBlockAlt1: React.FC = () => {
                         strokeDasharray="1"
                         strokeDashoffset={isVisible ? 0 : 1}
                         style={{
-                          transition: 'stroke-dashoffset 0.3s ease-out',
-                          transitionDelay: isVisible ? '1400ms' : '0ms',
+                          transition: `stroke-dashoffset 0.3s ease-out`,
+                          transitionDelay: isVisible ? `1400ms` : `0ms`,
                         }}
                       />
                     </svg>
-                  </span>{' '}
+                  </span>
+                  {` `}
                   Screen Time should have included.
                 </p>
 
@@ -410,8 +424,8 @@ interface BlockedGifSearchScreenProps {
 }
 
 const BlockedGifSearchScreen: React.FC<BlockedGifSearchScreenProps> = ({ isVisible }) => {
-  const searchText = 'Bikini';
-  const baseDelay = 3700;
+  const searchText = `Bikini`;
+  const baseDelay = 2500;
   const slideUpDelay = baseDelay;
   const typingStartDelay = baseDelay + 400;
   const typingSpeed = 120;
@@ -429,25 +443,37 @@ const BlockedGifSearchScreen: React.FC<BlockedGifSearchScreenProps> = ({ isVisib
       </div>
       <div className="h-16 shrink-0" />
       <div
-        className={`flex-1 bg-white flex flex-col ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}
+        className={`flex-1 bg-white flex flex-col ${isVisible ? `translate-y-0` : `translate-y-full`}`}
         style={{
-          transition: 'transform 0.5s cubic-bezier(0.22, 1.1, 0.36, 1)',
-          transitionDelay: isVisible ? `${slideUpDelay}ms` : '0ms',
+          transition: `transform 0.5s cubic-bezier(0.22, 1.1, 0.36, 1)`,
+          transitionDelay: isVisible ? `${slideUpDelay}ms` : `0ms`,
         }}
       >
         <div className="bg-gray-100 px-3 py-2 flex items-center gap-2">
           <div className="flex-1 bg-white rounded-lg px-3 py-2 flex items-center gap-2">
-            <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <svg
+              className="w-4 h-4 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
             </svg>
             <span className="text-gray-800 text-sm font-medium">
-              {searchText.split('').map((char, i) => (
+              {searchText.split(``).map((char, i) => (
                 <span
                   key={i}
-                  className={`inline-block ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+                  className={`inline-block ${isVisible ? `opacity-100` : `opacity-0`}`}
                   style={{
-                    transition: 'opacity 0.1s ease-out',
-                    transitionDelay: isVisible ? `${typingStartDelay + i * typingSpeed}ms` : '0ms',
+                    transition: `opacity 0.1s ease-out`,
+                    transitionDelay: isVisible
+                      ? `${typingStartDelay + i * typingSpeed}ms`
+                      : `0ms`,
                   }}
                 >
                   {char}
@@ -462,10 +488,12 @@ const BlockedGifSearchScreen: React.FC<BlockedGifSearchScreenProps> = ({ isVisib
             {[...Array(18)].map((_, i) => (
               <div
                 key={i}
-                className={`aspect-square bg-gradient-to-br from-gray-200 to-gray-300 rounded relative flex items-center justify-center ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}
+                className={`aspect-square bg-gradient-to-br from-gray-200 to-gray-300 rounded relative flex items-center justify-center ${isVisible ? `opacity-100 scale-100` : `opacity-0 scale-75`}`}
                 style={{
-                  transition: 'opacity 0.2s ease-out, transform 0.2s ease-out',
-                  transitionDelay: isVisible ? `${squaresStartDelay + i * squareStagger}ms` : '0ms',
+                  transition: `opacity 0.2s ease-out, transform 0.2s ease-out`,
+                  transitionDelay: isVisible
+                    ? `${squaresStartDelay + i * squareStagger}ms`
+                    : `0ms`,
                 }}
               >
                 <svg

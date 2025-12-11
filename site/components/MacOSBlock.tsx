@@ -50,19 +50,19 @@ const MacOSBlock: React.FC = () => {
   }, []);
 
   return (
-    <div ref={wrapperRef} className="h-[200vh] relative">
+    <div ref={wrapperRef} className="h-[280vh] relative">
       <section
         ref={stickyRef}
         className="sticky top-0 min-h-screen bg-gradient-to-b from-white to-slate-50 overflow-hidden"
       >
         <div
           className="absolute inset-0 bg-gradient-to-b from-violet-950 to-black pointer-events-none z-10"
-          style={{ opacity: Math.max(0, (exitProgress - 0.25) / 0.75) * 0.9 }}
+          style={{ opacity: Math.max(0, (exitProgress - 0.45) / 0.55) * 0.9 }}
         />
         <div
           className="min-h-screen bg-slate-900 px-6 sm:px-12 md:px-20 pt-16 sm:pt-[15vh] pb-16 relative overflow-hidden"
           style={{
-            filter: `blur(${Math.max(0, (exitProgress - 0.25) / 0.75) * 8}px)`,
+            filter: `blur(${Math.max(0, (exitProgress - 0.45) / 0.55) * 8}px)`,
           }}
         >
           <div className="[background:radial-gradient(#a78bfa44,transparent_70%)] w-176 h-176 absolute -right-80 -top-80" />
@@ -77,11 +77,11 @@ const MacOSBlock: React.FC = () => {
                   : `opacity-30 sm:opacity-20`
             }`}
             style={
-              exitProgress > 0.15
+              exitProgress > 0.35
                 ? {
                     opacity:
                       (window.innerWidth < 640 ? 0.3 : 0.2) *
-                      (1 - (exitProgress - 0.15) / 0.85),
+                      (1 - (exitProgress - 0.35) / 0.65),
                   }
                 : undefined
             }
@@ -104,9 +104,9 @@ const MacOSBlock: React.FC = () => {
                 style={{
                   transition: `transform 0.25s cubic-bezier(0.2, 1.4, 0.5, 1), opacity 0.25s ease-out`,
                   transitionDelay: isVisible && exitProgress === 0 ? `200ms` : `0ms`,
-                  ...(exitProgress > 0.15 && {
-                    transform: `translateX(${((exitProgress - 0.15) / 0.85) * 500}px)`,
-                    opacity: 1 - (exitProgress - 0.15) / 0.85,
+                  ...(exitProgress > 0.35 && {
+                    transform: `translateX(${((exitProgress - 0.35) / 0.65) * 500}px)`,
+                    opacity: 1 - (exitProgress - 0.35) / 0.65,
                   }),
                 }}
               >
@@ -124,9 +124,9 @@ const MacOSBlock: React.FC = () => {
                 }`}
                 style={{
                   transitionDelay: isVisible && exitProgress === 0 ? `600ms` : `0ms`,
-                  ...(exitProgress > 0.15 && {
-                    transform: `translateX(${(-(exitProgress - 0.15) / 0.85) * 100}px)`,
-                    opacity: 1 - (exitProgress - 0.15) / 0.85,
+                  ...(exitProgress > 0.35 && {
+                    transform: `translateX(${(-(exitProgress - 0.35) / 0.65) * 100}px)`,
+                    opacity: 1 - (exitProgress - 0.35) / 0.65,
                   }),
                 }}
               >
@@ -186,9 +186,9 @@ const MacOSBlock: React.FC = () => {
                 }`}
                 style={{
                   transitionDelay: isVisible && exitProgress === 0 ? `1000ms` : `0ms`,
-                  ...(exitProgress > 0.15 && {
-                    transform: `translateX(${((exitProgress - 0.15) / 0.85) * 100}px)`,
-                    opacity: 1 - (exitProgress - 0.15) / 0.85,
+                  ...(exitProgress > 0.35 && {
+                    transform: `translateX(${((exitProgress - 0.35) / 0.65) * 100}px)`,
+                    opacity: 1 - (exitProgress - 0.35) / 0.65,
                   }),
                 }}
               >
@@ -207,9 +207,9 @@ const MacOSBlock: React.FC = () => {
               }`}
               style={{
                 transitionDelay: isVisible && exitProgress === 0 ? `1400ms` : `0ms`,
-                ...(exitProgress > 0.15 && {
-                  transform: `translateX(${(-(exitProgress - 0.15) / 0.85) * 100}px)`,
-                  opacity: 1 - (exitProgress - 0.15) / 0.85,
+                ...(exitProgress > 0.35 && {
+                  transform: `translateX(${(-(exitProgress - 0.35) / 0.65) * 100}px)`,
+                  opacity: 1 - (exitProgress - 0.35) / 0.65,
                 }),
               }}
             >
@@ -249,8 +249,8 @@ const MacOSBlock: React.FC = () => {
               }`}
               style={{
                 transitionDelay: isVisible && exitProgress === 0 ? `1800ms` : `0ms`,
-                ...(exitProgress > 0.15 && {
-                  opacity: 1 - (exitProgress - 0.15) / 0.85,
+                ...(exitProgress > 0.35 && {
+                  opacity: 1 - (exitProgress - 0.35) / 0.65,
                 }),
               }}
             >
