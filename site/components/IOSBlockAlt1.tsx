@@ -1,15 +1,46 @@
 'use client';
 
-import { StarIcon } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon, StarIcon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import FancyLink from './FancyLink';
 import Phone from './super-scroller-illustration/Phone';
 
+const reviews = [
+  {
+    title: `Exactly what I needed`,
+    text: `Screen Time has so many holes. This app fills them perfectly. My kids can't search for inappropriate GIFs anymore.`,
+    author: `ParentOfThree`,
+    rating: 5,
+  },
+  {
+    title: `Finally peace of mind`,
+    text: `I had no idea Spotlight could search the web until my kid found something awful. Gertrude blocks it completely.`,
+    author: `ProtectiveMom2024`,
+    rating: 5,
+  },
+  {
+    title: `Simple and effective`,
+    text: `Setup took 2 minutes. Now I don't have to worry about the #images loophole. Worth every penny... oh wait, it's free!`,
+    author: `TechDad`,
+    rating: 5,
+  },
+  {
+    title: `Game changer for families`,
+    text: `We tried everything else. This is the only app that actually blocks the stuff Apple missed.`,
+    author: `HomeschoolFamily`,
+    rating: 5,
+  },
+];
+
 const IOSBlockAlt1: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [exitProgress, setExitProgress] = useState(0);
+  const [currentReview, setCurrentReview] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
+
+  const nextReview = () => setCurrentReview((prev) => (prev + 1) % reviews.length);
+  const prevReview = () => setCurrentReview((prev) => (prev - 1 + reviews.length) % reviews.length);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -52,8 +83,92 @@ const IOSBlockAlt1: React.FC = () => {
       >
         <div
           className="absolute inset-0 bg-gradient-to-b from-fuchsia-900 to-violet-950 pointer-events-none z-10"
-          style={{ opacity: Math.max(0, (exitProgress - 0.25) / 0.75) * 0.9 }}
+          style={{ opacity: Math.max(0, (exitProgress - 0.25) / 0.75) * 0.95 }}
         />
+
+        <div
+          className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
+          style={{
+            opacity: Math.max(0, (exitProgress - 0.35) / 0.65),
+          }}
+        >
+          <div
+            className="max-w-2xl mx-4 pointer-events-auto"
+            style={{
+              transform: `translateY(${Math.max(0, 1 - (exitProgress - 0.35) / 0.3) * 60}px)`,
+            }}
+          >
+            <div className="text-center mb-8">
+              <p className="text-fuchsia-300 text-sm font-semibold tracking-wider uppercase mb-2">
+                What parents are saying
+              </p>
+              <div className="flex items-center justify-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <StarIcon
+                    key={i}
+                    size={24}
+                    className="fill-amber-400 text-amber-400"
+                    strokeWidth={0}
+                  />
+                ))}
+                <span className="ml-2 text-white font-bold text-lg">4.9</span>
+                <span className="text-fuchsia-300 ml-1">on App Store</span>
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 shadow-2xl">
+                <div className="flex items-center gap-1 mb-3">
+                  {[...Array(reviews[currentReview]?.rating ?? 5)].map((_, i) => (
+                    <StarIcon
+                      key={i}
+                      size={18}
+                      className="fill-amber-400 text-amber-400"
+                      strokeWidth={0}
+                    />
+                  ))}
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">
+                  {reviews[currentReview]?.title}
+                </h3>
+                <p className="text-fuchsia-100 text-lg leading-relaxed mb-4">
+                  "{reviews[currentReview]?.text}"
+                </p>
+                <p className="text-fuchsia-300 text-sm">
+                  — {reviews[currentReview]?.author}
+                </p>
+              </div>
+
+              <div className="flex items-center justify-center gap-4 mt-6">
+                <button
+                  onClick={prevReview}
+                  className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-all duration-200 hover:scale-110"
+                >
+                  <ChevronLeftIcon size={24} className="text-white" />
+                </button>
+                <div className="flex items-center gap-2">
+                  {reviews.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentReview(i)}
+                      className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                        i === currentReview
+                          ? `bg-white scale-125`
+                          : `bg-white/30 hover:bg-white/50`
+                      }`}
+                    />
+                  ))}
+                </div>
+                <button
+                  onClick={nextReview}
+                  className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-all duration-200 hover:scale-110"
+                >
+                  <ChevronRightIcon size={24} className="text-white" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div
           className="min-h-screen flex flex-col items-center justify-center lg:pr-16 xl:pr-24"
           style={{
