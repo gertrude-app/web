@@ -6,6 +6,15 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+@keyframes glow-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 12px rgba(253, 186, 116, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 32px rgba(253, 186, 116, 0.8));
+  }
+}
+
 /* tighten up lists inside of markdown docs */
 .prose :where(ul > li):not(:where([class~='not-prose'] *)) {
   font-size: 95%;

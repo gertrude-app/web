@@ -26,22 +26,28 @@ const PodcastsBlock: React.FC = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="bg-gradient-to-br from-violet-700 to-fuchsia-600 px-6 sm:px-12 md:px-20 py-24 md:py-32 relative overflow-hidden">
+    <section ref={sectionRef} className="bg-gradient-to-br from-violet-700 to-fuchsia-600 px-6 sm:px-12 md:px-20 py-24 md:py-32 relative overflow-hidden min-h-screen flex flex-col justify-center">
       <div className="[background:radial-gradient(#ffffff33,transparent_60%)] w-176 h-176 absolute -right-80 -top-80" />
       <div className="[background:radial-gradient(#ffffff22,transparent_70%)] w-176 h-176 absolute -left-80 -bottom-80" />
 
       <div className="max-w-6xl mx-auto relative">
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <PodcastIcon size={56} className="text-white" />
-            <h2 className="text-5xl xs:text-6xl md:text-7xl font-bold text-white">
-              Gertrude AM
+            <PodcastIcon size={56} className="text-orange-300 drop-shadow-[0_0_12px_rgba(253,186,116,0.5)]" />
+            <h2 className="text-5xl xs:text-6xl md:text-7xl font-bold">
+              <span className="bg-gradient-to-b from-white to-fuchsia-200 bg-clip-text text-transparent">Gertrude</span>
+              {` `}
+              <span className="text-orange-300 tracking-tight animate-[glow-pulse_3s_ease-in-out_infinite]">AM</span>
             </h2>
           </div>
-          <p className="text-2xl md:text-3xl text-fuchsia-100 font-medium mb-3">
-            Safe <span className="text-purple-950 font-bold">Podcasts</span> for Kids
+          <p className="text-2xl md:text-3xl font-medium mb-3">
+            <span className="text-white/90">Safe</span>
+            {` `}
+            <span className="bg-gradient-to-r from-orange-200 to-orange-400 bg-clip-text text-transparent font-bold">Podcasts</span>
+            {` `}
+            <span className="text-white/90">for Kids</span>
           </p>
-          <p className="text-lg text-white/80 max-w-2xl mx-auto">
+          <p className="text-lg text-fuchsia-100/90 max-w-2xl mx-auto">
             PIN-protected content control. Kids only listen to shows you approve.
           </p>
         </div>
