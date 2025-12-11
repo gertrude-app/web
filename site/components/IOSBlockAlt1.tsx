@@ -1,33 +1,30 @@
 'use client';
 
-import { ChevronLeftIcon, ChevronRightIcon, StarIcon } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon, ExternalLinkIcon, StarIcon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import FancyLink from './FancyLink';
 import Phone from './super-scroller-illustration/Phone';
 
 const reviews = [
   {
-    title: `Exactly what I needed`,
-    text: `Screen Time has so many holes. This app fills them perfectly. My kids can't search for inappropriate GIFs anymore.`,
-    author: `ParentOfThree`,
+    title: `THANK YOU`,
+    text: `Saved my young son from looking at porn through the maps app. You are a lifesaver.`,
+    author: `GratefulMom55`,
+    date: `Apr 25, 2025`,
     rating: 5,
   },
   {
-    title: `Finally peace of mind`,
-    text: `I had no idea Spotlight could search the web until my kid found something awful. Gertrude blocks it completely.`,
-    author: `ProtectiveMom2024`,
+    title: `GIF Blocker!`,
+    text: `Finally a way to block GIFS!!! Thank you, thank you, thank you!!!`,
+    author: `HAAS1988`,
+    date: `May 30, 2025`,
     rating: 5,
   },
   {
-    title: `Simple and effective`,
-    text: `Setup took 2 minutes. Now I don't have to worry about the #images loophole. Worth every penny... oh wait, it's free!`,
-    author: `TechDad`,
-    rating: 5,
-  },
-  {
-    title: `Game changer for families`,
-    text: `We tried everything else. This is the only app that actually blocks the stuff Apple missed.`,
-    author: `HomeschoolFamily`,
+    title: `An absolute blessing`,
+    text: `An absolute masterpiece and likely the greatest blessing an app has had on our lives. Thank you again.`,
+    author: `Austin944`,
+    date: `Sep 25, 2025`,
     rating: 5,
   },
 ];
@@ -39,8 +36,17 @@ const IOSBlockAlt1: React.FC = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
 
+  const safeCurrentReview = currentReview % reviews.length;
   const nextReview = () => setCurrentReview((prev) => (prev + 1) % reviews.length);
   const prevReview = () => setCurrentReview((prev) => (prev - 1 + reviews.length) % reviews.length);
+
+  useEffect(() => {
+    if (exitProgress < 0.4) return;
+    const interval = setInterval(() => {
+      setCurrentReview((prev) => (prev + 1) % reviews.length);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [exitProgress]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -76,103 +82,101 @@ const IOSBlockAlt1: React.FC = () => {
   }, []);
 
   return (
-    <div ref={wrapperRef} className="h-[200vh] relative">
+    <div ref={wrapperRef} className="h-[420vh] relative">
       <section
         ref={stickyRef}
         className="sticky top-0 min-h-screen bg-gradient-to-tl from-white via-white via-55% to-fuchsia-200 overflow-hidden"
       >
         <div
           className="absolute inset-0 bg-gradient-to-b from-fuchsia-900 to-violet-950 pointer-events-none z-10"
-          style={{ opacity: Math.max(0, (exitProgress - 0.25) / 0.75) * 0.95 }}
+          style={{ opacity: Math.min(1, Math.max(0, (exitProgress - 0.35) / 0.2)) * 0.95 }}
         />
 
         <div
           className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
           style={{
-            opacity: Math.max(0, (exitProgress - 0.35) / 0.65),
+            opacity: Math.min(1, Math.max(0, (exitProgress - 0.5) / 0.15)),
           }}
         >
           <div
             className="max-w-2xl mx-4 pointer-events-auto"
             style={{
-              transform: `translateY(${Math.max(0, 1 - (exitProgress - 0.35) / 0.3) * 60}px)`,
+              transform: `translateY(${Math.max(0, 1 - (exitProgress - 0.5) / 0.2) * 60}px)`,
             }}
           >
-            <div className="text-center mb-8">
-              <p className="text-fuchsia-300 text-sm font-semibold tracking-wider uppercase mb-2">
-                What parents are saying
-              </p>
-              <div className="flex items-center justify-center gap-1">
-                {[...Array(5)].map((_, i) => (
+            <div className="text-center mb-12">
+              <a
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-fuchsia-300 text-sm font-semibold tracking-wider uppercase hover:text-fuchsia-200 transition-colors duration-200"
+              >
+                Real App Store Reviews
+                <ExternalLinkIcon size={14} />
+              </a>
+            </div>
+
+            <div className="relative text-center">
+              <div className="flex items-center justify-center gap-1 mb-4">
+                {[...Array(reviews[safeCurrentReview]?.rating ?? 5)].map((_, i) => (
                   <StarIcon
                     key={i}
-                    size={24}
+                    size={22}
                     className="fill-amber-400 text-amber-400"
                     strokeWidth={0}
                   />
                 ))}
-                <span className="ml-2 text-white font-bold text-lg">4.9</span>
-                <span className="text-fuchsia-300 ml-1">on App Store</span>
               </div>
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                {reviews[safeCurrentReview]?.title}
+              </h3>
+              <p className="text-fuchsia-100 text-2xl md:text-3xl leading-relaxed mb-16 font-serif">
+                "{reviews[safeCurrentReview]?.text}"
+              </p>
+              <p className="text-fuchsia-300 text-base">
+                — {reviews[safeCurrentReview]?.author}
+                <span className="text-fuchsia-300/40">, {reviews[safeCurrentReview]?.date}</span>
+              </p>
             </div>
+          </div>
 
-            <div className="relative">
-              <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 border border-white/20 shadow-2xl">
-                <div className="flex items-center gap-1 mb-3">
-                  {[...Array(reviews[currentReview]?.rating ?? 5)].map((_, i) => (
-                    <StarIcon
-                      key={i}
-                      size={18}
-                      className="fill-amber-400 text-amber-400"
-                      strokeWidth={0}
-                    />
-                  ))}
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">
-                  {reviews[currentReview]?.title}
-                </h3>
-                <p className="text-fuchsia-100 text-lg leading-relaxed mb-4">
-                  "{reviews[currentReview]?.text}"
-                </p>
-                <p className="text-fuchsia-300 text-sm">
-                  — {reviews[currentReview]?.author}
-                </p>
-              </div>
-
-              <div className="flex items-center justify-center gap-4 mt-6">
+          <div
+            className="absolute bottom-8 left-0 right-0 flex items-center justify-center gap-6 pointer-events-auto"
+            style={{
+              opacity: Math.min(1, Math.max(0, (exitProgress - 0.5) / 0.15)),
+            }}
+          >
+            <button
+              onClick={prevReview}
+              className="text-fuchsia-300/50 hover:text-fuchsia-200 transition-colors duration-200"
+            >
+              <ChevronLeftIcon size={20} />
+            </button>
+            <div className="flex items-center gap-2">
+              {reviews.map((_, i) => (
                 <button
-                  onClick={prevReview}
-                  className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-all duration-200 hover:scale-110"
-                >
-                  <ChevronLeftIcon size={24} className="text-white" />
-                </button>
-                <div className="flex items-center gap-2">
-                  {reviews.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setCurrentReview(i)}
-                      className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                        i === currentReview
-                          ? `bg-white scale-125`
-                          : `bg-white/30 hover:bg-white/50`
-                      }`}
-                    />
-                  ))}
-                </div>
-                <button
-                  onClick={nextReview}
-                  className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-all duration-200 hover:scale-110"
-                >
-                  <ChevronRightIcon size={24} className="text-white" />
-                </button>
-              </div>
+                  key={i}
+                  onClick={() => setCurrentReview(i)}
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                    i === safeCurrentReview
+                      ? `bg-fuchsia-300`
+                      : `bg-fuchsia-300/30 hover:bg-fuchsia-300/50`
+                  }`}
+                />
+              ))}
             </div>
+            <button
+              onClick={nextReview}
+              className="text-fuchsia-300/50 hover:text-fuchsia-200 transition-colors duration-200"
+            >
+              <ChevronRightIcon size={20} />
+            </button>
           </div>
         </div>
         <div
           className="min-h-screen flex flex-col items-center justify-center lg:pr-16 xl:pr-24"
           style={{
-            filter: `blur(${Math.max(0, (exitProgress - 0.25) / 0.75) * 8}px)`,
+            filter: `blur(${Math.max(0, (exitProgress - 0.35) / 0.65) * 8}px)`,
           }}
         >
           <div className="max-w-6xl w-full py-12 xs:py-14 md:py-16 lg:py-10 relative">
@@ -183,9 +187,9 @@ const IOSBlockAlt1: React.FC = () => {
                 style={{
                   transition: `all 0.6s cubic-bezier(0.2, 1.4, 0.5, 1)`,
                   transitionDelay: isVisible && exitProgress === 0 ? `600ms` : `0ms`,
-                  ...(exitProgress > 0.15 && {
-                    transform: `translateY(${((exitProgress - 0.15) / 0.85) * 100}px)`,
-                    opacity: 1 - (exitProgress - 0.15) / 0.85,
+                  ...(exitProgress > 0.25 && {
+                    transform: `translateY(${((exitProgress - 0.25) / 0.75) * 100}px)`,
+                    opacity: 1 - (exitProgress - 0.25) / 0.75,
                   }),
                 }}
               >
@@ -215,9 +219,9 @@ const IOSBlockAlt1: React.FC = () => {
                       transition: `transform 0.25s cubic-bezier(0.2, 1.4, 0.5, 1)`,
                       transitionDelay: isVisible && exitProgress === 0 ? `1000ms` : `0ms`,
                       animation: isVisible ? `waggle 0.5s ease-in-out 1.35s` : 'none',
-                      ...(exitProgress > 0.15 && {
-                        transform: `translateX(${(-(exitProgress - 0.15) / 0.85) * 300}px)`,
-                        opacity: 1 - (exitProgress - 0.15) / 0.85,
+                      ...(exitProgress > 0.25 && {
+                        transform: `translateX(${(-(exitProgress - 0.25) / 0.75) * 300}px)`,
+                        opacity: 1 - (exitProgress - 0.25) / 0.75,
                       }),
                     }}
                   >
@@ -237,9 +241,9 @@ const IOSBlockAlt1: React.FC = () => {
                   }`}
                   style={{
                     transitionDelay: isVisible && exitProgress === 0 ? `400ms` : `0ms`,
-                    ...(exitProgress > 0.15 && {
-                      transform: `translateX(${(-(exitProgress - 0.15) / 0.85) * 100}px)`,
-                      opacity: 1 - (exitProgress - 0.15) / 0.85,
+                    ...(exitProgress > 0.25 && {
+                      transform: `translateX(${(-(exitProgress - 0.25) / 0.75) * 100}px)`,
+                      opacity: 1 - (exitProgress - 0.25) / 0.75,
                     }),
                   }}
                 >
@@ -256,9 +260,9 @@ const IOSBlockAlt1: React.FC = () => {
                   }`}
                   style={{
                     transitionDelay: isVisible && exitProgress === 0 ? `600ms` : `0ms`,
-                    ...(exitProgress > 0.15 && {
-                      transform: `translateX(${((exitProgress - 0.15) / 0.85) * 100}px)`,
-                      opacity: 1 - (exitProgress - 0.15) / 0.85,
+                    ...(exitProgress > 0.25 && {
+                      transform: `translateX(${((exitProgress - 0.25) / 0.75) * 100}px)`,
+                      opacity: 1 - (exitProgress - 0.25) / 0.75,
                     }),
                   }}
                 >
@@ -288,9 +292,9 @@ const IOSBlockAlt1: React.FC = () => {
                   }`}
                   style={{
                     transitionDelay: isVisible && exitProgress === 0 ? `800ms` : `0ms`,
-                    ...(exitProgress > 0.15 && {
-                      transform: `translateX(${(-(exitProgress - 0.15) / 0.85) * 100}px)`,
-                      opacity: 1 - (exitProgress - 0.15) / 0.85,
+                    ...(exitProgress > 0.25 && {
+                      transform: `translateX(${(-(exitProgress - 0.25) / 0.75) * 100}px)`,
+                      opacity: 1 - (exitProgress - 0.25) / 0.75,
                     }),
                   }}
                 >
@@ -338,9 +342,9 @@ const IOSBlockAlt1: React.FC = () => {
                   }`}
                   style={{
                     transitionDelay: isVisible && exitProgress === 0 ? `1000ms` : `0ms`,
-                    ...(exitProgress > 0.15 && {
-                      transform: `translateY(${((exitProgress - 0.15) / 0.85) * 50}px)`,
-                      opacity: 1 - (exitProgress - 0.15) / 0.85,
+                    ...(exitProgress > 0.25 && {
+                      transform: `translateY(${((exitProgress - 0.25) / 0.75) * 50}px)`,
+                      opacity: 1 - (exitProgress - 0.25) / 0.75,
                     }),
                   }}
                 >
@@ -361,9 +365,9 @@ const IOSBlockAlt1: React.FC = () => {
                   }`}
                   style={{
                     transitionDelay: isVisible && exitProgress === 0 ? `1200ms` : `0ms`,
-                    ...(exitProgress > 0.15 && {
-                      transform: `translateY(${((exitProgress - 0.15) / 0.85) * 50}px)`,
-                      opacity: 1 - (exitProgress - 0.15) / 0.85,
+                    ...(exitProgress > 0.25 && {
+                      transform: `translateY(${((exitProgress - 0.25) / 0.75) * 50}px)`,
+                      opacity: 1 - (exitProgress - 0.25) / 0.75,
                     }),
                   }}
                 >
@@ -391,9 +395,9 @@ const IOSBlockAlt1: React.FC = () => {
                 }`}
                 style={{
                   transitionDelay: isVisible && exitProgress === 0 ? `600ms` : `0ms`,
-                  ...(exitProgress > 0.15 && {
-                    transform: `translateX(${((exitProgress - 0.15) / 0.85) * 150}px)`,
-                    opacity: 1 - (exitProgress - 0.15) / 0.85,
+                  ...(exitProgress > 0.25 && {
+                    transform: `translateX(${((exitProgress - 0.25) / 0.75) * 150}px)`,
+                    opacity: 1 - (exitProgress - 0.25) / 0.75,
                   }),
                 }}
               >
