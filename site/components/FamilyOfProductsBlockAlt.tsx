@@ -53,7 +53,7 @@ const FamilyOfProductsBlockAlt: React.FC = () => {
   const scrollProgress = Math.min(scrollY / 600, 1);
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-white via-white via-55% to-fuchsia-200 px-6 sm:px-8 md:px-20 pt-16 sm:pt-20 md:pt-24 pb-16 sm:pb-20 md:pb-24 flex flex-col items-center justify-center relative overflow-hidden">
+    <section className="min-h-screen bg-gradient-to-br from-white via-white via-55% to-fuchsia-200 px-4 xs:px-6 sm:px-8 md:px-20 pt-4 xs:pt-16 sm:pt-20 md:pt-24 pb-12 xs:pb-16 sm:pb-20 md:pb-24 flex flex-col items-center justify-center relative overflow-hidden">
       <div
         className="absolute inset-0 bg-gradient-to-b from-white bg-fuchsia-600 pointer-events-none"
         style={{ opacity: scrollProgress * 0.7 }}
@@ -67,15 +67,15 @@ const FamilyOfProductsBlockAlt: React.FC = () => {
         </defs>
       </svg>
       <div
-        className="flex flex-col items-center"
+        className="flex flex-col items-center w-full"
         style={{
           transform: `scale(${1 + scrollProgress * 0.15})`,
           filter: `blur(${scrollProgress * 8}px)`,
           opacity: 1 - scrollProgress * 0.8,
         }}
       >
-        <div className="text-center max-w-5xl">
-          <h1 className="text-5xl xs:text-6xl sm:text-7xl font-bold text-slate-800 !leading-[1.15em]">
+        <div className="text-center w-full pt-4 xs:pt-0">
+          <h1 className="text-4xl xs:text-5xl sm:text-7xl font-bold text-slate-800 !leading-[1.15em]">
             <span className="block lg:inline">Tools for{` `}</span>
             <span className="inline-block bg-gradient-to-r from-purple-600 to-fuchsia-500 bg-clip-text text-transparent">
               {displayedText}
@@ -84,7 +84,7 @@ const FamilyOfProductsBlockAlt: React.FC = () => {
           </h1>
         </div>
 
-        <div className="mt-16 md:mt-20 grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12 w-full max-w-4xl">
+        <div className="mt-12 xs:mt-16 md:mt-20 grid grid-cols-1 sm:grid-cols-3 gap-6 xs:gap-8 md:gap-12 w-full max-w-4xl justify-items-center sm:justify-items-stretch">
           <ProductCard
             icon={TabletSmartphoneIcon}
             label="iPhone & iPad"
@@ -123,21 +123,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
   delay,
 }) => (
   <div
-    className="flex flex-col items-center text-center group animate-fadeIn opacity-0"
+    className="flex flex-row sm:flex-col items-center sm:text-center group animate-fadeIn opacity-0 gap-4 sm:gap-0"
     style={{ animationDelay: `${delay}ms`, animationFillMode: `forwards` }}
   >
-    <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-8 mb-6 transition-all duration-300 group-hover:scale-105 border border-fuchsia-200 group-hover:border-fuchsia-400 shadow-lg shadow-fuchsia-100 group-hover:shadow-xl group-hover:shadow-fuchsia-200">
+    <div className="relative shrink-0 bg-white/80 backdrop-blur-sm rounded-2xl xs:rounded-3xl p-4 xs:p-6 sm:p-8 sm:mb-6 transition-all duration-300 group-hover:scale-105 border border-fuchsia-200 group-hover:border-fuchsia-400 shadow-lg shadow-fuchsia-100 group-hover:shadow-xl group-hover:shadow-fuchsia-200">
       <Icon
-        size={64}
-        className="[&_path]:stroke-[url(#icon-gradient-alt)] [&_rect]:stroke-[url(#icon-gradient-alt)] [&_line]:stroke-[url(#icon-gradient-alt)] [&_circle]:stroke-[url(#icon-gradient-alt)] [&_circle]:fill-[url(#icon-gradient-alt)] transition-transform duration-300 group-hover:scale-110"
+        className="size-10 xs:size-12 sm:size-16 [&_path]:stroke-[url(#icon-gradient-alt)] [&_rect]:stroke-[url(#icon-gradient-alt)] [&_line]:stroke-[url(#icon-gradient-alt)] [&_circle]:stroke-[url(#icon-gradient-alt)] [&_circle]:fill-[url(#icon-gradient-alt)] transition-transform duration-300 group-hover:scale-110"
       />
     </div>
-    <h3 className="text-2xl sm:text-3xl font-semibold text-slate-800 mb-2 transition-colors duration-300 group-hover:text-fuchsia-600">
-      {label}
-    </h3>
-    <p className="text-slate-500 text-sm sm:text-base leading-snug max-w-[200px] sm:max-w-none antialiased">
-      {description}
-    </p>
+    <div>
+      <h3 className="text-lg xs:text-xl sm:text-3xl font-semibold text-slate-800 mb-0.5 xs:mb-1 sm:mb-2 transition-colors duration-300 group-hover:text-fuchsia-600">
+        {label}
+      </h3>
+      <p className="text-slate-500 text-xs xs:text-sm sm:text-base leading-snug max-w-[200px] sm:max-w-none antialiased">
+        {description}
+      </p>
+    </div>
   </div>
 );
 
