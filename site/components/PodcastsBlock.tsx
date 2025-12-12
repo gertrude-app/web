@@ -16,7 +16,9 @@ import Phone from './super-scroller-illustration/Phone';
 
 const PodcastsBlock: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const [exitProgress, setExitProgress] = useState(0);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -25,32 +27,89 @@ const PodcastsBlock: React.FC = () => {
           setIsVisible(true);
         }
       },
-      { threshold: 0.3 },
+      { threshold: 0.5 },
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    if (stickyRef.current) {
+      observer.observe(stickyRef.current);
     }
 
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!wrapperRef.current) return;
+      const rect = wrapperRef.current.getBoundingClientRect();
+      const wrapperHeight = wrapperRef.current.offsetHeight;
+      const viewportHeight = window.innerHeight;
+      const scrollableDistance = wrapperHeight - viewportHeight;
+      const scrolled = -rect.top;
+      const progress = Math.max(0, Math.min(1, scrolled / scrollableDistance));
+      setExitProgress(progress);
+    };
+
+    window.addEventListener(`scroll`, handleScroll);
+    return () => window.removeEventListener(`scroll`, handleScroll);
+  }, []);
+
   return (
-    <section
-      ref={sectionRef}
-      className="bg-gradient-to-br from-violet-700 to-fuchsia-600 px-6 sm:px-12 md:px-10 lg:px-20 py-12 relative overflow-hidden min-h-screen flex flex-col"
-    >
-      <div className="[background:radial-gradient(#ffffff33,transparent_60%)] w-176 h-176 absolute -right-80 -top-80" />
-      <div className="[background:radial-gradient(#ffffff22,transparent_70%)] w-176 h-176 absolute -left-80 -bottom-80" />
+    <div ref={wrapperRef} className="h-[280vh] relative">
+      <section
+        ref={stickyRef}
+        className="sticky top-0 min-h-screen bg-gradient-to-br from-violet-700 to-fuchsia-600 overflow-hidden flex flex-col"
+      >
+        <div
+          className="absolute inset-0 bg-gradient-to-b from-fuchsia-100 to-fuchsia-300 pointer-events-none z-10"
+          style={{ opacity: Math.max(0, (exitProgress - 0.55) / 0.45) * 0.95 }}
+        />
+        <div
+          className="min-h-screen px-6 sm:px-12 md:px-10 lg:px-20 py-12 flex flex-col relative"
+          style={{
+            filter: `blur(${Math.max(0, (exitProgress - 0.55) / 0.45) * 8}px)`,
+          }}
+        >
+          <div className="[background:radial-gradient(#ffffff33,transparent_60%)] w-176 h-176 absolute -right-80 -top-80" />
+          <div className="[background:radial-gradient(#ffffff22,transparent_70%)] w-176 h-176 absolute -left-80 -bottom-80" />
 
       <div className="max-w-6xl mx-auto relative flex-1 flex flex-col justify-center">
         <div className="text-center mb-8 md:mb-16">
           <img
             src="/docs/images/gertrude-am-radio.png"
             alt="Radio"
-            className="mx-auto mb-6 w-32 rounded-2xl hidden md:block shadow-[0_8px_30px_rgba(0,0,0,0.4)]"
+            className={`mx-auto mb-6 w-32 rounded-2xl hidden md:block shadow-[0_8px_30px_rgba(0,0,0,0.4)] ${
+              isVisible && exitProgress === 0
+                ? `translate-y-0 opacity-100`
+                : !isVisible
+                  ? `-translate-y-8 opacity-0`
+                  : ``
+            }`}
+            style={{
+              transition: `transform 0.6s cubic-bezier(0.2, 1.2, 0.4, 1), opacity 0.6s ease-out`,
+              transitionDelay: isVisible && exitProgress === 0 ? `600ms` : `0ms`,
+              ...(exitProgress > 0.5 && {
+                transform: `translateY(${(-(exitProgress - 0.5) / 0.5) * 60}px)`,
+                opacity: 1 - (exitProgress - 0.5) / 0.5,
+              }),
+            }}
           />
-          <div className="flex items-center justify-center gap-3 mb-6">
+          <div
+            className={`flex items-center justify-center gap-3 mb-6 ${
+              isVisible && exitProgress === 0
+                ? `translate-x-0 opacity-100`
+                : !isVisible
+                  ? `-translate-x-16 opacity-0`
+                  : ``
+            }`}
+            style={{
+              transition: `transform 0.6s cubic-bezier(0.2, 1.2, 0.4, 1), opacity 0.6s ease-out`,
+              transitionDelay: isVisible && exitProgress === 0 ? `800ms` : `0ms`,
+              ...(exitProgress > 0.5 && {
+                transform: `translateX(${(-(exitProgress - 0.5) / 0.5) * 100}px)`,
+                opacity: 1 - (exitProgress - 0.5) / 0.5,
+              }),
+            }}
+          >
             <PodcastIcon
               size={56}
               className="text-orange-300 drop-shadow-[0_0_12px_rgba(253,186,116,0.5)]"
@@ -65,7 +124,23 @@ const PodcastsBlock: React.FC = () => {
               </span>
             </h2>
           </div>
-          <p className="text-2xl md:text-3xl font-medium mb-3">
+          <p
+            className={`text-2xl md:text-3xl font-medium mb-3 ${
+              isVisible && exitProgress === 0
+                ? `translate-x-0 opacity-100`
+                : !isVisible
+                  ? `translate-x-16 opacity-0`
+                  : ``
+            }`}
+            style={{
+              transition: `transform 0.6s cubic-bezier(0.2, 1.2, 0.4, 1), opacity 0.6s ease-out`,
+              transitionDelay: isVisible && exitProgress === 0 ? `1000ms` : `0ms`,
+              ...(exitProgress > 0.5 && {
+                transform: `translateX(${((exitProgress - 0.5) / 0.5) * 100}px)`,
+                opacity: 1 - (exitProgress - 0.5) / 0.5,
+              }),
+            }}
+          >
             <span className="text-white/90">A Safe</span>
             {` `}
             <span className="bg-gradient-to-r from-orange-200 to-orange-400 bg-clip-text text-transparent font-bold">
@@ -74,25 +149,55 @@ const PodcastsBlock: React.FC = () => {
             {` `}
             <span className="text-white/90">for Kids</span>
           </p>
-          <p className="text-lg text-fuchsia-100/90 max-w-2xl mx-auto leading-snug">
+          <p
+            className={`text-lg text-fuchsia-100/90 max-w-2xl mx-auto leading-snug ${
+              isVisible && exitProgress === 0
+                ? `translate-x-0 opacity-100`
+                : !isVisible
+                  ? `-translate-x-12 opacity-0`
+                  : ``
+            }`}
+            style={{
+              transition: `transform 0.6s cubic-bezier(0.2, 1.2, 0.4, 1), opacity 0.6s ease-out`,
+              transitionDelay: isVisible && exitProgress === 0 ? `1200ms` : `0ms`,
+              ...(exitProgress > 0.5 && {
+                transform: `translateX(${(-(exitProgress - 0.5) / 0.5) * 80}px)`,
+                opacity: 1 - (exitProgress - 0.5) / 0.5,
+              }),
+            }}
+          >
             PIN-protected content control. Kids only listen to shows you approve.
           </p>
         </div>
 
         <div className="grid md:grid-cols-[1fr_3fr] lg:grid-cols-[2fr_3fr] gap-12 md:gap-10 lg:gap-16 items-center">
           <div
-            className={`flex items-center justify-center mb-12 md:mb-0 ${isVisible ? `opacity-100` : `opacity-0`}`}
+            className={`flex items-center justify-center mb-12 md:mb-0 ${
+              isVisible && exitProgress === 0 ? `opacity-100` : !isVisible ? `opacity-0` : ``
+            }`}
             style={{
               transition: `opacity 0.6s ease-out`,
-              transitionDelay: isVisible ? `200ms` : `0ms`,
+              transitionDelay: isVisible && exitProgress === 0 ? `700ms` : `0ms`,
+              ...(exitProgress > 0.5 && {
+                opacity: 1 - (exitProgress - 0.5) / 0.5,
+              }),
             }}
           >
             <div className="relative">
               <div
-                className={`${isVisible ? `translate-x-0 translate-y-0` : `-translate-x-12 translate-y-8`}`}
+                className={`${
+                  isVisible && exitProgress === 0
+                    ? `translate-x-0 translate-y-0`
+                    : !isVisible
+                      ? `-translate-x-12 translate-y-8`
+                      : ``
+                }`}
                 style={{
                   transition: `transform 0.8s cubic-bezier(0.2, 1.2, 0.4, 1)`,
-                  transitionDelay: isVisible ? `400ms` : `0ms`,
+                  transitionDelay: isVisible && exitProgress === 0 ? `900ms` : `0ms`,
+                  ...(exitProgress > 0.5 && {
+                    transform: `translate(${(-(exitProgress - 0.5) / 0.5) * 80}px, ${((exitProgress - 0.5) / 0.5) * 40}px)`,
+                  }),
                 }}
               >
                 <Tablet>
@@ -100,10 +205,19 @@ const PodcastsBlock: React.FC = () => {
                 </Tablet>
               </div>
               <div
-                className={`absolute -right-24 -bottom-52 z-10 ${isVisible ? `translate-x-0 translate-y-0` : `translate-x-12 translate-y-8`}`}
+                className={`absolute -right-24 -bottom-52 z-10 ${
+                  isVisible && exitProgress === 0
+                    ? `translate-x-0 translate-y-0`
+                    : !isVisible
+                      ? `translate-x-12 translate-y-8`
+                      : ``
+                }`}
                 style={{
                   transition: `transform 0.8s cubic-bezier(0.2, 1.2, 0.4, 1)`,
-                  transitionDelay: isVisible ? `600ms` : `0ms`,
+                  transitionDelay: isVisible && exitProgress === 0 ? `1100ms` : `0ms`,
+                  ...(exitProgress > 0.5 && {
+                    transform: `translate(${((exitProgress - 0.5) / 0.5) * 80}px, ${((exitProgress - 0.5) / 0.5) * 60}px)`,
+                  }),
                 }}
               >
                 <Phone className="shadow-2xl scale-[0.47]" labelStatus="hidden">
@@ -113,25 +227,41 @@ const PodcastsBlock: React.FC = () => {
             </div>
           </div>
 
-          <div className="space-y-6">
+          <div
+            className={`space-y-6 ${
+              isVisible && exitProgress === 0
+                ? `translate-x-0 opacity-100`
+                : !isVisible
+                  ? `translate-x-16 opacity-0`
+                  : ``
+            }`}
+            style={{
+              transition: `transform 0.6s cubic-bezier(0.2, 1.2, 0.4, 1), opacity 0.6s ease-out`,
+              transitionDelay: isVisible && exitProgress === 0 ? `1300ms` : `0ms`,
+              ...(exitProgress > 0.5 && {
+                transform: `translateX(${((exitProgress - 0.5) / 0.5) * 100}px)`,
+                opacity: 1 - (exitProgress - 0.5) / 0.5,
+              }),
+            }}
+          >
             <FeatureCard
               icon={LockKeyholeIcon}
               title="Parents set PIN on first install"
               description="Searching and subscribing to new shows requires entering a parental PIN code."
-              delay={isVisible ? 0 : 0}
+              delay={isVisible ? 1400 : 0}
             />
             <FeatureCard
               icon={SearchXIcon}
               title="PIN required search or add shows"
               description="You pick exactly which podcasts your kids can listen to. No surprises, no limitations."
-              delay={isVisible ? 200 : 0}
+              delay={isVisible ? 1600 : 0}
             />
             <FeatureCard
               icon={HeadphonesIcon}
               title="Approved shows always available"
               description="Kids get
   a familiar podcast app experience, just without the ability to find bad stuff."
-              delay={isVisible ? 400 : 0}
+              delay={isVisible ? 1800 : 0}
             />
           </div>
         </div>
@@ -141,7 +271,21 @@ const PodcastsBlock: React.FC = () => {
         href="https://apps.apple.com/us/app/gertrude-am/id6738835146"
         target="_blank"
         rel="noopener noreferrer"
-        className="hidden md:flex flex-col items-center justify-center gap-1.5 my-8 md:mt-0 md:mb-24 text-white/50 text-sm hover:text-white/70 transition-colors antialiased"
+        className={`hidden md:flex flex-col items-center justify-center gap-1.5 my-8 md:mt-0 md:mb-24 text-white/50 text-sm hover:text-white/70 transition-colors antialiased ${
+          isVisible && exitProgress === 0
+            ? `translate-y-0 opacity-100`
+            : !isVisible
+              ? `translate-y-8 opacity-0`
+              : ``
+        }`}
+        style={{
+          transition: `transform 0.6s cubic-bezier(0.2, 1.2, 0.4, 1), opacity 0.6s ease-out`,
+          transitionDelay: isVisible && exitProgress === 0 ? `2000ms` : `0ms`,
+          ...(exitProgress > 0.5 && {
+            transform: `translateY(${((exitProgress - 0.5) / 0.5) * 60}px)`,
+            opacity: 1 - (exitProgress - 0.5) / 0.5,
+          }),
+        }}
       >
         <div className="flex items-center gap-1">
           {[...Array(5)].map((_, i) => (
@@ -154,7 +298,23 @@ const PodcastsBlock: React.FC = () => {
         </div>
       </a>
 
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+      <div
+        className={`flex flex-col sm:flex-row items-center justify-center gap-6 ${
+          isVisible && exitProgress === 0
+            ? `translate-y-0 opacity-100`
+            : !isVisible
+              ? `translate-y-12 opacity-0`
+              : ``
+        }`}
+        style={{
+          transition: `transform 0.6s cubic-bezier(0.2, 1.2, 0.4, 1), opacity 0.6s ease-out`,
+          transitionDelay: isVisible && exitProgress === 0 ? `2200ms` : `0ms`,
+          ...(exitProgress > 0.5 && {
+            transform: `translateY(${((exitProgress - 0.5) / 0.5) * 80}px)`,
+            opacity: 1 - (exitProgress - 0.5) / 0.5,
+          }),
+        }}
+      >
         <div className="flex items-center gap-4">
           <img
             src="/docs/images/gertrude-am-radio.png"
@@ -183,8 +343,10 @@ const PodcastsBlock: React.FC = () => {
           </p>
           <p className="text-white/70">Covers your entire Apple Family</p>
         </div>
+        </div>
       </div>
-    </section>
+      </section>
+    </div>
   );
 };
 
@@ -261,7 +423,7 @@ const PincodeScreen: React.FC<PincodeScreenProps> = ({ isVisible }) => {
 
   useEffect(() => {
     if (isVisible) {
-      const timer = setTimeout(() => setSheetVisible(true), 1500);
+      const timer = setTimeout(() => setSheetVisible(true), 2500);
       return () => clearTimeout(timer);
     }
   }, [isVisible]);
