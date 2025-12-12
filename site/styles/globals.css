@@ -8,10 +8,10 @@
 
 @keyframes glow-pulse {
   0%, 100% {
-    filter: drop-shadow(0 0 12px rgba(253, 186, 116, 0.3));
+    filter: drop-shadow(0 0 20px rgba(253, 186, 116, 0.6));
   }
   50% {
-    filter: drop-shadow(0 0 32px rgba(253, 186, 116, 0.8));
+    filter: drop-shadow(0 0 45px rgba(253, 186, 116, 1));
   }
 }
 
