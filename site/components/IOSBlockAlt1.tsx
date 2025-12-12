@@ -165,13 +165,13 @@ const IOSBlockAlt1: React.FC = () => {
           </div>
         </div>
         <div
-          className="min-h-screen flex flex-col items-center justify-center lg:pr-16 xl:pr-24"
+          className="min-h-screen flex flex-col items-center justify-center md+:pr-16 xl:pr-24"
           style={{
             filter: `blur(${Math.max(0, (exitProgress - 0.15) / 0.2) * 8}px)`,
           }}
         >
-          <div className="max-w-6xl w-full py-12 xs:py-14 md:py-16 lg:py-10 relative">
-            <div className="lg:hidden relative h-[140px] [@media(min-height:700px)]:h-[260px] xs:h-[300px] overflow-hidden flex items-start justify-center -mt-4 [@media(min-height:700px)]:-mt-8 mb-4 xs:mb-8">
+          <div className="max-w-6xl w-full py-12 xs:py-14 md:py-16 md+:py-10 relative">
+            <div className="md+:hidden relative h-[140px] [@media(min-height:700px)]:h-[260px] xs:h-[300px] overflow-hidden flex items-start justify-center -mt-4 [@media(min-height:700px)]:-mt-8 mb-4 xs:mb-8">
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-fuchsia-100/40 to-violet-200/60" />
               <div
                 className={`${isVisible && exitProgress === 0 ? `translate-y-0 opacity-100` : !isVisible ? `translate-y-12 opacity-0` : ``}`}
@@ -190,8 +190,8 @@ const IOSBlockAlt1: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 xl:gap-20 items-center px-6 xs:px-8 sm:px-12 md:px-20 pt-4 xs:pt-6">
-              <div className="lg:order-1 lg:col-span-9 relative z-10 flex flex-col items-center xs:items-start">
+            <div className="grid grid-cols-1 md+:grid-cols-12 gap-12 md+:gap-16 xl:gap-20 items-center px-6 xs:px-8 sm:px-12 md:px-20 pt-4 xs:pt-6">
+              <div className="md+:order-1 md+:col-span-9 relative z-10 flex flex-col items-center xs:items-start">
                 <div className="relative inline-block mb-3 xs:mb-6">
                   <style>
                     {`
@@ -292,7 +292,7 @@ const IOSBlockAlt1: React.FC = () => {
                   <span className="relative inline-block">
                     missing features
                     <svg
-                      className="absolute bottom-0 left-0 w-full translate-y-0.5"
+                      className="absolute bottom-0 left-0 w-full translate-y-0.5 md:translate-y-1"
                       height="6"
                       viewBox="0 0 200 6"
                       preserveAspectRatio="none"
@@ -336,7 +336,7 @@ const IOSBlockAlt1: React.FC = () => {
                 </p>
 
                 <div
-                  className={`w-full space-y-2 xs:space-y-3 mb-6 xs:mb-8 bg-white/60 backdrop-blur-sm p-4 xs:p-6 rounded-2xl border border-violet-100 lg:mr-4 transition-all duration-500 ${
+                  className={`w-full space-y-2 xs:space-y-3 mb-6 xs:mb-8 bg-white/60 backdrop-blur-sm p-4 xs:p-6 rounded-2xl border border-violet-100 md+:mr-4 transition-all duration-500 ${
                     isVisible && exitProgress === 0
                       ? `translate-y-0 opacity-100`
                       : !isVisible
@@ -417,7 +417,7 @@ const IOSBlockAlt1: React.FC = () => {
               </div>
 
               <div
-                className={`hidden lg:block lg:order-2 lg:col-span-3 relative flex items-center justify-center h-[500px] transition-all duration-500 ${
+                className={`hidden md+:block md+:order-2 md+:col-span-3 relative flex items-center justify-center h-[500px] transition-all duration-500 ${
                   isVisible && exitProgress === 0
                     ? `translate-x-0 opacity-100`
                     : !isVisible
