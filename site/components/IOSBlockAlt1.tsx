@@ -103,15 +103,15 @@ const IOSBlockAlt1: React.FC = () => {
               transform: `translateY(${Math.max(0, 1 - (exitProgress - 0.22) / 0.1) * 60}px)`,
             }}
           >
-            <div className="text-center mb-12">
+            <div className="text-center mb-6 xs:mb-12">
               <a
                 href="#"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-fuchsia-300/60 text-sm font-semibold tracking-wider uppercase hover:text-fuchsia-200 transition-colors duration-200"
+                className="inline-flex items-center gap-1.5 text-fuchsia-300/60 text-xs xs:text-sm font-semibold tracking-wider uppercase hover:text-fuchsia-200 transition-colors duration-200"
               >
                 More App Store Reviews
-                <ExternalLinkIcon size={14} />
+                <ExternalLinkIcon className="size-3 xs:size-3.5" />
               </a>
             </div>
 
@@ -122,24 +122,23 @@ const IOSBlockAlt1: React.FC = () => {
               >
                 {reviews.map((review, i) => (
                   <div key={i} className="w-screen flex-shrink-0 flex justify-center">
-                    <div className="max-w-2xl text-center px-8">
-                      <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 uppercase">
+                    <div className="max-w-2xl text-center px-6 xs:px-8">
+                      <h3 className="text-lg xs:text-2xl md:text-3xl font-bold text-white mb-2 xs:mb-4 uppercase">
                         {review.title}
                       </h3>
-                      <div className="flex items-center justify-center gap-1 mb-8">
+                      <div className="flex items-center justify-center gap-1 mb-4 xs:mb-8">
                         {[...Array(review.rating)].map((_, j) => (
                           <StarIcon
                             key={j}
-                            size={22}
-                            className="fill-amber-400 text-amber-400"
+                            className="size-4 xs:size-[22px] fill-amber-400 text-amber-400"
                             strokeWidth={0}
                           />
                         ))}
                       </div>
-                      <p className="text-fuchsia-100 text-3xl md:text-4xl leading-relaxed mb-16 font-serif">
+                      <p className="text-fuchsia-100 text-xl xs:text-3xl md:text-4xl leading-snug xs:leading-relaxed mb-8 xs:mb-16 font-serif">
                         &ldquo;{review.text}&rdquo;
                       </p>
-                      <p className="text-fuchsia-300/60 text-base">
+                      <p className="text-fuchsia-300/60 text-sm xs:text-base">
                         {review.date} — {review.author}
                       </p>
                     </div>
@@ -172,7 +171,7 @@ const IOSBlockAlt1: React.FC = () => {
           }}
         >
           <div className="max-w-6xl w-full py-12 xs:py-14 md:py-16 lg:py-10 relative">
-            <div className="lg:hidden relative h-[300px] overflow-hidden flex items-start justify-center -mt-4 mb-8">
+            <div className="lg:hidden relative h-[140px] [@media(min-height:700px)]:h-[260px] xs:h-[300px] overflow-hidden flex items-start justify-center -mt-4 [@media(min-height:700px)]:-mt-8 mb-4 xs:mb-8">
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-fuchsia-100/40 to-violet-200/60" />
               <div
                 className={`${isVisible && exitProgress === 0 ? `translate-y-0 opacity-100` : !isVisible ? `translate-y-12 opacity-0` : ``}`}
@@ -185,7 +184,7 @@ const IOSBlockAlt1: React.FC = () => {
                   }),
                 }}
               >
-                <Phone className="shadow-2xl scale-[0.85]" labelStatus="hidden">
+                <Phone className="shadow-2xl scale-[0.55] [@media(min-height:700px)]:scale-[0.65] xs:scale-[0.85] -mt-32 [@media(min-height:700px)]:-mt-24 xs:mt-0" labelStatus="hidden">
                   <BlockedGifSearchScreen isVisible={isVisible} />
                 </Phone>
               </div>
@@ -193,7 +192,7 @@ const IOSBlockAlt1: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 xl:gap-20 items-center px-6 xs:px-8 sm:px-12 md:px-20 pt-4 xs:pt-6">
               <div className="lg:order-1 lg:col-span-9 relative z-10 flex flex-col items-center xs:items-start">
-                <div className="relative inline-block mb-6">
+                <div className="relative inline-block mb-3 xs:mb-6">
                   <style>
                     {`
                       @keyframes waggle {
@@ -206,7 +205,7 @@ const IOSBlockAlt1: React.FC = () => {
                     `}
                   </style>
                   <div
-                    className={`inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-500 px-4 py-2 rounded-full shadow-lg shadow-green-600/30 ${isVisible && exitProgress === 0 ? `translate-x-0` : !isVisible ? `-translate-x-[250px]` : ``}`}
+                    className={`inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-500 px-3 xs:px-4 py-1.5 xs:py-2 rounded-full shadow-lg shadow-green-600/30 ${isVisible && exitProgress === 0 ? `translate-x-0` : !isVisible ? `-translate-x-[250px]` : ``}`}
                     style={{
                       transition: `transform 0.25s cubic-bezier(0.2, 1.4, 0.5, 1)`,
                       transitionDelay: isVisible && exitProgress === 0 ? `1000ms` : `0ms`,
@@ -217,14 +216,14 @@ const IOSBlockAlt1: React.FC = () => {
                       }),
                     }}
                   >
-                    <span className="text-sm font-bold text-white tracking-wide">
+                    <span className="text-xs xs:text-sm font-bold text-white tracking-wide">
                       100% FREE
                     </span>
                   </div>
                 </div>
 
                 <h2
-                  className={`text-3xl xs:text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight text-center xs:text-left transition-all duration-500 ${
+                  className={`text-2xl xs:text-4xl md:text-5xl font-bold text-slate-900 mb-1 xs:mb-4 sm:mb-6 leading-tight text-center xs:text-left transition-all duration-500 ${
                     isVisible && exitProgress === 0
                       ? `translate-x-0 opacity-100`
                       : !isVisible
@@ -262,20 +261,19 @@ const IOSBlockAlt1: React.FC = () => {
                     {[...Array(5)].map((_, i) => (
                       <StarIcon
                         key={i}
-                        size={20}
-                        className="fill-amber-400 text-amber-400"
+                        className="size-4 xs:size-5 fill-amber-400 text-amber-400"
                         strokeWidth={0}
                       />
                     ))}
                   </div>
-                  <div className="flex items-center gap-2 text-slate-700">
-                    <span className="text-xl font-bold">4.9</span>
-                    <span className="text-sm">App Store</span>
+                  <div className="flex items-center gap-1.5 xs:gap-2 text-slate-700">
+                    <span className="text-base xs:text-xl font-bold">4.9</span>
+                    <span className="text-[0.65rem] xs:text-sm">App Store</span>
                   </div>
                 </div>
 
                 <p
-                  className={`text-2xl text-slate-600 leading-relaxed mb-8 transition-all duration-500 ${
+                  className={`text-base xs:text-xl sm:text-2xl text-slate-600 leading-relaxed mb-6 xs:mb-8 transition-all duration-500 ${
                     isVisible && exitProgress === 0
                       ? `translate-x-0 opacity-100`
                       : !isVisible
@@ -294,7 +292,7 @@ const IOSBlockAlt1: React.FC = () => {
                   <span className="relative inline-block">
                     missing features
                     <svg
-                      className="absolute bottom-0 left-0 w-full translate-y-1"
+                      className="absolute bottom-0 left-0 w-full translate-y-0.5"
                       height="6"
                       viewBox="0 0 200 6"
                       preserveAspectRatio="none"
@@ -338,7 +336,7 @@ const IOSBlockAlt1: React.FC = () => {
                 </p>
 
                 <div
-                  className={`w-full space-y-3 mb-8 bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-violet-100 lg:mr-4 transition-all duration-500 ${
+                  className={`w-full space-y-2 xs:space-y-3 mb-6 xs:mb-8 bg-white/60 backdrop-blur-sm p-4 xs:p-6 rounded-2xl border border-violet-100 lg:mr-4 transition-all duration-500 ${
                     isVisible && exitProgress === 0
                       ? `translate-y-0 opacity-100`
                       : !isVisible
@@ -361,7 +359,35 @@ const IOSBlockAlt1: React.FC = () => {
                 </div>
 
                 <div
-                  className={`flex flex-col xs:flex-row items-center xs:items-start gap-4 transition-all duration-500 ${
+                  className={`flex xs:hidden flex-row items-center gap-3 transition-all duration-500 ${
+                    isVisible && exitProgress === 0
+                      ? `translate-y-0 opacity-100`
+                      : !isVisible
+                        ? `translate-y-8 opacity-0`
+                        : ``
+                  }`}
+                  style={{
+                    transitionDelay: isVisible && exitProgress === 0 ? `1200ms` : `0ms`,
+                    ...(exitProgress > 0.08 && {
+                      transform: `translateY(${((exitProgress - 0.08) / 0.25) * 50}px)`,
+                      opacity: 1 - (exitProgress - 0.08) / 0.25,
+                    }),
+                  }}
+                >
+                  <FancyLink
+                    type="link"
+                    href="https://apps.apple.com/us/app/gertrude/id1672416108"
+                    size="sm"
+                    color="primary"
+                  >
+                    Download&nbsp;&rarr;
+                  </FancyLink>
+                  <FancyLink type="link" href="/ios" size="sm" color="secondary">
+                    Learn&nbsp;More
+                  </FancyLink>
+                </div>
+                <div
+                  className={`hidden xs:flex w-full flex-row items-start justify-center sm:justify-start gap-4 transition-all duration-500 ${
                     isVisible && exitProgress === 0
                       ? `translate-y-0 opacity-100`
                       : !isVisible
@@ -521,10 +547,10 @@ interface FeatureProps {
 }
 
 const Feature: React.FC<FeatureProps> = ({ text }) => (
-  <div className="flex items-start gap-3">
-    <div className="flex-shrink-0 w-5 h-5 mt-0.5 rounded-md bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
+  <div className="flex items-start gap-2 xs:gap-3">
+    <div className="flex-shrink-0 w-4 h-4 xs:w-5 xs:h-5 mt-0.5 rounded-md bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
       <svg
-        className="w-3.5 h-3.5 text-white"
+        className="w-2.5 h-2.5 xs:w-3.5 xs:h-3.5 text-white"
         fill="none"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -535,7 +561,7 @@ const Feature: React.FC<FeatureProps> = ({ text }) => (
         <polyline points="20 6 9 17 4 12" />
       </svg>
     </div>
-    <span className="text-base text-slate-700">{text}</span>
+    <span className="text-sm xs:text-base text-slate-700">{text}</span>
   </div>
 );
 
