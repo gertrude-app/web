@@ -75,7 +75,7 @@ const FamilyOfProductsBlockAlt: React.FC = () => {
         }}
       >
         <div className="text-center w-full pt-4 xs:pt-0">
-          <h1 className="text-4xl xs:text-5xl sm:text-7xl font-bold text-slate-800 !leading-[1.15em]">
+          <h1 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl font-bold text-slate-800 !leading-[1.15em]">
             <span className="block lg:inline">Tools for{` `}</span>
             <span className="inline-block bg-gradient-to-r from-purple-600 to-fuchsia-500 bg-clip-text text-transparent">
               {displayedText}
@@ -126,16 +126,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
     className="flex flex-row sm:flex-col items-center sm:text-center group animate-fadeIn opacity-0 gap-4 sm:gap-0"
     style={{ animationDelay: `${delay}ms`, animationFillMode: `forwards` }}
   >
-    <div className="relative shrink-0 bg-white/80 backdrop-blur-sm rounded-2xl xs:rounded-3xl p-4 xs:p-6 sm:p-8 sm:mb-6 transition-all duration-300 group-hover:scale-105 border border-fuchsia-200 group-hover:border-fuchsia-400 shadow-lg shadow-fuchsia-100 group-hover:shadow-xl group-hover:shadow-fuchsia-200">
+    <div className="relative shrink-0 bg-white/80 backdrop-blur-sm rounded-2xl xs:rounded-3xl p-4 xs:p-6 sm:p-6 md:p-8 sm:mb-4 md:mb-6 transition-all duration-300 group-hover:scale-105 border border-fuchsia-200 group-hover:border-fuchsia-400 shadow-lg shadow-fuchsia-100 group-hover:shadow-xl group-hover:shadow-fuchsia-200">
       <Icon
-        className="size-10 xs:size-12 sm:size-16 [&_path]:stroke-[url(#icon-gradient-alt)] [&_rect]:stroke-[url(#icon-gradient-alt)] [&_line]:stroke-[url(#icon-gradient-alt)] [&_circle]:stroke-[url(#icon-gradient-alt)] [&_circle]:fill-[url(#icon-gradient-alt)] transition-transform duration-300 group-hover:scale-110"
+        className="size-10 xs:size-12 sm:size-10 md:size-16 [&_path]:stroke-[url(#icon-gradient-alt)] [&_rect]:stroke-[url(#icon-gradient-alt)] [&_line]:stroke-[url(#icon-gradient-alt)] [&_circle]:stroke-[url(#icon-gradient-alt)] [&_circle]:fill-[url(#icon-gradient-alt)] transition-transform duration-300 group-hover:scale-110"
       />
     </div>
     <div>
-      <h3 className="text-lg xs:text-xl sm:text-3xl font-semibold text-slate-800 mb-0.5 xs:mb-1 sm:mb-2 transition-colors duration-300 group-hover:text-fuchsia-600">
+      <h3 className="text-lg xs:text-xl sm:text-xl md:text-3xl font-semibold text-slate-800 mb-0.5 xs:mb-1 sm:mb-1 md:mb-2 transition-colors duration-300 group-hover:text-fuchsia-600">
         {label}
       </h3>
-      <p className="text-slate-500 text-xs xs:text-sm sm:text-base leading-snug max-w-[200px] sm:max-w-none antialiased">
+      <p className="text-slate-500 text-xs xs:text-sm sm:text-sm md:text-base leading-snug max-w-[200px] sm:max-w-none antialiased">
         {description}
       </p>
     </div>
