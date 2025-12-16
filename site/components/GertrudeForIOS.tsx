@@ -1,7 +1,9 @@
 'use client';
 
 import { ExternalLinkIcon, StarIcon } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
+import { useIntersectionVisibility, useScrollProgress } from '@/lib/hooks';
+import AnimatedUnderline from './AnimatedUnderline';
 import FancyLink from './FancyLink';
 import Phone from './super-scroller-illustration/Phone';
 
@@ -27,10 +29,10 @@ const reviews = [
 ];
 
 const GertrudeForIOS: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [exitProgress, setExitProgress] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
+  const isVisible = useIntersectionVisibility(stickyRef, 0.5);
+  const exitProgress = useScrollProgress(wrapperRef);
 
   const reviewStartProgress = 0.32;
   const reviewEndProgress = 0.92;
@@ -40,39 +42,6 @@ const GertrudeForIOS: React.FC = () => {
     reviews.length - 1,
     Math.max(0, Math.floor((exitProgress - reviewStartProgress) / progressPerReview)),
   );
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.5 },
-    );
-
-    if (stickyRef.current) {
-      observer.observe(stickyRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!wrapperRef.current) return;
-      const rect = wrapperRef.current.getBoundingClientRect();
-      const wrapperHeight = wrapperRef.current.offsetHeight;
-      const viewportHeight = window.innerHeight;
-      const scrollableDistance = wrapperHeight - viewportHeight;
-      const scrolled = -rect.top;
-      const progress = Math.max(0, Math.min(1, scrolled / scrollableDistance));
-      setExitProgress(progress);
-    };
-
-    window.addEventListener(`scroll`, handleScroll);
-    return () => window.removeEventListener(`scroll`, handleScroll);
-  }, []);
 
   return (
     <div id="ios" ref={wrapperRef} className="h-[650vh] relative">
@@ -281,45 +250,13 @@ const GertrudeForIOS: React.FC = () => {
                   The{` `}
                   <span className="relative inline-block">
                     missing features
-                    <svg
-                      className="absolute bottom-0 left-0 w-full translate-y-0.5 md:translate-y-1"
-                      height="6"
-                      viewBox="0 0 200 6"
-                      preserveAspectRatio="none"
-                    >
-                      <defs>
-                        <linearGradient
-                          id="ios-underline-gradient"
-                          x1="0%"
-                          y1="0%"
-                          x2="100%"
-                          y2="0%"
-                        >
-                          <stop
-                            offset="0%"
-                            style={{ stopColor: `#8b5cf6`, stopOpacity: 1 }}
-                          />
-                          <stop
-                            offset="100%"
-                            style={{ stopColor: `#d946ef`, stopOpacity: 1 }}
-                          />
-                        </linearGradient>
-                      </defs>
-                      <path
-                        d="M 0 3 Q 50 1, 100 3 T 200 3"
-                        stroke="url(#ios-underline-gradient)"
-                        strokeWidth="3"
-                        fill="none"
-                        strokeLinecap="butt"
-                        pathLength="1"
-                        strokeDasharray="1"
-                        strokeDashoffset={isVisible ? 0 : 1}
-                        style={{
-                          transition: `stroke-dashoffset 0.3s ease-out`,
-                          transitionDelay: isVisible ? `1400ms` : `0ms`,
-                        }}
-                      />
-                    </svg>
+                    <AnimatedUnderline
+                      isVisible={isVisible}
+                      delay={1400}
+                      gradientId="ios-underline-gradient"
+                      fromColor="#8b5cf6"
+                      toColor="#d946ef"
+                    />
                   </span>
                   {` `}
                   Screen Time should have included.

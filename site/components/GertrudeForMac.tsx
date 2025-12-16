@@ -8,14 +8,21 @@ import {
   SmartphoneIcon,
 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
+import {
+  useIntersectionVisibility,
+  useScrollProgress,
+  useDelayedVisibility,
+} from '@/lib/hooks';
+import AnimatedUnderline from './AnimatedUnderline';
 import Computer from './super-scroller-illustration/Computer';
 
 const GertrudeForMac: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [exitProgress, setExitProgress] = useState(0);
   const [isMdOrLarger, setIsMdOrLarger] = useState(true);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
+  const isVisible = useIntersectionVisibility(stickyRef, 0.5);
+  const scrollProgress = useScrollProgress(wrapperRef);
+  const exitProgress = isMdOrLarger ? scrollProgress : 0;
 
   useEffect(() => {
     const checkWidth = () => setIsMdOrLarger(window.innerWidth >= 768);
@@ -23,41 +30,6 @@ const GertrudeForMac: React.FC = () => {
     window.addEventListener(`resize`, checkWidth);
     return () => window.removeEventListener(`resize`, checkWidth);
   }, []);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.5 },
-    );
-
-    if (stickyRef.current) {
-      observer.observe(stickyRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!isMdOrLarger) return;
-
-    const handleScroll = () => {
-      if (!wrapperRef.current) return;
-      const rect = wrapperRef.current.getBoundingClientRect();
-      const wrapperHeight = wrapperRef.current.offsetHeight;
-      const viewportHeight = window.innerHeight;
-      const scrollableDistance = wrapperHeight - viewportHeight;
-      const scrolled = -rect.top;
-      const progress = Math.max(0, Math.min(1, scrolled / scrollableDistance));
-      setExitProgress(progress);
-    };
-
-    window.addEventListener(`scroll`, handleScroll);
-    return () => window.removeEventListener(`scroll`, handleScroll);
-  }, [isMdOrLarger]);
 
   return (
     <div
@@ -152,45 +124,16 @@ const GertrudeForMac: React.FC = () => {
                 </span>
                 <span className="relative inline-block bg-gradient-to-r from-white to-violet-300 bg-clip-text text-transparent">
                   Mac
-                  <svg
+                  <AnimatedUnderline
+                    isVisible={isVisible}
+                    delay={1000}
+                    gradientId="mac-underline-gradient"
+                    fromColor="#a78bfa"
+                    toColor="#e879f9"
+                    height={8}
+                    strokeWidth={4}
                     className="absolute bottom-0 left-0 w-full -translate-y-1 xs:translate-y-2"
-                    height="8"
-                    viewBox="0 0 200 8"
-                    preserveAspectRatio="none"
-                  >
-                    <defs>
-                      <linearGradient
-                        id="mac-underline-gradient"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="0%"
-                      >
-                        <stop
-                          offset="0%"
-                          style={{ stopColor: `#a78bfa`, stopOpacity: 1 }}
-                        />
-                        <stop
-                          offset="100%"
-                          style={{ stopColor: `#e879f9`, stopOpacity: 1 }}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <path
-                      d="M 0 4 Q 50 2, 100 4 T 200 4"
-                      stroke="url(#mac-underline-gradient)"
-                      strokeWidth="4"
-                      fill="none"
-                      strokeLinecap="butt"
-                      pathLength="1"
-                      strokeDasharray="1"
-                      strokeDashoffset={isVisible ? 0 : 1}
-                      style={{
-                        transition: `stroke-dashoffset 0.2s ease-out`,
-                        transitionDelay: isVisible ? `1000ms` : `0ms`,
-                      }}
-                    />
-                  </svg>
+                  />
                 </span>
               </h2>
               <p
@@ -305,14 +248,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   description,
   delay,
 }) => {
-  const [isVisible, setIsVisible] = useState(delay === 0);
-
-  useEffect(() => {
-    if (delay > 0) {
-      const timer = setTimeout(() => setIsVisible(true), delay);
-      return () => clearTimeout(timer);
-    }
-  }, [delay]);
+  const isVisible = useDelayedVisibility(delay);
 
   return (
     <div

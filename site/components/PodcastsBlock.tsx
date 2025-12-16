@@ -12,28 +12,12 @@ import {
   StarIcon,
 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
+import { useIntersectionVisibility, useDelayedVisibility } from '@/lib/hooks';
 import Phone from './super-scroller-illustration/Phone';
 
 const PodcastsBlock: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.5 },
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
+  const isVisible = useIntersectionVisibility(sectionRef, 0.5);
 
   return (
     <section
@@ -342,14 +326,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   title,
   delay,
 }) => {
-  const [isVisible, setIsVisible] = useState(delay === 0);
-
-  useEffect(() => {
-    if (delay > 0) {
-      const timer = setTimeout(() => setIsVisible(true), delay);
-      return () => clearTimeout(timer);
-    }
-  }, [delay]);
+  const isVisible = useDelayedVisibility(delay);
 
   return (
     <div
