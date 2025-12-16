@@ -1,14 +1,147 @@
-import React from 'react';
+'use client';
 
-const AboutBlock: React.FC = () => (
-  <section className="bg-slate-900 px-6 sm:px-8 md:px-20 py-28 flex flex-col items-center">
-    <h2 className="text-4xl xs:text-5xl md:text-6xl font-semibold text-white text-center">
-      About Me and Gertrude
-    </h2>
-    <p className="mt-8 text-white/80 text-lg xs:text-xl md:text-2xl leading-[1.5em] text-center max-w-3xl">
-      Placeholder for about section
-    </p>
-  </section>
-);
+import { GithubIcon, PodcastIcon, YoutubeIcon } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+
+const AboutBlock: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.3 },
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      className="bg-gradient-to-b from-slate-900 to-slate-950 px-6 sm:px-8 md:px-20 py-24 sm:py-32 md:py-40"
+    >
+      <div className="max-w-5xl mx-auto">
+        <div className="flex flex-col md:flex-row items-center gap-12 md:gap-16 lg:gap-24">
+          <div className="relative shrink-0">
+            <div
+              className={`relative transition-all duration-700 ${
+                isVisible
+                  ? `opacity-100 rotate-[-5deg] scale-100`
+                  : `opacity-0 rotate-0 scale-95`
+              }`}
+              style={{ transitionDelay: isVisible ? `200ms` : `0ms` }}
+            >
+              <div className="bg-white p-2 xs:p-3 sm:p-4 shadow-2xl shadow-black/40">
+                <img
+                  src="/family.jpg"
+                  alt="Jared and his family"
+                  className="w-56 xs:w-64 sm:w-72 md:w-80 aspect-[4/3] object-cover"
+                />
+              </div>
+            </div>
+
+            <style>
+              {`
+                @keyframes waggle {
+                  0%, 100% { transform: rotate(150deg); }
+                  20% { transform: rotate(142deg); }
+                  40% { transform: rotate(158deg); }
+                  60% { transform: rotate(145deg); }
+                  80% { transform: rotate(155deg); }
+                }
+              `}
+            </style>
+            <img
+              src="/arrow.png"
+              alt=""
+              className={`absolute top-[10%] left-[15%] md:top-[11%] md:left-[18%] md:top-[10%] w-16 xs:w-20 sm:w-24 transition-opacity duration-500 ${
+                isVisible ? `opacity-100` : `opacity-0`
+              }`}
+              style={{
+                transitionDelay: isVisible ? `2000ms` : `0ms`,
+                transform: `rotate(150deg)`,
+                animation: isVisible ? `waggle 0.6s ease-in-out 2.1s` : `none`,
+              }}
+            />
+            <span
+              className={`hidden absolute top-8 -left-4 xs:top-6 xs:-left-2 sm:top-4 sm:left-0 text-fuchsia-400 font-medium text-sm xs:text-base sm:text-lg whitespace-nowrap rotate-[-8deg] transition-all duration-300 ${
+                isVisible ? `opacity-100 translate-y-0` : `opacity-0 -translate-y-2`
+              }`}
+              style={{
+                fontFamily: `'Comic Sans MS', 'Chalkboard', 'Bradley Hand', cursive`,
+                transitionDelay: isVisible ? `1600ms` : `0ms`,
+              }}
+            >
+              That's me!
+            </span>
+          </div>
+
+          <div className="text-center md:text-left">
+            <h2
+              className={`text-4xl xs:text-4xl sm:text-5xl font-semibold text-white mb-6 transition-all duration-500 ${
+                isVisible ? `opacity-100 translate-y-0` : `opacity-0 translate-y-8`
+              }`}
+              style={{ transitionDelay: isVisible ? `400ms` : `0ms` }}
+            >
+              <span className="text-[1.75rem] xs:text-[2.25rem] sm:text-[2.75rem]">
+                👋
+              </span>
+              {` `}
+              Hi, I&rsquo;m{` `}
+              <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                Jared!
+              </span>
+            </h2>
+            <p
+              className={`text-white/80 text-base xs:text-lg sm:text-xl leading-relaxed max-w-xl transition-all duration-500 ${
+                isVisible ? `opacity-100 translate-y-0` : `opacity-0 translate-y-8`
+              }`}
+              style={{ transitionDelay: isVisible ? `600ms` : `0ms` }}
+            >
+              I&rsquo;m a Christian, a homeschool dad, and a computer programmer. I built
+              all the Gertrude apps first to protect my own kids. I care a ton about
+              helping provide simple, strict, and reliable tools to protect the hearts of
+              the next generation.
+            </p>
+            <div
+              className={`mt-10 flex flex-col gap-3 text-left transition-all duration-500 ${
+                isVisible ? `opacity-100 translate-y-0` : `opacity-0 translate-y-8`
+              }`}
+              style={{ transitionDelay: isVisible ? `800ms` : `0ms` }}
+            >
+              <a
+                href="#"
+                className="flex items-center gap-3.5 px-4 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors group"
+              >
+                <YoutubeIcon className="opacity-75 w-7 h-7 text-violet-500 group-hover:text-violet-300" />
+                <span className="text-sm leading-tight text-white/60 group-hover:text-white/90">
+                  Watch me give a talk on &ldquo;Internet Safety 101&rdquo;
+                </span>
+              </a>
+              <a
+                href="#"
+                className="flex items-center gap-3.5 px-4 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors group"
+              >
+                <PodcastIcon className="opacity-75 w-7 h-7 text-violet-500 group-hover:text-violet-300" />
+                <span className="text-sm leading-tight text-white/60 group-hover:text-white/90">
+                  Hear me being interviewed on The Changelog podcast
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 export default AboutBlock;
