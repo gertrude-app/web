@@ -37,6 +37,7 @@ const PodcastsBlock: React.FC = () => {
 
   return (
     <section
+      id="podcasts"
       ref={sectionRef}
       className="min-h-screen bg-gradient-to-br from-violet-700 to-fuchsia-600 overflow-hidden flex flex-col"
     >

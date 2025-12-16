@@ -4,7 +4,7 @@ import { LaptopIcon, PodcastIcon, TabletSmartphoneIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useScrollY } from '../lib/hooks';
 
-const rotatingPhrases = [
+const initialPhrases = [
   `internet safety.`,
   `protecting kids.`,
   `peace of mind.`,
@@ -15,17 +15,22 @@ const rotatingPhrases = [
   `Apple families.`,
 ];
 
-const FamilyOfProductsBlock: React.FC = () => {
+const ToolsForSafetyBlock: React.FC = () => {
+  const [phrases, setPhrases] = useState(initialPhrases);
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState(``);
   const [isDeleting, setIsDeleting] = useState(false);
   const scrollY = useScrollY();
 
   useEffect(() => {
-    const currentPhrase = rotatingPhrases[phraseIndex] ?? ``;
+    const rest = initialPhrases.slice(1).sort(() => Math.random() - 0.5);
+    setPhrases([initialPhrases[0]!, ...rest]);
+  }, []);
+
+  useEffect(() => {
+    const currentPhrase = phrases[phraseIndex] ?? ``;
     const typingSpeed = isDeleting ? 15 : 60;
     const pauseAfterTyping = 2000;
-    const pauseAfterDeleting = 500;
 
     if (!isDeleting && displayedText === currentPhrase) {
       const timeout = setTimeout(() => setIsDeleting(true), pauseAfterTyping);
@@ -34,9 +39,8 @@ const FamilyOfProductsBlock: React.FC = () => {
 
     if (isDeleting && displayedText === ``) {
       setIsDeleting(false);
-      setPhraseIndex((current) => (current + 1) % rotatingPhrases.length);
-      const timeout = setTimeout(() => {}, pauseAfterDeleting);
-      return () => clearTimeout(timeout);
+      setPhraseIndex((current) => (current + 1) % phrases.length);
+      return;
     }
 
     const timeout = setTimeout(() => {
@@ -48,7 +52,7 @@ const FamilyOfProductsBlock: React.FC = () => {
     }, typingSpeed);
 
     return () => clearTimeout(timeout);
-  }, [displayedText, isDeleting, phraseIndex]);
+  }, [displayedText, isDeleting, phraseIndex, phrases]);
 
   const scrollProgress = Math.min(scrollY / 600, 1);
 
@@ -60,7 +64,7 @@ const FamilyOfProductsBlock: React.FC = () => {
       />
       <svg width="0" height="0" style={{ position: `absolute` }}>
         <defs>
-          <linearGradient id="icon-gradient-alt" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id="icon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" style={{ stopColor: `#a855f7`, stopOpacity: 1 }} />
             <stop offset="100%" style={{ stopColor: `#d946ef`, stopOpacity: 1 }} />
           </linearGradient>
@@ -77,7 +81,11 @@ const FamilyOfProductsBlock: React.FC = () => {
         <div className="text-center w-full pt-4 xs:pt-0">
           <h1 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl font-bold text-slate-800 !leading-[1.15em]">
             <span className="block lg:inline">Tools for{` `}</span>
-            <span className="inline-block bg-gradient-to-r from-purple-600 to-fuchsia-500 bg-clip-text text-transparent">
+            <span className="sr-only">{initialPhrases.join(`, `)}</span>
+            <span
+              aria-hidden
+              className="inline-block bg-gradient-to-r from-purple-600 to-fuchsia-500 bg-clip-text text-transparent"
+            >
               {displayedText}
               <span className="animate-blink text-fuchsia-400">|</span>
             </span>
@@ -90,18 +98,21 @@ const FamilyOfProductsBlock: React.FC = () => {
             label="iPhone & iPad"
             description="Plug holes in Screen Time, including #images GIF search"
             delay={500}
+            href="#ios"
           />
           <ProductCard
             icon={LaptopIcon}
             label="Mac"
             description="Comprehensive web filtering and screenshot monitoring"
             delay={700}
+            href="#mac"
           />
           <ProductCard
             icon={PodcastIcon}
             label="Podcasts"
             description="Parent-managed podcasts protected by PIN code"
             delay={900}
+            href="#podcasts"
           />
         </div>
       </div>
@@ -110,10 +121,11 @@ const FamilyOfProductsBlock: React.FC = () => {
 };
 
 interface ProductCardProps {
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: React.ComponentType<{ className?: string }>;
   label: string;
   description: string;
   delay: number;
+  href: string;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -121,15 +133,19 @@ const ProductCard: React.FC<ProductCardProps> = ({
   label,
   description,
   delay,
+  href,
 }) => (
-  <div
-    className="flex flex-row sm:flex-col items-center sm:text-center group animate-fadeIn opacity-0 gap-4 sm:gap-0"
+  <a
+    href={href}
+    onClick={(e) => {
+      e.preventDefault();
+      document.querySelector(href)?.scrollIntoView({ behavior: `smooth` });
+    }}
+    className="flex flex-row sm:flex-col items-center sm:text-center group animate-fadeIn opacity-0 gap-4 sm:gap-0 cursor-pointer"
     style={{ animationDelay: `${delay}ms`, animationFillMode: `forwards` }}
   >
     <div className="relative shrink-0 bg-white/80 backdrop-blur-sm rounded-2xl xs:rounded-3xl p-4 xs:p-6 sm:p-6 md:p-8 sm:mb-4 md:mb-6 transition-all duration-300 group-hover:scale-105 border border-fuchsia-200 group-hover:border-fuchsia-400 shadow-lg shadow-fuchsia-100 group-hover:shadow-xl group-hover:shadow-fuchsia-200">
-      <Icon
-        className="size-10 xs:size-12 sm:size-10 md:size-16 [&_path]:stroke-[url(#icon-gradient-alt)] [&_rect]:stroke-[url(#icon-gradient-alt)] [&_line]:stroke-[url(#icon-gradient-alt)] [&_circle]:stroke-[url(#icon-gradient-alt)] [&_circle]:fill-[url(#icon-gradient-alt)] transition-transform duration-300 group-hover:scale-110"
-      />
+      <Icon className="size-10 xs:size-12 sm:size-10 md:size-16 [&_*]:stroke-[url(#icon-gradient)] [&_circle]:fill-[url(#icon-gradient)] transition-transform duration-300 group-hover:scale-110" />
     </div>
     <div>
       <h3 className="text-lg xs:text-xl sm:text-xl md:text-3xl font-semibold text-slate-800 mb-0.5 xs:mb-1 sm:mb-1 md:mb-2 transition-colors duration-300 group-hover:text-fuchsia-600">
@@ -139,7 +155,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         {description}
       </p>
     </div>
-  </div>
+  </a>
 );
 
-export default FamilyOfProductsBlock;
+export default ToolsForSafetyBlock;

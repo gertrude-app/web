@@ -60,7 +60,7 @@ const MacOSBlock: React.FC = () => {
   }, [isMdOrLarger]);
 
   return (
-    <div ref={wrapperRef} className={isMdOrLarger ? `h-[280vh] relative` : `relative`}>
+    <div id="mac" ref={wrapperRef} className={isMdOrLarger ? `h-[280vh] relative` : `relative`}>
       <section
         ref={stickyRef}
         className={`${isMdOrLarger ? `sticky top-0` : ``} min-h-screen bg-gradient-to-b from-white to-slate-50 overflow-hidden`}

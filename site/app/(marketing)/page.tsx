@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import AboutBlock from '@/components/AboutBlock';
-import FamilyOfProductsBlock from '@/components/FamilyOfProductsBlock';
+import ToolsForSafetyBlock from '@/components/ToolsForSafetyBlock';
 import IOSBlock from '@/components/IOSBlock';
 import MacOSBlock from '@/components/MacOSBlock';
 import PodcastsBlock from '@/components/PodcastsBlock';
@@ -13,7 +13,7 @@ export const metadata = createMetadata(
 
 const HomePage: NextPage = () => (
   <main>
-    <FamilyOfProductsBlock />
+    <ToolsForSafetyBlock />
     <MacOSBlock />
     <IOSBlock />
     <PodcastsBlock />

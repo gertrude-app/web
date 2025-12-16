@@ -79,7 +79,7 @@ const IOSBlock: React.FC = () => {
   }, []);
 
   return (
-    <div ref={wrapperRef} className="h-[650vh] relative">
+    <div id="ios" ref={wrapperRef} className="h-[650vh] relative">
       <section
         ref={stickyRef}
         className="sticky top-0 min-h-screen bg-gradient-to-tl from-white via-white via-55% to-fuchsia-200 overflow-hidden"
