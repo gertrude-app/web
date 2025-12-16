@@ -11,21 +11,18 @@ const reviews = [
     text: `Saved my young son from looking at porn through the maps app. You are a lifesaver.`,
     author: `GratefulMom55`,
     date: `Apr 25, 2025`,
-    rating: 5,
   },
   {
     title: `GIF Blocker!`,
     text: `Finally a way to block GIFS!!! Thank you, thank you, thank you!!!`,
     author: `HAAS1988`,
     date: `May 30, 2025`,
-    rating: 5,
   },
   {
     title: `An absolute blessing`,
     text: `Likely the greatest blessing an app has had on our lives.`,
     author: `Austin944`,
     date: `Sep 25, 2025`,
-    rating: 5,
   },
 ];
 
@@ -47,7 +44,7 @@ const IOSBlock: React.FC = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry?.isIntersecting) {
           setIsVisible(true);
         }
       },
@@ -71,7 +68,6 @@ const IOSBlock: React.FC = () => {
       const scrolled = -rect.top;
       const progress = Math.max(0, Math.min(1, scrolled / scrollableDistance));
       setExitProgress(progress);
-      console.log(`exitProgress: ${(progress * 100).toFixed(1)}%`);
     };
 
     window.addEventListener(`scroll`, handleScroll);
@@ -127,7 +123,7 @@ const IOSBlock: React.FC = () => {
                         {review.title}
                       </h3>
                       <div className="flex items-center justify-center gap-1 mb-4 xs:mb-8">
-                        {[...Array(review.rating)].map((_, j) => (
+                        {[...Array(5)].map((_, j) => (
                           <StarIcon
                             key={j}
                             className="size-4 xs:size-[22px] fill-amber-400 text-amber-400"
@@ -353,7 +349,7 @@ const IOSBlock: React.FC = () => {
                 </div>
 
                 <div
-                  className={`flex xs:hidden flex-row items-center gap-3 transition-all duration-500 ${
+                  className={`flex flex-row items-center xs:items-start justify-center sm:justify-start gap-3 xs:gap-4 transition-all duration-500 ${
                     isVisible && exitProgress === 0
                       ? `translate-y-0 opacity-100`
                       : !isVisible
@@ -373,45 +369,30 @@ const IOSBlock: React.FC = () => {
                     href="https://apps.apple.com/us/app/gertrude/id1672416108"
                     size="sm"
                     color="primary"
+                    className="xs:hidden"
                   >
                     Download&nbsp;&rarr;
                   </FancyLink>
-                  <FancyLink type="link" href="/ios" size="sm" color="secondary">
-                    Learn&nbsp;More
-                  </FancyLink>
-                </div>
-                <div
-                  className={`hidden xs:flex w-full flex-row items-start justify-center sm:justify-start gap-4 transition-all duration-500 ${
-                    isVisible && exitProgress === 0
-                      ? `translate-y-0 opacity-100`
-                      : !isVisible
-                        ? `translate-y-8 opacity-0`
-                        : ``
-                  }`}
-                  style={{
-                    transitionDelay: isVisible && exitProgress === 0 ? `1200ms` : `0ms`,
-                    ...(exitProgress > 0.08 && {
-                      transform: `translateY(${((exitProgress - 0.08) / 0.25) * 50}px)`,
-                      opacity: 1 - (exitProgress - 0.08) / 0.25,
-                    }),
-                  }}
-                >
                   <FancyLink
                     type="link"
                     href="https://apps.apple.com/us/app/gertrude/id1672416108"
                     size="lg"
                     color="primary"
+                    className="hidden xs:inline-flex"
                   >
                     Download&nbsp;&rarr;
                   </FancyLink>
-                  <FancyLink type="link" href="/ios" size="lg" color="secondary">
-                    Learn&nbsp;More&nbsp;
+                  <FancyLink type="link" href="/ios" size="sm" color="secondary" className="xs:hidden">
+                    Learn&nbsp;More
+                  </FancyLink>
+                  <FancyLink type="link" href="/ios" size="lg" color="secondary" className="hidden xs:inline-flex">
+                    Learn&nbsp;More
                   </FancyLink>
                 </div>
               </div>
 
               <div
-                className={`hidden md+:block md+:order-2 md+:col-span-3 relative flex items-center justify-center h-[500px] transition-all duration-500 ${
+                className={`hidden md+:block md+:order-2 md+:col-span-3 relative h-[500px] transition-all duration-500 ${
                   isVisible && exitProgress === 0
                     ? `translate-x-0 opacity-100`
                     : !isVisible
