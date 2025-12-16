@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
-import AboutBlock from '@/components/AboutBlock';
+import HiImJared from '@/components/HiImJared';
 import ToolsForSafetyBlock from '@/components/ToolsForSafetyBlock';
-import IOSBlock from '@/components/IOSBlock';
+import GertrudeForIOS from '@/components/GertrudeForIOS';
 import GertrudeForMac from '@/components/GertrudeForMac';
 import PodcastsBlock from '@/components/PodcastsBlock';
 import { createMetadata } from '@/lib/seo';
@@ -15,9 +15,9 @@ const HomePage: NextPage = () => (
   <main>
     <ToolsForSafetyBlock />
     <GertrudeForMac />
-    <IOSBlock />
+    <GertrudeForIOS />
     <PodcastsBlock />
-    <AboutBlock />
+    <HiImJared />
   </main>
 );
 

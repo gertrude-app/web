@@ -26,7 +26,7 @@ const reviews = [
   },
 ];
 
-const IOSBlock: React.FC = () => {
+const GertrudeForIOS: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [exitProgress, setExitProgress] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -101,7 +101,7 @@ const IOSBlock: React.FC = () => {
           >
             <div className="text-center mb-6 xs:mb-12">
               <a
-                href="#"
+                href="https://apps.apple.com/us/app/gertrude-blocker/id6736368820?see-all=reviews&platform=iphone"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-fuchsia-300/60 text-xs xs:text-sm font-semibold tracking-wider uppercase hover:text-fuchsia-200 transition-colors duration-200"
@@ -117,7 +117,7 @@ const IOSBlock: React.FC = () => {
                 style={{ transform: `translateX(-${currentReview * 100}%)` }}
               >
                 {reviews.map((review, i) => (
-                  <div key={i} className="w-screen flex-shrink-0 flex justify-center">
+                  <div key={i} className="w-screen shrink-0 flex justify-center">
                     <div className="max-w-2xl text-center px-6 xs:px-8">
                       <h3 className="text-lg xs:text-2xl md:text-3xl font-bold text-white mb-2 xs:mb-4 uppercase">
                         {review.title}
@@ -153,7 +153,7 @@ const IOSBlock: React.FC = () => {
             {reviews.map((_, i) => (
               <div
                 key={i}
-                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                className={`size-1.5 rounded-full transition-all duration-300 ${
                   i === currentReview ? `bg-fuchsia-300` : `bg-fuchsia-300/30`
                 }`}
               />
@@ -349,7 +349,7 @@ const IOSBlock: React.FC = () => {
                 </div>
 
                 <div
-                  className={`flex flex-row items-center xs:items-start justify-center sm:justify-start gap-3 xs:gap-4 transition-all duration-500 ${
+                  className={`flex items-center xs:items-start justify-center sm:justify-start gap-3 xs:gap-4 transition-all duration-500 ${
                     isVisible && exitProgress === 0
                       ? `translate-y-0 opacity-100`
                       : !isVisible
@@ -366,7 +366,7 @@ const IOSBlock: React.FC = () => {
                 >
                   <FancyLink
                     type="link"
-                    href="https://apps.apple.com/us/app/gertrude/id1672416108"
+                    href="https://apps.apple.com/us/app/gertrude-blocker/id6736368820"
                     size="sm"
                     color="primary"
                     className="xs:hidden"
@@ -375,17 +375,17 @@ const IOSBlock: React.FC = () => {
                   </FancyLink>
                   <FancyLink
                     type="link"
-                    href="https://apps.apple.com/us/app/gertrude/id1672416108"
+                    href="https://apps.apple.com/us/app/gertrude-blocker/id6736368820"
                     size="lg"
                     color="primary"
                     className="hidden xs:inline-flex"
                   >
                     Download&nbsp;&rarr;
                   </FancyLink>
-                  <FancyLink type="link" href="/ios" size="sm" color="secondary" className="xs:hidden">
+                  <FancyLink type="link" href="/blog/how-parents-can-block-images-gif-search-ios-18" size="sm" color="secondary" className="xs:hidden">
                     Learn&nbsp;More
                   </FancyLink>
-                  <FancyLink type="link" href="/ios" size="lg" color="secondary" className="hidden xs:inline-flex">
+                  <FancyLink type="link" href="/blog/how-parents-can-block-images-gif-search-ios-18" size="lg" color="secondary" className="hidden xs:inline-flex">
                     Learn&nbsp;More
                   </FancyLink>
                 </div>
@@ -435,12 +435,12 @@ const BlockedGifSearchScreen: React.FC<BlockedGifSearchScreenProps> = ({ isVisib
   const squareStagger = 50;
 
   return (
-    <div className="w-full h-full flex flex-col overflow-hidden relative bg-slate-900">
+    <div className="size-full flex flex-col overflow-hidden relative bg-slate-900">
       <div className="absolute top-[25%] left-1/2 -translate-x-1/2">
         <img
           src="/gertrude-icon.png"
           alt="Gertrude app icon"
-          className="w-20 h-20 rounded-2xl shadow-lg"
+          className="size-20 rounded-2xl shadow-lg"
         />
       </div>
       <div className="h-16 shrink-0" />
@@ -454,7 +454,7 @@ const BlockedGifSearchScreen: React.FC<BlockedGifSearchScreenProps> = ({ isVisib
         <div className="bg-gray-100 px-3 py-2 flex items-center gap-2">
           <div className="flex-1 bg-white rounded-lg px-3 py-2 flex items-center gap-2">
             <svg
-              className="w-4 h-4 text-gray-400"
+              className="size-4 text-gray-400"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -499,7 +499,7 @@ const BlockedGifSearchScreen: React.FC<BlockedGifSearchScreenProps> = ({ isVisib
                 }}
               >
                 <svg
-                  className="w-8 h-8 text-red-400/40"
+                  className="size-8 text-red-400/40"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -523,9 +523,9 @@ interface FeatureProps {
 
 const Feature: React.FC<FeatureProps> = ({ text }) => (
   <div className="flex items-start gap-2 xs:gap-3">
-    <div className="flex-shrink-0 w-4 h-4 xs:w-5 xs:h-5 mt-0.5 rounded-md bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
+    <div className="shrink-0 size-4 xs:size-5 mt-0.5 rounded-md bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
       <svg
-        className="w-2.5 h-2.5 xs:w-3.5 xs:h-3.5 text-white"
+        className="size-2.5 xs:size-3.5 text-white"
         fill="none"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -540,4 +540,4 @@ const Feature: React.FC<FeatureProps> = ({ text }) => (
   </div>
 );
 
-export default IOSBlock;
+export default GertrudeForIOS;
