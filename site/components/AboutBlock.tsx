@@ -48,18 +48,6 @@ const AboutBlock: React.FC = () => {
                 />
               </div>
             </div>
-
-            <style>
-              {`
-                @keyframes waggle {
-                  0%, 100% { transform: rotate(150deg); }
-                  20% { transform: rotate(142deg); }
-                  40% { transform: rotate(158deg); }
-                  60% { transform: rotate(145deg); }
-                  80% { transform: rotate(155deg); }
-                }
-              `}
-            </style>
             <img
               src="/arrow.png"
               alt=""
@@ -69,7 +57,7 @@ const AboutBlock: React.FC = () => {
               style={{
                 transitionDelay: isVisible ? `2000ms` : `0ms`,
                 transform: `rotate(150deg)`,
-                animation: isVisible ? `waggle 0.6s ease-in-out 2.1s` : `none`,
+                animation: isVisible ? `waggle-arrow 0.6s ease-in-out 2.1s` : `none`,
               }}
             />
             <span

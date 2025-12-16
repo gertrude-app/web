@@ -7,7 +7,7 @@ import PodcastsBlock from '@/components/PodcastsBlock';
 import { createMetadata } from '@/lib/seo';
 
 export const metadata = createMetadata(
-  `Gertrude | Parental Controls for Mac, iOS, and Podcasts`,
+  `Gertrude | Parental Controls for Mac, iPhone, and iPad`,
   `Protect your kids online with easy-to-use parental controls`,
 );
 

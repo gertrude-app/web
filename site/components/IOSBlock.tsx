@@ -184,7 +184,10 @@ const IOSBlock: React.FC = () => {
                   }),
                 }}
               >
-                <Phone className="shadow-2xl scale-[0.55] [@media(min-height:700px)]:scale-[0.65] xs:scale-[0.85] -mt-32 [@media(min-height:700px)]:-mt-24 xs:mt-0" labelStatus="hidden">
+                <Phone
+                  className="shadow-2xl scale-[0.55] [@media(min-height:700px)]:scale-[0.65] xs:scale-[0.85] -mt-32 [@media(min-height:700px)]:-mt-24 xs:mt-0"
+                  labelStatus="hidden"
+                >
                   <BlockedGifSearchScreen isVisible={isVisible} />
                 </Phone>
               </div>
@@ -193,23 +196,14 @@ const IOSBlock: React.FC = () => {
             <div className="grid grid-cols-1 md+:grid-cols-12 gap-12 md+:gap-16 xl:gap-20 items-center px-6 xs:px-8 sm:px-12 md:px-20 pt-4 xs:pt-6">
               <div className="md+:order-1 md+:col-span-9 relative z-10 flex flex-col items-center xs:items-start">
                 <div className="relative inline-block mb-3 xs:mb-6">
-                  <style>
-                    {`
-                      @keyframes waggle {
-                        0%, 100% { transform: rotate(0deg); }
-                        20% { transform: rotate(-8deg); }
-                        40% { transform: rotate(8deg); }
-                        60% { transform: rotate(-5deg); }
-                        80% { transform: rotate(5deg); }
-                      }
-                    `}
-                  </style>
                   <div
                     className={`inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-500 px-3 xs:px-4 py-1.5 xs:py-2 rounded-full shadow-lg shadow-green-600/30 ${isVisible && exitProgress === 0 ? `translate-x-0` : !isVisible ? `-translate-x-[250px]` : ``}`}
                     style={{
                       transition: `transform 0.25s cubic-bezier(0.2, 1.4, 0.5, 1)`,
                       transitionDelay: isVisible && exitProgress === 0 ? `1000ms` : `0ms`,
-                      animation: isVisible ? `waggle 0.5s ease-in-out 1.35s` : `none`,
+                      animation: isVisible
+                        ? `waggle-badge 0.5s ease-in-out 1.35s`
+                        : `none`,
                       ...(exitProgress > 0.08 && {
                         transform: `translateX(${(-(exitProgress - 0.08) / 0.25) * 300}px)`,
                         opacity: 1 - (exitProgress - 0.08) / 0.25,
