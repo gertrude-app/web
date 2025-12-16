@@ -110,8 +110,8 @@ const PodcastsBlock: React.FC = () => {
                   }),
                 }}
               >
-                <PodcastIcon className="size-10 xs:size-14 text-orange-300 drop-shadow-[0_0_12px_rgba(253,186,116,0.5)]" />
-                <h2 className="text-[2.75rem] xs:text-6xl md:text-7xl font-bold">
+                <PodcastIcon className="size-10 xs:size-12 md:size-14 text-orange-300 drop-shadow-[0_0_12px_rgba(253,186,116,0.5)]" />
+                <h2 className="text-[2.75rem] xs:text-5xl md:text-7xl font-bold">
                   <span className="bg-gradient-to-b from-white to-fuchsia-200 bg-clip-text text-transparent">
                     Gertrude
                   </span>
@@ -122,7 +122,7 @@ const PodcastsBlock: React.FC = () => {
                 </h2>
               </div>
               <p
-                className={`text-lg xs:text-2xl md:text-3xl font-medium -mt-3 sm:mt-0 mb-3 ${
+                className={`text-lg xs:text-xl md:text-3xl font-medium -mt-3 xs:-mt-1 md:mt-0 mb-3 ${
                   isVisible && exitProgress === 0
                     ? `translate-x-0 opacity-100`
                     : !isVisible
@@ -147,7 +147,7 @@ const PodcastsBlock: React.FC = () => {
                 <span className="text-white/90">for Kids</span>
               </p>
               <p
-                className={`hidden xs:block text-sm xs:text-lg text-fuchsia-100/90 max-w-2xl mx-auto leading-snug ${
+                className={`hidden xs:block text-sm xs:text-base md:text-lg text-fuchsia-100/90 max-w-2xl mx-auto leading-snug ${
                   isVisible && exitProgress === 0
                     ? `translate-x-0 opacity-100`
                     : !isVisible
@@ -169,7 +169,7 @@ const PodcastsBlock: React.FC = () => {
 
             <div className="grid md:grid-cols-[1fr_3fr] lg:grid-cols-[2fr_3fr] gap-8 xs:gap-8 md:gap-10 lg:gap-16 items-center mb-8 xs:mb-0">
               <div
-                className={`flex items-center justify-center mb-0 xs:mb-4 md:mb-0 -my-24 xs:-my-12 md:my-0 ${
+                className={`flex items-center justify-center mb-0 xs:mb-4 md:mb-0 -my-24 xs:-my-12 md:-my-10 lg:my-0 ${
                   isVisible && exitProgress === 0
                     ? `opacity-100`
                     : !isVisible
@@ -229,7 +229,7 @@ const PodcastsBlock: React.FC = () => {
               </div>
 
               <div
-                className={`space-y-3 xs:space-y-6 -mt-[7.5rem] xs:-mt-4 md:mt-0 ${
+                className={`space-y-3 xs:space-y-3 md:space-y-6 -mt-[7.5rem] xs:-mt-12 md:mt-0 ${
                   isVisible && exitProgress === 0
                     ? `translate-x-0 opacity-100`
                     : !isVisible
@@ -272,7 +272,7 @@ const PodcastsBlock: React.FC = () => {
             href="https://apps.apple.com/us/app/gertrude-am/id6738835146"
             target="_blank"
             rel="noopener noreferrer"
-            className={`hidden md:flex flex-col items-center justify-center gap-1.5 my-8 md:mt-0 md:mb-24 text-white/50 text-sm hover:text-white/70 transition-colors antialiased ${
+            className={`hidden md:flex flex-col items-center justify-center gap-1.5 my-8 md:mt-8 md:mb-16 text-white/50 text-sm hover:text-white/70 transition-colors antialiased ${
               isVisible && exitProgress === 0
                 ? `translate-y-0 opacity-100`
                 : !isVisible
@@ -326,7 +326,7 @@ const PodcastsBlock: React.FC = () => {
                 <img
                   src="/download-on-app-store.svg"
                   alt="Download on the App Store"
-                  className="h-10 xs:h-16"
+                  className="h-10 xs:h-12 md:h-16"
                 />
               </a>
               <div className="text-left xs:hidden">
@@ -340,13 +340,13 @@ const PodcastsBlock: React.FC = () => {
               </div>
             </div>
             <div className="hidden xs:block text-center sm:text-left">
-              <p className="text-white/90 font-semibold text-lg">
+              <p className="text-white/90 font-semibold text-base md:text-lg">
                 <span className="bg-gradient-to-r from-orange-200 to-orange-400 bg-clip-text text-transparent font-bold">
                   $10/year
                 </span>
                 {` `}after 30-day trial
               </p>
-              <p className="text-white/70">Covers your entire Apple Family</p>
+              <p className="text-white/70 text-sm md:text-base">Covers your entire Apple Family</p>
             </div>
           </div>
         </div>
@@ -505,15 +505,15 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
 
   return (
     <div
-      className={`bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl xs:rounded-2xl p-3 xs:p-6 transition-all duration-500 hover:bg-white/15 hover:border-white/30 ${
+      className={`bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl xs:rounded-2xl p-3 xs:p-4 md:p-6 transition-all duration-500 hover:bg-white/15 hover:border-white/30 ${
         isVisible ? `opacity-100 translate-x-0` : `opacity-0 translate-x-8`
       }`}
     >
-      <div className="flex items-center gap-2.5 xs:gap-4">
-        <div className="flex-shrink-0 w-9 h-9 xs:w-12 xs:h-12 rounded-lg xs:rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-          <Icon className="size-4 xs:size-6 text-white" />
+      <div className="flex items-center gap-2.5 xs:gap-3 md:gap-4">
+        <div className="flex-shrink-0 w-9 h-9 xs:w-10 xs:h-10 md:w-12 md:h-12 rounded-lg xs:rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+          <Icon className="size-4 xs:size-5 md:size-6 text-white" />
         </div>
-        <h3 className="text-sm xs:text-xl font-normal text-white leading-tight">
+        <h3 className="text-sm xs:text-base md:text-lg md:leading-tight font-normal text-white leading-tight">
           {title}
         </h3>
       </div>
