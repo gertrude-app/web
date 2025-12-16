@@ -16,9 +16,7 @@ import Phone from './super-scroller-illustration/Phone';
 
 const PodcastsBlock: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [exitProgress, setExitProgress] = useState(0);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const stickyRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -30,328 +28,193 @@ const PodcastsBlock: React.FC = () => {
       { threshold: 0.5 },
     );
 
-    if (stickyRef.current) {
-      observer.observe(stickyRef.current);
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
     }
 
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!wrapperRef.current) return;
-      const rect = wrapperRef.current.getBoundingClientRect();
-      const wrapperHeight = wrapperRef.current.offsetHeight;
-      const viewportHeight = window.innerHeight;
-      const scrollableDistance = wrapperHeight - viewportHeight;
-      const scrolled = -rect.top;
-      const progress = Math.max(0, Math.min(1, scrolled / scrollableDistance));
-      setExitProgress(progress);
-    };
-
-    window.addEventListener(`scroll`, handleScroll);
-    return () => window.removeEventListener(`scroll`, handleScroll);
-  }, []);
-
   return (
-    <div ref={wrapperRef} className="h-[280vh] relative">
-      <section
-        ref={stickyRef}
-        className="sticky top-0 min-h-screen bg-gradient-to-br from-violet-700 to-fuchsia-600 overflow-hidden flex flex-col"
-      >
-        <div
-          className="absolute inset-0 bg-gradient-to-b from-fuchsia-100 to-fuchsia-300 pointer-events-none z-10"
-          style={{ opacity: Math.max(0, (exitProgress - 0.55) / 0.45) * 0.95 }}
-        />
-        <div
-          className="min-h-screen px-6 sm:px-12 md:px-10 lg:px-20 pt-10 pb-6 xs:py-12 flex flex-col relative"
-          style={{
-            filter: `blur(${Math.max(0, (exitProgress - 0.55) / 0.45) * 8}px)`,
-          }}
-        >
-          <div className="[background:radial-gradient(#ffffff33,transparent_60%)] w-176 h-176 absolute -right-80 -top-80" />
-          <div className="[background:radial-gradient(#ffffff22,transparent_70%)] w-176 h-176 absolute -left-80 -bottom-80" />
+    <section
+      ref={sectionRef}
+      className="min-h-screen bg-gradient-to-br from-violet-700 to-fuchsia-600 overflow-hidden flex flex-col"
+    >
+      <div className="px-6 sm:px-12 md:px-10 lg:px-20 pt-10 pb-6 xs:py-12 flex flex-col relative flex-1">
+        <div className="[background:radial-gradient(#ffffff33,transparent_60%)] w-176 h-176 absolute -right-80 -top-80" />
+        <div className="[background:radial-gradient(#ffffff22,transparent_70%)] w-176 h-176 absolute -left-80 -bottom-80" />
 
-          <div className="max-w-6xl mx-auto relative flex-1 flex flex-col justify-center">
-            <div className="text-center mb-4 xs:mb-8 md:mb-16">
+        <div className="max-w-6xl mx-auto relative flex-1 flex flex-col justify-center">
+          <div className="text-center mb-4 xs:mb-8 md:mb-16">
+            <div
+              className={`flex items-center justify-center gap-3 xs:mb-6 transition-all duration-500 ${
+                isVisible ? `translate-x-0 opacity-100` : `-translate-x-16 opacity-0`
+              }`}
+              style={{ transitionDelay: isVisible ? `800ms` : `0ms` }}
+            >
+              <PodcastIcon className="size-10 xs:size-12 md:size-14 text-orange-300 drop-shadow-[0_0_12px_rgba(253,186,116,0.5)]" />
+              <h2 className="text-[2.75rem] xs:text-5xl md:text-7xl font-bold">
+                <span className="bg-gradient-to-b from-white to-fuchsia-200 bg-clip-text text-transparent">
+                  Gertrude
+                </span>
+                {` `}
+                <span className="text-orange-300 tracking-tight sm:animate-[glow-pulse_3s_ease-in-out_infinite]">
+                  AM
+                </span>
+              </h2>
               <img
                 src="/docs/images/gertrude-am-radio.png"
                 alt="Radio"
-                className={`mx-auto mb-6 w-32 rounded-2xl hidden md:block shadow-[0_8px_30px_rgba(0,0,0,0.4)] ${
-                  isVisible && exitProgress === 0
-                    ? `translate-y-0 opacity-100`
-                    : !isVisible
-                      ? `-translate-y-8 opacity-0`
-                      : ``
+                className={`w-20 rounded-xl hidden md:block shadow-[0_8px_30px_rgba(0,0,0,0.4)] ml-5 transition-all duration-500 ${
+                  isVisible ? `scale-100 opacity-100` : `scale-75 opacity-0`
                 }`}
-                style={{
-                  transition: `transform 0.6s cubic-bezier(0.2, 1.2, 0.4, 1), opacity 0.6s ease-out`,
-                  transitionDelay: isVisible && exitProgress === 0 ? `600ms` : `0ms`,
-                  ...(exitProgress > 0.5 && {
-                    transform: `translateY(${(-(exitProgress - 0.5) / 0.5) * 60}px)`,
-                    opacity: 1 - (exitProgress - 0.5) / 0.5,
-                  }),
-                }}
+                style={{ transitionDelay: isVisible ? `600ms` : `0ms` }}
               />
-              <div
-                className={`flex items-center justify-center gap-3 xs:mb-6 ${
-                  isVisible && exitProgress === 0
-                    ? `translate-x-0 opacity-100`
-                    : !isVisible
-                      ? `-translate-x-16 opacity-0`
-                      : ``
-                }`}
-                style={{
-                  transition: `transform 0.6s cubic-bezier(0.2, 1.2, 0.4, 1), opacity 0.6s ease-out`,
-                  transitionDelay: isVisible && exitProgress === 0 ? `800ms` : `0ms`,
-                  ...(exitProgress > 0.5 && {
-                    transform: `translateX(${(-(exitProgress - 0.5) / 0.5) * 100}px)`,
-                    opacity: 1 - (exitProgress - 0.5) / 0.5,
-                  }),
-                }}
-              >
-                <PodcastIcon className="size-10 xs:size-12 md:size-14 text-orange-300 drop-shadow-[0_0_12px_rgba(253,186,116,0.5)]" />
-                <h2 className="text-[2.75rem] xs:text-5xl md:text-7xl font-bold">
-                  <span className="bg-gradient-to-b from-white to-fuchsia-200 bg-clip-text text-transparent">
-                    Gertrude
-                  </span>
-                  {` `}
-                  <span className="text-orange-300 tracking-tight sm:animate-[glow-pulse_3s_ease-in-out_infinite]">
-                    AM
-                  </span>
-                </h2>
-              </div>
-              <p
-                className={`text-lg xs:text-xl md:text-3xl font-medium -mt-3 xs:-mt-1 md:mt-0 mb-3 ${
-                  isVisible && exitProgress === 0
-                    ? `translate-x-0 opacity-100`
-                    : !isVisible
-                      ? `translate-x-16 opacity-0`
-                      : ``
-                }`}
-                style={{
-                  transition: `transform 0.6s cubic-bezier(0.2, 1.2, 0.4, 1), opacity 0.6s ease-out`,
-                  transitionDelay: isVisible && exitProgress === 0 ? `1000ms` : `0ms`,
-                  ...(exitProgress > 0.5 && {
-                    transform: `translateX(${((exitProgress - 0.5) / 0.5) * 100}px)`,
-                    opacity: 1 - (exitProgress - 0.5) / 0.5,
-                  }),
-                }}
-              >
-                <span className="text-white/90">A Safe</span>
-                {` `}
-                <span className="bg-gradient-to-r from-orange-200 to-orange-400 bg-clip-text text-transparent font-bold">
-                  Podcast App
-                </span>
-                {` `}
-                <span className="text-white/90">for Kids</span>
-              </p>
-              <p
-                className={`hidden xs:block text-sm xs:text-base md:text-lg text-fuchsia-100/90 max-w-2xl mx-auto leading-snug ${
-                  isVisible && exitProgress === 0
-                    ? `translate-x-0 opacity-100`
-                    : !isVisible
-                      ? `-translate-x-12 opacity-0`
-                      : ``
-                }`}
-                style={{
-                  transition: `transform 0.6s cubic-bezier(0.2, 1.2, 0.4, 1), opacity 0.6s ease-out`,
-                  transitionDelay: isVisible && exitProgress === 0 ? `1200ms` : `0ms`,
-                  ...(exitProgress > 0.5 && {
-                    transform: `translateX(${(-(exitProgress - 0.5) / 0.5) * 80}px)`,
-                    opacity: 1 - (exitProgress - 0.5) / 0.5,
-                  }),
-                }}
-              >
-                PIN-protected content control. Kids only listen to shows you approve.
-              </p>
             </div>
-
-            <div className="grid md:grid-cols-[1fr_3fr] lg:grid-cols-[2fr_3fr] gap-8 xs:gap-8 md:gap-10 lg:gap-16 items-center mb-8 xs:mb-0">
-              <div
-                className={`flex items-center justify-center mb-0 xs:mb-4 md:mb-0 -my-24 xs:-my-12 md:-my-10 lg:my-0 ${
-                  isVisible && exitProgress === 0
-                    ? `opacity-100`
-                    : !isVisible
-                      ? `opacity-0`
-                      : ``
-                }`}
-                style={{
-                  transition: `opacity 0.6s ease-out`,
-                  transitionDelay: isVisible && exitProgress === 0 ? `700ms` : `0ms`,
-                  ...(exitProgress > 0.5 && {
-                    opacity: 1 - (exitProgress - 0.5) / 0.5,
-                  }),
-                }}
-              >
-                <div className="relative scale-[0.55] xs:scale-75 md:scale-100">
-                  <div
-                    className={`${
-                      isVisible && exitProgress === 0
-                        ? `translate-x-0 translate-y-0`
-                        : !isVisible
-                          ? `-translate-x-12 translate-y-8`
-                          : ``
-                    }`}
-                    style={{
-                      transition: `transform 0.8s cubic-bezier(0.2, 1.2, 0.4, 1)`,
-                      transitionDelay: isVisible && exitProgress === 0 ? `900ms` : `0ms`,
-                      ...(exitProgress > 0.5 && {
-                        transform: `translate(${(-(exitProgress - 0.5) / 0.5) * 80}px, ${((exitProgress - 0.5) / 0.5) * 40}px)`,
-                      }),
-                    }}
-                  >
-                    <Tablet>
-                      <PodcastPlayerScreen />
-                    </Tablet>
-                  </div>
-                  <div
-                    className={`absolute -right-24 -bottom-52 z-10 ${
-                      isVisible && exitProgress === 0
-                        ? `translate-x-0 translate-y-0`
-                        : !isVisible
-                          ? `translate-x-12 translate-y-8`
-                          : ``
-                    }`}
-                    style={{
-                      transition: `transform 0.8s cubic-bezier(0.2, 1.2, 0.4, 1)`,
-                      transitionDelay: isVisible && exitProgress === 0 ? `1100ms` : `0ms`,
-                      ...(exitProgress > 0.5 && {
-                        transform: `translate(${((exitProgress - 0.5) / 0.5) * 80}px, ${((exitProgress - 0.5) / 0.5) * 60}px)`,
-                      }),
-                    }}
-                  >
-                    <Phone className="shadow-2xl scale-[0.47]" labelStatus="hidden">
-                      <PincodeScreen isVisible={isVisible} />
-                    </Phone>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className={`space-y-3 xs:space-y-3 md:space-y-6 -mt-[7.5rem] xs:-mt-12 md:mt-0 ${
-                  isVisible && exitProgress === 0
-                    ? `translate-x-0 opacity-100`
-                    : !isVisible
-                      ? `translate-x-16 opacity-0`
-                      : ``
-                }`}
-                style={{
-                  transition: `transform 0.6s cubic-bezier(0.2, 1.2, 0.4, 1), opacity 0.6s ease-out`,
-                  transitionDelay: isVisible && exitProgress === 0 ? `1300ms` : `0ms`,
-                  ...(exitProgress > 0.5 && {
-                    transform: `translateX(${((exitProgress - 0.5) / 0.5) * 100}px)`,
-                    opacity: 1 - (exitProgress - 0.5) / 0.5,
-                  }),
-                }}
-              >
-                <FeatureCard
-                  icon={LockKeyholeIcon}
-                  title="Parents set PIN on first install"
-                  description="Searching and subscribing to new shows requires entering a parental PIN code."
-                  delay={isVisible ? 1400 : 0}
-                />
-                <FeatureCard
-                  icon={SearchXIcon}
-                  title="PIN required search or add shows"
-                  description="You pick exactly which podcasts your kids can listen to. No surprises, no limitations."
-                  delay={isVisible ? 1600 : 0}
-                />
-                <FeatureCard
-                  icon={HeadphonesIcon}
-                  title="Approved shows always available"
-                  description="Kids get
-  a familiar podcast app experience, just without the ability to find bad stuff."
-                  delay={isVisible ? 1800 : 0}
-                />
-              </div>
-            </div>
+            <p
+              className={`text-lg xs:text-xl md:text-3xl font-medium -mt-3 xs:-mt-1 md:mt-0 mb-3 transition-all duration-500 ${
+                isVisible ? `translate-x-0 opacity-100` : `translate-x-16 opacity-0`
+              }`}
+              style={{ transitionDelay: isVisible ? `1000ms` : `0ms` }}
+            >
+              <span className="text-white/90">A Safe</span>
+              {` `}
+              <span className="bg-gradient-to-r from-orange-200 to-orange-400 bg-clip-text text-transparent font-bold">
+                Podcast App
+              </span>
+              {` `}
+              <span className="text-white/90">for Kids</span>
+            </p>
+            <p
+              className={`hidden xs:block text-sm xs:text-base md:text-lg text-fuchsia-100/90 max-w-2xl mx-auto leading-snug transition-all duration-500 ${
+                isVisible ? `translate-x-0 opacity-100` : `-translate-x-12 opacity-0`
+              }`}
+              style={{ transitionDelay: isVisible ? `1200ms` : `0ms` }}
+            >
+              PIN-protected content control. Kids only listen to shows you approve.
+            </p>
           </div>
 
-          <a
-            href="https://apps.apple.com/us/app/gertrude-am/id6738835146"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`hidden md:flex flex-col items-center justify-center gap-1.5 my-8 md:mt-8 md:mb-16 text-white/50 text-sm hover:text-white/70 transition-colors antialiased ${
-              isVisible && exitProgress === 0
-                ? `translate-y-0 opacity-100`
-                : !isVisible
-                  ? `translate-y-8 opacity-0`
-                  : ``
-            }`}
-            style={{
-              transition: `transform 0.6s cubic-bezier(0.2, 1.2, 0.4, 1), opacity 0.6s ease-out`,
-              transitionDelay: isVisible && exitProgress === 0 ? `2000ms` : `0ms`,
-              ...(exitProgress > 0.5 && {
-                transform: `translateY(${((exitProgress - 0.5) / 0.5) * 60}px)`,
-                opacity: 1 - (exitProgress - 0.5) / 0.5,
-              }),
-            }}
-          >
-            <div className="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <StarIcon key={i} className="w-5 h-5 fill-current" />
-              ))}
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span>5-star rated on the App Store</span>
-              <ExternalLinkIcon className="w-3 h-3" />
-            </div>
-          </a>
-
-          <div
-            className={`flex flex-col sm:flex-row items-center justify-center gap-6 ${
-              isVisible && exitProgress === 0
-                ? `translate-y-0 opacity-100`
-                : !isVisible
-                  ? `translate-y-12 opacity-0`
-                  : ``
-            }`}
-            style={{
-              transition: `transform 0.6s cubic-bezier(0.2, 1.2, 0.4, 1), opacity 0.6s ease-out`,
-              transitionDelay: isVisible && exitProgress === 0 ? `2200ms` : `0ms`,
-              ...(exitProgress > 0.5 && {
-                transform: `translateY(${((exitProgress - 0.5) / 0.5) * 80}px)`,
-                opacity: 1 - (exitProgress - 0.5) / 0.5,
-              }),
-            }}
-          >
-            <div className="flex items-center gap-3 xs:gap-4">
-              <a
-                href="https://apps.apple.com/us/app/gertrude-am/id6738835146"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-transform duration-200 hover:scale-105"
-              >
-                <img
-                  src="/download-on-app-store.svg"
-                  alt="Download on the App Store"
-                  className="h-10 xs:h-12 md:h-16"
-                />
-              </a>
-              <div className="text-left xs:hidden">
-                <p className="text-white/90 font-semibold text-sm">
-                  <span className="bg-gradient-to-r from-orange-200 to-orange-400 bg-clip-text text-transparent font-bold">
-                    $10/year
-                  </span>
-                  {` `}after 30-day trial
-                </p>
-                <p className="text-white/70 text-xs">Covers your entire Apple Family</p>
+          <div className="grid md:grid-cols-[1fr_3fr] lg:grid-cols-[2fr_3fr] gap-8 xs:gap-8 md:gap-10 lg:gap-16 items-center mb-8 xs:mb-0">
+            <div
+              className={`flex items-center justify-center mb-0 xs:mb-4 md:mb-0 -my-24 xs:-my-12 md:-my-10 lg:my-0 transition-opacity duration-500 ${
+                isVisible ? `opacity-100` : `opacity-0`
+              }`}
+              style={{ transitionDelay: isVisible ? `700ms` : `0ms` }}
+            >
+              <div className="relative scale-[0.55] xs:scale-75 md:scale-100">
+                <div
+                  className={`transition-transform duration-700 ${
+                    isVisible ? `translate-x-0 translate-y-0` : `-translate-x-12 translate-y-8`
+                  }`}
+                  style={{ transitionDelay: isVisible ? `900ms` : `0ms` }}
+                >
+                  <Tablet>
+                    <PodcastPlayerScreen />
+                  </Tablet>
+                </div>
+                <div
+                  className={`absolute -right-24 -bottom-52 z-10 transition-transform duration-700 ${
+                    isVisible ? `translate-x-0 translate-y-0` : `translate-x-12 translate-y-8`
+                  }`}
+                  style={{ transitionDelay: isVisible ? `1100ms` : `0ms` }}
+                >
+                  <Phone className="shadow-2xl scale-[0.47]" labelStatus="hidden">
+                    <PincodeScreen isVisible={isVisible} />
+                  </Phone>
+                </div>
               </div>
             </div>
-            <div className="hidden xs:block text-center sm:text-left">
-              <p className="text-white/90 font-semibold text-base md:text-lg">
+
+            <div
+              className={`space-y-3 xs:space-y-3 md:space-y-6 -mt-[7.5rem] xs:-mt-12 md:mt-0 transition-all duration-500 ${
+                isVisible ? `translate-x-0 opacity-100` : `translate-x-16 opacity-0`
+              }`}
+              style={{ transitionDelay: isVisible ? `1300ms` : `0ms` }}
+            >
+              <FeatureCard
+                icon={LockKeyholeIcon}
+                title="Parents set PIN on first install"
+                description="Searching and subscribing to new shows requires entering a parental PIN code."
+                delay={isVisible ? 1400 : 0}
+              />
+              <FeatureCard
+                icon={SearchXIcon}
+                title="PIN required search or add shows"
+                description="You pick exactly which podcasts your kids can listen to. No surprises, no limitations."
+                delay={isVisible ? 1600 : 0}
+              />
+              <FeatureCard
+                icon={HeadphonesIcon}
+                title="Approved shows always available"
+                description="Kids get a familiar podcast app experience, just without the ability to find bad stuff."
+                delay={isVisible ? 1800 : 0}
+              />
+            </div>
+          </div>
+        </div>
+
+        <a
+          href="https://apps.apple.com/us/app/gertrude-am/id6738835146"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`hidden md:flex flex-col items-center justify-center gap-1.5 my-8 md:mt-12 md:mb-16 text-white/50 text-sm hover:text-white/70 transition-all duration-500 antialiased relative z-10 ${
+            isVisible ? `translate-y-0 opacity-100` : `translate-y-8 opacity-0`
+          }`}
+          style={{ transitionDelay: isVisible ? `2000ms` : `0ms` }}
+        >
+          <div className="flex items-center gap-1">
+            {[...Array(5)].map((_, i) => (
+              <StarIcon key={i} className="w-5 h-5 fill-current" />
+            ))}
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span>5-star rated on the App Store</span>
+            <ExternalLinkIcon className="w-3 h-3" />
+          </div>
+        </a>
+
+        <div
+          className={`flex flex-col sm:flex-row items-center justify-center gap-6 sm:mt-8 md:mt-0 transition-all duration-500 ${
+            isVisible ? `translate-y-0 opacity-100` : `translate-y-12 opacity-0`
+          }`}
+          style={{ transitionDelay: isVisible ? `2200ms` : `0ms` }}
+        >
+          <div className="flex items-center gap-3 xs:gap-4">
+            <a
+              href="https://apps.apple.com/us/app/gertrude-am/id6738835146"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-transform duration-200 hover:scale-105"
+            >
+              <img
+                src="/download-on-app-store.svg"
+                alt="Download on the App Store"
+                className="h-10 xs:h-12 md:h-14"
+              />
+            </a>
+            <div className="text-left xs:hidden">
+              <p className="text-white/90 font-semibold text-sm">
                 <span className="bg-gradient-to-r from-orange-200 to-orange-400 bg-clip-text text-transparent font-bold">
                   $10/year
                 </span>
                 {` `}after 30-day trial
               </p>
-              <p className="text-white/70 text-sm md:text-base">Covers your entire Apple Family</p>
+              <p className="text-white/50 text-[0.65rem]">Covers your entire Apple Family</p>
             </div>
           </div>
+          <div className="hidden xs:block text-center sm:text-left">
+            <p className="text-white/90 font-semibold text-base md:text-lg">
+              <span className="bg-gradient-to-r from-orange-200 to-orange-400 bg-clip-text text-transparent font-bold">
+                $10/year
+              </span>
+              {` `}after 30-day trial
+            </p>
+            <p className="text-white/50 text-xs md:text-sm">Covers your entire Apple Family</p>
+          </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
 
