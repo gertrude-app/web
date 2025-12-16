@@ -21,7 +21,7 @@ const PodcastsBlock: React.FC = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry?.isIntersecting) {
           setIsVisible(true);
         }
       },
@@ -96,7 +96,7 @@ const PodcastsBlock: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-[1fr_3fr] lg:grid-cols-[2fr_3fr] gap-8 xs:gap-8 md:gap-10 lg:gap-16 items-center mb-8 xs:mb-0">
+          <div className="grid md:grid-cols-[1fr_3fr] lg:grid-cols-[2fr_3fr] gap-8 md:gap-10 lg:gap-16 items-center mb-8 xs:mb-0">
             <div
               className={`flex items-center justify-center mb-0 xs:mb-4 md:mb-0 -my-24 xs:-my-12 md:-my-10 lg:my-0 transition-opacity duration-500 ${
                 isVisible ? `opacity-100` : `opacity-0`
@@ -128,7 +128,7 @@ const PodcastsBlock: React.FC = () => {
             </div>
 
             <div
-              className={`space-y-3 xs:space-y-3 md:space-y-6 -mt-[7.5rem] xs:-mt-12 md:mt-0 transition-all duration-500 ${
+              className={`space-y-3 md:space-y-6 -mt-[7.5rem] xs:-mt-12 md:mt-0 transition-all duration-500 ${
                 isVisible ? `translate-x-0 opacity-100` : `translate-x-16 opacity-0`
               }`}
               style={{ transitionDelay: isVisible ? `1300ms` : `0ms` }}
@@ -136,19 +136,16 @@ const PodcastsBlock: React.FC = () => {
               <FeatureCard
                 icon={LockKeyholeIcon}
                 title="Parents set PIN on first install"
-                description="Searching and subscribing to new shows requires entering a parental PIN code."
                 delay={isVisible ? 1400 : 0}
               />
               <FeatureCard
                 icon={SearchXIcon}
                 title="PIN required search or add shows"
-                description="You pick exactly which podcasts your kids can listen to. No surprises, no limitations."
                 delay={isVisible ? 1600 : 0}
               />
               <FeatureCard
                 icon={HeadphonesIcon}
                 title="Approved shows always available"
-                description="Kids get a familiar podcast app experience, just without the ability to find bad stuff."
                 delay={isVisible ? 1800 : 0}
               />
             </div>
@@ -156,7 +153,7 @@ const PodcastsBlock: React.FC = () => {
         </div>
 
         <a
-          href="https://apps.apple.com/us/app/gertrude-am/id6738835146"
+          href="https://apps.apple.com/us/app/gertrude-am/id6753187429?see-all=reviews&platform=iphone"
           target="_blank"
           rel="noopener noreferrer"
           className={`hidden md:flex flex-col items-center justify-center gap-1.5 my-8 md:mt-12 md:mb-16 text-white/50 text-sm hover:text-white/70 transition-all duration-500 antialiased relative z-10 ${
@@ -181,9 +178,8 @@ const PodcastsBlock: React.FC = () => {
           }`}
           style={{ transitionDelay: isVisible ? `2200ms` : `0ms` }}
         >
-          <div className="flex items-center gap-3 xs:gap-4">
-            <a
-              href="https://apps.apple.com/us/app/gertrude-am/id6738835146"
+          <a
+              href="https://apps.apple.com/us/app/gertrude-am/id6753187429"
               target="_blank"
               rel="noopener noreferrer"
               className="transition-transform duration-200 hover:scale-105"
@@ -194,24 +190,14 @@ const PodcastsBlock: React.FC = () => {
                 className="h-10 xs:h-12 md:h-14"
               />
             </a>
-            <div className="text-left xs:hidden">
-              <p className="text-white/90 font-semibold text-sm">
-                <span className="bg-gradient-to-r from-orange-200 to-orange-400 bg-clip-text text-transparent font-bold">
-                  $10/year
-                </span>
-                {` `}after 30-day trial
-              </p>
-              <p className="text-white/50 text-[0.65rem]">Covers your entire Apple Family</p>
-            </div>
-          </div>
-          <div className="hidden xs:block text-center sm:text-left">
-            <p className="text-white/90 font-semibold text-base md:text-lg">
+          <div className="text-center sm:text-left">
+            <p className="text-white/90 font-semibold text-sm xs:text-base md:text-lg">
               <span className="bg-gradient-to-r from-orange-200 to-orange-400 bg-clip-text text-transparent font-bold">
                 $10/year
               </span>
               {` `}after 30-day trial
             </p>
-            <p className="text-white/50 text-xs md:text-sm">Covers your entire Apple Family</p>
+            <p className="text-white/50 text-[0.65rem] xs:text-xs md:text-sm">Covers your entire Apple Family</p>
           </div>
         </div>
       </div>
@@ -346,16 +332,14 @@ const PincodeScreen: React.FC<PincodeScreenProps> = ({ isVisible }) => {
 };
 
 interface FeatureCardProps {
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: React.ComponentType<{ className?: string }>;
   title: string;
-  description: string;
   delay: number;
 }
 
 const FeatureCard: React.FC<FeatureCardProps> = ({
   icon: Icon,
   title,
-  description,
   delay,
 }) => {
   const [isVisible, setIsVisible] = useState(delay === 0);
