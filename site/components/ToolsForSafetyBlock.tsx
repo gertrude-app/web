@@ -59,7 +59,7 @@ const ToolsForSafetyBlock: React.FC = () => {
   return (
     <section className="min-h-screen bg-gradient-to-br from-white via-white via-55% to-fuchsia-200 px-4 xs:px-6 sm:px-8 md:px-20 pt-4 xs:pt-16 sm:pt-20 md:pt-24 pb-12 xs:pb-16 sm:pb-20 md:pb-24 flex flex-col items-center justify-center relative overflow-hidden">
       <div
-        className="absolute inset-0 bg-gradient-to-b from-white bg-fuchsia-600 pointer-events-none"
+        className="absolute inset-0 bg-gradient-to-b from-white to-fuchsia-600 pointer-events-none"
         style={{ opacity: scrollProgress * 0.7 }}
       />
       <svg width="0" height="0" style={{ position: `absolute` }}>
@@ -141,17 +141,17 @@ const ProductCard: React.FC<ProductCardProps> = ({
       e.preventDefault();
       document.querySelector(href)?.scrollIntoView({ behavior: `smooth` });
     }}
-    className="flex flex-row sm:flex-col items-center sm:text-center group animate-fadeIn opacity-0 gap-4 sm:gap-0 cursor-pointer"
+    className="flex flex-row sm:flex-col items-center sm:text-center group animate-fadeIn opacity-0 gap-4 sm:gap-0"
     style={{ animationDelay: `${delay}ms`, animationFillMode: `forwards` }}
   >
-    <div className="relative shrink-0 bg-white/80 backdrop-blur-sm rounded-2xl xs:rounded-3xl p-4 xs:p-6 sm:p-6 md:p-8 sm:mb-4 md:mb-6 transition-all duration-300 group-hover:scale-105 border border-fuchsia-200 group-hover:border-fuchsia-400 shadow-lg shadow-fuchsia-100 group-hover:shadow-xl group-hover:shadow-fuchsia-200">
+    <div className="relative shrink-0 bg-white/80 backdrop-blur-sm rounded-2xl xs:rounded-3xl p-4 xs:p-6 md:p-8 sm:mb-4 md:mb-6 transition-all duration-300 group-hover:scale-105 border border-fuchsia-200 group-hover:border-fuchsia-400 shadow-lg shadow-fuchsia-100 group-hover:shadow-xl group-hover:shadow-fuchsia-200">
       <Icon className="size-10 xs:size-12 sm:size-10 md:size-16 [&_*]:stroke-[url(#icon-gradient)] [&_circle]:fill-[url(#icon-gradient)] transition-transform duration-300 group-hover:scale-110" />
     </div>
     <div>
-      <h3 className="text-lg xs:text-xl sm:text-xl md:text-3xl font-semibold text-slate-800 mb-0.5 xs:mb-1 sm:mb-1 md:mb-2 transition-colors duration-300 group-hover:text-fuchsia-600">
+      <h3 className="text-lg xs:text-xl md:text-3xl font-semibold text-slate-800 mb-0.5 xs:mb-1 md:mb-2 transition-colors duration-300 group-hover:text-fuchsia-600">
         {label}
       </h3>
-      <p className="text-slate-500 text-xs xs:text-sm sm:text-sm md:text-base leading-snug max-w-[200px] sm:max-w-none antialiased">
+      <p className="text-slate-500 text-xs xs:text-sm md:text-base leading-snug max-w-[200px] sm:max-w-none antialiased">
         {description}
       </p>
     </div>

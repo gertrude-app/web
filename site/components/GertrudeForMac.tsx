@@ -10,7 +10,7 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 import Computer from './super-scroller-illustration/Computer';
 
-const MacOSBlock: React.FC = () => {
+const GertrudeForMac: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [exitProgress, setExitProgress] = useState(0);
   const [isMdOrLarger, setIsMdOrLarger] = useState(true);
@@ -27,7 +27,7 @@ const MacOSBlock: React.FC = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry?.isIntersecting) {
           setIsVisible(true);
         }
       },
@@ -60,10 +60,14 @@ const MacOSBlock: React.FC = () => {
   }, [isMdOrLarger]);
 
   return (
-    <div id="mac" ref={wrapperRef} className={isMdOrLarger ? `h-[280vh] relative` : `relative`}>
+    <div
+      id="mac"
+      ref={wrapperRef}
+      className={isMdOrLarger ? `h-[280vh] relative` : `relative`}
+    >
       <section
         ref={stickyRef}
-        className={`${isMdOrLarger ? `sticky top-0` : ``} min-h-screen bg-gradient-to-b from-white to-slate-50 overflow-hidden`}
+        className={`${isMdOrLarger ? `sticky top-0` : ``} min-h-screen overflow-hidden`}
       >
         <div
           className="absolute inset-0 bg-gradient-to-b from-violet-950 to-black pointer-events-none z-10"
@@ -96,7 +100,10 @@ const MacOSBlock: React.FC = () => {
                 : undefined
             }
           >
-            <Computer className="scale-[0.6] xs:scale-90 lg:scale-110" labelStatus="hidden">
+            <Computer
+              className="scale-[0.6] xs:scale-90 lg:scale-110"
+              labelStatus="hidden"
+            >
               <div className="w-full h-full bg-slate-950" />
             </Computer>
           </div>
@@ -223,25 +230,25 @@ const MacOSBlock: React.FC = () => {
                 }),
               }}
             >
-              <FeatureCardAlt
+              <FeatureCard
                 icon={ShieldCheckIcon}
                 title="Filter"
                 description="Everything is blocked. Unlock only what you approve."
-                delay={isVisible ? 0 : 0}
+                delay={0}
               />
-              <FeatureCardAlt
+              <FeatureCard
                 icon={MonitorDot}
                 title="Record"
                 description="Capture screenshots and typing for full transparency."
                 delay={isVisible ? 150 : 0}
               />
-              <FeatureCardAlt
+              <FeatureCard
                 icon={Clock4Icon}
                 title="Schedule"
                 description="Allow apps and websites on custom timeframes."
                 delay={isVisible ? 300 : 0}
               />
-              <FeatureCardAlt
+              <FeatureCard
                 icon={SmartphoneIcon}
                 title="Relax"
                 description="Control and monitor wherever you are, from any device."
@@ -265,7 +272,7 @@ const MacOSBlock: React.FC = () => {
               }}
             >
               <a
-                href="https://parents.gertrude.app/signup"
+                href="/mac"
                 className="group relative px-10 py-5 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-2xl text-white text-xl font-bold transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(168,85,247,0.4)] active:scale-100"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-violet-400 to-fuchsia-400 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -285,14 +292,14 @@ const MacOSBlock: React.FC = () => {
   );
 };
 
-interface FeatureCardAltProps {
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+interface FeatureCardProps {
+  icon: React.ComponentType<{ className?: string }>;
   title: string;
   description: string;
   delay: number;
 }
 
-const FeatureCardAlt: React.FC<FeatureCardAltProps> = ({
+const FeatureCard: React.FC<FeatureCardProps> = ({
   icon: Icon,
   title,
   description,
@@ -313,15 +320,19 @@ const FeatureCardAlt: React.FC<FeatureCardAltProps> = ({
         isVisible ? `opacity-100 translate-y-0` : `opacity-0 translate-y-8`
       }`}
     >
-      <div className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 shrink-0 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center lg:mb-4">
+      <div className="size-10 xs:size-11 sm:size-12 shrink-0 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center lg:mb-4">
         <Icon className="size-5 xs:size-[1.375rem] sm:size-6 text-white" />
       </div>
       <div className="-mt-0.5 lg:mt-0">
-        <h3 className="text-base xs:text-[1.0625rem] sm:text-lg font-semibold text-white mb-0.5 lg:mb-2">{title}</h3>
-        <p className="text-violet-300/80 text-xs xs:text-[0.8125rem] sm:text-sm leading-snug">{description}</p>
+        <h3 className="text-base xs:text-[1.0625rem] sm:text-lg font-semibold text-white mb-0.5 lg:mb-2">
+          {title}
+        </h3>
+        <p className="text-violet-300/80 text-xs xs:text-[0.8125rem] sm:text-sm leading-snug">
+          {description}
+        </p>
       </div>
     </div>
   );
 };
 
-export default MacOSBlock;
+export default GertrudeForMac;
