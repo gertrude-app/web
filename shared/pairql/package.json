@@ -6,7 +6,10 @@
   "exports": {
     ".": "./src/index.ts",
     "./admin": "./admin.ts",
-    "./dashboard": "./dashboard.ts"
+    "./dashboard": "./dashboard.ts",
+    "./src/dashboard": "./src/dashboard/index.ts",
+    "./src/admin": "./src/admin/index.ts",
+    "./src/PqlError": "./src/PqlError.ts"
   },
   "scripts": {
     "codegen": "node ./src/codegen.mts",
