@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import client, { type ParentDetailOutput } from '../api/client';
 
-export default function ParentDetail() {
+export default function ParentDetail(): React.ReactNode {
   const { id } = useParams<{ id: string }>();
   const [data, setData] = useState<ParentDetailOutput | null>(null);
   const [loading, setLoading] = useState(true);
@@ -11,7 +11,7 @@ export default function ParentDetail() {
   useEffect(() => {
     if (!id) return;
 
-    const fetchData = async () => {
+    const fetchData = async (): Promise<void> => {
       setLoading(true);
       setError(null);
 
@@ -53,10 +53,7 @@ export default function ParentDetail() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Link
-          to="/parents"
-          className="text-violet-600 hover:text-violet-700 font-medium"
-        >
+        <Link to="/parents" className="text-violet-600 hover:text-violet-700 font-medium">
           ← Back to Parents
         </Link>
       </div>
@@ -97,10 +94,7 @@ export default function ParentDetail() {
         ) : (
           <div className="space-y-4">
             {data.children.map((child) => (
-              <div
-                key={child.id}
-                className="border border-slate-200 rounded-lg p-4"
-              >
+              <div key={child.id} className="border border-slate-200 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="font-semibold text-slate-800">{child.name}</h3>
                   <div className="flex gap-2">
@@ -124,10 +118,7 @@ export default function ParentDetail() {
                     </h4>
                     <div className="grid gap-2">
                       {child.installations.map((install) => (
-                        <div
-                          key={install.id}
-                          className="bg-slate-50 rounded p-3 text-sm"
-                        >
+                        <div key={install.id} className="bg-slate-50 rounded p-3 text-sm">
                           <div className="flex justify-between">
                             <span className="font-medium">
                               {install.modelIdentifier ?? `Unknown Device`}
@@ -138,7 +129,8 @@ export default function ParentDetail() {
                           </div>
                           <div className="text-slate-600 mt-1">
                             App: {install.appVersion}
-                            {install.filterVersion && ` | Filter: ${install.filterVersion}`}
+                            {install.filterVersion &&
+                              ` | Filter: ${install.filterVersion}`}
                             {install.osVersion && ` | macOS: ${install.osVersion}`}
                           </div>
                         </div>
@@ -161,23 +153,16 @@ export default function ParentDetail() {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {data.keychains.map((keychain) => (
-              <div
-                key={keychain.id}
-                className="border border-slate-200 rounded-lg p-4"
-              >
+              <div key={keychain.id} className="border border-slate-200 rounded-lg p-4">
                 <div className="flex items-center justify-between">
-                  <span className="font-medium text-slate-800">
-                    {keychain.name}
-                  </span>
+                  <span className="font-medium text-slate-800">{keychain.name}</span>
                   {keychain.isPublic && (
                     <span className="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded-full">
                       Public
                     </span>
                   )}
                 </div>
-                <div className="text-sm text-slate-600 mt-1">
-                  {keychain.numKeys} keys
-                </div>
+                <div className="text-sm text-slate-600 mt-1">{keychain.numKeys} keys</div>
               </div>
             ))}
           </div>
@@ -207,7 +192,7 @@ export default function ParentDetail() {
   );
 }
 
-function InfoCard({ label, value }: { label: string; value: string }) {
+function InfoCard({ label, value }: { label: string; value: string }): React.ReactNode {
   return (
     <div className="bg-slate-50 rounded-lg p-4">
       <div className="text-sm text-slate-600">{label}</div>
@@ -216,7 +201,7 @@ function InfoCard({ label, value }: { label: string; value: string }) {
   );
 }
 
-function SubscriptionBadge({ status }: { status: string }) {
+function SubscriptionBadge({ status }: { status: string }): React.ReactNode {
   const styles: Record<string, string> = {
     paid: `bg-green-100 text-green-800`,
     trialing: `bg-blue-100 text-blue-800`,

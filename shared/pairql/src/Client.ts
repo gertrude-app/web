@@ -1,58 +1,40 @@
-import { type PqlError, type ServerPqlError, isPqlError, toClientError } from './PqlError';
+import type { Domain, PrepareRequest } from './types';
+import { type PqlError, isPqlError, toClientError } from './PqlError';
 import Result from './Result';
 
-export interface ClientConfig {
-  /** Function to get the API endpoint URL */
-  getEndpoint: () => string;
-  /** PairQL domain name (e.g., 'dashboard', 'admin') */
-  domain: string;
-  /** Function to get the auth token, if any */
-  getToken?: () => string | undefined;
-  /** Header name for auth token (default: 'X-AdminToken') */
-  authHeader?: string;
-  /** Extra headers to include with each request */
-  extraHeaders?: () => Record<string, string>;
-  /** Whether to log errors to console (default: true in non-prod) */
-  logErrors?: boolean;
-}
+export default abstract class Client<Auth> {
+  private endpoint: string;
+  private domain: Domain;
+  private prepareRequest: PrepareRequest<Auth>;
 
-export default abstract class Client {
-  protected config: ClientConfig;
-
-  protected constructor(config: ClientConfig) {
-    this.config = {
-      authHeader: `X-AdminToken`,
-      logErrors: true,
-      ...config,
-    };
+  protected constructor(
+    endpoint: string,
+    domain: Domain,
+    prepareRequest: PrepareRequest<Auth> = () => null,
+  ) {
+    this.endpoint = endpoint;
+    this.domain = domain;
+    this.prepareRequest = prepareRequest;
   }
 
   protected async query<Output>(
     input: unknown,
     operation: string,
+    auth: Auth,
   ): Promise<Result<Output, PqlError>> {
-    const headers: Record<string, string> = { 'Content-Type': `application/json` };
-
-    if (this.config.getToken) {
-      const token = this.config.getToken();
-      if (token && this.config.authHeader) {
-        headers[this.config.authHeader] = token;
-      }
-    }
-
-    if (this.config.extraHeaders) {
-      Object.assign(headers, this.config.extraHeaders());
-    }
-
     const init: RequestInit = {
       method: `POST`,
-      headers,
+      headers: { 'Content-Type': `application/json` },
       body: input === undefined ? undefined : JSON.stringify(input),
     };
 
+    const error = this.prepareRequest(init, auth);
+    if (error) {
+      return Result.error(error);
+    }
+
     try {
-      const endpoint = this.config.getEndpoint();
-      const url = `${endpoint}/pairql/${this.config.domain}/${operation}`;
+      const url = `${this.endpoint}/pairql/${this.domain}/${operation}`;
       const res = await fetch(url, init);
       const text = await res.text();
       let json: unknown;
@@ -66,8 +48,8 @@ export default abstract class Client {
       } else {
         return Result.success(json as Output);
       }
-    } catch (error) {
-      return this.errorResult(error);
+    } catch (err) {
+      return this.errorResult(err);
     }
   }
 
@@ -75,8 +57,16 @@ export default abstract class Client {
     return typeof json === `object` && json !== null && `__cyStubbedError` in json;
   }
 
+  private shouldLogError(): boolean {
+    return (
+      this.endpoint.includes(`localhost`) ||
+      this.endpoint.includes(`127.0.0.1`) ||
+      this.endpoint.includes(`api--staging`)
+    );
+  }
+
   protected errorResult(error: unknown): Result<never, PqlError> {
-    if (this.config.logErrors) {
+    if (this.shouldLogError()) {
       console.error(`PqlError`, error); // eslint-disable-line no-console
     }
 
@@ -84,13 +74,12 @@ export default abstract class Client {
       return Result.error(error);
     }
 
-    // Handle server error response
-    const serverError = error as ServerPqlError;
+    const serverError = error as any;
     if (typeof serverError === `object` && serverError !== null && `id` in serverError) {
       return Result.error(toClientError(serverError));
     }
 
-    // Handle network/unknown errors
+    // network/unknown errors
     if (`${error}`.includes(`Failed to fetch`)) {
       return Result.error<PqlError>({
         isPqlError: true,

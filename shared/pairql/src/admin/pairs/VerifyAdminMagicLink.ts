@@ -1,0 +1,11 @@
+// auto-generated, do not edit
+import type { UUID } from '../../types';
+
+export namespace VerifyAdminMagicLink {
+  export interface Input {
+    token: UUID;
+  }
+  export interface Output {
+    token: UUID;
+  }
+}

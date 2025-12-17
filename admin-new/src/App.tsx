@@ -7,25 +7,25 @@ import ParentDetail from './pages/ParentDetail';
 import ParentsList from './pages/ParentsList';
 import VerifyToken from './pages/VerifyToken';
 
-function App() {
+function App(): React.ReactNode {
   const [token, setToken] = useState<string | null>(() =>
     localStorage.getItem(`admin_token`),
   );
 
   useEffect(() => {
-    const handleStorageChange = () => {
+    const handleStorageChange = (): void => {
       setToken(localStorage.getItem(`admin_token`));
     };
     window.addEventListener(`storage`, handleStorageChange);
     return () => window.removeEventListener(`storage`, handleStorageChange);
   }, []);
 
-  const handleLogin = (newToken: string) => {
+  const handleLogin = (newToken: string): void => {
     localStorage.setItem(`admin_token`, newToken);
     setToken(newToken);
   };
 
-  const handleLogout = () => {
+  const handleLogout = (): void => {
     localStorage.removeItem(`admin_token`);
     setToken(null);
   };

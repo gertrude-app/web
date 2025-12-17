@@ -36,9 +36,6 @@ clean:
   @find . -name "node_modules" -type d -prune -exec rm -rf {} + && pnpm i
 
 codegen: && lint-fix format
-	@cd dash/app && node ./scripts/codegen.js
-
-codegen-admin:
 	@cd shared/pairql && pnpm codegen
 
 nuke-node-modules:

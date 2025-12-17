@@ -1,78 +1,84 @@
 import { Client, type PqlError } from '@shared/pairql';
-import type { Result} from '@shared/pairql';
+import type { Result } from '@shared/pairql';
 
-type Env = `dev` | `staging` | `prod`;
-
-function inferEnv(href: string): Env {
+function getEndpoint(): string {
+  const href =
+    typeof window !== `undefined` ? window.location.href : `http://localhost:4243`;
   if (
     href.includes(`vercel.app`) ||
     href.startsWith(`https://deploy-preview-`) ||
     (href.startsWith(`https://`) && href.includes(`--staging`))
   ) {
-    return `staging`;
+    return `https://api--staging.gertrude.app`;
   } else if (href.startsWith(`http://`)) {
-    return `dev`;
+    return `http://127.0.0.1:8080`;
   } else {
-    return `prod`;
+    return `https://api.gertrude.app`;
   }
 }
 
-function getEndpoint(env: Env): string {
-  switch (env) {
-    case `dev`:
-      return `http://127.0.0.1:8080`;
-    case `staging`:
-      return `https://api--staging.gertrude.app`;
-    case `prod`:
-      return `https://api.gertrude.app`;
-  }
-}
+type Auth = `superAdmin` | `none`;
 
-class AdminClient extends Client {
-  constructor(env: Env, getToken: () => string | undefined) {
-    super({
-      getEndpoint: () => getEndpoint(env),
-      domain: `admin`,
-      getToken,
-      authHeader: `X-AdminToken`,
-      logErrors: env !== `prod`,
-    });
-  }
+function createPrepareRequest(): (init: RequestInit, auth: Auth) => PqlError | null {
+  return (init: RequestInit, auth: Auth): PqlError | null => {
+    const headers = init.headers as Record<string, string>;
 
-  static web(href: string, getToken: () => string | undefined): AdminClient {
-    const env = inferEnv(href);
-    if (env !== `prod`) {
-      console.log(`[,] Gertrude Admin client configured for env: ${env.toUpperCase()}`);
+    if (auth === `superAdmin`) {
+      const token = localStorage.getItem(`admin_token`);
+      if (!token) {
+        return {
+          isPqlError: true,
+          id: `b2c3d4e5`,
+          type: `loggedOut`,
+          debugMessage: `No admin_token found in localStorage`,
+        };
+      }
+      headers[`X-AdminToken`] = token;
     }
-    return new AdminClient(env, getToken);
+
+    return null;
+  };
+}
+
+class AdminClient extends Client<Auth> {
+  constructor(
+    endpoint: string,
+    prepareRequest: (init: RequestInit, auth: Auth) => PqlError | null,
+  ) {
+    super(endpoint, `admin`, prepareRequest);
   }
 
-  async requestMagicLink(input: { email: string }): Promise<Result<{ success: boolean }>> {
-    return this.query<{ success: boolean }>(input, `RequestAdminMagicLink`);
+  async requestMagicLink(input: {
+    email: string;
+  }): Promise<Result<{ success: boolean }>> {
+    return this.query<{ success: boolean }>(input, `RequestAdminMagicLink`, `none`);
   }
 
   async verifyMagicLink(input: { token: string }): Promise<Result<{ token: string }>> {
-    return this.query<{ token: string }>(input, `VerifyAdminMagicLink`);
+    return this.query<{ token: string }>(input, `VerifyAdminMagicLink`, `none`);
   }
 
   async macOverview(): Promise<Result<MacOverviewOutput>> {
-    return this.query<MacOverviewOutput>(undefined, `MacOverview`);
+    return this.query<MacOverviewOutput>(undefined, `MacOverview`, `superAdmin`);
   }
 
   async iOSOverview(): Promise<Result<IOSOverviewOutput>> {
-    return this.query<IOSOverviewOutput>(undefined, `IOSOverview`);
+    return this.query<IOSOverviewOutput>(undefined, `IOSOverview`, `superAdmin`);
   }
 
   async podcastOverview(): Promise<Result<PodcastOverviewOutput>> {
-    return this.query<PodcastOverviewOutput>(undefined, `PodcastOverview`);
+    return this.query<PodcastOverviewOutput>(undefined, `PodcastOverview`, `superAdmin`);
   }
 
-  async parentsList(input: { page: number; pageSize?: number }): Promise<Result<ParentsListOutput>> {
-    return this.query<ParentsListOutput>(input, `ParentsList`);
+  async parentsList(input: {
+    page: number;
+    pageSize?: number;
+  }): Promise<Result<ParentsListOutput>> {
+    return this.query<ParentsListOutput>(input, `ParentsList`, `superAdmin`);
   }
 
   async parentDetail(input: { id: string }): Promise<Result<ParentDetailOutput>> {
-    return this.query<ParentDetailOutput>(input, `ParentDetail`);
+    return this.query<ParentDetailOutput>(input, `ParentDetail`, `superAdmin`);
   }
 }
 
@@ -153,10 +159,7 @@ export interface ParentDetailOutput {
   }>;
 }
 
-const client = AdminClient.web(
-  typeof window !== `undefined` ? window.location.href : `http://localhost:4243`,
-  () => localStorage.getItem(`admin_token`) ?? undefined,
-);
+const client = new AdminClient(getEndpoint(), createPrepareRequest());
 
 export default client;
 export type { PqlError };

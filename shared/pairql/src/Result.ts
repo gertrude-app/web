@@ -19,6 +19,25 @@ export default class Result<T, E = PqlError> {
     return new Result<never, E>({ type: `error`, error });
   }
 
+  public static unexpectedError(
+    id: string,
+    debugMessage?: string,
+  ): Result<never, PqlError> {
+    return Result.error({
+      id,
+      type: `clientError`,
+      debugMessage: debugMessage ?? `[no debug message]`,
+      isPqlError: true,
+    });
+  }
+
+  public static resolveUnexpected(
+    id: string,
+    debugMessage?: string,
+  ): Promise<Result<never, PqlError>> {
+    return Promise.resolve(this.unexpectedError(id, debugMessage));
+  }
+
   public static merge<TA, TB, E>(
     a: Result<TA, E>,
     b: Result<TB, E>,
@@ -43,10 +62,7 @@ export default class Result<T, E = PqlError> {
     }
   }
 
-  public reduce<K>(config: {
-    success: (value: T) => K;
-    error: (error: E) => K;
-  }): K {
+  public reduce<K>(config: { success: (value: T) => K; error: (error: E) => K }): K {
     if (this.data.type === `success`) {
       return config.success(this.data.value);
     } else {

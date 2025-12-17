@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import client from '../api/client';
 
-export default function Login() {
+export default function Login(): React.ReactNode {
   const [email, setEmail] = useState(``);
   const [status, setStatus] = useState<`idle` | `loading` | `sent` | `error`>(`idle`);
   const [errorMsg, setErrorMsg] = useState(``);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     setStatus(`loading`);
     setErrorMsg(``);
@@ -25,11 +25,15 @@ export default function Login() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-violet-600 to-fuchsia-600">
         <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full text-center">
-          <div className="text-6xl mb-4">📬</div>
+          <div className="text-6xl mb-4">
+            <span role="img" aria-label="mailbox">
+              📬
+            </span>
+          </div>
           <h2 className="text-2xl font-bold text-slate-800 mb-2">Check Your Email</h2>
           <p className="text-slate-600">
-            If an admin account exists for <strong>{email}</strong>, we've sent a magic link.
-            Click the link in the email to sign in.
+            If an admin account exists for <strong>{email}</strong>, we've sent a magic
+            link. Click the link in the email to sign in.
           </p>
           <button
             onClick={() => {
@@ -57,7 +61,10 @@ export default function Login() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-slate-700 mb-1"
+            >
               Email Address
             </label>
             <input

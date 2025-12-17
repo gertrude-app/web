@@ -6,7 +6,7 @@ import client, {
   type PodcastOverviewOutput,
 } from '../api/client';
 
-export default function Dashboard() {
+export default function Dashboard(): React.ReactNode {
   const [macData, setMacData] = useState<MacOverviewOutput | null>(null);
   const [iosData, setIosData] = useState<IOSOverviewOutput | null>(null);
   const [podcastData, setPodcastData] = useState<PodcastOverviewOutput | null>(null);
@@ -14,7 +14,7 @@ export default function Dashboard() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (): Promise<void> => {
       setLoading(true);
       setError(null);
 
@@ -66,7 +66,7 @@ export default function Dashboard() {
   );
 }
 
-function MacSection({ data }: { data: MacOverviewOutput }) {
+function MacSection({ data }: { data: MacOverviewOutput }): React.ReactNode {
   const stats = [
     { label: `Annual Revenue`, value: `$${data.annualRevenue.toLocaleString()}` },
     { label: `Paying Parents`, value: data.payingParents.toLocaleString() },
@@ -100,7 +100,7 @@ function MacSection({ data }: { data: MacOverviewOutput }) {
   );
 }
 
-function IOSSection({ data }: { data: IOSOverviewOutput }) {
+function IOSSection({ data }: { data: IOSOverviewOutput }): React.ReactNode {
   const total = data.firstLaunches;
   const authPct = total > 0 ? (data.authorizationSuccesses / total) * 100 : 0;
   const installPct = total > 0 ? (data.filterInstallSuccesses / total) * 100 : 0;
@@ -145,7 +145,15 @@ function IOSSection({ data }: { data: IOSOverviewOutput }) {
   );
 }
 
-function FunnelBar({ label, value, color }: { label: string; value: number; color: string }) {
+function FunnelBar({
+  label,
+  value,
+  color,
+}: {
+  label: string;
+  value: number;
+  color: string;
+}): React.ReactNode {
   return (
     <div className="flex items-center gap-4">
       <div className="w-28 text-sm text-slate-600">{label}</div>
@@ -162,7 +170,7 @@ function FunnelBar({ label, value, color }: { label: string; value: number; colo
   );
 }
 
-function PodcastSection({ data }: { data: PodcastOverviewOutput }) {
+function PodcastSection({ data }: { data: PodcastOverviewOutput }): React.ReactNode {
   return (
     <section className="bg-white rounded-lg shadow-md p-6">
       <h2 className="text-xl font-semibold text-slate-800 mb-4">Podcast App</h2>

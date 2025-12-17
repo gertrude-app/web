@@ -6,7 +6,7 @@ interface VerifyTokenProps {
   onLogin: (token: string) => void;
 }
 
-export default function VerifyToken({ onLogin }: VerifyTokenProps) {
+export default function VerifyToken({ onLogin }: VerifyTokenProps): React.ReactNode {
   const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
   const [status, setStatus] = useState<`verifying` | `error`>(`verifying`);
@@ -19,7 +19,7 @@ export default function VerifyToken({ onLogin }: VerifyTokenProps) {
       return;
     }
 
-    const verifyToken = async () => {
+    const verifyToken = async (): Promise<void> => {
       const result = await client.verifyMagicLink({ token });
 
       if (result.isSuccess && result.value) {
@@ -38,9 +38,15 @@ export default function VerifyToken({ onLogin }: VerifyTokenProps) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-violet-600 to-fuchsia-600">
         <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full text-center">
-          <div className="animate-spin text-4xl mb-4">⏳</div>
+          <div className="animate-spin text-4xl mb-4">
+            <span role="img" aria-label="loading">
+              ⏳
+            </span>
+          </div>
           <h2 className="text-xl font-bold text-slate-800">Verifying...</h2>
-          <p className="text-slate-600 mt-2">Please wait while we verify your magic link.</p>
+          <p className="text-slate-600 mt-2">
+            Please wait while we verify your magic link.
+          </p>
         </div>
       </div>
     );
@@ -49,7 +55,11 @@ export default function VerifyToken({ onLogin }: VerifyTokenProps) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-violet-600 to-fuchsia-600">
       <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full text-center">
-        <div className="text-6xl mb-4">❌</div>
+        <div className="text-6xl mb-4">
+          <span role="img" aria-label="error">
+            ❌
+          </span>
+        </div>
         <h2 className="text-xl font-bold text-slate-800">Verification Failed</h2>
         <p className="text-slate-600 mt-2">{errorMsg}</p>
         <button

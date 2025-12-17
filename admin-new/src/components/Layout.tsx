@@ -5,7 +5,7 @@ interface LayoutProps {
   onLogout: () => void;
 }
 
-export default function Layout({ children, onLogout }: LayoutProps) {
+export default function Layout({ children, onLogout }: LayoutProps): React.ReactNode {
   const location = useLocation();
 
   const navLinks = [

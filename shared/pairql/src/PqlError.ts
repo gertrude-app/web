@@ -1,7 +1,14 @@
-const TYPES = [`notFound`, `badRequest`, `serverError`, `unauthorized`, `loggedOut`, `clientError`, `other`] as const;
+const TYPES = [
+  `notFound`,
+  `badRequest`,
+  `serverError`,
+  `unauthorized`,
+  `loggedOut`,
+  `clientError`,
+  `other`,
+] as const;
 export type PqlErrorType = (typeof TYPES)[number];
 
-/** Error response from a PairQL server */
 export interface ServerPqlError {
   id: string;
   requestId?: string;
@@ -17,7 +24,6 @@ export interface ServerPqlError {
   version?: string;
 }
 
-/** Client-side PqlError (after converting server response) */
 export interface PqlError {
   isPqlError: true;
   id: string;
@@ -61,5 +67,18 @@ export function toClientError(serverError: ServerPqlError): PqlError {
     entityName: serverError.entityName,
     tag: serverError.dashboardTag,
     showContactSupport: serverError.showContactSupport,
+  };
+}
+
+export function ensurePqlError(error: unknown): PqlError {
+  if (isPqlError(error)) {
+    return error;
+  }
+  return {
+    isPqlError: true,
+    id: `59b169c4`,
+    type: `clientError`,
+    debugMessage: `Unexpected non-pql error: ${error}`,
+    showContactSupport: true,
   };
 }

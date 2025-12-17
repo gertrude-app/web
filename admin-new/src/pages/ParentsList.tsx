@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import client, { type ParentsListOutput } from '../api/client';
 
-export default function ParentsList() {
+export default function ParentsList(): React.ReactNode {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get(`page`) ?? `1`, 10);
 
@@ -11,7 +11,7 @@ export default function ParentsList() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (): Promise<void> => {
       setLoading(true);
       setError(null);
 
@@ -30,7 +30,7 @@ export default function ParentsList() {
     fetchData();
   }, [page]);
 
-  const goToPage = (newPage: number) => {
+  const goToPage = (newPage: number): void => {
     setSearchParams({ page: newPage.toString() });
   };
 
@@ -134,7 +134,7 @@ export default function ParentsList() {
   );
 }
 
-function StatusBadge({ status }: { status: string }) {
+function StatusBadge({ status }: { status: string }): React.ReactNode {
   const styles: Record<string, string> = {
     active: `bg-green-100 text-green-800`,
     onboarded: `bg-blue-100 text-blue-800`,
@@ -150,13 +150,15 @@ function StatusBadge({ status }: { status: string }) {
   };
 
   return (
-    <span className={`px-2 py-1 rounded-full text-xs font-medium ${styles[status] ?? styles.unknown}`}>
+    <span
+      className={`px-2 py-1 rounded-full text-xs font-medium ${styles[status] ?? styles.unknown}`}
+    >
       {labels[status] ?? status}
     </span>
   );
 }
 
-function SubscriptionBadge({ status }: { status: string }) {
+function SubscriptionBadge({ status }: { status: string }): React.ReactNode {
   const styles: Record<string, string> = {
     paid: `bg-green-100 text-green-800`,
     trialing: `bg-blue-100 text-blue-800`,
@@ -167,7 +169,9 @@ function SubscriptionBadge({ status }: { status: string }) {
   };
 
   return (
-    <span className={`px-2 py-1 rounded-full text-xs font-medium ${styles[status] ?? `bg-slate-100 text-slate-600`}`}>
+    <span
+      className={`px-2 py-1 rounded-full text-xs font-medium ${styles[status] ?? `bg-slate-100 text-slate-600`}`}
+    >
       {status}
     </span>
   );
@@ -181,7 +185,7 @@ function Pagination({
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-}) {
+}): React.ReactNode {
   return (
     <div className="flex items-center justify-center gap-2">
       <button
