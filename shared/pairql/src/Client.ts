@@ -74,6 +74,10 @@ export default abstract class Client<Auth> {
       return Result.error(error);
     }
 
+    if (this.isStubbedError(error)) {
+      return Result.error(toClientError(error as any));
+    }
+
     const serverError = error as any;
     if (typeof serverError === `object` && serverError !== null && `id` in serverError) {
       return Result.error(toClientError(serverError));
