@@ -2,6 +2,80 @@ import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import client, { type ParentsListOutput } from '../api/client';
 
+function UsersIcon({ className = `` }: { className?: string }): React.ReactNode {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </svg>
+  );
+}
+
+function ChevronLeftIcon({ className = `` }: { className?: string }): React.ReactNode {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="m15 18-6-6 6-6" />
+    </svg>
+  );
+}
+
+function ChevronRightIcon({ className = `` }: { className?: string }): React.ReactNode {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="m9 18 6-6-6-6" />
+    </svg>
+  );
+}
+
+function LoadingSpinner({ className = `` }: { className?: string }): React.ReactNode {
+  return (
+    <svg className={`animate-spin ${className}`} viewBox="0 0 24 24" fill="none">
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="3"
+      />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      />
+    </svg>
+  );
+}
+
 export default function ParentsList(): React.ReactNode {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get(`page`) ?? `1`, 10);
@@ -36,16 +110,36 @@ export default function ParentsList(): React.ReactNode {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="text-lg text-slate-600">Loading parents...</div>
+      <div className="flex flex-col items-center justify-center py-24">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-violet to-brand-fuchsia flex items-center justify-center mb-4 shadow-lg shadow-brand-violet/20">
+          <LoadingSpinner className="w-6 h-6 text-white" />
+        </div>
+        <p className="text-slate-500 font-medium">Loading parents...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
-        {error}
+      <div className="bg-red-50 border border-red-100 rounded-2xl p-6">
+        <div className="flex items-start gap-4">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-400 to-red-500 flex items-center justify-center flex-shrink-0">
+            <svg
+              className="w-5 h-5 text-white"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v4M12 16h.01" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="font-display font-semibold text-red-900">Failed to load parents</h3>
+            <p className="mt-1 text-red-700">{error}</p>
+          </div>
+        </div>
       </div>
     );
   }
@@ -55,68 +149,91 @@ export default function ParentsList(): React.ReactNode {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-slate-800">Parents</h1>
-        <div className="text-sm text-slate-600">
-          {data.totalCount.toLocaleString()} total parents
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-violet to-brand-fuchsia flex items-center justify-center shadow-lg shadow-brand-violet/20">
+            <UsersIcon className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-display font-semibold text-slate-900 tracking-tight">
+              Parents
+            </h1>
+            <p className="text-sm text-slate-500">
+              {data.totalCount.toLocaleString()} total accounts
+            </p>
+          </div>
         </div>
+        <Pagination
+          currentPage={data.page}
+          totalPages={data.totalPages}
+          onPageChange={goToPage}
+        />
       </div>
 
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm shadow-slate-200/50 overflow-hidden">
         <table className="w-full">
-          <thead className="bg-slate-50 border-b border-slate-200">
-            <tr>
-              <th className="text-left px-4 py-3 text-sm font-semibold text-slate-700">
+          <thead>
+            <tr className="border-b border-slate-100">
+              <th className="text-left px-5 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Email
               </th>
-              <th className="text-left px-4 py-3 text-sm font-semibold text-slate-700">
+              <th className="text-left px-5 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Status
               </th>
-              <th className="text-left px-4 py-3 text-sm font-semibold text-slate-700">
+              <th className="text-left px-5 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Subscription
               </th>
-              <th className="text-center px-4 py-3 text-sm font-semibold text-slate-700">
+              <th className="text-center px-5 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Kids
               </th>
-              <th className="text-center px-4 py-3 text-sm font-semibold text-slate-700">
-                Keychains
+              <th className="text-center px-5 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                Keys
               </th>
-              <th className="text-center px-4 py-3 text-sm font-semibold text-slate-700">
+              <th className="text-center px-5 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Notifs
               </th>
-              <th className="text-left px-4 py-3 text-sm font-semibold text-slate-700">
+              <th className="text-left px-5 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Created
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {data.parents.map((parent) => (
-              <tr key={parent.id} className="hover:bg-slate-50 transition-colors">
-                <td className="px-4 py-3">
+              <tr
+                key={parent.id}
+                className="hover:bg-slate-50/50 transition-colors group"
+              >
+                <td className="px-5 py-4">
                   <Link
                     to={`/parents/${parent.id}`}
-                    className="text-violet-600 hover:text-violet-700 font-medium"
+                    className="text-slate-900 hover:text-brand-violet font-medium transition-colors"
                   >
                     {parent.email}
                   </Link>
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-5 py-4">
                   <StatusBadge status={parent.status} />
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-5 py-4">
                   <SubscriptionBadge status={parent.subscriptionStatus} />
                 </td>
-                <td className="px-4 py-3 text-center text-slate-600">
-                  {parent.numChildren}
+                <td className="px-5 py-4 text-center">
+                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 text-sm font-medium text-slate-700">
+                    {parent.numChildren}
+                  </span>
                 </td>
-                <td className="px-4 py-3 text-center text-slate-600">
-                  {parent.numKeychains}
+                <td className="px-5 py-4 text-center">
+                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 text-sm font-medium text-slate-700">
+                    {parent.numKeychains}
+                  </span>
                 </td>
-                <td className="px-4 py-3 text-center text-slate-600">
-                  {parent.numNotifications}
+                <td className="px-5 py-4 text-center">
+                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 text-sm font-medium text-slate-700">
+                    {parent.numNotifications}
+                  </span>
                 </td>
-                <td className="px-4 py-3 text-sm text-slate-600">
+                <td className="px-5 py-4 text-sm text-slate-500">
                   {formatDate(parent.createdAt)}
                 </td>
               </tr>
@@ -125,21 +242,23 @@ export default function ParentsList(): React.ReactNode {
         </table>
       </div>
 
-      <Pagination
-        currentPage={data.page}
-        totalPages={data.totalPages}
-        onPageChange={goToPage}
-      />
+      <div className="flex justify-center">
+        <Pagination
+          currentPage={data.page}
+          totalPages={data.totalPages}
+          onPageChange={goToPage}
+        />
+      </div>
     </div>
   );
 }
 
 function StatusBadge({ status }: { status: string }): React.ReactNode {
   const styles: Record<string, string> = {
-    active: `bg-green-100 text-green-800`,
-    onboarded: `bg-blue-100 text-blue-800`,
-    no_action: `bg-slate-100 text-slate-600`,
-    unknown: `bg-slate-100 text-slate-600`,
+    active: `bg-emerald-50 text-emerald-700 ring-emerald-600/20`,
+    onboarded: `bg-sky-50 text-sky-700 ring-sky-600/20`,
+    no_action: `bg-slate-50 text-slate-600 ring-slate-500/20`,
+    unknown: `bg-slate-50 text-slate-600 ring-slate-500/20`,
   };
 
   const labels: Record<string, string> = {
@@ -151,7 +270,7 @@ function StatusBadge({ status }: { status: string }): React.ReactNode {
 
   return (
     <span
-      className={`px-2 py-1 rounded-full text-xs font-medium ${styles[status] ?? styles.unknown}`}
+      className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium ring-1 ring-inset ${styles[status] ?? styles.unknown}`}
     >
       {labels[status] ?? status}
     </span>
@@ -160,19 +279,28 @@ function StatusBadge({ status }: { status: string }): React.ReactNode {
 
 function SubscriptionBadge({ status }: { status: string }): React.ReactNode {
   const styles: Record<string, string> = {
-    paid: `bg-green-100 text-green-800`,
-    trialing: `bg-blue-100 text-blue-800`,
-    overdue: `bg-yellow-100 text-yellow-800`,
-    unpaid: `bg-red-100 text-red-800`,
-    pendingEmailVerification: `bg-slate-100 text-slate-600`,
-    complimentary: `bg-purple-100 text-purple-800`,
+    paid: `bg-emerald-50 text-emerald-700 ring-emerald-600/20`,
+    trialing: `bg-sky-50 text-sky-700 ring-sky-600/20`,
+    overdue: `bg-amber-50 text-amber-700 ring-amber-600/20`,
+    unpaid: `bg-red-50 text-red-700 ring-red-600/20`,
+    pendingEmailVerification: `bg-slate-50 text-slate-600 ring-slate-500/20`,
+    complimentary: `bg-violet-50 text-violet-700 ring-violet-600/20`,
+  };
+
+  const labels: Record<string, string> = {
+    paid: `Paid`,
+    trialing: `Trial`,
+    overdue: `Overdue`,
+    unpaid: `Unpaid`,
+    pendingEmailVerification: `Pending`,
+    complimentary: `Comp`,
   };
 
   return (
     <span
-      className={`px-2 py-1 rounded-full text-xs font-medium ${styles[status] ?? `bg-slate-100 text-slate-600`}`}
+      className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium ring-1 ring-inset ${styles[status] ?? `bg-slate-50 text-slate-600 ring-slate-500/20`}`}
     >
-      {status}
+      {labels[status] ?? status}
     </span>
   );
 }
@@ -187,26 +315,60 @@ function Pagination({
   onPageChange: (page: number) => void;
 }): React.ReactNode {
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex items-center gap-1">
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage <= 1}
-        className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
       >
-        Previous
+        <ChevronLeftIcon className="w-5 h-5" />
       </button>
-      <span className="px-4 py-2 text-sm text-slate-600">
-        Page {currentPage} of {totalPages}
-      </span>
+      <div className="flex items-center gap-1 px-2">
+        {getPageNumbers(currentPage, totalPages).map((pageNum, idx) =>
+          pageNum === `...` ? (
+            <span key={`ellipsis-${idx}`} className="px-2 text-slate-400">
+              ...
+            </span>
+          ) : (
+            <button
+              key={pageNum}
+              onClick={() => onPageChange(pageNum as number)}
+              className={`min-w-[36px] h-9 px-3 rounded-lg text-sm font-medium transition-all ${
+                pageNum === currentPage
+                  ? `bg-gradient-to-r from-brand-violet to-brand-fuchsia text-white shadow-sm`
+                  : `text-slate-600 hover:bg-slate-100`
+              }`}
+            >
+              {pageNum}
+            </button>
+          ),
+        )}
+      </div>
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage >= totalPages}
-        className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
       >
-        Next
+        <ChevronRightIcon className="w-5 h-5" />
       </button>
     </div>
   );
+}
+
+function getPageNumbers(current: number, total: number): (number | string)[] {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
+  if (current <= 3) {
+    return [1, 2, 3, 4, 5, `...`, total];
+  }
+
+  if (current >= total - 2) {
+    return [1, `...`, total - 4, total - 3, total - 2, total - 1, total];
+  }
+
+  return [1, `...`, current - 1, current, current + 1, `...`, total];
 }
 
 function formatDate(dateString: string): string {

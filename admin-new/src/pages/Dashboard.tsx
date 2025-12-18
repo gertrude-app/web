@@ -6,6 +6,100 @@ import client, {
   type PodcastOverviewOutput,
 } from '../api/client';
 
+function MonitorIcon({ className = `` }: { className?: string }): React.ReactNode {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <rect width="20" height="14" x="2" y="3" rx="2" />
+      <line x1="8" x2="16" y1="21" y2="21" />
+      <line x1="12" x2="12" y1="17" y2="21" />
+    </svg>
+  );
+}
+
+function SmartphoneIcon({ className = `` }: { className?: string }): React.ReactNode {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+      <line x1="12" x2="12.01" y1="18" y2="18" />
+    </svg>
+  );
+}
+
+function MicIcon({ className = `` }: { className?: string }): React.ReactNode {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+      <line x1="12" x2="12" y1="19" y2="22" />
+    </svg>
+  );
+}
+
+function ArrowRightIcon({ className = `` }: { className?: string }): React.ReactNode {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M5 12h14" />
+      <path d="m12 5 7 7-7 7" />
+    </svg>
+  );
+}
+
+function LoadingSpinner({ className = `` }: { className?: string }): React.ReactNode {
+  return (
+    <svg className={`animate-spin ${className}`} viewBox="0 0 24 24" fill="none">
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="3"
+      />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      />
+    </svg>
+  );
+}
+
 export default function Dashboard(): React.ReactNode {
   const [macData, setMacData] = useState<MacOverviewOutput | null>(null);
   const [iosData, setIosData] = useState<IOSOverviewOutput | null>(null);
@@ -41,23 +135,50 @@ export default function Dashboard(): React.ReactNode {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="text-lg text-slate-600">Loading dashboard...</div>
+      <div className="flex flex-col items-center justify-center py-24">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-violet to-brand-fuchsia flex items-center justify-center mb-4 shadow-lg shadow-brand-violet/20">
+          <LoadingSpinner className="w-6 h-6 text-white" />
+        </div>
+        <p className="text-slate-500 font-medium">Loading dashboard...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
-        {error}
+      <div className="bg-red-50 border border-red-100 rounded-2xl p-6">
+        <div className="flex items-start gap-4">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-400 to-red-500 flex items-center justify-center flex-shrink-0">
+            <svg
+              className="w-5 h-5 text-white"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v4M12 16h.01" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="font-display font-semibold text-red-900">
+              Failed to load dashboard
+            </h3>
+            <p className="mt-1 text-red-700">{error}</p>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-3xl font-bold text-slate-800">Dashboard Overview</h1>
+    <div className="space-y-8 animate-fade-in">
+      <div>
+        <h1 className="text-2xl font-display font-semibold text-slate-900 tracking-tight">
+          Dashboard
+        </h1>
+        <p className="mt-1 text-slate-500">Overview of all Gertrude products</p>
+      </div>
 
       {macData && <MacSection data={macData} />}
       {iosData && <IOSSection data={iosData} />}
@@ -68,33 +189,65 @@ export default function Dashboard(): React.ReactNode {
 
 function MacSection({ data }: { data: MacOverviewOutput }): React.ReactNode {
   const stats = [
-    { label: `Annual Revenue`, value: `$${data.annualRevenue.toLocaleString()}` },
+    {
+      label: `Annual Revenue`,
+      value: `$${data.annualRevenue.toLocaleString()}`,
+      highlight: true,
+    },
     { label: `Paying Parents`, value: data.payingParents.toLocaleString() },
     { label: `Active Parents`, value: data.activeParents.toLocaleString() },
-    { label: `Children (Active)`, value: data.childrenOfActiveParents.toLocaleString() },
+    { label: `Active Children`, value: data.childrenOfActiveParents.toLocaleString() },
     { label: `All-Time Signups`, value: data.allTimeSignups.toLocaleString() },
     { label: `All-Time Children`, value: data.allTimeChildren.toLocaleString() },
     { label: `All-Time Installs`, value: data.allTimeAppInstallations.toLocaleString() },
   ];
 
   return (
-    <section className="bg-white rounded-lg shadow-md p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-slate-800">Mac App</h2>
+    <section className="bg-white rounded-2xl border border-slate-200/80 shadow-sm shadow-slate-200/50 overflow-hidden">
+      <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-violet to-brand-fuchsia flex items-center justify-center shadow-lg shadow-brand-violet/20">
+            <MonitorIcon className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h2 className="font-display font-semibold text-slate-900">Mac App</h2>
+            <p className="text-sm text-slate-500">macOS parental controls</p>
+          </div>
+        </div>
         <Link
           to="/parents"
-          className="text-violet-600 hover:text-violet-700 text-sm font-medium"
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-brand-violet hover:text-brand-fuchsia bg-brand-50 hover:bg-brand-100 rounded-lg transition-all group"
         >
-          View Parents →
+          <span>View Parents</span>
+          <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
         </Link>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-        {stats.map((stat) => (
-          <div key={stat.label} className="bg-slate-50 rounded-lg p-4">
-            <div className="text-2xl font-bold text-violet-600">{stat.value}</div>
-            <div className="text-sm text-slate-600">{stat.label}</div>
-          </div>
-        ))}
+      <div className="p-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+          {stats.map((stat) => (
+            <div
+              key={stat.label}
+              className={`rounded-xl p-4 ${
+                stat.highlight
+                  ? `bg-gradient-to-br from-brand-violet to-brand-fuchsia text-white`
+                  : `bg-slate-50 border border-slate-100`
+              }`}
+            >
+              <div
+                className={`text-2xl font-display font-semibold ${
+                  stat.highlight ? `text-white` : `text-slate-900`
+                }`}
+              >
+                {stat.value}
+              </div>
+              <div
+                className={`text-sm mt-1 ${stat.highlight ? `text-white/80` : `text-slate-500`}`}
+              >
+                {stat.label}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -105,41 +258,76 @@ function IOSSection({ data }: { data: IOSOverviewOutput }): React.ReactNode {
   const authPct = total > 0 ? (data.authorizationSuccesses / total) * 100 : 0;
   const installPct = total > 0 ? (data.filterInstallSuccesses / total) * 100 : 0;
 
+  const stats = [
+    { label: `First Launches`, value: data.firstLaunches.toLocaleString() },
+    { label: `Auth Successes`, value: data.authorizationSuccesses.toLocaleString() },
+    { label: `Filter Installs`, value: data.filterInstallSuccesses.toLocaleString() },
+    { label: `Conversion Rate`, value: `${data.conversionRate.toFixed(1)}%`, highlight: true },
+  ];
+
   return (
-    <section className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-xl font-semibold text-slate-800 mb-4">iOS App</h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-slate-50 rounded-lg p-4">
-          <div className="text-2xl font-bold text-blue-600">
-            {data.firstLaunches.toLocaleString()}
+    <section className="bg-white rounded-2xl border border-slate-200/80 shadow-sm shadow-slate-200/50 overflow-hidden">
+      <div className="px-6 py-5 border-b border-slate-100">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center shadow-lg shadow-sky-500/20">
+            <SmartphoneIcon className="w-5 h-5 text-white" />
           </div>
-          <div className="text-sm text-slate-600">First Launches</div>
-        </div>
-        <div className="bg-slate-50 rounded-lg p-4">
-          <div className="text-2xl font-bold text-blue-600">
-            {data.authorizationSuccesses.toLocaleString()}
+          <div>
+            <h2 className="font-display font-semibold text-slate-900">iOS App</h2>
+            <p className="text-sm text-slate-500">iPhone parental controls</p>
           </div>
-          <div className="text-sm text-slate-600">Auth Successes</div>
-        </div>
-        <div className="bg-slate-50 rounded-lg p-4">
-          <div className="text-2xl font-bold text-blue-600">
-            {data.filterInstallSuccesses.toLocaleString()}
-          </div>
-          <div className="text-sm text-slate-600">Filter Installs</div>
-        </div>
-        <div className="bg-slate-50 rounded-lg p-4">
-          <div className="text-2xl font-bold text-blue-600">
-            {data.conversionRate.toFixed(1)}%
-          </div>
-          <div className="text-sm text-slate-600">Conversion Rate</div>
         </div>
       </div>
+      <div className="p-6 space-y-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {stats.map((stat) => (
+            <div
+              key={stat.label}
+              className={`rounded-xl p-4 ${
+                stat.highlight
+                  ? `bg-gradient-to-br from-sky-400 to-blue-500 text-white`
+                  : `bg-slate-50 border border-slate-100`
+              }`}
+            >
+              <div
+                className={`text-2xl font-display font-semibold ${
+                  stat.highlight ? `text-white` : `text-slate-900`
+                }`}
+              >
+                {stat.value}
+              </div>
+              <div
+                className={`text-sm mt-1 ${stat.highlight ? `text-white/80` : `text-slate-500`}`}
+              >
+                {stat.label}
+              </div>
+            </div>
+          ))}
+        </div>
 
-      <div className="space-y-3">
-        <h3 className="font-medium text-slate-700">Onboarding Funnel</h3>
-        <FunnelBar label="First Launch" value={100} color="bg-blue-500" />
-        <FunnelBar label="Authorization" value={authPct} color="bg-blue-400" />
-        <FunnelBar label="Filter Install" value={installPct} color="bg-blue-300" />
+        <div className="bg-slate-50 rounded-xl p-5 border border-slate-100">
+          <h3 className="font-display font-medium text-slate-900 mb-4">Onboarding Funnel</h3>
+          <div className="space-y-4">
+            <FunnelBar
+              label="First Launch"
+              value={100}
+              count={data.firstLaunches}
+              gradient="from-sky-400 to-blue-500"
+            />
+            <FunnelBar
+              label="Authorization"
+              value={authPct}
+              count={data.authorizationSuccesses}
+              gradient="from-sky-400 to-blue-500"
+            />
+            <FunnelBar
+              label="Filter Install"
+              value={installPct}
+              count={data.filterInstallSuccesses}
+              gradient="from-sky-400 to-blue-500"
+            />
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -148,44 +336,71 @@ function IOSSection({ data }: { data: IOSOverviewOutput }): React.ReactNode {
 function FunnelBar({
   label,
   value,
-  color,
+  count,
+  gradient,
 }: {
   label: string;
   value: number;
-  color: string;
+  count: number;
+  gradient: string;
 }): React.ReactNode {
   return (
-    <div className="flex items-center gap-4">
-      <div className="w-28 text-sm text-slate-600">{label}</div>
-      <div className="flex-1 h-6 bg-slate-100 rounded-full overflow-hidden">
+    <div className="space-y-1.5">
+      <div className="flex justify-between items-baseline">
+        <span className="text-sm font-medium text-slate-700">{label}</span>
+        <span className="text-sm text-slate-500">
+          {count.toLocaleString()} ({value.toFixed(1)}%)
+        </span>
+      </div>
+      <div className="h-3 bg-slate-200 rounded-full overflow-hidden">
         <div
-          className={`h-full ${color} transition-all duration-500`}
+          className={`h-full bg-gradient-to-r ${gradient} rounded-full transition-all duration-700`}
           style={{ width: `${value}%` }}
         />
-      </div>
-      <div className="w-16 text-right text-sm font-medium text-slate-700">
-        {value.toFixed(1)}%
       </div>
     </div>
   );
 }
 
 function PodcastSection({ data }: { data: PodcastOverviewOutput }): React.ReactNode {
+  const conversionRate =
+    data.totalInstalls > 0
+      ? ((data.successfulSubscriptions / data.totalInstalls) * 100).toFixed(1)
+      : `0.0`;
+
   return (
-    <section className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-xl font-semibold text-slate-800 mb-4">Podcast App</h2>
-      <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
-        <div className="bg-slate-50 rounded-lg p-4">
-          <div className="text-2xl font-bold text-green-600">
-            {data.totalInstalls.toLocaleString()}
+    <section className="bg-white rounded-2xl border border-slate-200/80 shadow-sm shadow-slate-200/50 overflow-hidden">
+      <div className="px-6 py-5 border-b border-slate-100">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+            <MicIcon className="w-5 h-5 text-white" />
           </div>
-          <div className="text-sm text-slate-600">Total Installs</div>
+          <div>
+            <h2 className="font-display font-semibold text-slate-900">Podcast App</h2>
+            <p className="text-sm text-slate-500">Kid-safe podcast player</p>
+          </div>
         </div>
-        <div className="bg-slate-50 rounded-lg p-4">
-          <div className="text-2xl font-bold text-green-600">
-            {data.successfulSubscriptions.toLocaleString()}
+      </div>
+      <div className="p-6">
+        <div className="grid grid-cols-3 gap-4">
+          <div className="bg-slate-50 border border-slate-100 rounded-xl p-4">
+            <div className="text-2xl font-display font-semibold text-slate-900">
+              {data.totalInstalls.toLocaleString()}
+            </div>
+            <div className="text-sm mt-1 text-slate-500">Total Installs</div>
           </div>
-          <div className="text-sm text-slate-600">Subscriptions</div>
+          <div className="bg-slate-50 border border-slate-100 rounded-xl p-4">
+            <div className="text-2xl font-display font-semibold text-slate-900">
+              {data.successfulSubscriptions.toLocaleString()}
+            </div>
+            <div className="text-sm mt-1 text-slate-500">Subscriptions</div>
+          </div>
+          <div className="bg-gradient-to-br from-emerald-400 to-green-500 rounded-xl p-4">
+            <div className="text-2xl font-display font-semibold text-white">
+              {conversionRate}%
+            </div>
+            <div className="text-sm mt-1 text-white/80">Conversion</div>
+          </div>
         </div>
       </div>
     </section>
