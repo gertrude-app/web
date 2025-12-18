@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import client, { type ParentsListOutput } from '../api/client';
 
 function UsersIcon({ className = `` }: { className?: string }): React.ReactNode {
@@ -77,6 +77,7 @@ function LoadingSpinner({ className = `` }: { className?: string }): React.React
 }
 
 export default function ParentsList(): React.ReactNode {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get(`page`) ?? `1`, 10);
 
@@ -202,15 +203,13 @@ export default function ParentsList(): React.ReactNode {
             {data.parents.map((parent) => (
               <tr
                 key={parent.id}
-                className="hover:bg-slate-50/50 transition-colors group"
+                onClick={() => navigate(`/parents/${parent.id}`)}
+                className="hover:bg-slate-50/50 transition-colors group cursor-pointer"
               >
                 <td className="px-5 py-4">
-                  <Link
-                    to={`/parents/${parent.id}`}
-                    className="text-slate-900 hover:text-brand-violet font-medium transition-colors"
-                  >
+                  <span className="text-brand-violet group-hover:text-brand-fuchsia font-medium transition-colors">
                     {parent.email}
-                  </Link>
+                  </span>
                 </td>
                 <td className="px-5 py-4">
                   <StatusBadge status={parent.status} />
@@ -219,17 +218,17 @@ export default function ParentsList(): React.ReactNode {
                   <SubscriptionBadge status={parent.subscriptionStatus} />
                 </td>
                 <td className="px-5 py-4 text-center">
-                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 text-sm font-medium text-slate-700">
+                  <span className={`inline-flex items-center justify-center w-7 h-7 rounded-lg text-sm font-medium ${parent.numChildren > 0 ? `bg-sky-100 text-sky-700` : `bg-slate-100 text-slate-400`}`}>
                     {parent.numChildren}
                   </span>
                 </td>
                 <td className="px-5 py-4 text-center">
-                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 text-sm font-medium text-slate-700">
+                  <span className={`inline-flex items-center justify-center w-7 h-7 rounded-lg text-sm font-medium ${parent.numKeychains > 0 ? `bg-violet-100 text-violet-700` : `bg-slate-100 text-slate-400`}`}>
                     {parent.numKeychains}
                   </span>
                 </td>
                 <td className="px-5 py-4 text-center">
-                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 text-sm font-medium text-slate-700">
+                  <span className={`inline-flex items-center justify-center w-7 h-7 rounded-lg text-sm font-medium ${parent.numNotifications > 0 ? `bg-emerald-100 text-emerald-700` : `bg-slate-100 text-slate-400`}`}>
                     {parent.numNotifications}
                   </span>
                 </td>
@@ -257,7 +256,7 @@ function StatusBadge({ status }: { status: string }): React.ReactNode {
   const styles: Record<string, string> = {
     active: `bg-emerald-50 text-emerald-700 ring-emerald-600/20`,
     onboarded: `bg-sky-50 text-sky-700 ring-sky-600/20`,
-    no_action: `bg-slate-50 text-slate-600 ring-slate-500/20`,
+    no_action: `bg-slate-50 text-slate-400 ring-slate-300/20 opacity-60`,
     unknown: `bg-slate-50 text-slate-600 ring-slate-500/20`,
   };
 
@@ -281,6 +280,7 @@ function SubscriptionBadge({ status }: { status: string }): React.ReactNode {
   const styles: Record<string, string> = {
     paid: `bg-emerald-50 text-emerald-700 ring-emerald-600/20`,
     trialing: `bg-sky-50 text-sky-700 ring-sky-600/20`,
+    trialExpiringSoon: `bg-amber-50 text-amber-700 ring-amber-600/20`,
     overdue: `bg-amber-50 text-amber-700 ring-amber-600/20`,
     unpaid: `bg-red-50 text-red-700 ring-red-600/20`,
     pendingEmailVerification: `bg-slate-50 text-slate-600 ring-slate-500/20`,
@@ -290,10 +290,11 @@ function SubscriptionBadge({ status }: { status: string }): React.ReactNode {
   const labels: Record<string, string> = {
     paid: `Paid`,
     trialing: `Trial`,
+    trialExpiringSoon: `Trial Expiring Soon`,
     overdue: `Overdue`,
     unpaid: `Unpaid`,
     pendingEmailVerification: `Pending`,
-    complimentary: `Comp`,
+    complimentary: `Complimentary`,
   };
 
   return (
