@@ -19,7 +19,7 @@ hmr-docs:
   @watchexec --watch site/markdoc --exts .md "just hmr-comment"
 
 storybook:
-	@pnpm --filter @storybook/app start
+  @pnpm --filter @storybook/app start
 
 dev:
   pnpm concurrently \
@@ -35,8 +35,11 @@ clean:
   @rm -rf dash/app/build
   @find . -name "node_modules" -type d -prune -exec rm -rf {} + && pnpm i
 
-codegen: && lint-fix format
-	@cd shared/pairql && pnpm codegen
+codegen:
+  @cd shared/pairql && pnpm codegen
+  @printf "\nRunning 'lint-fix' and 'format' after codegen...\n"
+  @just lint-fix
+  @just format
 
 nuke-node-modules:
   @pnpm store prune
