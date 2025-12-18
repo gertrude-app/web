@@ -137,7 +137,9 @@ export default function ParentsList(): React.ReactNode {
             </svg>
           </div>
           <div>
-            <h3 className="font-display font-semibold text-red-900">Failed to load parents</h3>
+            <h3 className="font-display font-semibold text-red-900">
+              Failed to load parents
+            </h3>
             <p className="mt-1 text-red-700">{error}</p>
           </div>
         </div>
@@ -218,17 +220,23 @@ export default function ParentsList(): React.ReactNode {
                   <SubscriptionBadge status={parent.subscriptionStatus} />
                 </td>
                 <td className="px-5 py-4 text-center">
-                  <span className={`inline-flex items-center justify-center w-7 h-7 rounded-lg text-sm font-medium ${parent.numChildren > 0 ? `bg-sky-100 text-sky-700` : `bg-slate-100 text-slate-400`}`}>
+                  <span
+                    className={`inline-flex items-center justify-center w-7 h-7 rounded-lg text-sm font-medium ${parent.numChildren > 0 ? `bg-sky-100 text-sky-700` : `bg-slate-100 text-slate-400`}`}
+                  >
                     {parent.numChildren}
                   </span>
                 </td>
                 <td className="px-5 py-4 text-center">
-                  <span className={`inline-flex items-center justify-center w-7 h-7 rounded-lg text-sm font-medium ${parent.numKeychains > 0 ? `bg-violet-100 text-violet-700` : `bg-slate-100 text-slate-400`}`}>
+                  <span
+                    className={`inline-flex items-center justify-center w-7 h-7 rounded-lg text-sm font-medium ${parent.numKeychains > 0 ? `bg-violet-100 text-violet-700` : `bg-slate-100 text-slate-400`}`}
+                  >
                     {parent.numKeychains}
                   </span>
                 </td>
                 <td className="px-5 py-4 text-center">
-                  <span className={`inline-flex items-center justify-center w-7 h-7 rounded-lg text-sm font-medium ${parent.numNotifications > 0 ? `bg-emerald-100 text-emerald-700` : `bg-slate-100 text-slate-400`}`}>
+                  <span
+                    className={`inline-flex items-center justify-center w-7 h-7 rounded-lg text-sm font-medium ${parent.numNotifications > 0 ? `bg-emerald-100 text-emerald-700` : `bg-slate-100 text-slate-400`}`}
+                  >
                     {parent.numNotifications}
                   </span>
                 </td>

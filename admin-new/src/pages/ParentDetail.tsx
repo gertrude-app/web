@@ -295,7 +295,9 @@ export default function ParentDetail(): React.ReactNode {
             </svg>
           </div>
           <div>
-            <h3 className="font-display font-semibold text-red-900">Failed to load parent</h3>
+            <h3 className="font-display font-semibold text-red-900">
+              Failed to load parent
+            </h3>
             <p className="mt-1 text-red-700">{error}</p>
           </div>
         </div>
@@ -333,7 +335,9 @@ export default function ParentDetail(): React.ReactNode {
                 <CopyButton text={data.email} />
               </div>
               <div className="flex items-center gap-1 mt-0.5">
-                <p className="text-sm text-slate-500 font-mono">{data.id.toLowerCase()}</p>
+                <p className="text-sm text-slate-500 font-mono">
+                  {data.id.toLowerCase()}
+                </p>
                 <CopyButton text={data.id.toLowerCase()} />
               </div>
             </div>
@@ -398,7 +402,9 @@ export default function ParentDetail(): React.ReactNode {
                       <div className="w-8 h-8 rounded-lg bg-sky-100 flex items-center justify-center">
                         <UserIcon className="w-[18px] h-[18px] text-sky-600" />
                       </div>
-                      <h3 className="font-display font-semibold text-slate-900 text-xl">{child.name}</h3>
+                      <h3 className="font-display font-semibold text-slate-900 text-xl">
+                        {child.name}
+                      </h3>
                       <CopyLinkButton childId={child.id} />
                     </div>
                     <div className="flex gap-2">
@@ -456,7 +462,9 @@ export default function ParentDetail(): React.ReactNode {
                                 {install.filterVersion && (
                                   <span>Filter v{install.filterVersion}</span>
                                 )}
-                                {install.osVersion && <span>macOS {install.osVersion}</span>}
+                                {install.osVersion && (
+                                  <span>macOS {install.osVersion}</span>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -503,7 +511,9 @@ export default function ParentDetail(): React.ReactNode {
                       </span>
                     )}
                   </div>
-                  <div className="text-sm text-slate-500 mt-1">{keychain.numKeys} keys</div>
+                  <div className="text-sm text-slate-500 mt-1">
+                    {keychain.numKeys} keys
+                  </div>
                 </div>
               ))}
             </div>
@@ -563,7 +573,9 @@ function InfoCard({
           : `bg-slate-50 border border-slate-100`
       }`}
     >
-      <div className={`text-sm ${highlight ? `text-white/80` : `text-slate-500`}`}>{label}</div>
+      <div className={`text-sm ${highlight ? `text-white/80` : `text-slate-500`}`}>
+        {label}
+      </div>
       <div
         className={`text-lg font-display font-semibold mt-1 ${highlight ? `text-white` : `text-slate-900`}`}
       >

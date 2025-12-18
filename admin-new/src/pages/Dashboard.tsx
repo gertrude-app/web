@@ -253,7 +253,11 @@ function IOSSection({ data }: { data: IOSOverviewOutput }): React.ReactNode {
     { label: `First Launches`, value: data.firstLaunches.toLocaleString() },
     { label: `Auth Successes`, value: data.authorizationSuccesses.toLocaleString() },
     { label: `Filter Installs`, value: data.filterInstallSuccesses.toLocaleString() },
-    { label: `Conversion Rate`, value: `${data.conversionRate.toFixed(1)}%`, highlight: true },
+    {
+      label: `Conversion Rate`,
+      value: `${data.conversionRate.toFixed(1)}%`,
+      highlight: true,
+    },
   ];
 
   return (
@@ -294,7 +298,9 @@ function IOSSection({ data }: { data: IOSOverviewOutput }): React.ReactNode {
         </div>
 
         <div className="bg-slate-50 rounded-xl p-5 border border-slate-100">
-          <h3 className="font-display font-medium text-slate-900 mb-4">Onboarding Funnel</h3>
+          <h3 className="font-display font-medium text-slate-900 mb-4">
+            Onboarding Funnel
+          </h3>
           <div className="space-y-4">
             <FunnelBar
               label="First Launch"
@@ -364,7 +370,9 @@ function PodcastSection({ data }: { data: PodcastOverviewOutput }): React.ReactN
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
             <MicIcon className="w-5 h-5 text-white" />
           </div>
-          <h2 className="font-display font-semibold text-slate-900 text-xl">Podcast App</h2>
+          <h2 className="font-display font-semibold text-slate-900 text-xl">
+            Podcast App
+          </h2>
         </div>
       </div>
       <div className="p-6">

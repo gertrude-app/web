@@ -22,7 +22,17 @@ export namespace ParentDetail {
         appVersion: string;
         filterVersion?: string;
         osVersion?: string;
-        modelIdentifier?: string;
+        modelIdentifier: string;
+        modelFamily:
+          | `macBook`
+          | `macBookAir`
+          | `macBookPro`
+          | `mini`
+          | `iMac`
+          | `studio`
+          | `pro`
+          | `unknown`;
+        modelTitle: string;
         createdAt: ISODateString;
       }>;
     }>;
