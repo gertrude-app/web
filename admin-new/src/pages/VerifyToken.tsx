@@ -1,14 +1,16 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import client from '../api/client';
 
-function GertrudeLogo({
-  className = ``,
-  variant = `gradient`,
-}: {
+interface GertrudeLogoProps {
   className?: string;
   variant?: `gradient` | `light` | `white`;
-}): React.ReactNode {
+}
+
+const GertrudeLogo: React.FC<GertrudeLogoProps> = ({
+  className = ``,
+  variant = `gradient`,
+}) => {
   const gradientId = `logoGradientVerify-${Math.random().toString(36).slice(2, 9)}`;
   const fills: Record<string, { start: string; end: string } | string> = {
     gradient: { start: `#8B5CF6`, end: `#D846EF` },
@@ -36,13 +38,13 @@ function GertrudeLogo({
       />
     </svg>
   );
-}
+};
 
 interface VerifyTokenProps {
   onLogin: (token: string) => void;
 }
 
-export default function VerifyToken({ onLogin }: VerifyTokenProps): React.ReactNode {
+const VerifyToken: React.FC<VerifyTokenProps> = ({ onLogin }) => {
   const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
   const [status, setStatus] = useState<`verifying` | `error`>(`verifying`);
@@ -198,4 +200,6 @@ export default function VerifyToken({ onLogin }: VerifyTokenProps): React.ReactN
       </div>
     </div>
   );
-}
+};
+
+export default VerifyToken;

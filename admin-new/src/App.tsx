@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
@@ -7,7 +7,7 @@ import ParentDetail from './pages/ParentDetail';
 import ParentsList from './pages/ParentsList';
 import VerifyToken from './pages/VerifyToken';
 
-function App(): React.ReactNode {
+const App: React.FC = () => {
   const [token, setToken] = useState<string | null>(() =>
     localStorage.getItem(`admin_token`),
   );
@@ -49,6 +49,6 @@ function App(): React.ReactNode {
       </Routes>
     </Layout>
   );
-}
+};
 
 export default App;

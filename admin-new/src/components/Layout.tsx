@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 interface LayoutProps {
@@ -5,7 +6,11 @@ interface LayoutProps {
   onLogout: () => void;
 }
 
-function GertrudeLogo({ className = `` }: { className?: string }): React.ReactNode {
+interface IconProps {
+  className?: string;
+}
+
+const GertrudeLogo: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1250 1240" className={className}>
       <defs>
@@ -22,9 +27,9 @@ function GertrudeLogo({ className = `` }: { className?: string }): React.ReactNo
       />
     </svg>
   );
-}
+};
 
-function HomeIcon({ className = `` }: { className?: string }): React.ReactNode {
+const HomeIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -40,9 +45,9 @@ function HomeIcon({ className = `` }: { className?: string }): React.ReactNode {
       <polyline points="9 22 9 12 15 12 15 22" />
     </svg>
   );
-}
+};
 
-function UsersIcon({ className = `` }: { className?: string }): React.ReactNode {
+const UsersIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -60,9 +65,9 @@ function UsersIcon({ className = `` }: { className?: string }): React.ReactNode 
       <path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </svg>
   );
-}
+};
 
-function LogoutIcon({ className = `` }: { className?: string }): React.ReactNode {
+const LogoutIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -79,9 +84,9 @@ function LogoutIcon({ className = `` }: { className?: string }): React.ReactNode
       <line x1="21" x2="9" y1="12" y2="12" />
     </svg>
   );
-}
+};
 
-export default function Layout({ children, onLogout }: LayoutProps): React.ReactNode {
+const Layout: React.FC<LayoutProps> = ({ children, onLogout }) => {
   const location = useLocation();
 
   const navLinks = [
@@ -143,4 +148,6 @@ export default function Layout({ children, onLogout }: LayoutProps): React.React
       <main className="max-w-7xl mx-auto px-6 py-8">{children}</main>
     </div>
   );
-}
+};
+
+export default Layout;

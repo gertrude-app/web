@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import client from '../api/client';
 
-function GertrudeLogo({
-  className = ``,
-  variant = `gradient`,
-}: {
+interface GertrudeLogoProps {
   className?: string;
   variant?: `gradient` | `light` | `white`;
-}): React.ReactNode {
+}
+
+const GertrudeLogo: React.FC<GertrudeLogoProps> = ({
+  className = ``,
+  variant = `gradient`,
+}) => {
   const gradientId = `logoGradient-${Math.random().toString(36).slice(2, 9)}`;
   const fills: Record<string, { start: string; end: string } | string> = {
     gradient: { start: `#8B5CF6`, end: `#D846EF` },
@@ -35,9 +37,13 @@ function GertrudeLogo({
       />
     </svg>
   );
+};
+
+interface IconProps {
+  className?: string;
 }
 
-function MailIcon({ className = `` }: { className?: string }): React.ReactNode {
+const MailIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -53,9 +59,9 @@ function MailIcon({ className = `` }: { className?: string }): React.ReactNode {
       <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
     </svg>
   );
-}
+};
 
-function ArrowRightIcon({ className = `` }: { className?: string }): React.ReactNode {
+const ArrowRightIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -71,9 +77,9 @@ function ArrowRightIcon({ className = `` }: { className?: string }): React.React
       <path d="m12 5 7 7-7 7" />
     </svg>
   );
-}
+};
 
-function CheckCircleIcon({ className = `` }: { className?: string }): React.ReactNode {
+const CheckCircleIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -89,9 +95,9 @@ function CheckCircleIcon({ className = `` }: { className?: string }): React.Reac
       <path d="m9 12 2 2 4-4" />
     </svg>
   );
-}
+};
 
-export default function Login(): React.ReactNode {
+const Login: React.FC = () => {
   const [email, setEmail] = useState(``);
   const [status, setStatus] = useState<`idle` | `loading` | `sent` | `error`>(`idle`);
   const [errorMsg, setErrorMsg] = useState(``);
@@ -308,4 +314,6 @@ export default function Login(): React.ReactNode {
       </div>
     </div>
   );
-}
+};
+
+export default Login;

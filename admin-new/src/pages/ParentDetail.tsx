@@ -1,8 +1,12 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import client, { type ParentDetailOutput } from '../api/client';
 
-function CopyIcon({ className = `` }: { className?: string }): React.ReactNode {
+interface IconProps {
+  className?: string;
+}
+
+const CopyIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -18,9 +22,9 @@ function CopyIcon({ className = `` }: { className?: string }): React.ReactNode {
       <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
     </svg>
   );
-}
+};
 
-function CheckIcon({ className = `` }: { className?: string }): React.ReactNode {
+const CheckIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -35,9 +39,13 @@ function CheckIcon({ className = `` }: { className?: string }): React.ReactNode 
       <path d="M20 6 9 17l-5-5" />
     </svg>
   );
+};
+
+interface CopyButtonProps {
+  text: string;
 }
 
-function CopyButton({ text }: { text: string }): React.ReactNode {
+const CopyButton: React.FC<CopyButtonProps> = ({ text }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async (): Promise<void> => {
@@ -59,9 +67,9 @@ function CopyButton({ text }: { text: string }): React.ReactNode {
       )}
     </button>
   );
-}
+};
 
-function LinkIcon({ className = `` }: { className?: string }): React.ReactNode {
+const LinkIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -77,9 +85,13 @@ function LinkIcon({ className = `` }: { className?: string }): React.ReactNode {
       <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
     </svg>
   );
+};
+
+interface CopyLinkButtonProps {
+  childId: string;
 }
 
-function CopyLinkButton({ childId }: { childId: string }): React.ReactNode {
+const CopyLinkButton: React.FC<CopyLinkButtonProps> = ({ childId }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async (): Promise<void> => {
@@ -105,9 +117,9 @@ function CopyLinkButton({ childId }: { childId: string }): React.ReactNode {
       )}
     </button>
   );
-}
+};
 
-function ArrowLeftIcon({ className = `` }: { className?: string }): React.ReactNode {
+const ArrowLeftIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -123,9 +135,9 @@ function ArrowLeftIcon({ className = `` }: { className?: string }): React.ReactN
       <path d="M19 12H5" />
     </svg>
   );
-}
+};
 
-function UserIcon({ className = `` }: { className?: string }): React.ReactNode {
+const UserIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -141,9 +153,9 @@ function UserIcon({ className = `` }: { className?: string }): React.ReactNode {
       <path d="M20 21a8 8 0 0 0-16 0" />
     </svg>
   );
-}
+};
 
-function UsersIcon({ className = `` }: { className?: string }): React.ReactNode {
+const UsersIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -161,9 +173,9 @@ function UsersIcon({ className = `` }: { className?: string }): React.ReactNode 
       <path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </svg>
   );
-}
+};
 
-function KeyIcon({ className = `` }: { className?: string }): React.ReactNode {
+const KeyIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -180,9 +192,9 @@ function KeyIcon({ className = `` }: { className?: string }): React.ReactNode {
       <path d="m15.5 7.5 3 3L22 7l-3-3" />
     </svg>
   );
-}
+};
 
-function BellIcon({ className = `` }: { className?: string }): React.ReactNode {
+const BellIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -198,9 +210,9 @@ function BellIcon({ className = `` }: { className?: string }): React.ReactNode {
       <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
     </svg>
   );
-}
+};
 
-function MonitorIcon({ className = `` }: { className?: string }): React.ReactNode {
+const MonitorIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -217,9 +229,9 @@ function MonitorIcon({ className = `` }: { className?: string }): React.ReactNod
       <line x1="12" x2="12" y1="17" y2="21" />
     </svg>
   );
-}
+};
 
-function LoadingSpinner({ className = `` }: { className?: string }): React.ReactNode {
+const LoadingSpinner: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg className={`animate-spin ${className}`} viewBox="0 0 24 24" fill="none">
       <circle
@@ -237,9 +249,9 @@ function LoadingSpinner({ className = `` }: { className?: string }): React.React
       />
     </svg>
   );
-}
+};
 
-export default function ParentDetail(): React.ReactNode {
+const ParentDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [data, setData] = useState<ParentDetailOutput | null>(null);
   const [loading, setLoading] = useState(true);
@@ -554,17 +566,15 @@ export default function ParentDetail(): React.ReactNode {
       </section>
     </div>
   );
-}
+};
 
-function InfoCard({
-  label,
-  value,
-  highlight = false,
-}: {
+interface InfoCardProps {
   label: string;
   value: string;
   highlight?: boolean;
-}): React.ReactNode {
+}
+
+const InfoCard: React.FC<InfoCardProps> = ({ label, value, highlight = false }) => {
   return (
     <div
       className={`rounded-xl p-4 ${
@@ -583,9 +593,13 @@ function InfoCard({
       </div>
     </div>
   );
+};
+
+interface SubscriptionBadgeProps {
+  status: string;
 }
 
-function SubscriptionBadge({ status }: { status: string }): React.ReactNode {
+const SubscriptionBadge: React.FC<SubscriptionBadgeProps> = ({ status }) => {
   const styles: Record<string, string> = {
     paid: `bg-emerald-50 text-emerald-700 ring-emerald-600/20`,
     trialing: `bg-sky-50 text-sky-700 ring-sky-600/20`,
@@ -613,7 +627,7 @@ function SubscriptionBadge({ status }: { status: string }): React.ReactNode {
       {labels[status] ?? status}
     </span>
   );
-}
+};
 
 function formatDate(dateString: string): string {
   const date = new Date(dateString);
@@ -631,3 +645,5 @@ function unCamelCase(str: string): string {
     .toLowerCase()
     .replace(/^\w/, (c) => c.toUpperCase());
 }
+
+export default ParentDetail;

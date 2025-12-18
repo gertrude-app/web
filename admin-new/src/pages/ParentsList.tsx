@@ -1,8 +1,12 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import client, { type ParentsListOutput } from '../api/client';
 
-function UsersIcon({ className = `` }: { className?: string }): React.ReactNode {
+interface IconProps {
+  className?: string;
+}
+
+const UsersIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -20,9 +24,9 @@ function UsersIcon({ className = `` }: { className?: string }): React.ReactNode 
       <path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </svg>
   );
-}
+};
 
-function ChevronLeftIcon({ className = `` }: { className?: string }): React.ReactNode {
+const ChevronLeftIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -37,9 +41,9 @@ function ChevronLeftIcon({ className = `` }: { className?: string }): React.Reac
       <path d="m15 18-6-6 6-6" />
     </svg>
   );
-}
+};
 
-function ChevronRightIcon({ className = `` }: { className?: string }): React.ReactNode {
+const ChevronRightIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -54,9 +58,9 @@ function ChevronRightIcon({ className = `` }: { className?: string }): React.Rea
       <path d="m9 18 6-6-6-6" />
     </svg>
   );
-}
+};
 
-function LoadingSpinner({ className = `` }: { className?: string }): React.ReactNode {
+const LoadingSpinner: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg className={`animate-spin ${className}`} viewBox="0 0 24 24" fill="none">
       <circle
@@ -74,9 +78,9 @@ function LoadingSpinner({ className = `` }: { className?: string }): React.React
       />
     </svg>
   );
-}
+};
 
-export default function ParentsList(): React.ReactNode {
+const ParentsList: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get(`page`) ?? `1`, 10);
@@ -258,9 +262,13 @@ export default function ParentsList(): React.ReactNode {
       </div>
     </div>
   );
+};
+
+interface BadgeProps {
+  status: string;
 }
 
-function StatusBadge({ status }: { status: string }): React.ReactNode {
+const StatusBadge: React.FC<BadgeProps> = ({ status }) => {
   const styles: Record<string, string> = {
     active: `bg-emerald-50 text-emerald-700 ring-emerald-600/20`,
     onboarded: `bg-sky-50 text-sky-700 ring-sky-600/20`,
@@ -282,9 +290,9 @@ function StatusBadge({ status }: { status: string }): React.ReactNode {
       {labels[status] ?? status}
     </span>
   );
-}
+};
 
-function SubscriptionBadge({ status }: { status: string }): React.ReactNode {
+const SubscriptionBadge: React.FC<BadgeProps> = ({ status }) => {
   const styles: Record<string, string> = {
     paid: `bg-emerald-50 text-emerald-700 ring-emerald-600/20`,
     trialing: `bg-sky-50 text-sky-700 ring-sky-600/20`,
@@ -312,17 +320,19 @@ function SubscriptionBadge({ status }: { status: string }): React.ReactNode {
       {labels[status] ?? status}
     </span>
   );
-}
+};
 
-function Pagination({
-  currentPage,
-  totalPages,
-  onPageChange,
-}: {
+interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-}): React.ReactNode {
+}
+
+const Pagination: React.FC<PaginationProps> = ({
+  currentPage,
+  totalPages,
+  onPageChange,
+}) => {
   return (
     <div className="flex items-center gap-1">
       <button
@@ -362,7 +372,7 @@ function Pagination({
       </button>
     </div>
   );
-}
+};
 
 function getPageNumbers(current: number, total: number): (number | string)[] {
   if (total <= 7) {
@@ -388,3 +398,5 @@ function formatDate(dateString: string): string {
     day: `numeric`,
   });
 }
+
+export default ParentsList;

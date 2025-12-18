@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import client, {
   type IOSOverviewOutput,
@@ -6,7 +6,11 @@ import client, {
   type PodcastOverviewOutput,
 } from '../api/client';
 
-function MonitorIcon({ className = `` }: { className?: string }): React.ReactNode {
+interface IconProps {
+  className?: string;
+}
+
+const MonitorIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -23,9 +27,9 @@ function MonitorIcon({ className = `` }: { className?: string }): React.ReactNod
       <line x1="12" x2="12" y1="17" y2="21" />
     </svg>
   );
-}
+};
 
-function SmartphoneIcon({ className = `` }: { className?: string }): React.ReactNode {
+const SmartphoneIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -41,9 +45,9 @@ function SmartphoneIcon({ className = `` }: { className?: string }): React.React
       <line x1="12" x2="12.01" y1="18" y2="18" />
     </svg>
   );
-}
+};
 
-function MicIcon({ className = `` }: { className?: string }): React.ReactNode {
+const MicIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -60,9 +64,9 @@ function MicIcon({ className = `` }: { className?: string }): React.ReactNode {
       <line x1="12" x2="12" y1="19" y2="22" />
     </svg>
   );
-}
+};
 
-function ArrowRightIcon({ className = `` }: { className?: string }): React.ReactNode {
+const ArrowRightIcon: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -78,9 +82,9 @@ function ArrowRightIcon({ className = `` }: { className?: string }): React.React
       <path d="m12 5 7 7-7 7" />
     </svg>
   );
-}
+};
 
-function LoadingSpinner({ className = `` }: { className?: string }): React.ReactNode {
+const LoadingSpinner: React.FC<IconProps> = ({ className = `` }) => {
   return (
     <svg className={`animate-spin ${className}`} viewBox="0 0 24 24" fill="none">
       <circle
@@ -98,9 +102,9 @@ function LoadingSpinner({ className = `` }: { className?: string }): React.React
       />
     </svg>
   );
-}
+};
 
-export default function Dashboard(): React.ReactNode {
+const Dashboard: React.FC = () => {
   const [macData, setMacData] = useState<MacOverviewOutput | null>(null);
   const [iosData, setIosData] = useState<IOSOverviewOutput | null>(null);
   const [podcastData, setPodcastData] = useState<PodcastOverviewOutput | null>(null);
@@ -178,9 +182,13 @@ export default function Dashboard(): React.ReactNode {
       {podcastData && <PodcastSection data={podcastData} />}
     </div>
   );
+};
+
+interface MacSectionProps {
+  data: MacOverviewOutput;
 }
 
-function MacSection({ data }: { data: MacOverviewOutput }): React.ReactNode {
+const MacSection: React.FC<MacSectionProps> = ({ data }) => {
   const monthlyRevenue = Math.round(data.annualRevenue / 12);
   const stats = [
     { label: `Annual Revenue`, value: `$${data.annualRevenue.toLocaleString()}` },
@@ -242,9 +250,13 @@ function MacSection({ data }: { data: MacOverviewOutput }): React.ReactNode {
       </div>
     </section>
   );
+};
+
+interface IOSSectionProps {
+  data: IOSOverviewOutput;
 }
 
-function IOSSection({ data }: { data: IOSOverviewOutput }): React.ReactNode {
+const IOSSection: React.FC<IOSSectionProps> = ({ data }) => {
   const total = data.firstLaunches;
   const authPct = total > 0 ? (data.authorizationSuccesses / total) * 100 : 0;
   const installPct = total > 0 ? (data.filterInstallSuccesses / total) * 100 : 0;
@@ -325,19 +337,16 @@ function IOSSection({ data }: { data: IOSOverviewOutput }): React.ReactNode {
       </div>
     </section>
   );
-}
+};
 
-function FunnelBar({
-  label,
-  value,
-  count,
-  gradient,
-}: {
+interface FunnelBarProps {
   label: string;
   value: number;
   count: number;
   gradient: string;
-}): React.ReactNode {
+}
+
+const FunnelBar: React.FC<FunnelBarProps> = ({ label, value, count, gradient }) => {
   return (
     <div className="space-y-1.5">
       <div className="flex justify-between items-baseline">
@@ -354,9 +363,13 @@ function FunnelBar({
       </div>
     </div>
   );
+};
+
+interface PodcastSectionProps {
+  data: PodcastOverviewOutput;
 }
 
-function PodcastSection({ data }: { data: PodcastOverviewOutput }): React.ReactNode {
+const PodcastSection: React.FC<PodcastSectionProps> = ({ data }) => {
   const conversionRate =
     data.totalInstalls > 0
       ? ((data.successfulSubscriptions / data.totalInstalls) * 100).toFixed(1)
@@ -405,4 +418,6 @@ function PodcastSection({ data }: { data: PodcastOverviewOutput }): React.ReactN
       </div>
     </section>
   );
-}
+};
+
+export default Dashboard;
