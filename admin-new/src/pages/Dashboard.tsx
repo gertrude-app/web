@@ -5,104 +5,95 @@ import client, {
   type MacOverviewOutput,
   type PodcastOverviewOutput,
 } from '../api/client';
+import SignupGraph from '../components/SignupGraph';
 
 interface IconProps {
   className?: string;
 }
 
-const MonitorIcon: React.FC<IconProps> = ({ className = `` }) => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <rect width="20" height="14" x="2" y="3" rx="2" />
-      <line x1="8" x2="16" y1="21" y2="21" />
-      <line x1="12" x2="12" y1="17" y2="21" />
-    </svg>
-  );
-};
+const MonitorIcon: React.FC<IconProps> = ({ className = `` }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <rect width="20" height="14" x="2" y="3" rx="2" />
+    <line x1="8" x2="16" y1="21" y2="21" />
+    <line x1="12" x2="12" y1="17" y2="21" />
+  </svg>
+);
 
-const SmartphoneIcon: React.FC<IconProps> = ({ className = `` }) => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
-      <line x1="12" x2="12.01" y1="18" y2="18" />
-    </svg>
-  );
-};
+const SmartphoneIcon: React.FC<IconProps> = ({ className = `` }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+    <line x1="12" x2="12.01" y1="18" y2="18" />
+  </svg>
+);
 
-const MicIcon: React.FC<IconProps> = ({ className = `` }) => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
-      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-      <line x1="12" x2="12" y1="19" y2="22" />
-    </svg>
-  );
-};
+const MicIcon: React.FC<IconProps> = ({ className = `` }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+    <line x1="12" x2="12" y1="19" y2="22" />
+  </svg>
+);
 
-const ArrowRightIcon: React.FC<IconProps> = ({ className = `` }) => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M5 12h14" />
-      <path d="m12 5 7 7-7 7" />
-    </svg>
-  );
-};
+const ArrowRightIcon: React.FC<IconProps> = ({ className = `` }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M5 12h14" />
+    <path d="m12 5 7 7-7 7" />
+  </svg>
+);
 
-const LoadingSpinner: React.FC<IconProps> = ({ className = `` }) => {
-  return (
-    <svg className={`animate-spin ${className}`} viewBox="0 0 24 24" fill="none">
-      <circle
-        className="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="3"
-      />
-      <path
-        className="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-      />
-    </svg>
-  );
-};
+const LoadingSpinner: React.FC<IconProps> = ({ className = `` }) => (
+  <svg className={`animate-spin ${className}`} viewBox="0 0 24 24" fill="none">
+    <circle
+      className="opacity-25"
+      cx="12"
+      cy="12"
+      r="10"
+      stroke="currentColor"
+      strokeWidth="3"
+    />
+    <path
+      className="opacity-75"
+      fill="currentColor"
+      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+    />
+  </svg>
+);
 
 const Dashboard: React.FC = () => {
   const [macData, setMacData] = useState<MacOverviewOutput | null>(null);
@@ -221,7 +212,7 @@ const MacSection: React.FC<MacSectionProps> = ({ data }) => {
           <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
         </Link>
       </div>
-      <div className="p-6">
+      <div className="p-6 space-y-6">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
           {stats.map((stat) => (
             <div
@@ -246,6 +237,10 @@ const MacSection: React.FC<MacSectionProps> = ({ data }) => {
               </div>
             </div>
           ))}
+        </div>
+        <div>
+          <h3 className="font-display font-medium text-slate-900 mb-3">Recent Signups</h3>
+          <SignupGraph signups={data.recentSignups} />
         </div>
       </div>
     </section>
@@ -346,24 +341,22 @@ interface FunnelBarProps {
   gradient: string;
 }
 
-const FunnelBar: React.FC<FunnelBarProps> = ({ label, value, count, gradient }) => {
-  return (
-    <div className="space-y-1.5">
-      <div className="flex justify-between items-baseline">
-        <span className="text-sm font-medium text-slate-700">{label}</span>
-        <span className="text-sm text-slate-500">
-          {count.toLocaleString()} ({value.toFixed(1)}%)
-        </span>
-      </div>
-      <div className="h-3 bg-slate-200 rounded-full overflow-hidden">
-        <div
-          className={`h-full bg-gradient-to-r ${gradient} rounded-full transition-all duration-700`}
-          style={{ width: `${value}%` }}
-        />
-      </div>
+const FunnelBar: React.FC<FunnelBarProps> = ({ label, value, count, gradient }) => (
+  <div className="space-y-1.5">
+    <div className="flex justify-between items-baseline">
+      <span className="text-sm font-medium text-slate-700">{label}</span>
+      <span className="text-sm text-slate-500">
+        {count.toLocaleString()} ({value.toFixed(1)}%)
+      </span>
     </div>
-  );
-};
+    <div className="h-3 bg-slate-200 rounded-full overflow-hidden">
+      <div
+        className={`h-full bg-gradient-to-r ${gradient} rounded-full transition-all duration-700`}
+        style={{ width: `${value}%` }}
+      />
+    </div>
+  </div>
+);
 
 interface PodcastSectionProps {
   data: PodcastOverviewOutput;

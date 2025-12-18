@@ -6,79 +6,71 @@ interface IconProps {
   className?: string;
 }
 
-const UsersIcon: React.FC<IconProps> = ({ className = `` }) => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-    </svg>
-  );
-};
+const UsersIcon: React.FC<IconProps> = ({ className = `` }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  </svg>
+);
 
-const ChevronLeftIcon: React.FC<IconProps> = ({ className = `` }) => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="m15 18-6-6 6-6" />
-    </svg>
-  );
-};
+const ChevronLeftIcon: React.FC<IconProps> = ({ className = `` }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="m15 18-6-6 6-6" />
+  </svg>
+);
 
-const ChevronRightIcon: React.FC<IconProps> = ({ className = `` }) => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="m9 18 6-6-6-6" />
-    </svg>
-  );
-};
+const ChevronRightIcon: React.FC<IconProps> = ({ className = `` }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="m9 18 6-6-6-6" />
+  </svg>
+);
 
-const LoadingSpinner: React.FC<IconProps> = ({ className = `` }) => {
-  return (
-    <svg className={`animate-spin ${className}`} viewBox="0 0 24 24" fill="none">
-      <circle
-        className="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="3"
-      />
-      <path
-        className="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-      />
-    </svg>
-  );
-};
+const LoadingSpinner: React.FC<IconProps> = ({ className = `` }) => (
+  <svg className={`animate-spin ${className}`} viewBox="0 0 24 24" fill="none">
+    <circle
+      className="opacity-25"
+      cx="12"
+      cy="12"
+      r="10"
+      stroke="currentColor"
+      strokeWidth="3"
+    />
+    <path
+      className="opacity-75"
+      fill="currentColor"
+      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+    />
+  </svg>
+);
 
 const ParentsList: React.FC = () => {
   const navigate = useNavigate();
@@ -332,47 +324,45 @@ const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
   onPageChange,
-}) => {
-  return (
-    <div className="flex items-center gap-1">
-      <button
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage <= 1}
-        className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-      >
-        <ChevronLeftIcon className="w-5 h-5" />
-      </button>
-      <div className="flex items-center gap-1 px-2">
-        {getPageNumbers(currentPage, totalPages).map((pageNum, idx) =>
-          pageNum === `...` ? (
-            <span key={`ellipsis-${idx}`} className="px-2 text-slate-400">
-              ...
-            </span>
-          ) : (
-            <button
-              key={pageNum}
-              onClick={() => onPageChange(pageNum as number)}
-              className={`min-w-[36px] h-9 px-3 rounded-lg text-sm font-medium transition-all ${
-                pageNum === currentPage
-                  ? `bg-gradient-to-r from-brand-violet to-brand-fuchsia text-white shadow-sm`
-                  : `text-slate-600 hover:bg-slate-100`
-              }`}
-            >
-              {pageNum}
-            </button>
-          ),
-        )}
-      </div>
-      <button
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage >= totalPages}
-        className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-      >
-        <ChevronRightIcon className="w-5 h-5" />
-      </button>
+}) => (
+  <div className="flex items-center gap-1">
+    <button
+      onClick={() => onPageChange(currentPage - 1)}
+      disabled={currentPage <= 1}
+      className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+    >
+      <ChevronLeftIcon className="w-5 h-5" />
+    </button>
+    <div className="flex items-center gap-1 px-2">
+      {getPageNumbers(currentPage, totalPages).map((pageNum, idx) =>
+        pageNum === `...` ? (
+          <span key={`ellipsis-${idx}`} className="px-2 text-slate-400">
+            ...
+          </span>
+        ) : (
+          <button
+            key={pageNum}
+            onClick={() => onPageChange(pageNum as number)}
+            className={`min-w-[36px] h-9 px-3 rounded-lg text-sm font-medium transition-all ${
+              pageNum === currentPage
+                ? `bg-gradient-to-r from-brand-violet to-brand-fuchsia text-white shadow-sm`
+                : `text-slate-600 hover:bg-slate-100`
+            }`}
+          >
+            {pageNum}
+          </button>
+        ),
+      )}
     </div>
-  );
-};
+    <button
+      onClick={() => onPageChange(currentPage + 1)}
+      disabled={currentPage >= totalPages}
+      className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+    >
+      <ChevronRightIcon className="w-5 h-5" />
+    </button>
+  </div>
+);
 
 function getPageNumbers(current: number, total: number): (number | string)[] {
   if (total <= 7) {
