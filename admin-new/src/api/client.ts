@@ -143,7 +143,9 @@ export interface ParentDetailOutput {
       appVersion: string;
       filterVersion?: string;
       osVersion?: string;
-      modelIdentifier?: string;
+      modelIdentifier: string;
+      modelFamily: string;
+      modelTitle: string;
       createdAt: string;
     }>;
   }>;

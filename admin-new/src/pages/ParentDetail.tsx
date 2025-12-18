@@ -2,6 +2,111 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import client, { type ParentDetailOutput } from '../api/client';
 
+function CopyIcon({ className = `` }: { className?: string }): React.ReactNode {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+    </svg>
+  );
+}
+
+function CheckIcon({ className = `` }: { className?: string }): React.ReactNode {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
+  );
+}
+
+function CopyButton({ text }: { text: string }): React.ReactNode {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async (): Promise<void> => {
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="p-1 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
+      title="Copy to clipboard"
+    >
+      {copied ? (
+        <CheckIcon className="w-4 h-4 text-emerald-500" />
+      ) : (
+        <CopyIcon className="w-4 h-4" />
+      )}
+    </button>
+  );
+}
+
+function LinkIcon({ className = `` }: { className?: string }): React.ReactNode {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+    </svg>
+  );
+}
+
+function CopyLinkButton({ childId }: { childId: string }): React.ReactNode {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async (): Promise<void> => {
+    const url = `https://parents.gertrude.app/children/${childId.toLowerCase()}`;
+    await navigator.clipboard.writeText(url);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors text-xs"
+      title="Copy child settings link"
+    >
+      {copied ? (
+        <>
+          <CheckIcon className="w-3.5 h-3.5 text-emerald-500" />
+          <span className="text-emerald-600 font-medium">Child settings link copied</span>
+        </>
+      ) : (
+        <LinkIcon className="w-3.5 h-3.5" />
+      )}
+    </button>
+  );
+}
+
 function ArrowLeftIcon({ className = `` }: { className?: string }): React.ReactNode {
   return (
     <svg
@@ -221,10 +326,16 @@ export default function ParentDetail(): React.ReactNode {
               <UserIcon className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-display font-semibold text-slate-900 tracking-tight">
-                {data.email}
-              </h1>
-              <p className="text-sm text-slate-500 mt-0.5 font-mono">{data.id.toLowerCase()}</p>
+              <div className="flex items-center gap-1">
+                <h1 className="text-xl font-display font-semibold text-slate-900 tracking-tight">
+                  {data.email}
+                </h1>
+                <CopyButton text={data.email} />
+              </div>
+              <div className="flex items-center gap-1 mt-0.5">
+                <p className="text-sm text-slate-500 font-mono">{data.id.toLowerCase()}</p>
+                <CopyButton text={data.id.toLowerCase()} />
+              </div>
             </div>
           </div>
           <SubscriptionBadge status={data.subscriptionStatus} />
@@ -245,7 +356,14 @@ export default function ParentDetail(): React.ReactNode {
           {data.subscriptionId && (
             <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
               <span className="text-sm text-slate-500">Stripe ID: </span>
-              <code className="text-sm font-mono text-slate-700">{data.subscriptionId}</code>
+              <a
+                href={`https://dashboard.stripe.com/acct_1L8TXdGKRdhETuKA/subscriptions/${data.subscriptionId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-mono text-brand-violet hover:text-brand-fuchsia transition-colors"
+              >
+                {data.subscriptionId}
+              </a>
             </div>
           )}
         </div>
@@ -254,10 +372,10 @@ export default function ParentDetail(): React.ReactNode {
       <section className="bg-white rounded-2xl border border-slate-200/80 shadow-sm shadow-slate-200/50 overflow-hidden">
         <div className="px-6 py-5 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-sky-100 flex items-center justify-center">
-              <UsersIcon className="w-4 h-4 text-sky-600" />
+            <div className="w-9 h-9 rounded-lg bg-sky-100 flex items-center justify-center">
+              <UsersIcon className="w-5 h-5 text-sky-600" />
             </div>
-            <h2 className="font-display font-semibold text-slate-900">
+            <h2 className="font-display font-semibold text-slate-900 text-xl">
               Children
               <span className="ml-2 text-sm font-normal text-slate-500">
                 ({data.children.length})
@@ -276,7 +394,13 @@ export default function ParentDetail(): React.ReactNode {
                   className="border border-slate-200 rounded-xl p-5 hover:border-slate-300 transition-colors"
                 >
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-display font-semibold text-slate-900">{child.name}</h3>
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-sky-100 flex items-center justify-center">
+                        <UserIcon className="w-[18px] h-[18px] text-sky-600" />
+                      </div>
+                      <h3 className="font-display font-semibold text-slate-900 text-xl">{child.name}</h3>
+                      <CopyLinkButton childId={child.id} />
+                    </div>
                     <div className="flex gap-2">
                       {child.keyloggingEnabled && (
                         <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-600/20">
@@ -296,29 +420,44 @@ export default function ParentDetail(): React.ReactNode {
                       <div className="flex items-center gap-2 mb-3">
                         <MonitorIcon className="w-4 h-4 text-slate-400" />
                         <h4 className="text-sm font-medium text-slate-700">
-                          Installations ({child.installations.length})
+                          Computer users ({child.installations.length})
                         </h4>
                       </div>
                       <div className="grid gap-2">
                         {child.installations.map((install) => (
                           <div
                             key={install.id}
-                            className="bg-slate-50 rounded-lg p-4 border border-slate-100"
+                            className="bg-slate-50 rounded-xl p-4 border border-slate-100 flex gap-4"
                           >
-                            <div className="flex justify-between items-start">
-                              <span className="font-medium text-slate-900">
-                                {install.modelIdentifier ?? `Unknown Device`}
-                              </span>
-                              <span className="text-xs text-slate-500">
-                                {formatDate(install.createdAt)}
-                              </span>
+                            <div className="flex-shrink-0 w-20 h-20 bg-white rounded-lg border border-slate-200 flex items-center justify-center p-2">
+                              <img
+                                src={`https://parents.gertrude.app/macs/${install.modelIdentifier}.png`}
+                                alt={install.modelTitle}
+                                className="max-w-full max-h-full object-contain"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).style.display = `none`;
+                                }}
+                              />
                             </div>
-                            <div className="text-sm text-slate-600 mt-2 flex flex-wrap gap-x-4 gap-y-1">
-                              <span>App: {install.appVersion}</span>
-                              {install.filterVersion && (
-                                <span>Filter: {install.filterVersion}</span>
-                              )}
-                              {install.osVersion && <span>macOS: {install.osVersion}</span>}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex justify-between items-start gap-2">
+                                <span className="font-medium text-slate-900">
+                                  {install.modelTitle}
+                                </span>
+                                <span className="text-xs text-slate-400 flex-shrink-0">
+                                  {formatDate(install.createdAt)}
+                                </span>
+                              </div>
+                              <p className="text-xs text-slate-400 font-mono mt-0.5">
+                                {install.modelIdentifier}
+                              </p>
+                              <div className="text-sm text-slate-600 mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                                <span>App v{install.appVersion}</span>
+                                {install.filterVersion && (
+                                  <span>Filter v{install.filterVersion}</span>
+                                )}
+                                {install.osVersion && <span>macOS {install.osVersion}</span>}
+                              </div>
                             </div>
                           </div>
                         ))}
@@ -335,10 +474,10 @@ export default function ParentDetail(): React.ReactNode {
       <section className="bg-white rounded-2xl border border-slate-200/80 shadow-sm shadow-slate-200/50 overflow-hidden">
         <div className="px-6 py-5 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center">
-              <KeyIcon className="w-4 h-4 text-violet-600" />
+            <div className="w-9 h-9 rounded-lg bg-violet-100 flex items-center justify-center">
+              <KeyIcon className="w-5 h-5 text-violet-600" />
             </div>
-            <h2 className="font-display font-semibold text-slate-900">
+            <h2 className="font-display font-semibold text-slate-900 text-xl">
               Keychains
               <span className="ml-2 text-sm font-normal text-slate-500">
                 ({data.keychains.length})
@@ -375,10 +514,10 @@ export default function ParentDetail(): React.ReactNode {
       <section className="bg-white rounded-2xl border border-slate-200/80 shadow-sm shadow-slate-200/50 overflow-hidden">
         <div className="px-6 py-5 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
-              <BellIcon className="w-4 h-4 text-emerald-600" />
+            <div className="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center">
+              <BellIcon className="w-5 h-5 text-emerald-600" />
             </div>
-            <h2 className="font-display font-semibold text-slate-900">
+            <h2 className="font-display font-semibold text-slate-900 text-xl">
               Notifications
               <span className="ml-2 text-sm font-normal text-slate-500">
                 ({data.notifications.length})
@@ -396,7 +535,7 @@ export default function ParentDetail(): React.ReactNode {
                   key={notif.id}
                   className="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-700 ring-1 ring-inset ring-slate-200"
                 >
-                  {notif.trigger}
+                  {unCamelCase(notif.trigger)}
                 </span>
               ))}
             </div>
@@ -471,4 +610,12 @@ function formatDate(dateString: string): string {
     month: `short`,
     day: `numeric`,
   });
+}
+
+function unCamelCase(str: string): string {
+  return str
+    .replace(/([a-z])([A-Z])/g, `$1 $2`)
+    .replace(/([A-Z]+)([A-Z][a-z])/g, `$1 $2`)
+    .toLowerCase()
+    .replace(/^\w/, (c) => c.toUpperCase());
 }
