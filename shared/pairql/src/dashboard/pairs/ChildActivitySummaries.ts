@@ -1,6 +1,4 @@
 // auto-generated, do not edit
-import type { ISODateString, UUID } from '../../types';
-
 export namespace ChildActivitySummaries {
   export interface Input {
     childId: UUID;

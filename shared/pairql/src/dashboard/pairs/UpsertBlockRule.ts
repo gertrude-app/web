@@ -1,5 +1,4 @@
 // auto-generated, do not edit
-import type { UUID } from '../../types';
 import type { BlockRule } from '../shared';
 
 export namespace UpsertBlockRule {

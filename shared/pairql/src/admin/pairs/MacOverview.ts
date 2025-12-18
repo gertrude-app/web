@@ -1,6 +1,4 @@
 // auto-generated, do not edit
-import type { ISODateString } from '../../types';
-
 export namespace MacOverview {
   export type Input = void;
 

@@ -1,6 +1,4 @@
 // auto-generated, do not edit
-import type { UUID } from '../../types';
-
 export namespace Signup {
   export interface Input {
     email: string;

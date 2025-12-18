@@ -1,5 +1,4 @@
 // auto-generated, do not edit
-export type { ISODateString, UUID } from '../types';
 export * from './shared';
 export * from './pairs/ChildActivitySummaries';
 export * from './pairs/CombinedUsersActivityFeed';

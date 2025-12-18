@@ -1,5 +1,4 @@
 // auto-generated, do not edit
-import type { ISODateString, UUID } from '../types';
 export type { ServerPqlError } from '../PqlError';
 
 export interface AdminKeychain {

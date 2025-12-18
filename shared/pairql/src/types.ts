@@ -2,11 +2,6 @@ import type { PqlError } from './PqlError';
 
 export type Domain = `dashboard` | `admin`;
 
-/** UUID string type alias */
-export type UUID = string;
-/** ISO 8601 date string type alias */
-export type ISODateString = string;
-
 /**
  * Hook called before each request. Receives the mutable RequestInit (after body is set)
  * and the auth requirement. Mutate init.headers in place to add headers.

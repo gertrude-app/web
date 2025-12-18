@@ -1,5 +1,4 @@
 // auto-generated, do not edit
-import type { ISODateString, UUID } from '../../types';
 import type { SharedKey, SuccessOutput } from '../shared';
 
 export namespace SaveKey {

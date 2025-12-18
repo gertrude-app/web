@@ -17,6 +17,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@types/dash-ambient": "workspace:*",
     "node-fetch": "3.3.0",
     "tsx": "^4.7.0",
     "typescript": "5.8.3",
