@@ -172,14 +172,7 @@ export default function Dashboard(): React.ReactNode {
   }
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      <div>
-        <h1 className="text-2xl font-display font-semibold text-slate-900 tracking-tight">
-          Dashboard
-        </h1>
-        <p className="mt-1 text-slate-500">Overview of all Gertrude products</p>
-      </div>
-
+    <div className="space-y-8 animate-fade-in pt-4">
       {macData && <MacSection data={macData} />}
       {iosData && <IOSSection data={iosData} />}
       {podcastData && <PodcastSection data={podcastData} />}
@@ -188,16 +181,17 @@ export default function Dashboard(): React.ReactNode {
 }
 
 function MacSection({ data }: { data: MacOverviewOutput }): React.ReactNode {
+  const monthlyRevenue = Math.round(data.annualRevenue / 12);
   const stats = [
+    { label: `Annual Revenue`, value: `$${data.annualRevenue.toLocaleString()}` },
     {
-      label: `Annual Revenue`,
-      value: `$${data.annualRevenue.toLocaleString()}`,
+      label: `Monthly Revenue`,
+      value: `$${monthlyRevenue.toLocaleString()}`,
       highlight: true,
     },
     { label: `Paying Parents`, value: data.payingParents.toLocaleString() },
     { label: `Active Parents`, value: data.activeParents.toLocaleString() },
     { label: `Active Children`, value: data.childrenOfActiveParents.toLocaleString() },
-    { label: `All-Time Signups`, value: data.allTimeSignups.toLocaleString() },
     { label: `All-Time Children`, value: data.allTimeChildren.toLocaleString() },
     { label: `All-Time Installs`, value: data.allTimeAppInstallations.toLocaleString() },
   ];
@@ -209,10 +203,7 @@ function MacSection({ data }: { data: MacOverviewOutput }): React.ReactNode {
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-violet to-brand-fuchsia flex items-center justify-center shadow-lg shadow-brand-violet/20">
             <MonitorIcon className="w-5 h-5 text-white" />
           </div>
-          <div>
-            <h2 className="font-display font-semibold text-slate-900">Mac App</h2>
-            <p className="text-sm text-slate-500">macOS parental controls</p>
-          </div>
+          <h2 className="font-display font-semibold text-slate-900 text-xl">Mac App</h2>
         </div>
         <Link
           to="/parents"
@@ -272,10 +263,7 @@ function IOSSection({ data }: { data: IOSOverviewOutput }): React.ReactNode {
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center shadow-lg shadow-sky-500/20">
             <SmartphoneIcon className="w-5 h-5 text-white" />
           </div>
-          <div>
-            <h2 className="font-display font-semibold text-slate-900">iOS App</h2>
-            <p className="text-sm text-slate-500">iPhone parental controls</p>
-          </div>
+          <h2 className="font-display font-semibold text-slate-900 text-xl">iOS App</h2>
         </div>
       </div>
       <div className="p-6 space-y-6">
@@ -367,6 +355,7 @@ function PodcastSection({ data }: { data: PodcastOverviewOutput }): React.ReactN
     data.totalInstalls > 0
       ? ((data.successfulSubscriptions / data.totalInstalls) * 100).toFixed(1)
       : `0.0`;
+  const yearlyRevenue = Math.round(data.successfulSubscriptions * 10 * 0.85);
 
   return (
     <section className="bg-white rounded-2xl border border-slate-200/80 shadow-sm shadow-slate-200/50 overflow-hidden">
@@ -375,14 +364,11 @@ function PodcastSection({ data }: { data: PodcastOverviewOutput }): React.ReactN
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
             <MicIcon className="w-5 h-5 text-white" />
           </div>
-          <div>
-            <h2 className="font-display font-semibold text-slate-900">Podcast App</h2>
-            <p className="text-sm text-slate-500">Kid-safe podcast player</p>
-          </div>
+          <h2 className="font-display font-semibold text-slate-900 text-xl">Podcast App</h2>
         </div>
       </div>
       <div className="p-6">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-4 gap-4">
           <div className="bg-slate-50 border border-slate-100 rounded-xl p-4">
             <div className="text-2xl font-display font-semibold text-slate-900">
               {data.totalInstalls.toLocaleString()}
@@ -400,6 +386,12 @@ function PodcastSection({ data }: { data: PodcastOverviewOutput }): React.ReactN
               {conversionRate}%
             </div>
             <div className="text-sm mt-1 text-white/80">Conversion</div>
+          </div>
+          <div className="bg-slate-50 border border-slate-100 rounded-xl p-4">
+            <div className="text-2xl font-display font-semibold text-slate-900">
+              ${yearlyRevenue.toLocaleString()}
+            </div>
+            <div className="text-sm mt-1 text-slate-500">Yearly Revenue</div>
           </div>
         </div>
       </div>

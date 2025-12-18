@@ -85,7 +85,7 @@ export default function Layout({ children, onLogout }: LayoutProps): React.React
   const location = useLocation();
 
   const navLinks = [
-    { to: `/`, label: `Dashboard`, icon: HomeIcon },
+    { to: `/`, label: `Home`, icon: HomeIcon },
     { to: `/parents`, label: `Parents`, icon: UsersIcon },
   ];
 
@@ -100,9 +100,9 @@ export default function Layout({ children, onLogout }: LayoutProps): React.React
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-10">
-              <Link to="/" className="flex items-center gap-2.5">
+              <Link to="/" className="flex items-center gap-1.5">
                 <GertrudeLogo className="w-8 h-8" />
-                <span className="font-display font-semibold text-lg text-white">
+                <span className="font-display font-semibold text-xl text-white">
                   Gertrude
                 </span>
                 <span className="text-xs font-medium text-slate-500 uppercase tracking-wider ml-1">

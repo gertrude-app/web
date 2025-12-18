@@ -87,7 +87,6 @@ export interface MacOverviewOutput {
   payingParents: number;
   activeParents: number;
   childrenOfActiveParents: number;
-  allTimeSignups: number;
   allTimeChildren: number;
   allTimeAppInstallations: number;
   recentSignups: Array<{
