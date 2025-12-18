@@ -8,4 +8,4 @@ export {
   isPqlError,
   toClientError,
 } from './PqlError';
-export type { CodegenOutput, CodegenPair, Domain, PrepareRequest } from './types';
+export type { Domain, PrepareRequest } from './types';

@@ -8,13 +8,3 @@ export type Domain = `dashboard` | `admin`;
  * Return null on success, or a PqlError to abort the request.
  */
 export type PrepareRequest<Auth> = (init: RequestInit, auth: Auth) => PqlError | null;
-
-export interface CodegenPair {
-  pair: string;
-  fetcher: string;
-}
-
-export interface CodegenOutput {
-  shared: Record<string, string>;
-  pairs: Record<string, CodegenPair>;
-}

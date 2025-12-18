@@ -86,7 +86,7 @@ describe(`unlock request flow`, () => {
     cy.contains(`No keychains`);
   });
 
-  it.only(`displays not found error if not found`, () => {
+  it(`displays not found error if not found`, () => {
     cy.forcePqlErr(`GetUnlockRequest`, {
       type: `notFound`,
       entityName: `Unlock request`,

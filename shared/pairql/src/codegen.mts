@@ -2,7 +2,17 @@
 /* eslint-disable no-console */
 import fs from 'node:fs';
 import path from 'node:path';
-import type { CodegenOutput, Domain } from './types';
+import type { Domain } from './types';
+
+interface CodegenPair {
+  pair: string;
+  fetcher: string;
+}
+
+interface CodegenOutput {
+  shared: Record<string, string>;
+  pairs: Record<string, CodegenPair>;
+}
 
 interface DomainConfig {
   domain: Domain;
