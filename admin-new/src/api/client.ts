@@ -33,7 +33,7 @@ function createPrepareRequest(): (init: RequestInit, auth: Auth) => PqlError | n
           debugMessage: `No admin_token found in localStorage`,
         };
       }
-      headers[`X-AdminToken`] = token;
+      headers[`X-SuperAdminToken`] = token;
     }
 
     return null;
