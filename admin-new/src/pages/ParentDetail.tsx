@@ -224,7 +224,7 @@ export default function ParentDetail(): React.ReactNode {
               <h1 className="text-xl font-display font-semibold text-slate-900 tracking-tight">
                 {data.email}
               </h1>
-              <p className="text-sm text-slate-500 mt-0.5 font-mono">{data.id}</p>
+              <p className="text-sm text-slate-500 mt-0.5 font-mono">{data.id.toLowerCase()}</p>
             </div>
           </div>
           <SubscriptionBadge status={data.subscriptionStatus} />

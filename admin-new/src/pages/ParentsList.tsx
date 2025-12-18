@@ -203,7 +203,7 @@ export default function ParentsList(): React.ReactNode {
             {data.parents.map((parent) => (
               <tr
                 key={parent.id}
-                onClick={() => navigate(`/parents/${parent.id}`)}
+                onClick={() => navigate(`/parents/${parent.id.toLowerCase()}`)}
                 className="hover:bg-slate-50/50 transition-colors group cursor-pointer"
               >
                 <td className="px-5 py-4">
